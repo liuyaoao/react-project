@@ -86,10 +86,10 @@ export default class NotLoggedIn extends React.Component {
                 </div>
                 <div className='row footer'>
                     <div className='footer-pane col-xs-12'>
-                        <div className='col-xs-12'>
+                        <div className='col-xs-12' style={{display:'none'}}>
                             <span className='pull-right footer-site-name'>{'Mattermost'}</span>
                         </div>
-                        <div className='col-xs-12'>
+                        <div className='col-xs-12' style={{textAlign:'center'}}>
                             <span className='pull-right footer-link copyright'>{'© 2015-2016 Mattermost, Inc.'}</span>
                             {content}
                         </div>

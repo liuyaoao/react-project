@@ -216,13 +216,14 @@ export default class LoginController extends React.Component {
             () => {
                 const query = this.props.location.query;
                 GlobalActions.loadDefaultLocale();
-                if (query.redirect_to) {
-                    browserHistory.push(query.redirect_to);
-                } else if (team) {
-                    browserHistory.push(`/${team.name}`);
-                } else {
-                    GlobalActions.redirectUserToDefaultTeam();
-                }
+                browserHistory.push("modules");
+                // if (query.redirect_to) {
+                //     browserHistory.push(query.redirect_to);
+                // } else if (team) {
+                //     browserHistory.push(`/${team.name}`);
+                // } else {
+                //     GlobalActions.redirectUserToDefaultTeam();
+                // }
             }
         );
     }

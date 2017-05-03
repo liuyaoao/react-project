@@ -59,6 +59,12 @@ export default {
                             }
                         },
                         {
+                            path: 'modules',
+                            getComponents: (location, callback) => {
+                                System.import('pages/modules_page.jsx').then(RouteUtils.importComponentSuccess(callback));
+                            }
+                        },
+                        {
                             path: 'reset_password',
                             getComponents: (location, callback) => {
                                 System.import('components/password_reset_send_link.jsx').then(RouteUtils.importComponentSuccess(callback));
