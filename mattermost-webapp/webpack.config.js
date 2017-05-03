@@ -25,11 +25,17 @@ if (NPM_TARGET === 'test') {
 var config = {
     entry: ['babel-polyfill', './root.jsx', 'root.html'],
     output: {
-        path: 'dist/matterdist/static',
-        publicPath: '/matterdist/static/',
-        filename: '[name].[hash].js',
-        chunkFilename: '[name].[chunkhash].js'
+        path: 'dist/static',
+        publicPath: '/static/',
+        filename: '[name].124563.js',
+        chunkFilename: '[name].123.js'
     },
+    // output: {
+    //     path: 'dist/static',
+    //     publicPath: '/static/',
+    //     filename: '[name].[hash].js',
+    //     chunkFilename: '[name].[chunkhash].js'
+    // },
     module: {
         loaders: [
             {

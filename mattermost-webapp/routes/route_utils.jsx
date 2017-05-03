@@ -9,7 +9,7 @@ export function importComponentSuccess(callback) {
 }
 
 export function createGetChildComponentsFunction(arrayOfComponents) {
-    return (locaiton, callback) => callback(null, arrayOfComponents);
+    return (location, callback) => callback(null, arrayOfComponents);
 }
 
 export const notFoundParams = {

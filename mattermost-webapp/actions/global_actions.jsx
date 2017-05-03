@@ -98,7 +98,7 @@ export function emitInitialLoad(callback) {
     Client.getInitialLoad(
             (data) => {
                 global.window.mm_config = data.client_cfg;
-                global.window.mm_config.SiteName = "mattermost999999999";
+                global.window.mm_config.SiteName = "司法E通";
 
                 global.window.mm_license = data.license_cfg;
 
