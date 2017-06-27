@@ -1,16 +1,16 @@
+//发文管理--新建
 import $ from 'jquery';
 import React from 'react';
 import * as Utils from 'utils/utils.jsx';
 import myWebClient from 'client/my_web_client.jsx';
 import { WingBlank, WhiteSpace, Button, InputItem, NavBar,
-  TextareaItem, Flex, Steps, TabBar, Picker, List, Toast } from 'antd-mobile';
+  TextareaItem,Flex,Steps, TabBar, Picker, List, Toast } from 'antd-mobile';
 
 import { Icon, Select } from 'antd';
 import { createForm } from 'rc-form';
 const Step = Steps.Step;
-import CommonFlowTraceComp from './common_flowTrace_comp.jsx';//办文跟踪
 
-class DS_DetailContentComp extends React.Component {
+class DS_EditContentComp extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
@@ -20,13 +20,13 @@ class DS_DetailContentComp extends React.Component {
         showUploadContent: false,
         showSendContent: false,
         showFlowContent: false,
-        modulename:'qbgl', //模块名
-        curSubTab:'content',
+        dzTitle: "长沙市司法局文件"
       };
   }
 
   shouldComponentUpdate(nextProps){
     if(this.props.formData !== nextProps.formData){
+
     }
     return true;
   }
@@ -36,6 +36,34 @@ class DS_DetailContentComp extends React.Component {
     let tabNameCn = data.replace(/\s+/g,"");
     let tabNameCn2En = {"发送":"send", "上传附件":"upload", "正文":"article", "查阅附件":"referto"}
     this.props.afterChangeTabCall(tabNameCn2En[tabNameCn]);
+  }
+
+  handleChange = (value)=> {
+    if(value === "1"){
+      //发文
+      this.setState({dzTitle: "长沙市司法局文件", flow: [{label: '发文',value: '发文'},{label: '司法局发文流程',value: '司法局发文流程'}]});
+      $("#FGYJ").show();
+      $("#HG").show();
+      $("#JZYJ").show();
+      $("#FW").show();
+      $("#LDFW").hide();
+    }else if(value === "2"){
+      //领导小组发文
+      this.setState({dzTitle: "领导小组文件(稿纸)", flow: [{label: '领导小组发文',value: '领导小组发文'},{label: '司法局发文流程',value: '司法局发文流程'}]});
+      $("#FGYJ").hide();
+      $("#HG").hide();
+      $("#JZYJ").show();
+      $("#FW").hide();
+      $("#LDFW").show();
+    }else if(value === "3"){
+      //领导小组办公室发文
+      this.setState({dzTitle: "领导小组办公室文件(稿纸)", flow: [{label: '领导小组办公室发文',value: '领导小组办公室发文'},{label: '司法局发文流程',value: '司法局发文流程'}]});
+      $("#FGYJ").hide();
+      $("#HG").hide();
+      $("#JZYJ").hide();
+      $("#FW").hide();
+      $("#LDFW").show();
+    }
   }
 
   renderContent = (pageText)=> {
@@ -56,15 +84,24 @@ class DS_DetailContentComp extends React.Component {
     );
   }
 
+  onClickSave = ()=> {
+    Toast.info('保存成功!', 1);
+    this.props.backToTableListCall();
+    let form = this.props.form;
+  }
   render() {
-    const { detailInfo, formData, formDataRaw , tokenunid, modulename } = this.props;
     const { getFieldProps, getFieldError } = this.props.form;
     const secrecy = [{label: '秘密',value: '秘密'},{label: '机密',value: '机密'}];
     const urgency = [{label: '急',value: '急'},{label: '紧急',value: '紧急'},{label: '特急',value: '特急'},{label: '特提',value: '特提'}];
     return (
       <div style={{marginBottom: "100px"}}>
+        <Select defaultValue="请选择您要起草的发文类型" onChange={this.handleChange} style={{margin:"0.16rem"}} id="dsType">
+          <Select.Option value="1">发文</Select.Option>
+          <Select.Option value="2">领导小组发文</Select.Option>
+          <Select.Option value="3">领导小组办公室发文</Select.Option>
+        </Select>
         <div className={'oa_detail_cnt'}>
-          <div className={'oa_detail_title'} style={{width:'100%',textAlign:'center'}}>{detailInfo.fileTitle}</div>
+          <div className={'oa_detail_title'} style={{width:'100%',textAlign:'center'}}>{this.state.dzTitle}</div>
           <Flex>
             <Flex.Item><InputItem placeholder="2017" labelNumber={2}>文号</InputItem></Flex.Item>
             <Flex.Item><InputItem placeholder="2017" labelNumber={2} type="Number">份数</InputItem></Flex.Item>
@@ -72,10 +109,7 @@ class DS_DetailContentComp extends React.Component {
           <Flex>
             <Flex.Item>
               <div className="select_container">
-                <Picker data={secrecy} cols={1}
-                  {...getFieldProps('secrecy',{
-                    initialValue:detailInfo.secrecy || "",
-                  })}>
+                <Picker data={secrecy} cols={1} {...getFieldProps('secrecy')}>
                   <List.Item arrow="horizontal">密级</List.Item>
                 </Picker>
               </div>
@@ -177,34 +211,23 @@ class DS_DetailContentComp extends React.Component {
             <Flex.Item><InputItem placeholder="xxxxx" labelNumber={4}>拟稿单位</InputItem></Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem placeholder="xxxxx" labelNumber={4} value={formData.ngr_show}>拟稿人</InputItem></Flex.Item>
+            <Flex.Item><InputItem placeholder="xxxxx" labelNumber={4}>拟稿人</InputItem></Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem placeholder="xxxxx" editable="fasle" value={formData.ngrq_show}>日期</InputItem></Flex.Item>
+            <Flex.Item><InputItem placeholder="xxxxx" editable="fasle" labelNumber={4}>日期</InputItem></Flex.Item>
           </Flex>
-          <div style={{height:'0.5rem',width:'100%',margin:'1em 0',background:'#efe9e9'}}></div>
-          <div style={{height:'2.5em',lineHeight:'2.5em',marginLeft:'0.2rem',borderBottom:'1px solid #d6d1d1'}}>
-            <span style={{width:'0.1rem',height:'1em',lineHeight:'2.5em',verticalAlign: 'middle',background:'red',display:'inline-block'}}></span>
-            <span style={{marginLeft:'0.2rem',color:'black',fontWeight:'bold'}}>办公追踪-流转记录</span>
-          </div>
-          <CommonFlowTraceComp
-            tokenunid={tokenunid}
-            docunid={detailInfo.unid}
-            gwlcunid={formData.gwlc}
-            modulename={modulename}
-            />
         </div>
       </div>
     )
   }
 }
 
-DS_DetailContentComp.defaultProps = {
+DS_EditContentComp.defaultProps = {
 };
 
-DS_DetailContentComp.propTypes = {
+DS_EditContentComp.propTypes = {
 };
 
 
 
-export default createForm()(DS_DetailContentComp);
+export default createForm()(DS_EditContentComp);

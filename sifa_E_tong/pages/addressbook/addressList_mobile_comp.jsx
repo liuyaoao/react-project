@@ -43,7 +43,7 @@ class AddressListMobileComp extends React.Component {
       dataIndex: 'Contacts',
       render:(text,record,index) => (
         <div key={record.id+123456}>
-          <SwipeAction style={{ backgroundColor: 'gray' }}
+          <SwipeAction style={{ backgroundColor: '#f3f3f3' }}
             autoClose
             disabled={this.state.hasOperaPermission ? false : true}
             right={[

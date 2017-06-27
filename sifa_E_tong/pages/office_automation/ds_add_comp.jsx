@@ -11,7 +11,7 @@ import moment from 'moment';
 import 'moment/locale/zh-cn';
 
 import * as GlobalActions from 'actions/global_actions.jsx';
-import DS_DetailContentComp from './ds_detail_content_comp.jsx';
+import DS_EditContentComp from './ds_edit_content_comp.jsx';
 import BottomTabBarComp from './signReport/bottomTabBar_comp.jsx';
 import DS_SendContentComp from './ds_send_content_comp.jsx';//发文详情页-- 发送
 import CommonVerifyComp from './common_verify_comp.jsx';
@@ -99,14 +99,6 @@ class DS_DetailComp extends React.Component {
   onBackDetailCall = ()=>{
     this.setState({curSubTab:'content'});
   }
-  afterChangeTabCall = (tabname)=>{ //切换tab。
-    let {subTabsArr} = this.state;
-    subTabsArr.push(tabname);
-    this.setState({
-      curSubTab:tabname,
-      subTabsArr,
-    });
-  }
 
   onBackSendContentCall = () => {
     this.setState({curSubTab:'send'});
@@ -136,6 +128,22 @@ class DS_DetailComp extends React.Component {
     let form = this.props.form;
   }
 
+  onClickSubTab = (data)=>{
+    // console.log("onClickSubTab-target:",e.target);
+    let tabNameCn = data.replace(/\s+/g,"");
+    let tabNameCn2En = {"发送":"send", "上传附件":"upload", "正文":"article", "查阅附件":"referto"}
+    this.afterChangeTabCall(tabNameCn2En[tabNameCn]);
+  }
+
+  afterChangeTabCall = (tabname)=>{ //切换tab。
+    let {subTabsArr} = this.state;
+    subTabsArr.push(tabname);
+    this.setState({
+      curSubTab:tabname,
+      subTabsArr,
+    });
+  }
+
   render() {
      const { detailInfo } = this.props;
      const formData = this.state.formData || {};
@@ -155,63 +163,70 @@ class DS_DetailComp extends React.Component {
         </NavBar>
         <div style={{marginTop:'60px'}}>
           {this.state.curSubTab == "content" ?
-            (<DS_DetailContentComp
-              tokenunid={this.props.tokenunid}
-              detailInfo={detailInfo}
-              formData={formData}
-              formDataRaw={this.state.formDataRaw}
-              modulename={this.state.modulename}
-              afterChangeTabCall={this.afterChangeTabCall}
-              backToTableListCall={()=>this.props.backToTableListCall()} />):null}
-            <div className="custom_tabBar">
-              <BottomTabBarComp
-                hidden={false}
-                isAddNew={false}
-                formDataRaw={this.state.formDataRaw}
-                selectedTab={this.state.selectedTab}
-                onClickAddSave={()=>this.onClickSave()}
-                onClickVerifyBtn={()=>{
-                  this.setState({
-                    curSubTab:'verify',
-                    selectedTab: 'verifyTab',
-                  });
-                }}
-                onClickSendBtn={()=>{
-                  this.setState({
-                    curSubTab:'send',
-                    selectedTab: 'sendTab',
-                  });
-                }}
-                onClickTrackBtn={()=>{
-                  this.setState({
-                    curSubTab:'track',
-                    selectedTab: 'trackTab',
-                  });
-                }}
-                onClickArticleBtn={()=>{
-                  this.setState({
-                    curSubTab:'article',
-                    selectedTab: 'articleTab',
-                  });
-                }} />
+          (<DS_EditContentComp
+            tokenunid={this.props.tokenunid}
+            afterChangeTabCall={this.afterChangeTabCall}
+            backToTableListCall={()=>this.props.backToTableListCall()} />):null}
+            <div className="custom_tabBar" id="FW">
+              <TabBar
+                unselectedTintColor="#949494"
+                tintColor="#33A3F4"
+                barTintColor="white"
+                hidden={this.state.hidden}>
+                <TabBar.Item
+                  icon={<Icon type="save" size="lg" />}
+                  selectedIcon={<Icon type="save" size="lg" style={{color:"rgb(51, 163, 244)"}} />}
+                  title="保存"
+                  key="保存"
+                  selected={this.state.selectedTab === 'redTab'}
+                  onPress={() => this.onClickSave()}
+                  data-seed="logId1">
+                  {this.renderContent('保存')}
+                </TabBar.Item>
+                <TabBar.Item
+                  title="正文"
+                  key="正文"
+                  icon={
+                    <Icon type="left-circle" size="lg" />
+                  }
+                  selectedIcon={
+                    <Icon type="left-circle" size="lg" style={{color:"rgb(51, 163, 244)"}} />
+                  }
+                  selected={this.state.selectedTab === 'blueTab'}
+                  onPress={() => this.onClickSubTab("正文")}
+                  data-seed="logId">
+                  {this.renderContent('正文')}
+                </TabBar.Item>
+                <TabBar.Item
+                  icon={<Icon type="upload" size="lg" />}
+                  selectedIcon={<Icon type="upload" size="lg" style={{color:"rgb(51, 163, 244)"}} />}
+                  title="上传附件"
+                  key="上传附件"
+                  selected={this.state.selectedTab === 'greenTab'}
+                  onPress={() => this.onClickSubTab("上传附件")}>
+                  {this.renderContent('上传附件')}
+                </TabBar.Item>
+                <TabBar.Item
+                  icon={<Icon type="export" size="lg" />}
+                  selectedIcon={<Icon type="export" size="lg" style={{color:"rgb(51, 163, 244)"}} />}
+                  title="发送"
+                  key="发送"
+                  selected={this.state.selectedTab === 'yellowTab'}
+                  onPress={() => this.onClickSubTab("发送")}>
+                  {this.renderContent('发送')}
+                </TabBar.Item>
+              </TabBar>
             </div>
             {this.state.curSubTab == "send"?
               (<DS_SendContentComp
+                  tokenunid={this.props.tokenunid}              
                   backSendContentCall={this.onBackSendContentCall}
-                  detailInfo={detailInfo}
-                  tokenunid={this.props.tokenunid}
-                  docunid={detailInfo.unid}
-                  modulename={this.state.modulename}
-                  otherssign={formData["_otherssign"]}
                   backDetailCall={this.onBackDetailCall}
-                  gwlcunid={formData["gwlc"]} isShow={true}/>):null}
+                  isShow={true}/>):null}
             {this.state.curSubTab == "verify"?
               (<CommonVerifyComp
                 tokenunid={this.props.tokenunid}
                 backDetailCall={this.onBackDetailCall}
-                docunid={detailInfo.unid}
-                modulename={this.state.modulename}
-                gwlcunid={formData["gwlc"]}
                 isShow={true}/>):null}
             {this.state.curSubTab == "upload"?
               (<DS_UploadContentComp

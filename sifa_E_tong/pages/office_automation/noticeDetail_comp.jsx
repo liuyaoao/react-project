@@ -76,6 +76,7 @@ class Notice_DetailComp extends React.Component {
 
                 <Flex>
                   <Flex.Item>
+                    <div className="select_container">
                       <DatePicker className="forss"
                         mode="date"
                         onChange={this.onpublicValueChange}
@@ -83,10 +84,12 @@ class Notice_DetailComp extends React.Component {
                       >
                       <List.Item arrow="horizontal">发布日期</List.Item>
                       </DatePicker>
+                    </div>
                   </Flex.Item>
                 </Flex>
                 <Flex>
                   <Flex.Item>
+                    <div className="select_container">
                       <DatePicker className="forss"
                         mode="date"
                         onChange={this.onvalidValueChange}
@@ -94,21 +97,23 @@ class Notice_DetailComp extends React.Component {
                       >
                       <List.Item arrow="horizontal">有效期</List.Item>
                       </DatePicker>
+                    </div>
+                  </Flex.Item>
+                </Flex>
+                <Flex>
+                  <Flex.Item><InputItem  editable={true} labelNumber={2} placeholder="标题">标题</InputItem></Flex.Item>
+                </Flex>
+                <Flex>
+                  <Flex.Item>
+                    <List renderHeader={() => '内容'}>
+                         <TextareaItem
+                           rows={8}
+                         />
+                     </List>
                   </Flex.Item>
                 </Flex>
             </div>
-            <Flex>
-              <Flex.Item><InputItem  editable={true} labelNumber={2} placeholder="标题">标题</InputItem></Flex.Item>
-            </Flex>
-            <Flex>
-              <Flex.Item>
-                <List renderHeader={() => '内容'}>
-                     <TextareaItem
-                       rows={8}
-                     />
-                 </List>
-              </Flex.Item>
-            </Flex>
+
           </div>
         </div>
       </div>

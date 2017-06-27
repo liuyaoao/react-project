@@ -22,6 +22,7 @@
 node_modules.rar*
 **/*/node_modules.rar*
 node_modules.zip*
+/node_modules.zip*
 **/*/node_modules.zip*
 # misc
 .DS_Store

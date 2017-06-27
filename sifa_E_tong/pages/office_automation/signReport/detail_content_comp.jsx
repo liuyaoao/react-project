@@ -27,44 +27,34 @@ class DetailContentCompRaw extends React.Component {
 
   render() {
     const { getFieldProps } = this.props.form;
-    const {detailInfo} = this.props;
-    let owerPleaTypes = [
-      {
-        label:"其他请示事项（新）",
-        value:"其他请示事项（新）"
-      },{
-        label:"资金类请示事项（新）",
-        value:"资金类请示事项（新）"
-      },{
-        label:"文电分办",
-        value:"文电分办"
-      },{
-        label:"会议、活动（新）",
-        value:"会议、活动（新）"
-      },{
-        label:"需报送上级机关或平级机关的公文（新）",
-        value:"需报送上级机关或平级机关的公文（新）"
+    const {detailInfo, formData, formDataRaw} = this.props;
+    let items = formDataRaw.gwlc?formDataRaw.gwlc.items:[];
+    //请示类别当前值就是gwlc字段的值。--公文流程。
+    let owerPleaTypes = items.map((item)=>{ //请示类别。
+      return {
+        label:item.text,
+        value:item.value
       }
-    ];
+    });
     return (
       <div>
         <div className={'oa_detail_cnt'}>
           <div className={'oa_detail_title'} style={{width:'100%',textAlign:'center'}}>长沙司法局工作(报告)单</div>
           <Flex>
-            <Flex.Item><InputItem value={detailInfo.createUser} editable={false} labelNumber={4}>拟稿人：</InputItem></Flex.Item>
+            <Flex.Item><InputItem value={formData.ngr_show} editable={false} labelNumber={4}>拟稿人：</InputItem></Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem value={detailInfo.createDepartment||"148中心"} editable={false} labelNumber={5}>拟稿单位：</InputItem></Flex.Item>
+            <Flex.Item><InputItem value={detailInfo.department||""} editable={false} labelNumber={5}>拟稿单位：</InputItem></Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem value={detailInfo.createTime} editable={false} labelNumber={5}>拟稿日期：</InputItem></Flex.Item>
+            <Flex.Item><InputItem value={detailInfo.draftDate} editable={false} labelNumber={5}>拟稿日期：</InputItem></Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>标题：</div>
               <TextareaItem
                 {...getFieldProps('subjectTitle',{
-                  initialValue: detailInfo.subjectTitle,
+                  initialValue: detailInfo.fileTitle,
                 })}
                 title=""
                 rows={4}
@@ -75,10 +65,9 @@ class DetailContentCompRaw extends React.Component {
           <Flex>
             <Flex.Item>
               <List style={{ backgroundColor: 'white' }} className={'picker_list'}>
-                <Picker data={owerPleaTypes} cols={1} {...getFieldProps('pleaType',{
-                    initialValue:detailInfo.pleaType
-                  })}
+                <Picker data={owerPleaTypes} cols={1} {...getFieldProps('pleaType',{})}
                   disabled={true}
+                  value={[formData.gwlc]}
                   onOk={this.onPickerOk}>
                   <List.Item arrow="horizontal">请示类别：</List.Item>
                 </Picker>
@@ -139,7 +128,7 @@ class DetailContentCompRaw extends React.Component {
             <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>事由：</div>
               <TextareaItem
-                {...getFieldProps('reason',{ initialValue:detailInfo.reason })}
+                {...getFieldProps('reason',{ initialValue:formData.nr || '' })}
                 title=""
                 rows={5}
                 labelNumber={0}
@@ -157,6 +146,7 @@ DetailContentCompRaw.defaultProps = {
 };
 
 DetailContentCompRaw.propTypes = {
+  activeTabkey:React.PropTypes.string,
 };
 const DetailContentComp = createForm()(DetailContentCompRaw);
 export default DetailContentComp;

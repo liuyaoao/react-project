@@ -28,6 +28,7 @@ export default class Client4 {
         this.token = localStorage.getItem(localStorage_token_key) || "";
         // this.url = 'http://matt.siteview.com';
         this.url = '';
+        this.urlVersionV3 = '/api/v3';
         this.urlVersion = '/api/v4';
         this.userAgent = null;
 
@@ -82,9 +83,15 @@ export default class Client4 {
     getBaseRoute() {
         return `${this.url}${this.urlVersion}`;
     }
+    getBaseRouteV3() {
+        return `${this.url}${this.urlVersionV3}`;
+    }
 
     getUsersRoute() {
         return `${this.getBaseRoute()}/users`;
+    }
+    getUsersRouteV3(){
+      return `${this.getBaseRouteV3()}/users`;
     }
 
     getUserRoute(userId) {

@@ -2,7 +2,7 @@
 // See License.txt for license information.
 
 import request from 'superagent';
-
+import public_picture from 'images/users/image.png';
 const HEADER_X_VERSION_ID = 'x-version-id';
 const HEADER_X_CLUSTER_ID = 'x-cluster-id';
 const HEADER_TOKEN = 'token';
@@ -27,6 +27,7 @@ export default class Client {
         this.defaultHeaders = {
             'token':localStorage.getItem(localStorage_token_key) || "",
             'X-Requested-With': 'XMLHttpRequest'
+            // 'Access-Control-Allow-Origin':'*'
         };
 
         this.translations = {
@@ -48,6 +49,18 @@ export default class Client {
     getUrlVersion(){
       return this.urlVersionV4;
       // return this.urlVersion;
+    }
+
+    getLocalToken() {
+      return localStorage.getItem(this.tokenName);
+    }
+
+    removeToken(){
+      localStorage.removeItem(this.tokenName);
+    }
+
+    getPublicPictureUrl() {
+      return public_picture;
     }
 
     setLocalStorageToken(value) { //设置存储在localStorage里的token值。
@@ -137,9 +150,11 @@ export default class Client {
     getPostsRoute(channelId) {
         return `${this.url}${this.urlVersion}/teams/${this.getTeamId()}/channels/${channelId}/posts`;
     }
-
     getUsersRoute() {
         return `${this.url}${this.urlVersion}/users`;
+    }
+    getMyUsersRoute() {
+        return `${this.url}/users`;
     }
 
     getTeamFilesRoute() {
@@ -244,7 +259,7 @@ export default class Client {
             }
             if (res && res.text == 'token time out') { // eslint-disable-line no-undefined
                 this.removeLocalStorageToken();
-                // window.location.href = '/';
+                window.location.href = '/';
             }
 
             this.handleError(err, res);
@@ -1102,7 +1117,7 @@ export default class Client {
         var outer = this;  // eslint-disable-line consistent-this
 
         request.
-            post(`${this.getUsersRoute()}/login`).
+            post(`${this.getUsersRouteV3()}/login`).
             set(this.getDefaultHeadersWithToken()).
             type('application/json').
             accept('application/json').

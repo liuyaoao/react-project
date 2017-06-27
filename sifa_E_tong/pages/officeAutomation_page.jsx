@@ -6,8 +6,9 @@ import UserStore from 'stores/user_store.jsx';
 
 import * as Utils from 'utils/utils.jsx';
 
-import LogOutComp from './components/log_out_comp.jsx';
+// import LogOutComp from './components/log_out_comp.jsx';
 import myWebClient from 'client/my_web_client.jsx';
+import * as OAUtils from 'pages/utils/OA_utils.jsx';
 
 import { Drawer, NavBar,Button } from 'antd-mobile';
 import { Layout, Menu, Icon} from 'antd';
@@ -25,14 +26,12 @@ import NewDispatchList from './office_automation/newDispatchList.jsx'; //最新�
 import OaSiderbarComp from './office_automation/officeAutoSiderbar_comp.jsx';//侧边栏
 
 import DocumentSubmission from './office_automation/documentSubmission.jsx';//公文报送
-// import WorkSupervision from './office_automation/workSupervision.jsx';//工作督查
+import AdministrativeSystemInfos from './office_automation/administrativeSystemInfos.jsx';//工作督查
 // import InternalNoticeComp from './office_automation/internalNotice_comp.jsx'; //对内宣传
 // import WorkNoticeComp from './office_automation/workNotice_comp.jsx'; //工作通知
 
-
 import signup_logo from 'images/signup_logo.png';
-import logOut_icon from 'images/modules_img/logOut_icon.png';
-const urlPrefix = 'http://211.138.238.83:9000/CS_JrlService/';
+// import logOut_icon from 'images/modules_img/logOut_icon.png';
 
 class LoginRecordPage extends React.Component {
     constructor(props) {
@@ -43,7 +42,7 @@ class LoginRecordPage extends React.Component {
     }
     getStateFromStores() {
         return {
-            urlPrefix:urlPrefix,
+            tokenunid:'xxxxx', //登录标识id
             open: false,
             current: '待办事项',
             position: 'left',
@@ -58,8 +57,10 @@ class LoginRecordPage extends React.Component {
       this.setState({ open: !this.state.open });
     }
     afterChooseMenuItemCall = (key)=>{
+      let drawerOpen = this.state.open;
       this.setState({
-        current:key
+        current:key,
+        open:!drawerOpen
       });
     }
     onClickBackToModules(){
@@ -68,34 +69,41 @@ class LoginRecordPage extends React.Component {
     componentWillMount() {
       var me = UserStore.getCurrentUser() || {};
       this.setState({loginUserName:me.username || ''});
+      OAUtils.loginOASystem({}, (res)=>{ //登录OA系统获取认证id。
+        console.log("get OA login res:",res);
+        this.setState({tokenunid:res.values.tockenunid});
+      });
     }
     getContentElements(){
       let content = null;
-      let {current} = this.state;
+      let {current,tokenunid} = this.state;
       switch(current){
         case "待办事项":
-          content = (<PersonalTodoList title={current}/>);
+          content = (<PersonalTodoList title={current} tokenunid={tokenunid}/>);
         break;
         case "通知公告":
-          content = (<NoticeList title={current} />);
+          content = (<NoticeList title={current} tokenunid={tokenunid}/>);
         break;
         case "收文管理":
-          content = (<IncomingList title={current} />);
+          content = (<IncomingList title={current} tokenunid={tokenunid}/>);
         break;
         case "发文管理":
-          content = (<DispatchList title={current} />);
+          content = (<DispatchList title={current} tokenunid={tokenunid}/>);
         break;
         case "签报管理":
-          content = (<SignReportList title={current} />);
+          content = (<SignReportList title={current} tokenunid={tokenunid}/>);
         break;
         case "督办管理":
-          content = (<SuperviseList title={current} />);
+          content = (<SuperviseList title={current} tokenunid={tokenunid}/>);
         break;
         case "最新发文":
-          content = (<NewDispatchList title={current} />);
+          content = (<NewDispatchList title={current} tokenunid={tokenunid}/>);
         break;
         case "公文报送":
-          content = (<DocumentSubmission title={current} />);
+          content = (<DocumentSubmission title={current} tokenunid={tokenunid}/>);
+        break;
+        case "司法行政系统信息查询":
+          content = (<AdministrativeSystemInfos title={current} tokenunid={tokenunid}/>);
         break;
         default:
           break;
@@ -134,7 +142,7 @@ class LoginRecordPage extends React.Component {
                 <img width="35" height="35" src={signup_logo}/>司法E通
               </NavBar>
               <div style={{marginTop:'60px'}}>
-                {this.getContentElements()}
+                {this.state.tokenunid ? this.getContentElements() : null}
               </div>
             </Drawer>
           </div>

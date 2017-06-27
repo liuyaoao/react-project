@@ -2,8 +2,8 @@
 import $ from 'jquery';
 import React from 'react';
 import * as Utils from 'utils/utils.jsx';
-// import myWebClient from 'client/my_web_client.jsx';
-import { Modal,WingBlank, WhiteSpace,Popup, SwipeAction,Button, Tabs, RefreshControl, ListView,SearchBar} from 'antd-mobile';
+import * as OAUtils from 'pages/utils/OA_utils.jsx';
+import { Modal,WingBlank, WhiteSpace,Popup, SwipeAction,Button, Tabs, ListView,SearchBar} from 'antd-mobile';
 import { Icon} from 'antd';
 const TabPane = Tabs.TabPane;
 
@@ -11,8 +11,6 @@ import SuperviseAdd from './superviseAdd_comp.jsx';
 import SuperviseDetail from './superviseDetail_comp.jsx';
 
 const alert = Modal.alert;
-const loginUrl = 'http://10.192.0.241/openagent?agent=hcit.project.moa.transform.agent.ValidatePerson';
-
 //督办管理
 class SuperviseList extends React.Component {
   constructor(props) {
@@ -22,15 +20,13 @@ class SuperviseList extends React.Component {
         rowHasChanged: (row1, row2) => row1 !== row2,
       });
       this.state = {
-        loginUrl:loginUrl,
-        url:'http://10.192.0.241/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
-        moduleUrl:'/openagent?agent=hcit.project.moa.transform.agent.MobileViewWork', //模块url,当前是通知通告模块
         tabsArr:["待办", "办理中", "已办结", "所有"],
         activeTabkey:'待办',
+        colsNameCn:["收文日期", "标题", "来文单位", "督办类别", "当前办理人"],
+        colsNameEn:["acceptDate", "title", "sendUnit", "superviseType", "curUsers"],
         listData:[],
         dataSource: dataSource.cloneWithRows([]),
         tokenunid:'',
-        refreshing: true,
         showAdd:false,
         showDetail:false,
       };
@@ -40,107 +36,65 @@ class SuperviseList extends React.Component {
       key: '1',
       title:'督办管理111',
       superviseType: '督办A',
-      handleUsers: '吴龙',
-      sendTime:'2017/06/21'
+      sendUnit:'',
+      curUsers: '吴龙',
+      acceptDate:'2017/06/21'
     }, {
       key: '2',
       title:'督办管理2222',
+      sendUnit:'',
       superviseType: '督办B',
-      handleUsers: '吴龙,王焕清',
-      sendTime:'2017/05/01'
+      curUsers: '吴龙,王焕清',
+      acceptDate:'2017/05/01'
     }, {
       key: '3',
       title:'督办管理333',
+      sendUnit:'',
       superviseType: '督办A',
-      handleUsers: '吴龙,王焕清,尹小英',
-      sendTime:'2017/06/01'
+      curUsers: '吴龙,王焕清,尹小英',
+      acceptDate:'2017/06/01'
     }];
     //本地假数据
     setTimeout(() => {
       this.setState({
         listData:data,
         dataSource: this.state.dataSource.cloneWithRows(data),
-        refreshing: false
       });
     }, 1000);
-    // this.loginOASystem();
     //从服务端获取数据。
-    // this.getServerListData();
+    // this.getServerListData(this.state.activeTabkey,1);
   }
-  onRefresh = () => {
-    if(this.state.refreshing){ //如果正在刷新就不用重复刷了。
-      return;
-    }
-    console.log('onRefresh');
-    this.setState({ refreshing: true });
-    //本地假数据
-    setTimeout(() => {
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(this.state.listData),
-        refreshing: false
+  getServerListData = (keyName,currentpage)=>{
+    OAUtils.getSignReportListData({
+      tokenunid: this.props.tokenunid,
+      currentpage:currentpage,
+      keyName:keyName,
+      viewcolumntitles:this.state.colsNameCn.join(','),
+      successCall: (data)=>{
+        console.log("get server supervise list data:",data);
+        let parseData = this.formatServerListData(data.values);
+        this.setState({
+          listData:data.values,
+          dataSource: this.state.dataSource.cloneWithRows(parseData),
+        });
+      }
+    });
+  }
+  formatServerListData = (values)=>{ //整理后端发过来的列表数据。
+    let listArr = [];
+    let {colsNameEn} = this.state;
+    values.forEach((value, index)=>{
+      let obj = {key:index};
+      Object.keys(value).forEach((key) => {
+        let num = key.split("column")[1];
+        if (!isNaN(num)) {
+          obj[colsNameEn[+num]] = value[key];
+        }else{
+          obj[key] = value[key];
+        }
       });
-    }, 2000);
-    //从服务端获取数据。
-    // this.getServerListData();
-  }
-  loginOASystem = ()=>{
-    var param = encodeURIComponent(JSON.stringify({
-			"ver" : "2",
-			"params" : {
-				"username" : 'whq',
-				"password" : '123'
-			}
-		}));
-    $.ajax({
-				url : this.state.loginUrl,
-				data : {
-					"param" : param
-				},
-				async : true,
-				success : (result)=>{
-					var data  = decodeURIComponent(result);
-          data = data.replace(/%20/g, " ");
-					console.log("get server login data:",data);
-          if(data.code == "1"){
-            // this.setState({
-            //   listData:data,
-            // });
-          }
-				}
-			});
-  }
-  getServerListData = ()=>{ //从服务端获取列表数据
-    var param = encodeURIComponent(JSON.stringify({
-			"ver" : "2",
-			"params" : {
-				"key" : 10,
-				"currentpage" : 1,
-				"viewname" : "hcit.module.qbgl.ui.VeCld",
-				"viewcolumntitles" : "文件标题,主办部门,拟稿日期,当前办理人,办理状态"
-			}
-		}));
-    $.ajax({
-				url : this.state.url,
-				data : {
-					"tokenunid" : "7503071114382B3716EAC10A53773B25",
-					"param" : param,
-          "url" : this.state.moduleUrl
-				},
-				async : true,
-				success : (result)=>{
-					var data  = decodeURIComponent(result);
-          data = data.replace(/%20/g, " ");
-					console.log("get server notice list data:",data);
-          if(data.code == "1"){
-            this.setState({
-              listData:data,
-              dataSource: this.state.dataSource.cloneWithRows(data.values),
-              refreshing: false
-            });
-          }
-				}
-			});
-
+      listArr.push(obj);
+    });
   }
   showDeleteConfirmDialog = (record)=>{
     let selectedId = record.id ? record.id : '';
@@ -156,6 +110,7 @@ class SuperviseList extends React.Component {
     this.setState({
       activeTabkey:key
     });
+    // this.getServerListData(key,1);
   }
   onClickOneRow = (rowData)=>{
     console.log("incomingList click rowData:",rowData);
@@ -209,7 +164,7 @@ class SuperviseList extends React.Component {
             <div className={'list_item_container'}>
               <div className={'list_item_middle'}>
                 <div style={{color:'black',fontSize:'0.33rem',fontWeight:'bold'}}>{rowData.title}</div>
-                <div>当前办理人：<span>{rowData.handleUsers}</span></div>
+                <div>当前办理人：<span>{rowData.curUsers}</span></div>
               </div>
               <div className={'list_item_left'}>
                 <span className={'list_item_left_icon'} >
@@ -217,7 +172,7 @@ class SuperviseList extends React.Component {
                 </span>
               </div>
               <div className={'list_item_right'}>
-                <div style={{position:'absolute',top:'0',right:'0'}}>{rowData.sendTime}</div>
+                <div style={{position:'absolute',top:'0',right:'0'}}>{rowData.acceptDate}</div>
                 <div style={{ position:'absolute',bottom:'-1rem',right:'0' }}>{rowData.superviseType}</div>
               </div>
             </div>
@@ -231,6 +186,7 @@ class SuperviseList extends React.Component {
         <WingBlank>
           <Button className="btn" type="primary" onClick={this.onClickAddNew}><Icon type="plus"/>新建</Button>
         </WingBlank>
+        <WhiteSpace />
         <SearchBar placeholder="搜索" />
         {(!this.state.showAdd && !this.state.showDetail)?(<ListView
           dataSource={this.state.dataSource}
@@ -244,12 +200,7 @@ class SuperviseList extends React.Component {
             height: document.documentElement.clientHeight,
           }}
           useBodyScroll={true}
-          scrollerOptions={{ scrollbars: false }}
-          refreshControl={<RefreshControl
-            loading={(<Icon type="loading" />)}
-            refreshing={this.state.refreshing}
-            onRefresh={this.onRefresh}
-          />}
+          scrollerOptions={{ scrollbars: true }}
         />):null}
       </TabPane>);
     });

@@ -165,6 +165,7 @@ class Notice_AddEditContentComp extends React.Component {
             <div style={{marginLeft:'-0.1rem',marginRight:'-0.2rem'}}>
                 <Flex>
                   <Flex.Item>
+                    <div className="select_container">
                       <DatePicker className="forss"
                         mode="date"
                         onChange={this.onenteringValueChange}
@@ -172,10 +173,12 @@ class Notice_AddEditContentComp extends React.Component {
                       >
                       <List.Item arrow="horizontal">录入时间</List.Item>
                       </DatePicker>
+                    </div>
                   </Flex.Item>
                 </Flex>
                 <Flex>
                   <Flex.Item>
+                    <div className="select_container">
                       <DatePicker className="forss"
                         mode="date"
                         onChange={this.onpublicValueChange}
@@ -183,10 +186,12 @@ class Notice_AddEditContentComp extends React.Component {
                       >
                       <List.Item arrow="horizontal">发布日期</List.Item>
                       </DatePicker>
+                    </div>
                   </Flex.Item>
                 </Flex>
                 <Flex>
                   <Flex.Item>
+                    <div className="select_container">
                       <DatePicker className="forss"
                         mode="date"
                         onChange={this.onvalidValueChange}
@@ -194,89 +199,94 @@ class Notice_AddEditContentComp extends React.Component {
                       >
                       <List.Item arrow="horizontal">有效期</List.Item>
                       </DatePicker>
+                    </div>
                   </Flex.Item>
                 </Flex>
-            </div>
-
-            <Flex>
-              <Flex.Item><InputItem  editable={true} labelNumber={2} placeholder="标题">标题</InputItem></Flex.Item>
-            </Flex>
-            <Flex>
-              <Flex.Item><InputItem  editable={true} labelNumber={3} placeholder="副标题">副标题</InputItem></Flex.Item>
-            </Flex>
-            <Flex>
-              <Flex.Item><InputItem  editable={true} labelNumber={4} placeholder="文章来源">文章来源</InputItem></Flex.Item>
-            </Flex>
-            <Flex>
-              <Flex.Item><InputItem  editable={true} labelNumber={4} placeholder="所属类别">通知公告</InputItem></Flex.Item>
-            </Flex>
-            <Flex>
-              <Flex.Item><InputItem  editable={true} labelNumber={3} placeholder="录入人">录入人</InputItem></Flex.Item>
-            </Flex>
-            <Flex>
-              <Flex.Item>
-                <List renderHeader={() => '内容'}>
-                     <TextareaItem
-                       rows={5}
-                     />
-                 </List>
-              </Flex.Item>
-            </Flex>
-            <Flex>
-              <Flex.Item>
-                  <List.Item
-                  extra={<Switch
-                      {...getFieldProps('Switch1', {
-                        initialValue: true,
-                        valuePropName: 'checked',
-                      })}
-                    onClick={(checked) => { console.log(checked); }}
-                  />}>
-                    全部发布范围
-                  </List.Item>
-              </Flex.Item>
-            </Flex>
-            <Flex>
-              <Flex.Item>
-                    <Picker
-                          data={seasons}
-                          cascade={false}
-                          extra="请选择(可选)"
-                          value={this.state.sValue}
-                          onChange={v => this.setState({ sValue: v })}
-                    >
-                    <List.Item arrow="horizontal">审核情况</List.Item>
-                    </Picker>
-              </Flex.Item>
-            </Flex>
-            <Flex>
-              <Flex.Item>
-                  <List.Item
-                  extra={<Switch
-                      {...getFieldProps('Switch2', {
-                        initialValue: true,
-                        valuePropName: 'checked',
-                      })}
-                    onClick={(checked) => { console.log(checked); }}
-                  />}>
-                    是否启动附件
-                  </List.Item>
-              </Flex.Item>
-            </Flex>
-            <Flex>
-              <Flex.Item>
-                    <List renderHeader={() => '相关图片'}>
-                          <ImagePicker
-                              files={files}
-                              onChange={this.onImageChange}
-                              onImageClick={(index, fs) => console.log(index, fs)}
-                              selectable={files.length < 5}
+                <Flex>
+                  <Flex.Item><InputItem  editable={true} labelNumber={2} placeholder="标题">标题</InputItem></Flex.Item>
+                </Flex>
+                <Flex>
+                  <Flex.Item><InputItem  editable={true} labelNumber={3} placeholder="副标题">副标题</InputItem></Flex.Item>
+                </Flex>
+                <Flex>
+                  <Flex.Item><InputItem  editable={true} labelNumber={4} placeholder="文章来源">文章来源</InputItem></Flex.Item>
+                </Flex>
+                <Flex>
+                  <Flex.Item><InputItem  editable={true} labelNumber={4} placeholder="所属类别">通知公告</InputItem></Flex.Item>
+                </Flex>
+                <Flex>
+                  <Flex.Item><InputItem  editable={true} labelNumber={3} placeholder="录入人">录入人</InputItem></Flex.Item>
+                </Flex>
+                <Flex>
+                  <Flex.Item>
+                    <List renderHeader={() => '内容'}>
+                         <TextareaItem
+                           rows={5}
                          />
                      </List>
+                  </Flex.Item>
+                </Flex>
+                <Flex>
+                  <Flex.Item>
+                    <div className="select_container">
+                      <List.Item
+                      extra={<Switch
+                          {...getFieldProps('Switch1', {
+                            initialValue: true,
+                            valuePropName: 'checked',
+                          })}
+                        onClick={(checked) => { console.log(checked); }}
+                      />}>
+                        全部发布范围
+                      </List.Item>
+                    </div>
+                  </Flex.Item>
+                </Flex>
+                <Flex>
+                  <Flex.Item>
+                    <div className="select_container">
+                        <Picker
+                              data={seasons}
+                              cascade={false}
+                              extra="请选择(可选)"
+                              value={this.state.sValue}
+                              onChange={v => this.setState({ sValue: v })}
+                        >
+                        <List.Item arrow="horizontal">审核情况</List.Item>
+                        </Picker>
+                      </div>
+                  </Flex.Item>
+                </Flex>
+                <Flex>
+                  <Flex.Item>
+                    <div className="select_container">
+                      <List.Item
+                      extra={<Switch
+                          {...getFieldProps('Switch2', {
+                            initialValue: true,
+                            valuePropName: 'checked',
+                          })}
+                        onClick={(checked) => { console.log(checked); }}
+                      />}>
+                        是否启动附件
+                      </List.Item>
+                    </div>
+                  </Flex.Item>
+                </Flex>
+                <Flex>
+                  <Flex.Item>
+                        <List renderHeader={() => '相关图片'}>
+                              <ImagePicker
+                                  files={files}
+                                  onChange={this.onImageChange}
+                                  onImageClick={(index, fs) => console.log(index, fs)}
+                                  selectable={files.length < 5}
+                             />
+                         </List>
 
-              </Flex.Item>
-          </Flex>
-
+                  </Flex.Item>
+              </Flex>
+            </div>
                 <TabBar
                 unselectedTintColor="#949494"
                 tintColor="#33A3F4"
