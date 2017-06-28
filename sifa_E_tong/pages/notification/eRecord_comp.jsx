@@ -6,7 +6,7 @@ import superagent from 'superagent';
 import {  notification } from 'antd';
 import {Toast} from 'antd-mobile';
 import echarts from 'echarts';
-import StatisticalAnalysisMobileComp from './statisticalAnalysis_mobile_comp.jsx';
+import ERecordisMobileComp from './eRecord_mobile_comp.jsx';
 const urlPrefix = 'http://211.138.238.83:9000/CS_JrlService/';
 
 notification.config({
@@ -28,7 +28,7 @@ const analysisKey2name = {
 };
 
 //矫正系统的统计分析。
-class StatisticalAnalysisComp extends React.Component {
+class ERecordComp extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
@@ -122,7 +122,7 @@ class StatisticalAnalysisComp extends React.Component {
   componentWillReceiveProps(nextProps){
     //获取到新的隶属机构Id时，跟新通知列表数据。
     if(nextProps.tongjiData){
-      // console.log("componentWillReceiveProps----StatisticalAnalysisComp");
+      // console.log("componentWillReceiveProps----ERecordComp");
       this.updateChartData(nextProps.tongjiData);
     }
   }
@@ -139,21 +139,20 @@ class StatisticalAnalysisComp extends React.Component {
 
   render(){
   let echartView=this.state.isMobile ?
-  (<StatisticalAnalysisMobileComp tongjiData={this.props.tongjiData}/>) :
+  (<ERecordisMobileComp eRecordData={this.props.eRecordData}/>) :
   (<div id="tongjiChartsMainContaner" style={{height:600,margin:"0 auto",marginTop:30}}></div>);
     return (
       <div className="notificationdetai_container">
-        <span style={{fontSize:"1em",width:'100%',marginTop:22,color:'black',fontWeight:'bold'}}>统计分析类型数量</span>
         {echartView}
       </div>
     )
   }
 }
 
-StatisticalAnalysisComp.defaultProps = {
+ERecordComp.defaultProps = {
 };
 
-StatisticalAnalysisComp.propTypes = {
+ERecordComp.propTypes = {
 };
 
-export default StatisticalAnalysisComp;
+export default ERecordComp;
