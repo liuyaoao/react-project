@@ -70,6 +70,12 @@ export function formatOrganizationData(dtMap){
   });
   return orgaArr;
 }
+
+//获取发文管理的列表数据。
+export function getIncomingListData(opts){
+  opts['viewname'] = 'hcit.module.swgl.ui.VeSwcld';
+  getOAServerListData(opts);
+}
 //获取发文管理的列表数据
 export function getDispatchListData(opts){
   opts['viewname'] = 'hcit.module.fwgl.ui.VeFwcld';
@@ -240,6 +246,20 @@ export function getVerifyNotionTypes(params) {
       "docunid" : options.docunid,
       "gwlcunid" : options.gwlcunid,
       "modulename" : options.modulename
+    }
+  }));
+  finalRequestServer(options,param);
+}
+//获取表单历史阅文意见
+export function getFormVerifyNotion(params) {
+  let options = Object.assign({},{
+    url: 'http://10.192.0.241/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.GetHistoryNotionList',
+  },params);
+  let param = encodeURIComponent(JSON.stringify({
+    "ver" : "2",
+    "params" : {
+      "docunid" : options.docunid
     }
   }));
   finalRequestServer(options,param);

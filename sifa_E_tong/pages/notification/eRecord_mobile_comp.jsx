@@ -1,14 +1,18 @@
 //电子档案手机界面
 import $ from 'jquery';
 import React from 'react';
+import UserStore from 'stores/user_store.jsx';
+
 import * as Utils from 'utils/utils.jsx';
 import { createForm } from 'rc-form';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
+import myWebClient from 'client/my_web_client.jsx';
+import * as addressBookUtils from '../utils/addressBook_utils.jsx';
 
 // import myWebClient from 'client/my_web_client.jsx';
 import { Modal,WhiteSpace, SwipeAction, Flex,Button,
    RefreshControl, ListView,SearchBar,Picker,List,NavBar,DatePicker,InputItem} from 'antd-mobile';
-import { Icon} from 'antd';
+import { Icon,Table} from 'antd';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 const zhNow = moment().locale('zh-cn').utcOffset(8);
@@ -17,6 +21,8 @@ const alert = Modal.alert;
 class ERecordisMobileComp extends React.Component {
   constructor(props) {
       super(props);
+      let permissionData = UserStore.getPermissionData();
+      let hasOperaPermission = permissionData['address_book'].indexOf('action') != -1;
       this.showDeleteConfirmDialog = this.showDeleteConfirmDialog.bind(this);
       const dataSource = new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
@@ -34,9 +40,73 @@ class ERecordisMobileComp extends React.Component {
         publicValue:zhNow,
         dataDepartmentSource:[],
         sValue:['办公室'],
+        columns:[],
+        permissionData:permissionData,
+        hasOperaPermission:hasOperaPermission, //是否有操作权限。
+        eRecordData:[],
       };
   }
   componentWillMount(){
+    let params = {};
+    myWebClient.getServerAddressBook(params,
+      (data,res)=>{
+        let objArr = JSON.parse(res.text);
+        console.log("request server addressbook error res text:",objArr);
+        objArr = addressBookUtils.parseContactsData(objArr);
+        this.setState({"eRecordData":objArr});
+      },(e, err, res)=>{
+        console.log("request server addressbook error info:",err);
+      });
+      console.log("request server addressbook error res text:",this.state.eRecordData);
+
+    const columns = [{
+      title: '联系人',
+      dataIndex: 'Contacts',
+      render:(text,record,index) => (
+
+          <SwipeAction
+            autoClose
+            disabled={this.state.hasOperaPermission ? false : true}
+            right={[
+              {
+                text: '取消',
+                onPress: () => console.log('cancel'),
+                style: { backgroundColor: '#ddd', color: 'white' },
+              },
+              {
+                text: '删除',
+                onPress: ()=>{this.showDeleteConfirmDialog(record)},
+                style: { backgroundColor: '#F4333C', color: 'white' },
+              },
+            ]}
+            onOpen={() => console.log('global open')}
+            onClose={() => console.log('global close')}
+            >
+            <div key={record.identity+123456} className={'custom_listView_item'}>
+              <div className={'list_item_container'}>
+                  <div className={'list_item_middle'}>
+                    <div style={{color:'black',fontSize:'0.30rem',fontWeight:'bold'}}>{record.name+'('+record.telephone+')'}
+                    </div>
+                    <div style={{color:'black',fontSize:'0.30rem',marginTop:'0.3rem'}}>{record.organ}
+                    </div>
+                  </div>
+                  <div className={'list_item_left'}>
+                    <img width="54" height="54" src={record.uploadUrl}/>
+                  </div>
+                  <div className={'list_item_right'}>
+                        {this.state.hasOperaPermission ? (
+                          <a href="javascript:;" style={{position:'absolute',top:'0',right:'0'}}>解矫</a>
+                        ):null}
+                        <a href="javascript:;" style={{position:'absolute',bottom:'-1.1rem',right:'0'}}>查看</a>
+
+                  </div>
+              </div>
+            </div>
+          </SwipeAction>
+
+          )
+    }];
+    this.setState({columns:columns});
     OAUtils.getOrganization({
       tokenunid:this.props.tokenunid,
       successCall: (data)=>{
@@ -170,6 +240,7 @@ class ERecordisMobileComp extends React.Component {
     console.log("incomingList click rowData:",rowData);
   }
   render() {
+    const { columns } = this.state;
 
     const { getFieldProps, getFieldError } = this.props.form;
     const year = [{label: '2014 ',value: '2014 '},{label: '2015 ',value: '2015 '},{label: '2016 ',value: '2016 '},
@@ -203,51 +274,7 @@ class ERecordisMobileComp extends React.Component {
         }}
       />
     );
-    const listRow = (rowData, sectionID, rowID) => {
-      return (
-        <SwipeAction style={{ backgroundColor: 'gray' }}
-          autoClose
-          disabled={false}
-          right={[
-            {
-              text: '取消',
-              onPress: () => console.log('cancel'),
-              style: { backgroundColor: '#ddd', color: 'white' },
-            },
-            {
-              text: '删除',
-              onPress: ()=>{this.showDeleteConfirmDialog(rowData)},
-              style: { backgroundColor: '#F4333C', color: 'white' },
-            },
-          ]}
-          onOpen={() => console.log('global open')}
-          onClose={() => console.log('global close')}
-          >
-          <div key={rowID} className={'custom_listView_item'}
-            style={{
-              padding: '0.08rem 0.16rem',
-              backgroundColor: 'white',
-            }}
-            onClick={()=>this.onClickOneRow(rowData)}
-          >
-            <div className={'list_item_container'}>
-              <div className={'list_item_middle'}>
-                <div style={{color:'black',fontSize:'0.33rem',fontWeight:'bold'}}>{rowData.title}</div>
-              </div>
-              <div className={'list_item_left'}>
-                <span className={'list_item_left_icon'} >
-                  <Icon type="schedule" style={{fontSize:'3em'}} />
-                </span>
-              </div>
-              <div className={'list_item_right'}>
-                <div style={{position:'absolute',top:'0',right:'0'}}>{rowData.sendTime}</div>
-                <div style={{ position:'absolute',bottom:'-1rem',right:'0' }}>{rowData.verifState}</div>
-              </div>
-            </div>
-        </div>
-      </SwipeAction>
-      );
-    };
+
     let sponsorDepartmentSource=(
       <div className={'oa_detail_cnt'}>
         <div style={{marginLeft:'-0.1rem',marginRight:'-0.2rem'}}>
@@ -286,32 +313,21 @@ class ERecordisMobileComp extends React.Component {
     );
     let multiTabPanels =
       (<div>
-        <div>{sponsorDepartmentSource}</div>
-        <ListView
-          dataSource={this.state.dataSource}
-          renderRow={listRow}
-          renderSeparator={separator}
-          initialListSize={4}
-          pageSize={4}
-          scrollRenderAheadDistance={200}
-          scrollEventThrottle={20}
-          style={{
-            height: document.documentElement.clientHeight,
-          }}
-          scrollerOptions={{ scrollbars: true }}
-          refreshControl={<RefreshControl
-            loading={(<Icon type="loading" />)}
-            refreshing={this.state.refreshing}
-            onRefresh={this.onRefresh}
-          />}
-        />
-        </div>)
+        {sponsorDepartmentSource}
+      </div>)
     ;
 
     return (
       <div className="newDispatchList">
           {multiTabPanels}
-        <WhiteSpace />
+
+          <div className='addressbook_list' style={{width:'100%'}}>
+            <Table
+              columns={columns}
+              showHeader={false}
+              dataSource={this.props.eRecordData||[]}
+              pagination={{ pageSize: 10 }}/>
+          </div>
       </div>
     )
   }

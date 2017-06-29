@@ -7,6 +7,7 @@ import { Modal,WhiteSpace, SwipeAction,Popup, Tabs, RefreshControl, ListView,Sea
 import { Icon} from 'antd';
 const TabPane = Tabs.TabPane;
 import DS_DetailComp from './ds_detail_comp.jsx';//公文详情
+import DS_AddComp from './ds_add_comp.jsx';//新增
 
 const alert = Modal.alert;
 //发文管理
@@ -28,7 +29,7 @@ class DispatchList extends React.Component {
         dataSource: dataSource.cloneWithRows([]),
         refreshing: true,
         showDetail:false,
-        isEdit:false
+        showAdd:false
       };
   }
   componentWillMount(){
@@ -76,15 +77,15 @@ class DispatchList extends React.Component {
   }
   onClickOneRow = (rowData)=>{
     console.log("发文管理 click rowData:",rowData);
-    this.setState({detailInfo:rowData, showDetail:true});
+    this.setState({detailInfo:rowData, showDetail:true,showAdd: false});
   }
 
   backToTableListCall = ()=>{
-    this.setState({showDetail:false,isEdit: false});
+    this.setState({showDetail:false,showAdd: false});
   }
 
   onClickAddEdit = ()=>{
-    this.setState({showDetail:true, isEdit: true});
+    this.setState({showDetail:false, showAdd: true});
   }
 
   render() {
@@ -146,14 +147,18 @@ class DispatchList extends React.Component {
       );
     };
     let multiTabPanels = this.state.tabsArr.map((tabName,index)=>{
+      let {dataSource} = this.state;
+      if(this.state.activeTabkey != tabName){
+        dataSource = this.state.dataSource.cloneWithRows([]);
+      }
       return (<TabPane tab={tabName} key={tabName} >
         <Button className="btn" type="primary" style={{margin:"0.16rem"}} onClick={()=>this.onClickAddEdit()}><Icon type="plus" /> 新建</Button>
         <SearchBar placeholder="搜索" />
         {this.state.isLoading?<div style={{textAlign:'center'}}><Icon type="loading"/></div>:null}
         {(!this.state.isLoading && this.state.listData.length<=0)?<div style={{textAlign:'center'}}>暂无数据</div>:null}
-        {!this.state.showAddEdit && !this.state.showDetail ? (
+        {!this.state.showAdd && !this.state.showDetail ? (
           <ListView
-            dataSource={this.state.dataSource}
+            dataSource={dataSource}
             renderRow={listRow}
             renderSeparator={separator}
             scrollRenderAheadDistance={200}
@@ -178,13 +183,19 @@ class DispatchList extends React.Component {
           {multiTabPanels}
         </Tabs>
         <WhiteSpace />
+        {this.state.showAdd?
+          (<DS_AddComp
+            tokenunid={this.props.tokenunid}
+            backToTableListCall={()=>this.backToTableListCall()}
+            />):null
+        }
         {this.state.showDetail?
           (<DS_DetailComp
-            isEdit={this.state.isEdit}
             detailInfo={this.state.detailInfo}
             tokenunid={this.props.tokenunid}
             backToTableListCall={()=>this.backToTableListCall()}
-            />):null}
+            />):null
+        }
       </div>
     )
   }
