@@ -1,8 +1,8 @@
 //发送- 按部门
 import $ from 'jquery';
 import React from 'react';
-import * as Utils from 'utils/utils.jsx';
-import myWebClient from 'client/my_web_client.jsx';
+// import * as Utils from 'utils/utils.jsx';
+// import myWebClient from 'client/my_web_client.jsx';
 import { SearchBar, Button, Accordion } from 'antd-mobile';
 import { Icon } from 'antd';
 

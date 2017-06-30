@@ -1,8 +1,8 @@
 //发文详情页-- 上传附件
 import $ from 'jquery';
 import React from 'react';
-import * as Utils from 'utils/utils.jsx';
-import myWebClient from 'client/my_web_client.jsx';
+// import * as Utils from 'utils/utils.jsx';
+// import myWebClient from 'client/my_web_client.jsx';
 import { Upload, message, Button, Icon } from 'antd';
 
 class DS_UploadContentComp extends React.Component {

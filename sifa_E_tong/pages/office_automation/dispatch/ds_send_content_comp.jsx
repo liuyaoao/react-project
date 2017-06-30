@@ -1,7 +1,7 @@
 //发文详情页-- 发送
 import $ from 'jquery';
 import React from 'react';
-import * as Utils from 'utils/utils.jsx';
+// import * as Utils from 'utils/utils.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import { SearchBar, Tabs, Button, List, Flex, Toast, Switch } from 'antd-mobile';
 import { Icon } from 'antd';

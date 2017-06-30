@@ -1,8 +1,8 @@
 //发文详情页-- 正文
 import $ from 'jquery';
 import React from 'react';
-import * as Utils from 'utils/utils.jsx';
-import myWebClient from 'client/my_web_client.jsx';
+// import * as Utils from 'utils/utils.jsx';
+// import myWebClient from 'client/my_web_client.jsx';
 import { Button, TextareaItem } from 'antd-mobile';
 
 class DS_MainContentComp extends React.Component {

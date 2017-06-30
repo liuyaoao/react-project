@@ -1,62 +1,74 @@
 import $ from 'jquery';
 import React from 'react';
-import * as Utils from 'utils/utils.jsx';
-import myWebClient from 'client/my_web_client.jsx';
-import { WingBlank, WhiteSpace, Button, InputItem, NavBar,
-  TextareaItem, Flex, Steps, TabBar, Picker, List, Toast } from 'antd-mobile';
+// import * as Utils from 'utils/utils.jsx';
+// import myWebClient from 'client/my_web_client.jsx';
+import * as OAUtils from 'pages/utils/OA_utils.jsx';
+import UserStore from 'stores/user_store.jsx';
+import { WingBlank, WhiteSpace, Button, InputItem,
+  TextareaItem, Flex, TabBar, Picker, List, Toast } from 'antd-mobile';
 
 import { Icon, Select } from 'antd';
 import { createForm } from 'rc-form';
-const Step = Steps.Step;
-import CommonFlowTraceComp from './common_flowTrace_comp.jsx';//办文跟踪
+import CommonFlowTraceComp from '../common_flowTrace_comp.jsx';//办文跟踪
 
 class DS_DetailContentComp extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-        tabName:"content",
         flow: [{label: '发文',value: '发文'},{label: '司法局发文流程',value: '司法局发文流程'}],
-        showMainContent: false,
-        showUploadContent: false,
-        showSendContent: false,
-        showFlowContent: false,
-        modulename:'qbgl', //模块名
-        curSubTab:'content',
+        historyNotionList:[],
+        attachmentList:[],  //附件列表
       };
   }
-
-  shouldComponentUpdate(nextProps){
-    if(this.props.formData !== nextProps.formData){
+  componentWillMount(){
+    var me = UserStore.getCurrentUser() || {};
+    this.setState({loginUserName:me.username||''});
+    if(this.props.detailInfo && this.props.detailInfo.unid){
+      this.getFormVerifyNotion();
+      this.getFormAttachmentList();
     }
-    return true;
   }
-
-  onClickSubTab = (data)=>{
-    // console.log("onClickSubTab-target:",e.target);
-    let tabNameCn = data.replace(/\s+/g,"");
-    let tabNameCn2En = {"发送":"send", "上传附件":"upload", "正文":"article", "查阅附件":"referto"}
-    this.props.afterChangeTabCall(tabNameCn2En[tabNameCn]);
+  getFormVerifyNotion = ()=>{ //获取历史阅文意见数据。
+    OAUtils.getFormVerifyNotion({
+      tokenunid:this.props.tokenunid,
+      docunid:this.props.detailInfo.unid,
+      successCall: (data)=>{
+        console.log("get 发文管理的历史阅文意见:",data.values.notions);
+        this.setState({
+          historyNotionList:data.values.notions,
+        });
+      },
+      errorCall:(res)=>{
+        //TODO
+      }
+    });
   }
-
-  renderContent = (pageText)=> {
-    return (
-      <div style={{ backgroundColor: 'white', height: '100%', textAlign: 'center' }}>
-        <div style={{ paddingTop: 60 }}>你已点击“{pageText}” tab， 当前展示“{pageText}”信息</div>
-        <a style={{ display: 'block', marginTop: 40, marginBottom: 600, color: '#108ee9' }}
-          onClick={(e) => {
-            e.preventDefault();
-            this.setState({
-              hidden: !this.state.hidden,
-            });
-          }}
-        >
-          点击切换 tab-bar 显示/隐藏
-        </a>
-      </div>
-    );
+  getFormAttachmentList = ()=>{
+    OAUtils.getFormAttachmentList({
+      tokenunid:this.props.tokenunid,
+      docunid:this.props.detailInfo.unid,
+      moduleName:this.props.moduleNameCn,
+      successCall: (data)=>{
+        console.log("get 发文管理的附件列表:",data);
+        this.setState({
+          attachmentList:data.values.filelist || [],
+        });
+      }
+    });
   }
-
+  getAttachmentListEle = (attachmentList)=>{
+    return attachmentList.map((item,index)=>{
+      let downloadUrl = OAUtils.getAttachmentUrl({
+        fileunid:item.unid,
+        moduleName:this.props.moduleNameCn
+      });
+      return (
+        <div key={index} style={{marginLeft:'0.3rem'}}><a href={downloadUrl} data-unid={item.unid}>{item.attachname}</a><br/></div>
+      );
+    });
+  }
   render() {
+    const {attachmentList} = this.state;
     const { detailInfo, formData, formDataRaw , tokenunid, modulename } = this.props;
     const { getFieldProps, getFieldError } = this.props.form;
     const secrecy = [{label: '秘密',value: '秘密'},{label: '机密',value: '机密'}];
@@ -66,8 +78,8 @@ class DS_DetailContentComp extends React.Component {
         <div className={'oa_detail_cnt'}>
           <div className={'oa_detail_title'} style={{width:'100%',textAlign:'center'}}>{detailInfo.fileTitle}</div>
           <Flex>
-            <Flex.Item><InputItem placeholder="2017" labelNumber={2}>文号</InputItem></Flex.Item>
-            <Flex.Item><InputItem placeholder="2017" labelNumber={2} type="Number">份数</InputItem></Flex.Item>
+            <Flex.Item><InputItem placeholder="--" labelNumber={2}>文号</InputItem></Flex.Item>
+            <Flex.Item><InputItem placeholder="--" labelNumber={2} type="Number">份数</InputItem></Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
@@ -89,15 +101,25 @@ class DS_DetailContentComp extends React.Component {
             </Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem placeholder="局长办公室纪要" labelNumber={2}>标题</InputItem></Flex.Item>
-          </Flex>
-          <Flex>
             <Flex.Item>
-              <InputItem placeholder="张三，李四" labelNumber={2}>主送</InputItem>
+              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>标题：</div>
+              <TextareaItem
+                {...getFieldProps('subjectTitle',{
+                  initialValue: detailInfo.fileTitle,
+                })}
+                title=""
+                rows={3}
+                labelNumber={0}
+              />
             </Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem placeholder="张五，李六" labelNumber={2}>抄送</InputItem></Flex.Item>
+            <Flex.Item>
+              <InputItem placeholder="--" labelNumber={2}>主送</InputItem>
+            </Flex.Item>
+          </Flex>
+          <Flex>
+            <Flex.Item><InputItem placeholder="--" labelNumber={2}>抄送</InputItem></Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
@@ -108,8 +130,27 @@ class DS_DetailContentComp extends React.Component {
               </div>
             </Flex.Item>
           </Flex>
+
+          <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginTop:'0.1rem'}}/>
           <Flex>
-            <Flex.Item><InputItem placeholder="xxxxx" labelNumber={4}>领导签发</InputItem></Flex.Item>
+            <Flex.Item>
+              <form enctype="multipart/form-data" action="" method="post">
+                  <input type="file" name="file" id="choosefile" style={{display:'inline-block'}}/>
+                  <input type="submit" value="上传附件" id="submitBtn" style={{color:'black'}}/>
+              </form>
+            </Flex.Item>
+          </Flex>
+          <Flex>
+            <Flex.Item>
+              <div style={{margin:'0.2rem 0 0 0.3rem',color:'black'}}>附件列表：{attachmentList.length<=0?(<span>无附件</span>):null}</div>
+              { this.state.attachmentList.length>0?
+                (this.getAttachmentListEle(this.state.attachmentList)):null
+              }
+            </Flex.Item>
+          </Flex>
+
+          <Flex>
+            <Flex.Item><InputItem placeholder="--" labelNumber={4}>领导签发</InputItem></Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
@@ -174,13 +215,13 @@ class DS_DetailContentComp extends React.Component {
             </Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem placeholder="xxxxx" labelNumber={4}>拟稿单位</InputItem></Flex.Item>
+            <Flex.Item><InputItem placeholder="--" value={detailInfo.draftUnit} labelNumber={4}>拟稿单位</InputItem></Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem placeholder="xxxxx" labelNumber={4} value={formData.ngr_show}>拟稿人</InputItem></Flex.Item>
+            <Flex.Item><InputItem placeholder="--" labelNumber={4} value={formData.ngr_show}>拟稿人</InputItem></Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem placeholder="xxxxx" editable="fasle" value={formData.ngrq_show}>日期</InputItem></Flex.Item>
+            <Flex.Item><InputItem placeholder="--" editable="fasle" value={formData.ngrq_show}>日期</InputItem></Flex.Item>
           </Flex>
           <div style={{height:'0.5rem',width:'100%',margin:'1em 0',background:'#efe9e9'}}></div>
           <div style={{height:'2.5em',lineHeight:'2.5em',marginLeft:'0.2rem',borderBottom:'1px solid #d6d1d1'}}>

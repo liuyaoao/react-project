@@ -6,7 +6,7 @@ import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import { Modal,WhiteSpace, SwipeAction,Popup, Tabs, RefreshControl, ListView,SearchBar, Button} from 'antd-mobile';
 import { Icon} from 'antd';
 const TabPane = Tabs.TabPane;
-import DS_DetailComp from './ds_detail_comp.jsx';//公文详情
+import DS_DetailComp from './ds_detail_comp.jsx';//详情
 import DS_AddComp from './ds_add_comp.jsx';//新增
 
 const alert = Modal.alert;

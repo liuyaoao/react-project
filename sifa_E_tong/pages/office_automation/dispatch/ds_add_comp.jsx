@@ -1,32 +1,24 @@
 //发文管理的详情页.
 import $ from 'jquery';
 import React from 'react';
-import * as Utils from 'utils/utils.jsx';
-import myWebClient from 'client/my_web_client.jsx';
+// import * as Utils from 'utils/utils.jsx';
+// import myWebClient from 'client/my_web_client.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import { WingBlank, WhiteSpace, Button, NavBar, TabBar, Toast } from 'antd-mobile';
 
-import {Icon } from 'antd';
-import moment from 'moment';
-import 'moment/locale/zh-cn';
-
-import * as GlobalActions from 'actions/global_actions.jsx';
 import DS_EditContentComp from './ds_edit_content_comp.jsx';
-import BottomTabBarComp from './signReport/bottomTabBar_comp.jsx';
+import BottomTabBarComp from '../signReport/bottomTabBar_comp.jsx';
 import DS_SendContentComp from './ds_send_content_comp.jsx';//发文详情页-- 发送
-import CommonVerifyComp from './common_verify_comp.jsx';
+import CommonVerifyComp from '../common_verify_comp.jsx';
 import DS_MainContentComp from './ds_main_content_comp.jsx';//发文详情页-- 正文
 import DS_UploadContentComp from './ds_upload_content_comp.jsx';//发文详情页-- 上传附件
 import DS_FlowContentComp from './ds_flow_content_comp.jsx';//发文详情页-- 查看流程
-
-const zhNow = moment().locale('zh-cn').utcOffset(8);
 
 class DS_AddComp extends React.Component {
   constructor(props) {
       super(props);
       this.onNavBarLeftClick = this.onNavBarLeftClick.bind(this);
       this.state = {
-        date: zhNow,
         moduleNameCn:'发文管理',
         modulename:'fwgl', //模块名
         curSubTab:'content',

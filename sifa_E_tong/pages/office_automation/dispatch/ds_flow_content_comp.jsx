@@ -1,8 +1,8 @@
 //发文详情页-- 查看流程
 import $ from 'jquery';
 import React from 'react';
-import * as Utils from 'utils/utils.jsx';
-import myWebClient from 'client/my_web_client.jsx';
+// import * as Utils from 'utils/utils.jsx';
+// import myWebClient from 'client/my_web_client.jsx';
 import { WingBlank, WhiteSpace, Button, InputItem, NavBar,
   TextareaItem,Flex,Steps, TabBar, Picker, List } from 'antd-mobile';
 
