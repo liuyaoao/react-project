@@ -16,7 +16,6 @@ class NoticeList extends React.Component {
   constructor(props) {
       super(props);
       this.showDeleteConfirmDialog = this.showDeleteConfirmDialog.bind(this);
-      //this.showDeleteConfirm =this.showDeleteConfirm.bind(this);
       const dataSource = new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
       });
@@ -25,97 +24,49 @@ class NoticeList extends React.Component {
         moduleUrl:'/openagent?agent=hcit.project.moa.transform.agent.MobileViewWork', //模块url,当前是通知通告模块
         tabsArr:["所有", "待审核", "已通过", "未通过"],
         activeTabkey:'所有',
+        currentpage:1, //当前页码。
+        totalPageCount:1, //总页数。
+        isLoading:false, //是否在加载列表数据。
+        isMoreLoading:false, //是否正在加载更多。
         listData:[],
         dataSource: dataSource.cloneWithRows([]),
-        refreshing: true,
         showDetail:false,
         showAddEdit:false,
       };
   }
-  backToTableListCall = ()=>{
-    this.setState({showDetail:false});
-    this.setState({showAddEdit:false});
-  }
   componentWillMount(){
-    const data = [{
-      key: '1',
-      title:'周计划(6.19-6.23)',
-      verifState: '已通过',
-      type: '办理',
-      sendTime:'2017/06/20'
-    }, {
-      key: '2',
-      title:'周计划(6.12-6.16)',
-      verifState: '未通过',
-      type: '办理2',
-      sendTime:'2017/06/15'
-    }, {
-      key: '3',
-      title:'周计划(6.05-6.09)',
-      verifState: '待审核',
-      type: '办理2',
-      sendTime:'2017/06/08'
-    }];
     //本地假数据
-
-    setTimeout(() => {
-      this.setState({
-        listData:data,
-        dataSource: this.state.dataSource.cloneWithRows(data),
-        refreshing: false
-      });
-    }, 1000);
+    this.setState({
+      listData:[],
+      dataSource: this.state.dataSource.cloneWithRows([])
+    });
     //从服务端获取数据。
     // this.getServerListData();
   }
-  onRefresh = () => {
-    if(this.state.refreshing){ //如果正在刷新就不用重复刷了。
-      return;
-    }
-    console.log('onRefresh');
-    this.setState({ refreshing: true });
-    //本地假数据
-    setTimeout(() => {
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(this.state.listData),
-        refreshing: false
-      });
-    }, 2000);
-    //从服务端获取数据。
-    // this.getServerListData();
-  };
-  getServerListData = ()=>{ //从服务端获取列表数据
-    var param = encodeURIComponent(JSON.stringify({
-			"ver" : "2",
-			"params" : {
-				"key" : 10,
-				"currentpage" : 1,
-				"viewname" : "hcit.module.qbgl.ui.VeCld",
-				"viewcolumntitles" : "文件标题,主办部门,拟稿日期,当前办理人,办理状态"
-			}
-		}));
-    $.ajax({
-				url : this.state.url,
-				data : {
-					"tokenunid" : "7503071114382B3716EAC10A53773B25",
-					"param" : param,
-          "url" : this.state.moduleUrl
-				},
-				async : true,
-				success : (result)=>{
-					var data  = decodeURIComponent(result);
-          data = data.replace(/%20/g, " ");
-					console.log("get server notice list data:",data);
-          if(data.code == "1"){
-            this.setState({
-              listData:data,
-              dataSource: this.state.dataSource.cloneWithRows(data.values),
-              refreshing: false
-            });
-          }
-				}
-			});
-
+  getServerListData = (keyName,currentpage)=>{ //从服务端获取列表数据
+    this.setState({isLoading:true});
+    OAUtils.getSuperviseListData({
+      tokenunid: this.props.tokenunid,
+      currentpage:currentpage,
+      keyName:keyName,
+      viewcolumntitles:this.state.colsNameCn.join(','),
+      successCall: (data)=>{
+        console.log("get 通知公告的list data:",data);
+        let {colsNameEn} = this.state;
+        let parseData = OAUtils.formatServerListData(colsNameEn, data.values);
+        parseData = { ...this.state.listData, ...parseData };
+        this.setState({
+          isLoading:false,isMoreLoading:false,
+          currentpage:this.state.currentpage+1,
+          totalPageCount:data.totalcount,
+          listData:parseData,
+          dataSource: this.state.dataSource.cloneWithRows(parseData),
+        });
+      },
+      errorCall: (data)=>{
+        this.setState({isLoading:false,isMoreLoading:false});
+      }
+    });
   }
   showDeleteConfirmDialog = (record)=>{
     let selectedId = record.id ? record.id : '';
@@ -127,12 +78,31 @@ class NoticeList extends React.Component {
   confirmDelete = (selectedId)=>{ //确认删除
     //TODO.
   }
+  handleTabClick = (key)=>{
+    this.setState({
+      activeTabkey:key,
+      listData:[],
+      currentpage:1
+    });
+    this.getServerListData(key,1);
+  }
   onClickOneRow = (rowData)=>{
-    console.log("incomingList click rowData:",rowData);
-    this.setState({showDetail:true});
+    console.log("通知公告 click rowData:",rowData);
+    this.setState({detailInfo:rowData, showDetail:true});
   }
   onClickAddEdit = ()=>{
     this.setState({showAddEdit:true});
+  }
+  backToTableListCall = ()=>{
+    this.setState({showDetail:false,showAddEdit:false});
+  }
+  onEndReached = (evt)=>{
+    let {currentpage,totalPageCount} = this.state;
+    if (this.state.isMoreLoading && (currentpage==totalPageCount)) {
+      return;
+    }
+    this.setState({ isMoreLoading: true });
+    // this.getServerListData(this.state.activeTabkey,currentpage++);
   }
   render() {
     const separator = (sectionID, rowID) => (
@@ -240,10 +210,16 @@ class NoticeList extends React.Component {
         <Button type="primary" style={{margin:'0 auto',marginTop:'0.1rem',width:'98%'}}
         onClick={()=>this.onClickAddEdit()}><Icon type="plus" />新建</Button>
         <SearchBar placeholder="搜索" />
+        {this.state.isLoading?<div style={{textAlign:'center'}}><Icon type="loading"/></div>:null}
+        {(!this.state.isLoading && this.state.listData.length<=0)?<div style={{textAlign:'center'}}>暂无数据</div>:null}
+
         <ListView
           dataSource={this.state.dataSource}
           renderRow={listRow}
           renderSeparator={separator}
+          renderFooter={() => (<div style={{ padding: 20, textAlign: 'center' }}>
+              {this.state.isMoreLoading ? '加载中...' : '没有更多了！'}
+            </div>)}
           initialListSize={4}
           pageSize={4}
           scrollRenderAheadDistance={200}
@@ -253,12 +229,10 @@ class NoticeList extends React.Component {
             border: '1px solid #ddd',
             margin: '0.1rem 0',
           }}
-          scrollerOptions={{ scrollbars: true }}
-          refreshControl={<RefreshControl
-          loading={(<Icon type="loading" />)}
-          refreshing={this.state.refreshing}
-          onRefresh={this.onRefresh}
-          />}
+          useBodyScroll={true}
+          scrollerOptions={{ scrollbars: false }}
+          onEndReached={this.onEndReached}
+          onEndReachedThreshold={10}
         />
       </TabPane>);
     });

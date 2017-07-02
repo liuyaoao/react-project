@@ -28,7 +28,6 @@ notification.config({
   top: 68,
   duration: 3
 });
-
 class NotificationPage extends React.Component {
     constructor(props) {
         super(props);
@@ -46,8 +45,7 @@ class NotificationPage extends React.Component {
             organName:'',
             organFlag:'',
             organListData:[], //矫正的组织结构列表数据。
-            loginUserName:'', // 矫正系统里的用户名。
-            loginPassword:'', // 矫正系统的用户密码。
+            loginUserName:'', //矫正系统的登录用户.
             redressOrganId:'', //矫正系统里的组织机构Id.
             noticeListData:null,
             tongjiData:null, //统计分析的数据
@@ -74,8 +72,7 @@ class NotificationPage extends React.Component {
     componentWillMount() {
       var me = UserStore.getCurrentUser() || {};
       this.setState({loginUserName:me.redressUserName || 'csjz05'});
-      this.setState({loginPassword:me.redressPassword || '2016'});
-      //登录的接口。
+      //登录矫正系统的接口。
       let params = {
         loginName:`${me.redressUserName || 'csjz05'}`,
         loginPwd:`${me.redressPassword || '2016'}`
