@@ -90,6 +90,11 @@ export function getSuperviseListData(opts){
   opts['viewname'] = 'hcit.module.duban3.ui.VeDbjgl';
   getOAServerListData(opts);
 }
+//获取通知公告的列表数据
+export function getNoticeListData(opts){
+  opts['viewname'] = 'hcit.module.tzgg.ui.VeTzgg';
+  getOAServerListData(opts);
+}
 
 // Key：1表示获取获取草稿箱中的数据，10表示获取待办内容，2，表示办理中，4表示已办结，16777215表示所有。
 export function getOAServerListData(params){ //从服务端获取列表数据
@@ -268,10 +273,10 @@ export function parseHistoryNotionList(list){
   let notionMap = {};
   for(let i=0;i<list.length;i++){
     let obj = list[i];
-    if(notionMap[obj[type]]){
-      notionMap[obj[type]].push(obj);
+    if(notionMap[obj['type']]){
+      notionMap[obj['type']].push(obj);
     }else{
-      notionMap[obj[type]] = [obj];
+      notionMap[obj['type']] = [obj];
     }
   }
   return notionMap;

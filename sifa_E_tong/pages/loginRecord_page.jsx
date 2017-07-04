@@ -57,7 +57,9 @@ class LoginRecordPage extends React.Component {
     onClickBackToModules(){
       browserHistory.push('/modules');
     }
-
+    handleMenuClick = (item)=>{
+      this.setState({current:item.key, open:!this.state.open});
+    }
     componentWillMount() {
       var me = UserStore.getCurrentUser() || {};
       this.setState({loginUserName:me.username || ''});
@@ -77,8 +79,10 @@ class LoginRecordPage extends React.Component {
       return (<div className='office_automation_drawer'>
         <Drawer
           style={{ minHeight: document.documentElement.clientHeight - 200 }}
-          touch={true} sidebarStyle={{height:'100%',background:'#fff',overflow:'hidden'}}
-          contentStyle={{ color: '#A6A6A6'}} sidebar={sidebarMobile}
+          touch={true}
+          sidebarStyle={{height:'100%',background:'#2071a7',overflow:'hidden'}}
+          contentStyle={{ color: '#A6A6A6'}}
+          sidebar={sidebarMobile}
           {...drawerProps} >
           <NavBar className="mobile_navbar_custom"
           iconName = {false} onLeftClick={this.onNavBarLeftClick}
@@ -95,6 +99,7 @@ class LoginRecordPage extends React.Component {
 
     getBody(){
       return this.state.isAdmin ? (<AdminLoginRecordComp />) : (<UserLoginRecordComp />);
+      //return false ? (<AdminLoginRecordComp />) : (<UserLoginRecordComp />);
     }
 
     getPCElements(sidebar){
@@ -136,7 +141,7 @@ class LoginRecordPage extends React.Component {
           mode="inline"
           style={{ width: 246}}
           selectedKeys={[this.state.current]}
-          onClick={this.handleClick}
+          onClick={this.handleMenuClick}
         >
         <Menu.Item key="1" style={{fontSize:'18px'}}><Icon type="file" />登录签到</Menu.Item>
         </Menu>
@@ -149,6 +154,7 @@ class LoginRecordPage extends React.Component {
           theme="dark"
           mode="inline"
           style={{ width: 240}}
+          selectedKeys={[this.state.current]}
         >
             <Menu.Item key="1"><Icon type="calendar" />登录签到</Menu.Item>
         </Menu>

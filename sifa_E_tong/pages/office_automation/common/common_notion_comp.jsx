@@ -19,7 +19,7 @@ class CommonNotionComp extends React.Component {
         return (
           <div key={index}>
             <div>{item.content}</div>
-            <div>{item.preimage?<img href={item.preimage}/>:<span>{item.ownercommonname}</span>}</div>
+            <div><span>——{item.ownercommonname}</span></div>
             <div>{item.modifytime}</div>
           </div>
         );
@@ -39,7 +39,7 @@ class CommonNotionComp extends React.Component {
       }
     });
     return (
-      <div className={''}>
+      <div className={''} style={{minHeight:'3rem',width:'100%',padding:'0.05rem 0.2rem',border:'1px solid #d6d1d1'}}>
         {notionListElements}
       </div>
     )

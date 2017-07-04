@@ -6,6 +6,7 @@ import React from 'react';
 import Client from 'client/web_client.jsx';
 import PreferenceStore from 'stores/preference_store.jsx';
 import * as Utils from 'utils/utils.jsx';
+import {browserHistory} from 'react-router/es6';
 
 import SidebarHeaderDropdown from './sidebar_header_dropdown.jsx';
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
@@ -47,6 +48,10 @@ export default class SidebarHeader extends React.Component {
         e.preventDefault();
 
         this.refs.dropdown.toggleDropdown();
+    }
+    onClickBackToModules(e) {
+      console.log("点击了群聊的sidebar_header。",e);
+      browserHistory.push('/modules');
     }
 
     render() {
@@ -98,17 +103,16 @@ export default class SidebarHeader extends React.Component {
         }
 
         return (
-            <div className='team__header theme' style={{padding: "0px"}}>
+            <div className='team__header theme' style={{padding: "0px"}} onClick={this.onClickBackToModules}>
                 {tutorialTip}
-                <div className='custom_ant_header'>
-                    <div className="custom_ant_header_logo addressbook_logo" onClick={this.onClickBackToModules} style={{marginLeft: "0px", background: "#3f84af"}}>
+                <div className='custom_ant_header'  onTap={this.onClickBackToModules}>
+                    <div className="custom_ant_header_logo chat_header_logo"  style={{marginLeft: "0px", background: "#3f84af"}}>
                       <span className="logo_icon" style={{paddingLeft: "20px"}}><img width="40" height="40" src={signup_logo}/></span>
                       <div className="logo_title">
                         <p style={{margin: "0px"}}>{'@' + me.username}</p>
                         <p style={{margin: "0px"}}>司法E通</p>
                       </div>
                     </div>
-
                 </div>
                 {/*<div>
                     {profilePicture}
