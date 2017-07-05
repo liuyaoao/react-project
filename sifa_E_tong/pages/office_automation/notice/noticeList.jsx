@@ -239,9 +239,7 @@ class NoticeList extends React.Component {
           scrollRenderAheadDistance={400}
           scrollEventThrottle={20}
           style={{
-            height: document.documentElement.clientHeight,
-            border: '1px solid #ddd',
-            margin: '0.1rem 0',
+            height: document.documentElement.clientHeight
           }}
           scrollerOptions={{ scrollbars: false }}
         />):null}

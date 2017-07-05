@@ -70,7 +70,7 @@ export function formatOrganizationData(dtMap){
   return orgaArr;
 }
 
-//获取发文管理的列表数据。
+//获取shou文管理的列表数据。
 export function getIncomingListData(opts){
   opts['viewname'] = 'hcit.module.swgl.ui.VeSwcld';
   getOAServerListData(opts);
@@ -95,6 +95,10 @@ export function getNoticeListData(opts){
   // opts['viewname'] = 'hcit.module.tzgg.ui.VeTzgg';
   opts['viewname'] = 'hcit.module.xxfb.ui.VeSjsh';
   getOAServerListDataWithUrlParam(opts);
+}
+export function getNewDispatchListData(opts){
+  opts['viewname'] = 'hcit.module.fwgl.ui.VeFbgw';
+  getOAServerListData(opts);
 }
 
 // Key：1表示获取获取草稿箱中的数据，10表示获取待办内容，2，表示办理中，4表示已办结，16777215表示所有。
@@ -348,7 +352,7 @@ export function getFormAttachmentList(params){
   }));
   finalRequestServer(options,param);
 }
-//获取表单公文的附件下载地址。
+//获取表单公文附件的下载地址。
 export function getAttachmentUrl(params){
   let url='';
   var strUrl = "http://10.192.0.241/openagent?agent=hcit.project.moa.transform.agent.GetGwfjData";
