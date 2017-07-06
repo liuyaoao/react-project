@@ -12,13 +12,51 @@ class SearchZoneComp extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
+        curYearMonth:moment(new Date()),
+        maxYearMonth:moment(new Date()).add(1,'months'),
+        minYearMonth:moment(new Date()).subtract(4,'years'),
         beginTime:null,
         endTime:null,
+        departmentPickers:[]
       };
   }
   componentWillMount(){
+    let curDepartmentUnid='';
+    let departmentPickers = this.props.departmentSource.map((item)=>{
+      if(item.commonname == "148中心"){
+        curDepartmentUnid = item.unid;
+      }
+      return {
+        label:item.commonname,
+        value:item.unid
+      };
+    });
+    this.setState({
+      departmentPickers:departmentPickers,
+      curDepartmentUnid:curDepartmentUnid,
+    })
   }
   componentWillReceiveProps(nextState){
+  }
+  // updateSearchParams = (params)=>{
+  //   this.props.updateSearchParams(params);
+  // }
+  onYearMonthChange = (yearMonth)=>{
+    console.log("yearMonth:",yearMonth);
+    this.setState({curYearMonth:yearMonth});
+    this.props.updateSearchParams({
+      year:yearMonth.format("YYYY"),
+      month:yearMonth.format("MM"),
+    });
+  }
+  onDepartmentChange = (depart)=>{
+    console.log("curDepartmentUnid:",depart);
+    this.setState({
+      curDepartmentUnid:depart[0]
+    })
+    this.props.updateSearchParams({
+      department:depart[0]
+    });
   }
   onBeginTimeChange = (beginTime) => { //开始日期
     this.setState({
@@ -32,40 +70,25 @@ class SearchZoneComp extends React.Component {
   }
   render() {
     const { getFieldProps, getFieldError } = this.props.form;
-    const year = [{label: '2014 ',value: '2014 '},{label: '2015 ',value: '2015 '},{label: '2016 ',value: '2016 '},
-    {label: '2017 ',value: '2017 '},{label: '2018 ',value: '2018 '},{label: '2019 ',value: '2019 '}];
-    const month = [{label: '1 ',value: '1 '},{label: '2 ',value: '2 '},{label: '3 ',value: '3 '},
-    {label: '4 ',value: '4 '},{label: '5 ',value: '5 '},{label: '6 ',value: '6 '},{label: '7 ',value: '7 '},
-    {label: '8 ',value: '8 '},{label: '9 ',value: '9 '},{label: '10 ',value: '10 '},{label: '11 ',value: '11 '},
-    {label: '12 ',value: '12 '}];
+    const {departmentPickers} = this.state;
 
-    let sponsorDepartment = [];
-    for(var i=0;i<=this.props.departmentSource.length-1;i++){
-      sponsorDepartment.push({
-        label:this.props.departmentSource[i],
-        value: this.props.departmentSource[i]
-      });
-    }
     let yearMonthSource=(
       <div className={'oa_detail_cnt'}>
         <div style={{marginLeft:'-0.1rem',marginRight:'-0.2rem'}}>
           <Flex>
             <Flex.Item>
-              <div style={{borderBottom: '1px solid #ddd'}}>
-                <Picker data={year} cols={1}
-                  {...getFieldProps('year')}>
-                  <List.Item arrow="horizontal">年份</List.Item>
-                </Picker>
-              </div>
-            </Flex.Item>
-          </Flex>
-          <Flex>
-            <Flex.Item>
               <div className="select_container">
-                <Picker data={month} cols={1}
-                  {...getFieldProps('month')}>
-                  <List.Item arrow="horizontal">月份</List.Item>
-                </Picker>
+                <DatePicker
+                  mode="date"
+                  title="选择日期"
+                  extra="请选择"
+                  value={this.state.curYearMonth}
+                  minDate={this.state.minYearMonth}
+                  maxDate={this.state.maxYearMonth}
+                  onChange={this.onYearMonthChange}
+                >
+                  <List.Item arrow="horizontal">选择年月:</List.Item>
+                </DatePicker>
               </div>
             </Flex.Item>
           </Flex>
@@ -78,9 +101,12 @@ class SearchZoneComp extends React.Component {
           <Flex>
             <Flex.Item>
               <div className="select_container">
-                <Picker data={sponsorDepartment} cols={1}
-                  {...getFieldProps('sponsorDepartment')}>
-                  <List.Item arrow="horizontal">按主办部门</List.Item>
+                <Picker data={departmentPickers} cols={1}
+                  title="选择主办部门"
+                  value={[this.state.curDepartmentUnid]}
+                  onChange={this.onDepartmentChange}
+                  >
+                  <List.Item arrow="horizontal">按主办部门:</List.Item>
                 </Picker>
               </div>
             </Flex.Item>
@@ -149,7 +175,7 @@ class SearchZoneComp extends React.Component {
     );
     let searchEle=null;
     switch(this.props.tabName){
-      case "按日期":
+      // case "按日期":
       case "按年度":
         searchEle = yearMonthSource;
         break;

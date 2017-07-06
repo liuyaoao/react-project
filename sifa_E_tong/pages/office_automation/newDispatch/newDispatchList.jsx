@@ -28,10 +28,10 @@ class NewDispatchList extends React.Component {
       });
       this.state = {
         rootlbunid: '72060E133431242D987C0A80A4124268',
-        tabsArr:["按日期", "按年度", "按主办部门", "组合查询"],
+        tabsArr:["按日期", "按年度", "按主办部门"], //"组合查询" ，不好做，先去掉不做了，如果一定要再和海昌那边协调。
         activeTabkey:'按日期',
-        colsNameCn:["拟稿日期","拟稿单位", "拟稿人", "文件标题", "发文类型", "发文文号", "当前办理人", "办理状态"],
-        colsNameEn:["draftDate", "draftUnit", "draftPerson", "fileTitle", "fileType", "fileNum", "curUsers", "status"],
+        colsNameCn:["发布日期", "发文文号",  "标题",  "拟稿单位",  "附件",  "Word原稿",  "修改痕迹"],
+        colsNameEn:["publishTime", "fileNum", "fileTitle","draftUnit", "attachment", "wordOrigin", "modifyRecord"],
         currentpage:1, //当前页码。
         totalPageCount:1, //总页数。
         isLoading:false, //是否在加载列表数据
@@ -42,22 +42,28 @@ class NewDispatchList extends React.Component {
         departmentSource:[],
         showDetail:false,
         detailInfo:null,
+        curYearMonth:moment(new Date()), //当前日期。
+        curDepartmentUnid:'', //默认的部门id. 默认为'148中心' ;
       };
   }
   componentWillMount(){
     OAUtils.getOrganization({
       tokenunid:this.props.tokenunid,
       successCall: (data)=>{
-        //console.log("获取OA的组织机构数据：",data);
         let organizationList = OAUtils.formatOrganizationData(data.values);
-        let dataDepartment=[];
-        for(var i=0;i<=organizationList.length-1;i++){
+        console.log("获取OA的组织机构数据：",organizationList);
+        let dataDepartment=[] ,curDepartmentUnid;
+        for(var i=0;i<organizationList.length;i++){
           let commonname = organizationList[i].commonname;
           if(commonname && commonname.indexOf('暂定')==-1 && commonname.indexOf('打印室')==-1){
-            dataDepartment[i] = commonname;
+            dataDepartment.push(organizationList[i]);
+          }
+          if(commonname == "148中心"){
+            curDepartmentUnid = organizationList[i].unid;
           }
         }
         this.setState({
+          curDepartmentUnid:curDepartmentUnid,
           departmentSource:dataDepartment,
         });
       }
@@ -65,32 +71,52 @@ class NewDispatchList extends React.Component {
     //从服务端获取数据。
     this.getServerListData(this.state.activeTabkey,this.state.currentpage);
   }
-  getServerListData = (keyName,currentpage)=>{
+  getServerListData = (activeTabkey,currentpage,params)=>{
     this.setState({isLoading:true});
     OAUtils.getNewDispatchListData({
       tokenunid: this.props.tokenunid,
       currentpage:currentpage,
-      keyName:keyName,
+      urlparam:this.getSearchUrlParams(activeTabkey,params||{}),
       viewcolumntitles:this.state.colsNameCn.join(','),
       successCall: (data)=>{
         console.log("get 最新发文的list data:",data);
         let {colsNameEn} = this.state;
         let parseData = OAUtils.formatServerListData(colsNameEn, data.values);
-        parseData = { ...this.state.listData, ...parseData };
+        let listData = this.state.listData.concat(parseData);
+        console.log("最新发文-format data:",listData);
         this.setState({
           isLoading:false,
           isMoreLoading:false,
-          currentpage:this.state.currentpage+1,
+          currentpage:currentpage+1,
           totalPageCount:data.totalcount,
-          listData:parseData,
+          listData:listData,
           hasMore:(currentpage+1)<=data.totalcount,
-          dataSource: this.state.dataSource.cloneWithRows(parseData),
+          dataSource: this.state.dataSource.cloneWithRows(listData),
         });
       },
       errorCall: (data)=>{
         this.setState({isLoading:false,isMoreLoading:false});
       }
     });
+  }
+  getSearchUrlParams = (activeTabkey,params)=>{
+    let options = {};
+    if(activeTabkey == "按日期"){
+      options.key = 'rq';
+    }else if(activeTabkey == "按年度"){
+      options.key = 'nd';
+      options.state = 'fb';
+      options.year = params.year || this.state.curYearMonth.format('YYYY');
+      options.month = params.month || this.state.curYearMonth.format('MM');
+    }else if(activeTabkey == "按主办部门"){
+      options.key = 'bm';
+      options['zbbmid'] = params.department || this.state.curDepartmentUnid;
+    }
+    return options;
+  }
+  updateSearchParams = (params)=>{
+    this.setState({listData:[]});
+    this.getServerListData(this.state.activeTabkey,this.state.currentpage-1,params);
   }
   showDeleteConfirmDialog = (record)=>{
     let selectedId = record.id ? record.id : '';
@@ -165,7 +191,7 @@ class NewDispatchList extends React.Component {
           >
             <div className={'list_item_container'}>
               <div className={'list_item_middle'}>
-                <div style={{color:'black',fontSize:'0.33rem',fontWeight:'bold'}}>{rowData.title}</div>
+                <div style={{color:'black',fontSize:'0.33rem',fontWeight:'bold'}}>{rowData.fileTitle}</div>
               </div>
               <div className={'list_item_left'}>
                 <span className={'list_item_left_icon'} >
@@ -173,8 +199,8 @@ class NewDispatchList extends React.Component {
                 </span>
               </div>
               <div className={'list_item_right'}>
-                <div style={{position:'absolute',top:'0',right:'0'}}>{rowData.sendTime}</div>
-                <div style={{ position:'absolute',bottom:'-1rem',right:'0' }}>{rowData.verifState}</div>
+                <div style={{position:'absolute',top:'0',right:'0'}}>{rowData.publishTime}</div>
+                <div style={{ position:'absolute',bottom:'-1rem',right:'0' }}>{rowData.draftUnit}</div>
               </div>
             </div>
         </div>
@@ -200,6 +226,7 @@ class NewDispatchList extends React.Component {
       }
       return (<TabPane tab={tabName} key={tabName} >
         <SearchZoneComp
+          updateSearchParams={this.updateSearchParams}
           departmentSource={this.state.departmentSource}
           tabName={tabName}
         />
@@ -215,7 +242,9 @@ class NewDispatchList extends React.Component {
           pageSize={this.state.currentpage*10}
           scrollRenderAheadDistance={400}
           scrollEventThrottle={20}
-          style={{}}
+          style={{
+            height: document.documentElement.clientHeight
+          }}
           scrollerOptions={{ scrollbars: false }}
         />
       </TabPane>);

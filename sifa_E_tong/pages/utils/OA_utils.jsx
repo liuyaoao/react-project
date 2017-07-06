@@ -96,9 +96,43 @@ export function getNoticeListData(opts){
   opts['viewname'] = 'hcit.module.xxfb.ui.VeSjsh';
   getOAServerListDataWithUrlParam(opts);
 }
+//获取最新发文的列表数据
 export function getNewDispatchListData(opts){
-  opts['viewname'] = 'hcit.module.fwgl.ui.VeFbgw';
-  getOAServerListData(opts);
+  let options = Object.assign({},{
+    url: 'http://10.192.0.241/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.MobileViewWork', //模块url
+    urlparam:{}
+  },opts);
+  var param = {
+    "ver" : "2",
+    "params" : {
+      "key":opts.urlparam.key,
+      "currentpage" : options.currentpage || 1,
+      "viewname" : 'hcit.module.fwgl.ui.VeFbgw',
+      "viewcolumntitles" : options.viewcolumntitles
+    }
+  };
+  options.urlparam = encodeURIComponent(JSON.stringify(options.urlparam));
+  finalRequestServerWithUrlParam(options,encodeURIComponent(JSON.stringify(param)));
+}
+//获取待办事项的列表数据
+export function getPersonalTodoListData(opts){
+  let options = Object.assign({},{
+    url: 'http://10.192.0.241/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.MobileViewWork', //模块url
+    urlparam:{}
+  },opts);
+  var param = {
+    "ver" : "2",
+    "params" : {
+      "key":opts.urlparam.key,
+      "currentpage" : options.currentpage || 1,
+      "viewname" : 'hcit.workflow.backlog.ui.VeBacklog',
+      "viewcolumntitles" : options.viewcolumntitles
+    }
+  };
+  options.urlparam = encodeURIComponent(JSON.stringify(options.urlparam));
+  finalRequestServerWithUrlParam(options,encodeURIComponent(JSON.stringify(param)));
 }
 
 // Key：1表示获取获取草稿箱中的数据，10表示获取待办内容，2，表示办理中，4表示已办结，16777215表示所有。
@@ -527,6 +561,10 @@ export function finalRequestServerWithUrlParam(options,param){
           options.errorCall && options.errorCall({});
           return;
         }
+        if(res.indexOf('/script>') != -1){ 
+          res = res.substring(res.indexOf('/script>')+9);
+        }
+        // console.log("server request 返回--：", res);
         let data = JSON.parse(res);
         if(data.code == "1"){
           options.successCall && options.successCall(data);
