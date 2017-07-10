@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import React from 'react';
-import * as Utils from 'utils/utils.jsx';
 import UserStore from 'stores/user_store.jsx';
 import moment from 'moment';
 import { createForm } from 'rc-form';
@@ -91,7 +90,7 @@ class DetailContentCompRaw extends React.Component {
             <Flex.Item><InputItem value={formData.ngr_show} editable={false} labelNumber={4}>拟稿人：</InputItem></Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem value={detailInfo.department||""} editable={false} labelNumber={5}>拟稿单位：</InputItem></Flex.Item>
+            <Flex.Item><InputItem value={formData.zbbm_show||""} editable={false} labelNumber={5}>拟稿单位：</InputItem></Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item><InputItem value={detailInfo.draftDate} editable={false} labelNumber={5}>拟稿日期：</InputItem></Flex.Item>
@@ -114,11 +113,20 @@ class DetailContentCompRaw extends React.Component {
               <List style={{ backgroundColor: 'white' }} className={'picker_list'}>
                 <Picker data={owerPleaTypes} cols={1} {...getFieldProps('pleaType',{})}
                   disabled={true}
-                  value={[formData.gwlc]}
+                  value={[formData.gwlc||'']}
                   onOk={this.onPickerOk}>
                   <List.Item arrow="horizontal">请示类别：</List.Item>
                 </Picker>
               </List>
+            </Flex.Item>
+          </Flex>
+
+          <Flex>
+            <Flex.Item>
+              <Button type="default" style={{margin:'0.1rem auto',width:'90%'}}
+                onClick={()=>{
+                  location.href = OAUtils.getMainDocumentUrl({ docunid:detailInfo.unid });
+                }}>下载正文附件</Button>
             </Flex.Item>
           </Flex>
 

@@ -1,8 +1,7 @@
 //督办管理的详情页.
 import $ from 'jquery';
 import React from 'react';
-import * as Utils from 'utils/utils.jsx';
-import myWebClient from 'client/my_web_client.jsx';
+// import * as Utils from 'utils/utils.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import { WingBlank, WhiteSpace, Button, NavBar, TabBar,List} from 'antd-mobile';
 
@@ -148,7 +147,13 @@ class SuperviseDetail extends React.Component {
               curSubTab:'track',
               selectedTab: 'trackTab',
             });
-          }} />
+          }}
+          onClickArticleBtn={()=>{
+            this.setState({
+              selectedTab: 'articleTab',
+            });
+            location.href = OAUtils.getMainDocumentUrl({ docunid:this.props.detailInfo.unid });
+          }}  />
       </div>
     )
   }

@@ -16,9 +16,11 @@ class DS_DetailContentComp extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-        flow: [{label: '发文',value: '发文'},{label: '司法局发文流程',value: '司法局发文流程'}],
         historyNotionType2List:[],
         attachmentList:[],  //附件列表
+        gwlc_value:'', //公文流程
+        mj_value:'', //密级
+        jjcd_value:'', //缓急
       };
   }
   componentWillMount(){
@@ -27,6 +29,16 @@ class DS_DetailContentComp extends React.Component {
     if(this.props.detailInfo && this.props.detailInfo.unid){
       this.getFormVerifyNotion();
       this.getFormAttachmentList();
+    }
+  }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.formData.unid != this.props.formData.unid){
+      console.log("formData:",nextProps.formData);
+      this.setState({
+        gwlc_value:nextProps.formData.gwlc || "",
+        mj_value:nextProps.formData.mj || "",
+        jjcd_value:nextProps.formData.jjcd || "",
+      });
     }
   }
   getFormVerifyNotion = ()=>{ //获取历史阅文意见数据。
@@ -68,34 +80,84 @@ class DS_DetailContentComp extends React.Component {
       );
     });
   }
+  onPickerGWLCOk = (val)=>{ //选择 密级
+    console.log("onPickerGWLCOk--:",val);
+    this.setState({gwlc_value:val[0]});
+  }
+  onPickerSecrecyTypeOk = (val)=>{ //选择 密级
+    console.log("onPickerSecrecyTypeOk--:",val);
+    this.setState({mj_value:val[0]});
+  }
+  onPickerUrgencyTypeOk = (val)=>{ //选择 缓急
+    console.log("onPickerUrgencyTypeOk--:",val);
+    this.setState({jjcd_value:val[0]});
+  }
+
   render() {
-    const {attachmentList} = this.state;
+    const {attachmentList,mj_value,jjcd_value,gwlc_value} = this.state;
     const { detailInfo, formData, formDataRaw , tokenunid, modulename } = this.props;
     const { getFieldProps, getFieldError } = this.props.form;
-    const secrecy = [{label: '秘密',value: '秘密'},{label: '机密',value: '机密'}];
-    const urgency = [{label: '急',value: '急'},{label: '紧急',value: '紧急'},{label: '特急',value: '特急'},{label: '特提',value: '特提'}];
+    let secrecyItems = formDataRaw.mj?formDataRaw.mj.items:[];
+    let secrecyType = secrecyItems.map((item)=>{ //密级
+      return {
+        label:item.text,
+        value:item.value
+      }
+    });
+    let urgencyItems = formDataRaw.jjcd?formDataRaw.jjcd.items:[];
+    let urgencyType = urgencyItems.map((item)=>{ //缓急
+      return {
+        label:item.text,
+        value:item.value
+      }
+    });
+    //公文流程当前值就是gwlc字段的值。--公文流程。
+    let items = formDataRaw.gwlc?formDataRaw.gwlc.items:[];
+    let fileFlowTypes = items.map((item)=>{ //公文流程。
+      return {
+        label:item.text,
+        value:item.value
+      }
+    });
     return (
       <div style={{marginBottom: "100px"}}>
         <div className={'oa_detail_cnt'}>
           <div className={'oa_detail_title'} style={{width:'100%',textAlign:'center'}}>{detailInfo.fileTitle}</div>
           <Flex>
-            <Flex.Item><InputItem placeholder="--" labelNumber={2}>文号</InputItem></Flex.Item>
-            <Flex.Item><InputItem placeholder="--" labelNumber={2} type="Number">份数</InputItem></Flex.Item>
+            <Flex.Item>
+              <div className="select_container">
+                <Picker data={fileFlowTypes} cols={1}
+                  disabled={false}
+                  value={[gwlc_value]}
+                  onOk={this.onPickerGWLCOk}
+                  {...getFieldProps('fileFlowType')}>
+                  <List.Item arrow="horizontal">公文流程</List.Item>
+                </Picker>
+              </div>
+            </Flex.Item>
+          </Flex>
+          <Flex>
+            <Flex.Item><InputItem placeholder="--" value={formData.fwwh} labelNumber={2}>文号</InputItem></Flex.Item>
+            <Flex.Item><InputItem placeholder="--" value={formData.fs} labelNumber={2} type="Number">份数</InputItem></Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
               <div className="select_container">
-                <Picker data={secrecy} cols={1}
-                  {...getFieldProps('secrecy',{
-                    initialValue:detailInfo.secrecy || "",
-                  })}>
+                <Picker data={secrecyType} cols={1}
+                  disabled={false}
+                  value={[mj_value]}
+                  onOk={this.onPickerSecrecyTypeOk}
+                  {...getFieldProps('secrecyType')}>
                   <List.Item arrow="horizontal">密级</List.Item>
                 </Picker>
               </div>
             </Flex.Item>
             <Flex.Item>
               <div className="select_container">
-                <Picker data={urgency} cols={1} {...getFieldProps('urgency')}>
+                <Picker data={urgencyType} cols={1}
+                  disabled={false}
+                  value={[jjcd_value]}
+                  onOk={this.onPickerUrgencyTypeOk}>
                   <List.Item arrow="horizontal">缓急</List.Item>
                 </Picker>
               </div>
@@ -105,7 +167,7 @@ class DS_DetailContentComp extends React.Component {
             <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>标题：</div>
               <TextareaItem
-                {...getFieldProps('subjectTitle',{
+                {...getFieldProps('bt',{
                   initialValue: detailInfo.fileTitle,
                 })}
                 title=""
@@ -116,22 +178,34 @@ class DS_DetailContentComp extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <InputItem placeholder="--" labelNumber={2}>主送</InputItem>
+              <div className={'detail_textarea_title'}>主送：</div>
+              <TextareaItem
+                {...getFieldProps('zsdw',{
+                  initialValue: formData.zsdw,
+                })}
+                rows={3}
+              />
             </Flex.Item>
-          </Flex>
-          <Flex>
-            <Flex.Item><InputItem placeholder="--" labelNumber={2}>抄送</InputItem></Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
-              <div className="select_container">
-                <Picker data={this.state.flow} cols={1} {...getFieldProps('flow')}>
-                  <List.Item arrow="horizontal">公文流程</List.Item>
-                </Picker>
-              </div>
+              <div className={'detail_textarea_title'}>抄送：</div>
+              <TextareaItem
+                {...getFieldProps('csdw',{
+                  initialValue: formData.csdw,
+                })}
+                rows={3}
+              />
             </Flex.Item>
           </Flex>
-
+          <Flex>
+            <Flex.Item>
+              <Button type="default" style={{margin:'0.1rem auto',width:'90%'}}
+                onClick={()=>{
+                  location.href = OAUtils.getMainDocumentUrl({ docunid:detailInfo.unid });
+                }}>下载正文附件</Button>
+            </Flex.Item>
+          </Flex>
           <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginTop:'0.1rem'}}/>
           <Flex>
             <Flex.Item>
@@ -203,7 +277,7 @@ class DS_DetailContentComp extends React.Component {
             </Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem placeholder="--" value={detailInfo.draftUnit} labelNumber={4}>拟稿单位</InputItem></Flex.Item>
+            <Flex.Item><InputItem placeholder="--" value={formData.zbbm_show} labelNumber={4}>拟稿单位</InputItem></Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item><InputItem placeholder="--" labelNumber={4} value={formData.ngr_show}>拟稿人</InputItem></Flex.Item>

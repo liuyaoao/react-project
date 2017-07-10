@@ -2,10 +2,10 @@ import $ from 'jquery';
 import React from 'react';
 import * as Utils from 'utils/utils.jsx';
 import UserStore from 'stores/user_store.jsx';
+import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import moment from 'moment';
 import { createForm } from 'rc-form';
 
-import myWebClient from 'client/my_web_client.jsx';
 import { WingBlank, WhiteSpace, Button, InputItem,
   TextareaItem,Flex,List,Picker} from 'antd-mobile';
 
@@ -103,8 +103,8 @@ class DetailContentCompRaw extends React.Component {
             <Flex.Item>
               <List style={{ backgroundColor: 'white' }}>
                 <Picker data={superviseTypes} cols={1}
-                  {...getFieldProps('superviseType')}
-                  value={formData.superviseType}
+                  {...getFieldProps('dblx')}
+                  value={formData.dblx}
                   onOk={this.onPickerOk}>
                   <List.Item arrow="horizontal">督办类型：</List.Item>
                 </Picker>
@@ -114,7 +114,7 @@ class DetailContentCompRaw extends React.Component {
           <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginBottom:'0.1rem'}}/>
           <Flex>
             <Flex.Item>
-              <InputItem {...getFieldProps('receiveFileNum', {initialValue:''})}
+              <InputItem {...getFieldProps('receiveFileNum', {initialValue:formData.lsh})}
                 editable={true}
                 labelNumber={4}>收文号：</InputItem>
             </Flex.Item>
@@ -123,7 +123,7 @@ class DetailContentCompRaw extends React.Component {
             <Flex.Item>
               <InputItem
                 {...getFieldProps('receiveFileTime', {
-                    initialValue:detailInfo.acceptDate
+                    initialValue:formData.swrq
                   })
                 }
                 editable={true}
@@ -134,7 +134,7 @@ class DetailContentCompRaw extends React.Component {
             <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>来文单位：</div>
               <TextareaItem
-                {...getFieldProps('sendFileUnit',{initialValue:detailInfo.sendUnit})}
+                {...getFieldProps('sendFileUnit',{initialValue:formData.lwdw})}
                 title=""
                 autoHeight
                 labelNumber={0}
@@ -143,23 +143,30 @@ class DetailContentCompRaw extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <InputItem {...getFieldProps('deadlineTime', {initialValue:''})}
+              <InputItem {...getFieldProps('deadlineTime', {initialValue:formData.blsx})}
                 editable={true}
                 labelNumber={5}>截止日期：</InputItem>
             </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
-              <InputItem {...getFieldProps('reminders', {initialValue:''})}
+              <InputItem {...getFieldProps('cuiBan', {initialValue:formData.cb})}
                 editable={true}
                 labelNumber={4}>催办：</InputItem>
             </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
+              <InputItem {...getFieldProps('yuanHao', {initialValue:formData.yh})}
+                editable={true}
+                labelNumber={4}>原号：</InputItem>
+            </Flex.Item>
+          </Flex>
+          <Flex>
+            <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>文件标题：</div>
               <TextareaItem
-                {...getFieldProps('subjectTitle',{initialValue:detailInfo.title})}
+                {...getFieldProps('subjectTitle',{initialValue:formData.bt})}
                 title=""
                 rows={4}
                 labelNumber={0}
@@ -167,19 +174,24 @@ class DetailContentCompRaw extends React.Component {
             </Flex.Item>
           </Flex>
           <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginBottom:'0.1rem'}}/>
-            <Flex>
-              <Flex.Item>
-                <form enctype="multipart/form-data" action="" method="post">
-                    <input type="file" name="file" id="choosefile" style={{display:'inline-block'}}/>
-                    <input type="submit" value="上传正文" id="submitBtn" style={{color:'black'}}/>
-                </form>
-              </Flex.Item>
-            </Flex>
+
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>正文列表：</div>
+              <form enctype="multipart/form-data" action="" method="post">
+                  <input type="file" name="file" id="choosefile" style={{display:'inline-block'}}/>
+                  <input type="submit" value="上传正文" id="submitBtn" style={{color:'black'}}/>
+              </form>
             </Flex.Item>
           </Flex>
+          <Flex>
+            <Flex.Item>
+              <Button type="default" style={{margin:'0.1rem auto',width:'90%'}}
+                onClick={()=>{
+                  location.href = OAUtils.getMainDocumentUrl({ docunid:detailInfo.unid });
+                }}>下载正文附件</Button>
+            </Flex.Item>
+          </Flex>
+
           <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginBottom:'0.1rem'}}/>
 
           <Flex>
@@ -203,27 +215,22 @@ class DetailContentCompRaw extends React.Component {
           <Flex>
             <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>拟办意见：</div>
-                <CommonNotionComp
-                  notionList={this.state.historyNotionType2List['拟办意见'] || []} />
+              <CommonNotionComp
+                notionList={this.state.historyNotionType2List['拟办意见'] || []} />
             </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>领导意见：</div>
-                <CommonNotionComp
-                  notionList={this.state.historyNotionType2List['领导意见'] || []} />
+              <CommonNotionComp
+                notionList={this.state.historyNotionType2List['领导意见'] || []} />
             </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>办理情况：<span style={{color:'red'}}>(承办意见请上传在附件中)</span></div>
-              <TextareaItem
-                {...getFieldProps('reason')}
-                title=""
-                rows={3}
-                editable={false}
-                labelNumber={0}
-              />
+              <CommonNotionComp
+                notionList={this.state.historyNotionType2List['办理情况'] || []} />
             </Flex.Item>
           </Flex>
           <WhiteSpace size='md' style={{height:'1rem'}}/>

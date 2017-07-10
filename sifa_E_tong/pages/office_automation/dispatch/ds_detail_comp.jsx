@@ -7,7 +7,7 @@ import { WingBlank, WhiteSpace, Button, NavBar, Toast } from 'antd-mobile';
 import {Icon} from 'antd';
 
 import DS_DetailContentComp from './ds_detail_content_comp.jsx';
-import BottomTabBarComp from '../signReport/bottomTabBar_comp.jsx';
+import BottomTabBarComp from './bottomTabBar_comp.jsx';
 import DS_SendContentComp from './ds_send_content_comp.jsx';//发文详情页-- 发送
 import CommonVerifyComp from '../common_verify_comp.jsx';
 import DS_MainContentComp from './ds_main_content_comp.jsx';//发文详情页-- 正文
@@ -24,8 +24,8 @@ class DS_DetailComp extends React.Component {
         subTabsArr:["","content"], // such as :["","content","send","verify"]
         curSubTab:'content',
         isHide:false,
-        formData:null,
-        formDataRaw: null
+        formData:{},
+        formDataRaw: {}
       };
   }
   componentWillMount(){
@@ -40,13 +40,13 @@ class DS_DetailComp extends React.Component {
       tokenunid:this.props.tokenunid,
       unid:this.props.detailInfo.unid,
       successCall: (data)=>{
-        console.log("get 发文管理的表单数据:",data);
         let formDataRaw = data.values;
         let formData = OAUtils.formatFormData(data.values);
         this.setState({
           formData,
           formDataRaw
         });
+        console.log("get 发文管理的表单数据:",data,formData);
       }
     });
   }
@@ -117,17 +117,11 @@ class DS_DetailComp extends React.Component {
                     selectedTab: 'sendTab',
                   });
                 }}
-                onClickTrackBtn={()=>{
-                  this.setState({
-                    curSubTab:'track',
-                    selectedTab: 'trackTab',
-                  });
-                }}
                 onClickArticleBtn={()=>{
                   this.setState({
-                    curSubTab:'article',
                     selectedTab: 'articleTab',
                   });
+                  location.href = OAUtils.getMainDocumentUrl({ docunid:this.props.detailInfo.unid });
                 }} />
             </div>
             {this.state.curSubTab == "send"?
@@ -152,10 +146,10 @@ class DS_DetailComp extends React.Component {
               (<DS_UploadContentComp
                 tokenunid={this.props.tokenunid}
                 backDetailCall={this.onBackDetailCall} isShow={true}/>):null}
-            {this.state.curSubTab == "article"?
+            {/*this.state.curSubTab == "article"?
               (<DS_MainContentComp
                 tokenunid={this.props.tokenunid}
-                backDetailCall={this.onBackDetailCall} isShow={true}/>):null}
+                backDetailCall={this.onBackDetailCall} isShow={true}/>):null */}
         </div>
       </div>
     )

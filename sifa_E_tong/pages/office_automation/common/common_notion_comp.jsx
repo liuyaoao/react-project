@@ -39,7 +39,7 @@ class CommonNotionComp extends React.Component {
       }
     });
     return (
-      <div className={''} style={{minHeight:'3rem',width:'100%',padding:'0.05rem 0.2rem',border:'1px solid #d6d1d1'}}>
+      <div className={''} style={{minHeight:'2.5rem',width:'100%',padding:'0.05rem 0.2rem',border:'1px solid #d6d1d1'}}>
         {notionListElements}
       </div>
     )

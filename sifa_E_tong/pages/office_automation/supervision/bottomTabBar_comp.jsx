@@ -139,7 +139,7 @@ class BottomTabBarComp extends React.Component {
         icon={ <Icon type="switcher" style={{fontSize:'0.4rem'}} /> }
         selectedIcon={<Icon type="switcher" style={{color:'blue', fontSize:'0.4rem'}}/>}
         selected={this.props.selectedTab === 'articleTab'}
-        onPress={() => this.props.onClickTrackBtn()}
+        onPress={() => this.props.onClickArticleBtn()}
       >
       <div></div>
       </TabBar.Item>

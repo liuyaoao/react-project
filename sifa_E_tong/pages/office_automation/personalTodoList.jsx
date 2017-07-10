@@ -4,7 +4,7 @@ import React from 'react';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import { WhiteSpace, WingBlank, Button,RefreshControl, ListView} from 'antd-mobile';
 import {Icon} from 'antd';
-
+import SignReportDetail from './signReport/signReportDetail_comp.jsx';
 class PersonalTodoList extends React.Component {
   constructor(props) {
       super(props);
@@ -12,15 +12,18 @@ class PersonalTodoList extends React.Component {
         rowHasChanged: (row1, row2) => row1 !== row2,
       });
       this.state = {
-        colsNameCn:["标题", "模块",  "性质",  "紧急程度","送文人", "发送时间","办理时间"],
-        colsNameEn:["fileTitle", "modules", "property","urgency","sendtextPerson", "sendTime","handleTime"],
+        colsNameCn:["标题", "模块",  "性质",  "紧急程度","送文人", "发送时间"],
+        colsNameEn:["fileTitle", "modules", "property","urgency","sendtextPerson", "sendTime"],
         currentpage:1, //当前页码。
         totalPageCount:1, //总页数。
         isLoading:false, //是否在加载列表数据
         isMoreLoading:false, //是否正在加载更多。
         hasMore:false, //是否还有更多数据。
         listData:[], //原生list数据
+        activeTabkey:'待办',
         dataSource: dataSource.cloneWithRows([]),  //listView的源数据。
+        showDetail:false,
+        detailInfo:null,
       };
   }
 
@@ -61,7 +64,13 @@ class PersonalTodoList extends React.Component {
       }
     });
   }
-
+  onClickOneRow = (rowData)=>{
+    console.log("incomingList click rowData:",rowData);
+    this.setState({detailInfo:rowData, showDetail:true});
+  }
+  backToTableListCall = ()=>{   //返回到列表页。
+    this.setState({showDetail:false});
+  }
   render() {
     const separator = (sectionID, rowID) => (
       <div
@@ -75,13 +84,13 @@ class PersonalTodoList extends React.Component {
       />
     );
     const listRow = (rowData, sectionID, rowID) => {
-      console.log(rowData.handleTime);
       return (
         <div key={rowID} className={'custom_listView_item'}
           style={{
             padding: '0.08rem 0.16rem',
             backgroundColor: 'white',
           }}
+          onClick={()=>this.onClickOneRow(rowData)}
         >
         <div className={'list_item_container'}>
           <div className={'list_item_middle'}>
@@ -98,7 +107,6 @@ class PersonalTodoList extends React.Component {
           </div>
           <div className={'list_item_right'}>
             <div style={{position:'absolute',top:'0',right:'0'}}>{rowData.sendTime}</div>
-            <div style={{ position:'absolute',bottom:'-1rem',right:'0' }}>{rowData.handleTime}</div>
           </div>
         </div>
         </div>
@@ -106,7 +114,7 @@ class PersonalTodoList extends React.Component {
     };
     return (
       <div>
-        <ListView
+        {(!this.state.showDetail)?(<ListView
           dataSource={this.state.dataSource}
           renderRow={listRow}
           renderSeparator={separator}
@@ -120,7 +128,14 @@ class PersonalTodoList extends React.Component {
             margin: '0.1rem 0',
           }}
           scrollerOptions={{ scrollbars: true }}
-        />
+        />):null}
+        {this.state.showDetail?
+          <SignReportDetail
+            activeTabkey={this.state.activeTabkey}
+            detailInfo={this.state.detailInfo}
+            tokenunid={this.props.tokenunid}
+            backToTableListCall={this.backToTableListCall}
+          />:null}
       </div>
     )
   }

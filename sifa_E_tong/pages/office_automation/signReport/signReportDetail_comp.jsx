@@ -157,6 +157,12 @@ class SignReportDetail extends React.Component {
                 curSubTab:'track',
                 selectedTab: 'trackTab',
               });
+            }}
+            onClickArticleBtn={()=>{
+              this.setState({
+                selectedTab: 'articleTab',
+              });
+              location.href = OAUtils.getMainDocumentUrl({ docunid:this.props.detailInfo.unid });
             }} />
       </div>
     )

@@ -217,7 +217,20 @@ export function getModuleFormData(params) {
         "formdata" : {
           "unid" : "",
 					"flowsessionid" : "",
-					"gwlc" : "", //公文流程，即签报的请示类别，是下拉列表。
+          "fwwh":"", //发文管理的--文号。
+          "mj":"", //发文管理的--密级。
+          "jjcd":"",  //发文管理的--缓急。
+          "fs":"",  //发文管理的--份数。
+          "dblx":"",  //督办管理--督办类型。
+          "lsh":"",   //督办管理--收文号。
+          "swrq":"",  //督办管理--收文日期。
+          "lwdw":"",  //督办管理--来为单位。
+          "blsx":"",  //督办管理--办理时限，也就是截至日期。
+          "cb":"",  //督办管理--催办。
+          "yh":"",  //督办管理--原号。
+          "zsdw":"", //主送
+          "csdw":"", //抄送
+					"gwlc" : "", //公文流程，即发文管理的公文流程,或者签报管理的请示类别，是下拉列表。
 					"btSave" : "", //保存按钮
 					"btYwyj" : "",  //阅文意见按钮
 					"btSend" : "",
@@ -229,6 +242,7 @@ export function getModuleFormData(params) {
 					"btZw" : "",  //正文按钮
 					"ngr_show" : "", //拟稿人。
 					"ngrq_show" : "", //拟稿日期
+          "zbbm_show":"",  //拟稿单位（部门）
 					"bt" : "", //标题。
 					"nr" : ""
         }
@@ -362,6 +376,20 @@ export function saveVerifyNotion(params) {
     }
   }));
   finalRequestServer(options,param);
+}
+
+//获取下载正文附件的url连接。
+export function getMainDocumentUrl(params){
+  let url='';
+  var paramJson ={
+      ver : "2",
+      params :{
+          "docunid" : params.docunid,
+      }
+  };
+  url = "http://10.192.0.241/openagent?agent=hcit.project.moa.transform.agent.GetFolwDocument" +
+        "&param=" + encodeURIComponent(JSON.stringify(paramJson));
+  return url;
 }
 
 //获取表单公文附件列表。
@@ -561,7 +589,7 @@ export function finalRequestServerWithUrlParam(options,param){
           options.errorCall && options.errorCall({});
           return;
         }
-        if(res.indexOf('/script>') != -1){ 
+        if(res.indexOf('/script>') != -1){
           res = res.substring(res.indexOf('/script>')+9);
         }
         // console.log("server request 返回--：", res);
