@@ -40,9 +40,9 @@ class LoginRecordPage extends React.Component {
     }
     getStateFromStores() {
         return {
-            tokenunid:'xxxxx', //登录标识id
+            tokenunid:'', //登录标识id
             open: false,
-            current: '收文管理',
+            current: '待办事项',
             position: 'left',
             loginUserName:'',
         };

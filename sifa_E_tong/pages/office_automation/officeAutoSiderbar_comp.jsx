@@ -10,7 +10,7 @@ class OaSiderbarComp extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-        current: '收文管理',
+        current: '待办事项',
       };
   }
   componentWillMount(){

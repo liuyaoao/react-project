@@ -18,6 +18,7 @@ class DetailContentCompRaw extends React.Component {
       this.state = {
         loginUserName:'',
         nowDate:moment(new Date()).format('YYYY-MM-DD'),
+        uploadAttachmentUrl:'',  //上传公文附件的url.
         historyNotionType2List:[],
         attachmentList:[],
       };
@@ -69,31 +70,43 @@ class DetailContentCompRaw extends React.Component {
       );
     });
   }
+  onFileUploadChange = (file)=>{
+    var index = document.getElementById("choosefile").value.indexOf('fakepath')+9;
+    let filename = document.getElementById("choosefile").value.substring(index);
+    // console.log("上传文件时，选择文件的change事件----：",file,filename);
+    this.setState({
+      uploadAttachmentUrl:OAUtils.getUploadAttachmentUrl({
+        docunid:this.props.detailInfo.unid,
+        filename:filename,
+        moduleName:this.props.moduleNameCn
+      })
+    });
+  }
+  onUploadFileSubmit = ()=>{
+    // let uploadForm = document.getElementById("fileUploadForm");
+    // let res = fetch(this.state.uploadAttachmentUrl, {
+    //     method: 'POST',
+    //     body: new FormData(uploadForm)
+    //   }).then((response) => {
+    //
+    //     console.log("after file upload message:",response);
+    //     return response;
+    // });
+    // return false;
+  }
 
   render() {
     const {attachmentList} = this.state;
     const { getFieldProps } = this.props.form;
     const {detailInfo, formData, formDataRaw} = this.props;
-    let items = formDataRaw.gwlc?formDataRaw.gwlc.items:[];
-    //请示类别当前值就是gwlc字段的值。--公文流程。
-    let owerPleaTypes = items.map((item)=>{ //请示类别。
+    let items = formDataRaw.dblx?formDataRaw.dblx.items:[];
+    //督办类别当前值就是dblx字段的值。
+    let superviseTypes = items.map((item)=>{ //督办类别
       return {
         label:item.text,
         value:item.value
       }
     });
-    let superviseTypes = [
-      {
-        label:"",
-        value:""
-      },{
-        label:"督办A",
-        value:"督办A"
-      },{
-        label:"督办B",
-        value:"督办B"
-      }
-    ];
     return (
       <div>
         <div className={'oa_detail_cnt'}>
@@ -103,8 +116,7 @@ class DetailContentCompRaw extends React.Component {
             <Flex.Item>
               <List style={{ backgroundColor: 'white' }}>
                 <Picker data={superviseTypes} cols={1}
-                  {...getFieldProps('dblx')}
-                  value={formData.dblx}
+                  value={[formData.dblx||'']}
                   onOk={this.onPickerOk}>
                   <List.Item arrow="horizontal">督办类型：</List.Item>
                 </Picker>
@@ -175,14 +187,14 @@ class DetailContentCompRaw extends React.Component {
           </Flex>
           <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginBottom:'0.1rem'}}/>
 
-          <Flex>
+          {/*<Flex>
             <Flex.Item>
               <form enctype="multipart/form-data" action="" method="post">
                   <input type="file" name="file" id="choosefile" style={{display:'inline-block'}}/>
                   <input type="submit" value="上传正文" id="submitBtn" style={{color:'black'}}/>
               </form>
             </Flex.Item>
-          </Flex>
+          </Flex>*/}
           <Flex>
             <Flex.Item>
               <Button type="default" style={{margin:'0.1rem auto',width:'90%'}}
@@ -195,9 +207,13 @@ class DetailContentCompRaw extends React.Component {
           <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginBottom:'0.1rem'}}/>
 
           <Flex>
-            <Flex.Item>
-              <form enctype="multipart/form-data" action="" method="post">
-                  <input type="file" name="file" id="choosefile" style={{display:'inline-block'}}/>
+            <Flex.Item style={{marginLeft:'0.2rem'}}>
+              <form enctype="multipart/form-data"
+                    id="fileUploadForm"
+                    action={this.state.uploadAttachmentUrl}
+                    method="post"
+                    onsubmit={this.onUploadFileSubmit}>
+                  <input type="file" name="file" id="choosefile" style={{display:'inline-block',width:'76%'}} onChange={this.onFileUploadChange}/>
                   <input type="submit" value="上传附件" id="submitBtn" style={{color:'black'}}/>
               </form>
             </Flex.Item>

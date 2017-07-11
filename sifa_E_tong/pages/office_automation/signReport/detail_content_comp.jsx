@@ -19,6 +19,7 @@ class DetailContentCompRaw extends React.Component {
       this.state = {
         loginUserName:'',
         nowDate:moment(new Date()).format('YYYY-MM-DD'),
+        uploadAttachmentUrl:'',  //上传公文附件的url.
         historyNotionType2List:{},
         attachmentList:[],  //附件列表
       };
@@ -70,6 +71,19 @@ class DetailContentCompRaw extends React.Component {
       );
     });
   }
+  onFileUploadChange = (file)=>{
+    var index = document.getElementById("choosefile").value.indexOf('fakepath')+9;
+    let filename = document.getElementById("choosefile").value.substring(index);
+    // console.log("上传文件时，选择文件的change事件----：",file,filename);
+    this.setState({
+      uploadAttachmentUrl:OAUtils.getUploadAttachmentUrl({
+        docunid:this.props.detailInfo.unid,
+        filename:filename,
+        moduleName:this.props.moduleNameCn
+      })
+    });
+  }
+
   render() {
     const {attachmentList} = this.state;
     const { getFieldProps } = this.props.form;
@@ -111,7 +125,7 @@ class DetailContentCompRaw extends React.Component {
           <Flex>
             <Flex.Item>
               <List style={{ backgroundColor: 'white' }} className={'picker_list'}>
-                <Picker data={owerPleaTypes} cols={1} {...getFieldProps('pleaType',{})}
+                <Picker data={owerPleaTypes} cols={1}
                   disabled={true}
                   value={[formData.gwlc||'']}
                   onOk={this.onPickerOk}>
@@ -131,9 +145,9 @@ class DetailContentCompRaw extends React.Component {
           </Flex>
 
           <Flex>
-            <Flex.Item>
-              <form enctype="multipart/form-data" action="" method="post">
-                  <input type="file" name="file" id="choosefile" style={{display:'inline-block'}}/>
+            <Flex.Item style={{marginLeft:'0.2rem'}}>
+              <form enctype="multipart/form-data" action={this.state.uploadAttachmentUrl} method="post">
+                  <input type="file" name="file" id="choosefile" style={{display:'inline-block',width:'76%'}} onChange={this.onFileUploadChange}/>
                   <input type="submit" value="上传附件" id="submitBtn" style={{color:'black'}}/>
               </form>
             </Flex.Item>

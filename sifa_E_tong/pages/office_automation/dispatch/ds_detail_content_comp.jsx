@@ -9,7 +9,7 @@ import { WingBlank, WhiteSpace, Button, InputItem,
 
 import { Icon, Select } from 'antd';
 import { createForm } from 'rc-form';
-import CommonFlowTraceComp from '../common_flowTrace_comp.jsx';//办文跟踪
+import CommonFlowTraceComp from '../common_flowTrace_comp.jsx'; //办文跟踪
 import CommonNotionComp from '../common/common_notion_comp.jsx';
 
 class DS_DetailContentComp extends React.Component {
@@ -17,6 +17,7 @@ class DS_DetailContentComp extends React.Component {
       super(props);
       this.state = {
         historyNotionType2List:[],
+        uploadAttachmentUrl:'',  //上传公文附件的url.
         attachmentList:[],  //附件列表
         gwlc_value:'', //公文流程
         mj_value:'', //密级
@@ -92,6 +93,30 @@ class DS_DetailContentComp extends React.Component {
     console.log("onPickerUrgencyTypeOk--:",val);
     this.setState({jjcd_value:val[0]});
   }
+  onFileUploadChange = (file)=>{
+    let index = document.getElementById("choosefile").value.indexOf('fakepath')+9;
+    let filename = document.getElementById("choosefile").value.substring(index);
+    // console.log("上传文件时，选择文件的change事件----：",file,filename);
+    this.setState({
+      uploadAttachmentUrl:OAUtils.getUploadAttachmentUrl({
+        docunid:this.props.detailInfo.unid,
+        filename:filename,
+        moduleName:this.props.moduleNameCn
+      })
+    });
+  }
+  onUploadFileSubmit = ()=>{
+    // let uploadForm = document.getElementById("fileUploadForm");
+    // let res = fetch(this.state.uploadAttachmentUrl, {
+    //     method: 'POST',
+    //     body: new FormData(uploadForm)
+    //   }).then((response) => {
+    //
+    //     console.log("after file upload message:",response);
+    //     return response;
+    // });
+    // return false;
+  }
 
   render() {
     const {attachmentList,mj_value,jjcd_value,gwlc_value} = this.state;
@@ -119,6 +144,8 @@ class DS_DetailContentComp extends React.Component {
         value:item.value
       }
     });
+    let gwlc_val = gwlc_value || (formDataRaw.gwlc?formDataRaw.gwlc.value:'');
+    console.log("gwlc_val----:",gwlc_val,fileFlowTypes);
     return (
       <div style={{marginBottom: "100px"}}>
         <div className={'oa_detail_cnt'}>
@@ -128,9 +155,8 @@ class DS_DetailContentComp extends React.Component {
               <div className="select_container">
                 <Picker data={fileFlowTypes} cols={1}
                   disabled={false}
-                  value={[gwlc_value]}
-                  onOk={this.onPickerGWLCOk}
-                  {...getFieldProps('fileFlowType')}>
+                  value={[gwlc_val]}
+                  onOk={this.onPickerGWLCOk} >
                   <List.Item arrow="horizontal">公文流程</List.Item>
                 </Picker>
               </div>
@@ -146,8 +172,7 @@ class DS_DetailContentComp extends React.Component {
                 <Picker data={secrecyType} cols={1}
                   disabled={false}
                   value={[mj_value]}
-                  onOk={this.onPickerSecrecyTypeOk}
-                  {...getFieldProps('secrecyType')}>
+                  onOk={this.onPickerSecrecyTypeOk} >
                   <List.Item arrow="horizontal">密级</List.Item>
                 </Picker>
               </div>
@@ -157,7 +182,7 @@ class DS_DetailContentComp extends React.Component {
                 <Picker data={urgencyType} cols={1}
                   disabled={false}
                   value={[jjcd_value]}
-                  onOk={this.onPickerUrgencyTypeOk}>
+                  onOk={this.onPickerUrgencyTypeOk} >
                   <List.Item arrow="horizontal">缓急</List.Item>
                 </Picker>
               </div>
@@ -208,10 +233,14 @@ class DS_DetailContentComp extends React.Component {
           </Flex>
           <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginTop:'0.1rem'}}/>
           <Flex>
-            <Flex.Item>
-              <form enctype="multipart/form-data" action="" method="post">
-                  <input type="file" name="file" id="choosefile" style={{display:'inline-block'}}/>
-                  <input type="submit" value="上传附件" id="submitBtn" style={{color:'black'}}/>
+            <Flex.Item style={{marginLeft:'0.2rem'}}>
+              <form enctype="multipart/form-data"
+                    id="fileUploadForm"
+                    action={this.state.uploadAttachmentUrl}
+                    method="post"
+                    onSubmit={this.onUploadFileSubmit}>
+                  <input type="file" name="inputName" id="choosefile" style={{display:'inline-block',width:'76%'}} onChange={this.onFileUploadChange}/>
+                  <input type="submit" value="上传附件" id="submitBtn" style={{display:'inline-block',color:'black'}}/>
               </form>
             </Flex.Item>
           </Flex>

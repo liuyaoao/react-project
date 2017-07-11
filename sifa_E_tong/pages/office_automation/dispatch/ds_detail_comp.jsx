@@ -116,12 +116,6 @@ class DS_DetailComp extends React.Component {
                     curSubTab:'send',
                     selectedTab: 'sendTab',
                   });
-                }}
-                onClickArticleBtn={()=>{
-                  this.setState({
-                    selectedTab: 'articleTab',
-                  });
-                  location.href = OAUtils.getMainDocumentUrl({ docunid:this.props.detailInfo.unid });
                 }} />
             </div>
             {this.state.curSubTab == "send"?

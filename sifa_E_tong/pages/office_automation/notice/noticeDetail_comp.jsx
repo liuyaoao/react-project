@@ -57,6 +57,7 @@ class Notice_DetailComp extends React.Component {
 
   render() {
     let {detailInfo} = this.props;
+    let {customAttachmentList} = this.state;
     let customAttachment = this.state.customAttachmentList.map((item,index)=>{
       let downloadUrl = OAUtils.getCustomAttachmentUrl({
         moduleName:"信息发布",
@@ -121,7 +122,14 @@ class Notice_DetailComp extends React.Component {
                 </Flex>
                 <Flex>
                   <Flex.Item>
-                    {customAttachment}
+                    <div style={{margin:'0.2rem 0 0 0.3rem',color:'black'}}>通知公告的附件：{customAttachmentList.length<=0?(<span>无附件</span>):null}</div>
+                      { customAttachmentList.length>0?
+                        (<div>{customAttachment}</div>):null
+                      }
+                  </Flex.Item>
+                </Flex>
+                <Flex>
+                  <Flex.Item>
                     <List renderHeader={() => '内容'}>
                          <TextareaItem
                            editable={false}
