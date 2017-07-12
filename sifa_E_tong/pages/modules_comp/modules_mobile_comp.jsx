@@ -3,6 +3,7 @@ import $ from 'jquery';
 import React from 'react';
 import {Link} from 'react-router/es6';
 import UserStore from 'stores/user_store.jsx';
+import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import {Popup, Toast, List, NavBar, Button}  from 'antd-mobile';
 import {Icon,Row, Col,Button as ButtonPc, Checkbox} from 'antd';
 
@@ -240,25 +241,37 @@ class ModulesMobileComp extends React.Component {
       }
       Popup.hide();
     }
+    onClickNoticeItem = (evt)=>{ //点击了通知公告的某一条
+      // console.log("onClickNoticeItem---:",evt,$(evt.currentTarget).data("unid"));
+      let docunid = $(evt.currentTarget).data("unid");
+      OAUtils.getFormCustomAttachmentList({
+        tokenunid: this.props.tokenunid,
+        moduleName:"信息发布",
+        docunid:docunid,
+        successCall: (data)=>{
+          console.log("get 通知公告的自定义附件列表 data:",data);
+          if(data.values.filelist.length>0){
+            let attachItem = data.values.filelist[0];
+            let downloadUrl = OAUtils.getCustomAttachmentUrl({
+              moduleName:"信息发布",
+              fileunid:attachItem.unid
+            });
+            location.href = downloadUrl;
+          }
+        }
+      });
+    }
 
     render() {
-      let objsArr = [{
-        name:"五一劳动节放假安排",
-        time:"2017-4-21"
-      },{
-        name:"2017年度职称审核表",
-        time:"2017-1-11"
-      },{
-        name:"最新文件上传",
-        time:"2017-4-22"
-      },{
-        name:"最新活动时间",
-        time:"2017-4-28"
-      }];
+      let objsArr = this.props.noticeListData.slice(0,5);
       let listItem =[];
       listItem.push(
           objsArr.map((obj,index)=>{
-            return (<div key={index} style={{height:'35px'}}><a className="lf">{obj.name}</a><a className="rt">{obj.time}</a></div>)
+            return (
+              <div key={index} style={{height:'35px'}} data-unid={obj.unid} onClick={this.onClickNoticeItem}>
+                <a className="lf" data-unid={obj.unid}>{obj.fileTitle}</a>
+                <a className="rt">{obj.publishTime}</a>
+              </div>)
           })
         );
         let modulesItem = this.getCurModulesItem(this.props.allModulesData);

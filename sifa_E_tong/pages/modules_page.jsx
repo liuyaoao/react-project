@@ -6,6 +6,8 @@ import React from 'react';
 import LogOutComp from './components/log_out_comp.jsx'
 // import {browserHistory} from 'react-router/es6';
 import * as GlobalActions from 'actions/global_actions.jsx';
+import UserStore from 'stores/user_store.jsx';
+import * as OAUtils from 'pages/utils/OA_utils.jsx';
 
 import OA_icon from 'images/modules_img/OA_icon.png';
 import chat_icon from 'images/modules_img/chat_icon.png';
@@ -29,11 +31,21 @@ class ChooseModulesPage extends React.Component {
         this.state = {
             localStoreKey4Modules:'S_F_E_T_MODULES_KEY',
             allModulesData:[],
+            colsNameCn:[ "标题", "发布日期", "所属类别", "所属单位"], //通知公告的列表项。
+            colsNameEn:["fileTitle", "publishTime", "type" ,"unit"],
+            tokenunid:'', //登录OA系统获取认证id。
+            noticeListData:[],
             isMobile: Utils.isMobile()
         };
     }
     componentWillMount() {
       this.getAllModulesData();
+      var me = UserStore.getCurrentUser() || {};
+      // this.setState({loginUserName:me.username || ''});
+      OAUtils.loginOASystem({oaUserName:me.oaUserName,oaPassword:me.oaPassword}, (res)=>{ //登录OA系统获取认证id。
+        this.setState({tokenunid:res.values.tockenunid});
+        this.getServerListData(res.values.tockenunid);
+      });
     }
     getAllModulesData(){
       let modulesData = [
@@ -114,19 +126,43 @@ class ChooseModulesPage extends React.Component {
       GlobalActions.redirectUserToDefaultTeam();
       // browserHistory.push('/siteview/channels/town-square');
     }
+    getServerListData = (tokenunid)=>{ //从服务端获取列表数据
+      OAUtils.getNoticeListData({
+        tokenunid: tokenunid,
+        currentpage:1,
+        rootlbunid:'72060E133431242D987C0A80A4124268', //这个是固定的。
+        shbz:"1", //表示已通过。这里只获取已通过审核了的。
+        viewcolumntitles:this.state.colsNameCn.join(','),
+        successCall: (data)=>{
+          let {colsNameEn} = this.state;
+          let parseData = OAUtils.formatServerListData(colsNameEn, data.values);
+          console.log("get 通知公告的list data:",data,parseData);
+          this.setState({
+            noticeListData:parseData,
+          });
+        },
+        errorCall: (data)=>{
+          this.setState({isLoading:false,isMoreLoading:false});
+        }
+      });
+    }
     render() {
         let {localStoreKey4Modules, allModulesData} = this.state;
         let finalEle = this.state.isMobile ?
             (<ModulesMobileComp
+              tokenunid={this.state.tokenunid}
               localStoreKey4Modules={localStoreKey4Modules}
               allModulesData={allModulesData}
               notShowModuleIdInMobile={notShow_moduleId_inMobile}
+              noticeListData={this.state.noticeListData}
               handleGoMatter={this.handleGoMatter} />) :
             (<ModulesPcComp
+              tokenunid={this.state.tokenunid}
               localStoreKey4Modules={localStoreKey4Modules}
               allModulesData={allModulesData}
               notShowModuleIdInMobile={notShow_moduleId_inMobile}
               notShowModuleIdInPC={notShow_moduleId_inPC}
+              noticeListData={this.state.noticeListData}
               handleGoMatter={this.handleGoMatter}/>);
         return (
           <div className=''>

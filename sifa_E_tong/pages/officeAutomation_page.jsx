@@ -16,6 +16,7 @@ const { Sider } = Layout;
 
 import PersonalTodoList from './office_automation/personalTodoList.jsx'; //待办事项
 import NoticeList from './office_automation/notice/noticeList.jsx'; //通知公告
+import VehicleList from './office_automation/vehicle/vehicleList.jsx'; //通知公告
 import IncomingList from './office_automation/incomingList.jsx'; //收文管理
 import DispatchList from './office_automation/dispatch/dispatchList.jsx'; //发文管理
 import SignReportList from './office_automation/signReport/signReportList.jsx'; //签报管理
@@ -81,6 +82,9 @@ class LoginRecordPage extends React.Component {
         break;
         case "通知公告":
           content = (<NoticeList title={current} tokenunid={tokenunid}/>);
+        break;
+        case "车辆管理":
+          content = (<VehicleList title={current} tokenunid={tokenunid}/>);
         break;
         case "收文管理":
           content = (<IncomingList title={current} tokenunid={tokenunid}/>);

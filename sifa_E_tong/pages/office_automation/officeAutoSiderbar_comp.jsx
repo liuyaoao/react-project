@@ -39,6 +39,9 @@ class OaSiderbarComp extends React.Component {
       case "通知公告":
         this.setState({current:"通知公告"});
       break;
+      case "车辆管理":
+        this.setState({current:"车辆管理"});
+      break;
       case "司法行政系统信息查询":
         this.setState({current:"司法行政系统信息查询"});
         // window.open("http://www.rufa.gov.cn");
@@ -70,6 +73,9 @@ class OaSiderbarComp extends React.Component {
             <Menu.Item key="签报管理"><Icon type="file" />签报管理</Menu.Item>
             <Menu.Item key="督办管理"><Icon type="eye" />督办管理</Menu.Item>
             <Menu.Item key="最新发文"><Icon type="file-text" />最新发文</Menu.Item>
+          </MenuItemGroup>
+          <MenuItemGroup key="综合办公" title="综合办公">
+            <Menu.Item key="车辆管理"><Icon type="car" />车辆管理</Menu.Item>
           </MenuItemGroup>
           <MenuItemGroup key="信息发布" title="信息发布">
             <Menu.Item key="通知公告"><Icon type="notification" />通知公告</Menu.Item>

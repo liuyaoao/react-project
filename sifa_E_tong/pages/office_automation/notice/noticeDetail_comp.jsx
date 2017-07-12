@@ -65,8 +65,7 @@ class Notice_DetailComp extends React.Component {
       });
       return (
         <div key={index} style={{margin:'0.1rem auto', width:'90%'}}>
-          <a type="button" className="btn btn-info"
-          style={{ marginLeft: '20px',width:'100%' }}
+          <a style={{ marginLeft: '20px',width:'100%',textDecoration:'underline' }}
           href={downloadUrl}>{item.attachname}</a>
         </div>
       );
