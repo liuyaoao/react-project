@@ -107,14 +107,14 @@ class DetailContentCompRaw extends React.Component {
             <Flex.Item><InputItem value={formData.zbbm_show||""} editable={false} labelNumber={5}>拟稿单位：</InputItem></Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem value={detailInfo.draftDate} editable={false} labelNumber={5}>拟稿日期：</InputItem></Flex.Item>
+            <Flex.Item><InputItem value={formData.ngrq_show} editable={false} labelNumber={5}>拟稿日期：</InputItem></Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>标题：</div>
               <TextareaItem
                 {...getFieldProps('subjectTitle',{
-                  initialValue: detailInfo.fileTitle,
+                  initialValue: formData.bt,
                 })}
                 title=""
                 rows={4}
@@ -146,15 +146,22 @@ class DetailContentCompRaw extends React.Component {
 
           <Flex>
             <Flex.Item style={{marginLeft:'0.2rem'}}>
-              <form enctype="multipart/form-data" action={this.state.uploadAttachmentUrl} method="post">
-                  <input type="file" name="file" id="choosefile" style={{display:'inline-block',width:'76%'}} onChange={this.onFileUploadChange}/>
-                  <input type="submit" value="上传附件" id="submitBtn" style={{color:'black'}}/>
+              <form
+                enctype="multipart/form-data"
+                action={this.state.uploadAttachmentUrl}
+                target="_blank"
+                method="post">
+                <input type="file" name="file" id="choosefile" style={{display:'inline-block',width:'76%'}} onChange={this.onFileUploadChange}/>
+                <input type="submit" value="上传附件" id="submitBtn" style={{color:'black'}}/>
               </form>
             </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>附件列表：{attachmentList.length<=0?(<span>无附件</span>):null}</div>
+              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>附件列表：
+                {(attachmentList.length<=0) ?
+                  (<span>无附件</span>):null}
+              </div>
               { this.state.attachmentList.length>0?
                 (this.getAttachmentListEle(this.state.attachmentList)):null
               }
@@ -193,8 +200,7 @@ class DetailContentCompRaw extends React.Component {
             <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>核稿：</div>
               <TextareaItem
-              title=''
-              value={detailInfo.verifyText}
+              value={"--"}
               editable={false}
               labelNumber={0}/>
             </Flex.Item>

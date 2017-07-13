@@ -130,7 +130,7 @@ class ModulesPcComp extends React.Component {
       for(let i=1;i <= this.state.itemRowSum;i++){
         let itemCols = modulesItem.slice((i-1)*this.state.colNumPerRow,i*this.state.colNumPerRow);
         itemRowEles.push(
-          (<div className="row" style={{position:'relative',height:'170px'}} key={i}>
+          (<div className="row" style={{position:'relative',height:'200px'}} key={i}>
             {itemCols}
            </div>)
         );

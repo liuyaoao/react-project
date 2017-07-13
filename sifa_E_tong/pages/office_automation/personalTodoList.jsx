@@ -4,7 +4,11 @@ import React from 'react';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import { WhiteSpace, WingBlank, Button,RefreshControl, ListView} from 'antd-mobile';
 import {Icon} from 'antd';
-import SignReportDetail from './signReport/signReportDetail_comp.jsx';
+
+import DS_DetailComp from './dispatch/ds_detail_comp.jsx';  //发文管理--详情页。
+import SignReportDetail from './signReport/signReportDetail_comp.jsx';  //签报管理--详情页。
+import SuperviseDetail from './supervision/superviseDetail_comp.jsx';  //督办管理--详情页。
+
 class PersonalTodoList extends React.Component {
   constructor(props) {
       super(props);
@@ -13,25 +17,22 @@ class PersonalTodoList extends React.Component {
       });
       this.state = {
         colsNameCn:["标题", "模块",  "性质",  "紧急程度","送文人", "发送时间"],
-        colsNameEn:["fileTitle", "modules", "property","urgency","sendtextPerson", "sendTime"],
+        colsNameEn:["fileTitle", "moduleName", "property","urgency","fileSender", "sendTime"],
         currentpage:1, //当前页码。
         totalPageCount:1, //总页数。
         isLoading:false, //是否在加载列表数据
         isMoreLoading:false, //是否正在加载更多。
         hasMore:false, //是否还有更多数据。
         listData:[], //原生list数据
-        activeTabkey:'待办',
         dataSource: dataSource.cloneWithRows([]),  //listView的源数据。
         showDetail:false,
-        detailInfo:null,
+        detailInfo:{},
       };
   }
-
   componentDidMount(){
     //从服务端获取数据。
     this.getServerListData();
   }
-
   //获取服务器端的待办事项数据。
   getServerListData = (currentpage)=>{
     this.setState({isLoading:true});
@@ -64,12 +65,20 @@ class PersonalTodoList extends React.Component {
       }
     });
   }
+  onClickLoadMore = (evt)=>{ //点击加载更多。
+    let {currentpage,totalPageCount,hasMore} = this.state;
+    if (!this.state.isMoreLoading && !hasMore) {
+      return;
+    }
+    this.setState({ isMoreLoading: true });
+    this.getServerListData(currentpage);
+  }
   onClickOneRow = (rowData)=>{
-    console.log("incomingList click rowData:",rowData);
+    console.log("待办事项 click rowData:",rowData);
     this.setState({detailInfo:rowData, showDetail:true});
   }
   backToTableListCall = ()=>{   //返回到列表页。
-    this.setState({showDetail:false});
+    this.setState({ showDetail:false,detailInfo:{} });
   }
   render() {
     const separator = (sectionID, rowID) => (
@@ -95,8 +104,7 @@ class PersonalTodoList extends React.Component {
         <div className={'list_item_container'}>
           <div className={'list_item_middle'}>
             <div style={{color:'black',fontSize:'0.33rem',fontWeight:'bold'}}>{rowData.fileTitle}</div>
-            <div>送文人：<span>{rowData.sendtextPerson}</span></div>
-            <div>模块：<span>{rowData.modules}</span></div>
+            <div>送文人：<span>{rowData.fileSender}</span></div>
             <div>性质：<span>{rowData.property}</span></div>
             <div>紧急程度：<span>{rowData.urgency}</span></div>
           </div>
@@ -106,20 +114,34 @@ class PersonalTodoList extends React.Component {
             </span>
           </div>
           <div className={'list_item_right'}>
-            <div style={{position:'absolute',top:'0',right:'0'}}>{rowData.sendTime}</div>
+            <div style={{position:'absolute',top:'0',right:'0'}}>{rowData.sendTime.split(" ")[0]}</div>
+            <div style={{ position:'absolute',bottom:'-1.5rem',right:'0' }}>{rowData.moduleName}</div>
           </div>
         </div>
         </div>
       );
     };
+    const listViewRenderFooter = ()=>{
+      if(this.state.isMoreLoading){
+        return (<div style={{ padding: 10, textAlign: 'center' }}>加载中...</div>);
+      }else if(this.state.hasMore){
+        return (<div style={{ padding: 10, textAlign: 'center' }} >
+              <Button type="default" style={{margin:'0 auto',width:'90%'}}
+                onClick={()=>this.onClickLoadMore()}>加载更多</Button>
+            </div>);
+      }
+      return (<div style={{ padding: 10, textAlign: 'center' }}>没有更多了！</div>);
+    };
+    let {showDetail, detailInfo} = this.state;
+    detailInfo = Object.assign({}, detailInfo , {unid:detailInfo.frmunid || ''});
     return (
       <div>
-        {(!this.state.showDetail)?(<ListView
+        {(!showDetail)?(<ListView
           dataSource={this.state.dataSource}
           renderRow={listRow}
           renderSeparator={separator}
-          initialListSize={5}
-          pageSize={5}
+          initialListSize={this.state.currentpage*10}
+          pageSize={this.state.currentpage*10}
           scrollRenderAheadDistance={200}
           scrollEventThrottle={20}
           style={{
@@ -129,10 +151,24 @@ class PersonalTodoList extends React.Component {
           }}
           scrollerOptions={{ scrollbars: true }}
         />):null}
-        {this.state.showDetail?
+        {(showDetail && detailInfo.moduleName=="发文管理")?
+          <DS_DetailComp
+            activeTabkey={'待办'}
+            detailInfo={detailInfo}
+            tokenunid={this.props.tokenunid}
+            backToTableListCall={this.backToTableListCall}
+          />:null}
+        {(showDetail && detailInfo.moduleName=="签报管理")?
           <SignReportDetail
-            activeTabkey={this.state.activeTabkey}
-            detailInfo={this.state.detailInfo}
+            activeTabkey={'待办'}
+            detailInfo={detailInfo}
+            tokenunid={this.props.tokenunid}
+            backToTableListCall={this.backToTableListCall}
+          />:null}
+        {(showDetail && detailInfo.moduleName=="督办管理")?
+          <SuperviseDetail
+            activeTabkey={'待办'}
+            detailInfo={detailInfo}
             tokenunid={this.props.tokenunid}
             backToTableListCall={this.backToTableListCall}
           />:null}

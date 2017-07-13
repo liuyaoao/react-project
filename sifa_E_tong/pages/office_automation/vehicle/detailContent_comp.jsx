@@ -18,9 +18,9 @@ class DetailContentComp extends React.Component {
       this.state = {
         loginUser:{},
         loginUserName:'',
-        nowDate:moment(new Date()).format('YYYY-MM-DD'),
-        startTime:moment(new Date()).format('YYYY-MM-DD'),
-        endTime:moment(new Date()).format('YYYY-MM-DD'),
+        nowDate:moment(new Date()).format('YYYY-MM-DD HH:MM'),
+        startTime:moment(new Date()).format('YYYY-MM-DD HH:MM'),
+        endTime:moment(new Date()).format('YYYY-MM-DD HH:MM'),
         tabName:"content",
       };
   }
@@ -29,6 +29,19 @@ class DetailContentComp extends React.Component {
     console.log("me-----:",me,me.nickname,me.organizations);
     this.setState({loginUserName:me.username||'', loginUser:me});
   }
+  componentWillReceiveProps(nextProps){
+    let formData = nextProps.formData;
+    if(nextProps.formData.ycrq && nextProps.formData.ycrq!=this.props.formData.ycrq){
+      if(formData.ycrq){
+        console.log("formData-----:",formData);
+        this.setState({
+          startTime : moment(formData.ycrq+" "+formData.ycsjHour+":"+formData.ycsjMinute),
+          endTime : moment(formData.hcrq+" "+formData.hcsjHour+":"+formData.hcsjMinute)
+        });
+      }
+    }
+  }
+
   onStartUseTimeChange = (val)=>{  //开始--用车时间
     console.log("onStartUseTimeChange--:",val);
     this.setState({
@@ -44,12 +57,18 @@ class DetailContentComp extends React.Component {
 
   render() {
     const { getFieldProps } = this.props.form;
+    let {formData,formDataRaw} = this.props;
+    let {startTime,endTime} = this.state;
+    if(formData.ycrq){
+      // startTime = moment(formData.ycrq+" "+formData.ycsjHour+":"+formData.ycsjMinute);
+      // endTime = moment(formData.ycrq+" "+formData.ycsjHour+":"+formData.ycsjMinute);
+    }
     return (
       <div>
         <div className={'oa_detail_cnt'}>
           <div className={'oa_detail_title'} style={{width:'100%',textAlign:'center'}}>长沙市司法局用车申请表</div>
           <Flex>
-            <Flex.Item><InputItem value={this.state.loginUser.nickname||''}
+            <Flex.Item><InputItem value={formData.ngr_show||'--'}
               editable={false}
               labelNumber={4}>申请人：</InputItem>
           </Flex.Item>
@@ -62,7 +81,7 @@ class DetailContentComp extends React.Component {
             </Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem value={this.state.nowDate}
+            <Flex.Item><InputItem value={formData.ngrq_show||'-'}
               editable={false}
               labelNumber={5}>申请日期：</InputItem>
             </Flex.Item>
@@ -70,7 +89,7 @@ class DetailContentComp extends React.Component {
           <Flex>
             <Flex.Item>
               <InputItem placeholder={'请输入...'}
-                {...getFieldProps('peopleNum')}
+                {...getFieldProps('peopleNum',{initialValue:formData.sxrs||'-'})}
                 editable={true}
                 labelNumber={5}>随行人数：</InputItem>
             </Flex.Item>
@@ -78,7 +97,7 @@ class DetailContentComp extends React.Component {
           <Flex>
             <Flex.Item>
               <InputItem placeholder={'请输入...'}
-                {...getFieldProps('useDays')}
+                {...getFieldProps('useDays',{initialValue:formData.ycts||'-'})}
                 editable={true}
                 labelNumber={5}>用车天数：</InputItem>
             </Flex.Item>
@@ -87,7 +106,7 @@ class DetailContentComp extends React.Component {
             <Flex.Item>
               <div className="select_container">
                 <DatePicker className=""
-                  mode="date"
+                  mode="datetime"
                   onChange={this.onStartUseTimeChange}
                   value={moment(this.state.startTime)}
                 >
@@ -100,9 +119,9 @@ class DetailContentComp extends React.Component {
             <Flex.Item>
               <div className="select_container">
                 <DatePicker className=""
-                  mode="date"
+                  mode="datetime"
                   onChange={this.onEndUseTimeChange}
-                  value={moment(this.state.startTime)}
+                  value={moment(this.state.endTime)}
                 >
                 <List.Item arrow="horizontal">回车时间：</List.Item>
                 </DatePicker>
@@ -112,7 +131,7 @@ class DetailContentComp extends React.Component {
           <Flex>
             <Flex.Item>
               <InputItem placeholder={'请输入...'}
-                {...getFieldProps('carLicense')}
+                {...getFieldProps('carLicense',{initialValue:formData.cph||'-'})}
                 editable={true}
                 labelNumber={4}>车牌号：</InputItem>
             </Flex.Item>
@@ -120,7 +139,7 @@ class DetailContentComp extends React.Component {
           <Flex>
             <Flex.Item>
               <InputItem placeholder={'请输入...'}
-                {...getFieldProps('driver')}
+                {...getFieldProps('driver',{initialValue:formData.jsy||'-'})}
                 editable={true}
                 labelNumber={4}>驾驶员：</InputItem>
             </Flex.Item>
@@ -128,7 +147,7 @@ class DetailContentComp extends React.Component {
           <Flex>
             <Flex.Item>
               <InputItem placeholder={'请输入...'}
-                {...getFieldProps('driver')}
+                {...getFieldProps('driver',{initialValue:formData.ccdd||'-'})}
                 editable={true}
                 labelNumber={5}>用车地点：</InputItem>
             </Flex.Item>
@@ -138,7 +157,7 @@ class DetailContentComp extends React.Component {
             <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>用车事由：</div>
               <TextareaItem
-                {...getFieldProps('reason')}
+                {...getFieldProps('reason',{initialValue:formData.ycsy||'-'})}
                 title=""
                 placeholder={'请输入...'}
                 rows={5}

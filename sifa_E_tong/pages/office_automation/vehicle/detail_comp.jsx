@@ -1,11 +1,11 @@
-//通知公告的详情页.
+//车辆管理的详情页.
 import $ from 'jquery';
 import React from 'react';
 import * as Utils from 'utils/utils.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 
 import { WingBlank, WhiteSpace, Button, InputItem, NavBar,
-  TextareaItem,Flex,DatePicker,List} from 'antd-mobile';
+  TextareaItem,Flex,DatePicker,List,TabBar} from 'antd-mobile';
 
 import DetailContentComp from './detailContent_comp.jsx';
 import CommonSendComp from '../common_send_comp.jsx';
@@ -14,19 +14,60 @@ import {Icon} from 'antd';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 
-
 const zhNow = moment().locale('zh-cn').utcOffset(8);
-class Notice_DetailComp extends React.Component {
+
+class Vehicle_DetailComp extends React.Component {
   constructor(props) {
       super(props);
       this.onNavBarLeftClick = this.onNavBarLeftClick.bind(this);
       this.state = {
+        moduleNameCn:'车辆管理',
+        modulename:'clgl2', //模块名
+        formParams:{
+          ycts:'', //用车天数。
+          sxrs:'', //随行人数。
+          jsy:'',  //驾驶员。
+          cph:'',  //车牌号。
+          ccdd:'',  //用车地点。
+          ycsy:'',  //用车事由。
+          ycrq:'',  //用车时间-日期。
+          ycsjHour:'',  //用车时间-小时。
+          ycsjMinute:'',  //用车时间-分钟。
+          hcrq:'',  //回车时间-日期。
+          hcsjHour:'',  //回车时间-小时。
+          hcsjMinute:'',  //回车时间-分钟。
+        },
         hidden: false,
         selectedTab:'',
         curSubTab:'content',
+        formData:{}, //经过前端处理的表单数据
+        formDataRaw:{}, //没有经过处理的后端返回的表单数据。
       };
   }
   componentWillMount(){
+    if(this.props.detailInfo && this.props.detailInfo.unid){
+      this.getServerFormData();
+    }
+  }
+  getServerFormData = ()=>{
+    const { detailInfo } = this.props;
+    OAUtils.getModuleFormData({
+      moduleName:this.state.moduleNameCn,
+      tokenunid:this.props.tokenunid,
+      unid:this.props.detailInfo.unid,
+      formParams:this.state.formParams, //特有的表单参数数据。
+      successCall: (data)=>{
+        console.log("get 车辆管理的表单数据:",data);
+        let formData = OAUtils.formatFormData(data.values);
+        this.setState({
+          formData,
+          formDataRaw:data.values,
+        });
+      },
+      errorCall:(res)=>{
+        //TODO
+      }
+    });
   }
   onNavBarLeftClick = (e) => {
     this.props.backToTableListCall();
@@ -57,7 +98,11 @@ class Notice_DetailComp extends React.Component {
         </NavBar>
         <div style={{marginTop:'60px'}}>
           {this.state.curSubTab == "content"?
-            (<AddEditContentComp detailInfo={this.props.detailInfo}/>):null}
+            (<DetailContentComp
+              detailInfo={this.props.detailInfo}
+              formData={this.state.formData}
+              formDataRaw={this.state.formDataRaw}
+              />):null}
         </div>
 
         {this.state.curSubTab == "send"? (<CommonSendComp
@@ -121,12 +166,12 @@ class Notice_DetailComp extends React.Component {
   }
 }
 
-Notice_DetailComp.defaultProps = {
+Vehicle_DetailComp.defaultProps = {
 };
 
-Notice_DetailComp.propTypes = {
+Vehicle_DetailComp.propTypes = {
   backToTableListCall:React.PropTypes.func,
   // isShow:React.PropTypes.bool,
 };
 
-export default Notice_DetailComp;
+export default Vehicle_DetailComp;

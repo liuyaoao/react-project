@@ -7,8 +7,10 @@ import * as OAUtils from 'pages/utils/OA_utils.jsx';
 
 import { Modal,WhiteSpace, SwipeAction, InputItem,TextareaItem,
   RefreshControl, Button,Tabs,List,ListView,SearchBar} from 'antd-mobile';
+
 import Vehicle_DetailComp from './detail_comp.jsx';
 import Vehicle_AddEditComp from './addEdit_comp.jsx';
+
 import { Icon} from 'antd';
 const alert = Modal.alert;
 const TabPane = Tabs.TabPane;
@@ -41,30 +43,31 @@ class VehicleList extends React.Component {
     this.getServerListData(this.state.activeTabkey,this.state.currentpage);
   }
   getServerListData = (keyName,currentpage)=>{ //从服务端获取列表数据
-    // this.setState({isLoading:true});
-    // OAUtils.getNoticeListData({
-    //   tokenunid: this.props.tokenunid,
-    //   currentpage:currentpage,
-    //   viewcolumntitles:this.state.colsNameCn.join(','),
-    //   successCall: (data)=>{
-    //     console.log("get 车辆管理的list data:",currentpage,data);
-    //     let {colsNameEn} = this.state;
-    //     let parseData = OAUtils.formatServerListData(colsNameEn, data.values);
-    //     let listData = this.state.listData.concat(parseData);
-    //     this.setState({
-    //       isLoading:false,
-    //       isMoreLoading:false,
-    //       currentpage:currentpage+1,
-    //       totalPageCount:data.totalcount,
-    //       listData:listData,
-    //       hasMore:(currentpage+1)<=data.totalcount,
-    //       dataSource: this.state.dataSource.cloneWithRows(listData),
-    //     });
-    //   },
-    //   errorCall: (data)=>{
-    //     this.setState({isLoading:false,isMoreLoading:false});
-    //   }
-    // });
+    this.setState({isLoading:true});
+    OAUtils.getVehicleListData({
+      tokenunid: this.props.tokenunid,
+      currentpage:currentpage,
+      keyName:keyName,
+      viewcolumntitles:this.state.colsNameCn.join(','),
+      successCall: (data)=>{
+        console.log("get 车辆管理的list data:",currentpage,data);
+        let {colsNameEn} = this.state;
+        let parseData = OAUtils.formatServerListData(colsNameEn, data.values);
+        let listData = this.state.listData.concat(parseData);
+        this.setState({
+          isLoading:false,
+          isMoreLoading:false,
+          currentpage:currentpage+1,
+          totalPageCount:data.totalcount,
+          listData:listData,
+          hasMore:(currentpage+1)<=data.totalcount,
+          dataSource: this.state.dataSource.cloneWithRows(listData),
+        });
+      },
+      errorCall: (data)=>{
+        this.setState({isLoading:false,isMoreLoading:false});
+      }
+    });
   }
   showDeleteConfirmDialog = (record)=>{
     let selectedId = record.id ? record.id : '';
@@ -144,8 +147,9 @@ class VehicleList extends React.Component {
           >
             <div className={'list_item_container'}>
               <div className={'list_item_middle'}>
-                <div style={{color:'black',fontSize:'0.33rem',fontWeight:'bold'}}>{rowData.title}</div>
-                <div>当前办理人：<span>{rowData.curUsers}</span></div>
+                <div style={{color:'black',fontSize:'0.33rem',fontWeight:'bold'}}>{rowData.reason}</div>
+                  <div>申请部门：<span>{rowData.applyDepart}</span></div>
+                  <div>申请人：<span>{rowData.applyUser}</span></div>
               </div>
               <div className={'list_item_left'}>
                 <span className={'list_item_left_icon'} >
@@ -153,8 +157,8 @@ class VehicleList extends React.Component {
                 </span>
               </div>
               <div className={'list_item_right'}>
-                <div style={{position:'absolute',top:'0',right:'0'}}>{rowData.acceptDate}</div>
-                <div style={{ position:'absolute',bottom:'-1rem',right:'0' }}>{rowData.superviseType}</div>
+                <div style={{position:'absolute',top:'0',right:'0'}}>{rowData.carLicense}</div>
+                <div style={{ position:'absolute',bottom:'-1rem',right:'0' }}>{rowData.driver}</div>
               </div>
             </div>
         </div>

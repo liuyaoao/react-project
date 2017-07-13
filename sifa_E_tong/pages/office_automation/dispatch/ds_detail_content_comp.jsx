@@ -238,6 +238,7 @@ class DS_DetailContentComp extends React.Component {
                     id="fileUploadForm"
                     action={this.state.uploadAttachmentUrl}
                     method="post"
+                    target="_blank"
                     onSubmit={this.onUploadFileSubmit}>
                   <input type="file" name="inputName" id="choosefile" style={{display:'inline-block',width:'76%'}} onChange={this.onFileUploadChange}/>
                   <input type="submit" value="上传附件" id="submitBtn" style={{display:'inline-block',color:'black'}}/>
@@ -246,7 +247,10 @@ class DS_DetailContentComp extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.3rem',color:'black'}}>附件列表：{attachmentList.length<=0?(<span>无附件</span>):null}</div>
+              <div style={{margin:'0.2rem 0 0 0.3rem',color:'black'}}>附件列表：
+                {attachmentList.length<=0?
+                  (<span>无附件</span>):null}
+              </div>
               { this.state.attachmentList.length>0?
                 (this.getAttachmentListEle(this.state.attachmentList)):null
               }

@@ -90,6 +90,11 @@ export function getSuperviseListData(opts){
   opts['viewname'] = 'hcit.module.duban3.ui.VeDbjgl';
   getOAServerListData(opts);
 }
+//获取车辆管理的列表数据
+export function getVehicleListData(opts){
+  opts['viewname'] = 'hcit.module.clgl2.ui.VeClsq';
+  getOAServerListData(opts);
+}
 //获取通知公告的列表数据
 export function getNoticeListData(opts){
   // opts['viewname'] = 'hcit.module.tzgg.ui.VeTzgg';
@@ -137,7 +142,7 @@ export function getPersonalTodoListData(opts){
 
 // Key：1表示获取获取草稿箱中的数据，10表示获取待办内容，2，表示办理中，4表示已办结，16777215表示所有。
 export function getOAServerListData(params){ //从服务端获取列表数据
-  const keyName2keyMap = {"草稿箱":1, "待办":10, "办理中":2, "已办结":4, "所有":16777215}
+  const keyName2keyMap = {"草稿箱":1, "待办":10, "办理中":2, "已定稿":4,"已办结":4, "所有":16777215}
   let options = Object.assign({},{
     url: 'http://10.192.0.241/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.MobileViewWork', //模块url
@@ -201,7 +206,8 @@ export function getModuleFormData(params) {
     "签报管理":"hcit.module.qbgl.ui.FrmCld",
     "发文管理":"hcit.module.fwgl.ui.FrmFwcld",
     "收文管理":"hcit.module.swgl.ui.FrmSwcld",
-    "督办管理":"hcit.module.duban3.ui.FrmDbjgl"
+    "督办管理":"hcit.module.duban3.ui.FrmDbjgl",
+    "车辆管理":"hcit.module.clgl2.ui.FrmClsq"
   }
   let options = Object.assign({},{
     url: 'http://10.192.0.241/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
@@ -214,7 +220,7 @@ export function getModuleFormData(params) {
 				"formparam" : {
 					"unid" : options.unid,
 				},
-        "formdata" : {
+        "formdata" : Object.assign({},{
           "unid" : "",
 					"flowsessionid" : "",
           "fwwh":"", //发文管理的--文号。
@@ -245,7 +251,7 @@ export function getModuleFormData(params) {
           "zbbm_show":"",  //拟稿单位（部门）
 					"bt" : "", //标题。
 					"nr" : ""
-        }
+        }, options.formParams||{})
     }
   }));
   $.ajax({

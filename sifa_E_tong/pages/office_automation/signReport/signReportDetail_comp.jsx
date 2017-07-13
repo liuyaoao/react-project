@@ -28,7 +28,6 @@ class SignReportDetail extends React.Component {
         modulename:'qbgl', //模块名
         hidden: false,
         selectedTab:'',
-        visible:false,
         curSubTab:'content',
         formData:{}, //经过前端处理的表单数据
         formDataRaw:{}, //没有经过处理的后端返回的表单数据。
