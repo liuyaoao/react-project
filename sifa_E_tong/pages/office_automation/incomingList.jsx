@@ -174,7 +174,8 @@ class IncomingList extends React.Component {
       return (<TabPane tab={tabName} key={tabName} >
         <SearchBar placeholder="搜索" />
         {this.state.isLoading?<div style={{textAlign:'center'}}><Icon type="loading"/></div>:null}
-        {(!this.state.isLoading && this.state.listData.length<=0)?<div style={{textAlign:'center'}}>暂无数据</div>:null}
+        {(!this.state.isLoading && this.state.listData.length<=0)?
+          <div style={{textAlign:'center'}}>暂无数据</div>:null}
         {!this.state.showDetail?(
           <ListView
             dataSource={dataSource}
@@ -185,9 +186,7 @@ class IncomingList extends React.Component {
             pageSize={this.state.currentpage*10}
             scrollRenderAheadDistance={200}
             scrollEventThrottle={20}
-            style={{
-              height: document.documentElement.clientHeight,
-            }}
+            useBodyScroll={true}
             scrollerOptions={{ scrollbars: true }}
           />
         ):null}

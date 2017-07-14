@@ -149,7 +149,6 @@ class DetailContentCompRaw extends React.Component {
               <form
                 enctype="multipart/form-data"
                 action={this.state.uploadAttachmentUrl}
-                target="_blank"
                 method="post">
                 <input type="file" name="file" id="choosefile" style={{display:'inline-block',width:'76%'}} onChange={this.onFileUploadChange}/>
                 <input type="submit" value="上传附件" id="submitBtn" style={{color:'black'}}/>

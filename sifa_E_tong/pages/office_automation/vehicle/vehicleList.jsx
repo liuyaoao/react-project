@@ -194,9 +194,7 @@ class VehicleList extends React.Component {
           pageSize={this.state.currentpage*10}
           scrollRenderAheadDistance={400}
           scrollEventThrottle={20}
-          style={{
-            height: document.documentElement.clientHeight
-          }}
+          useBodyScroll={true}
           scrollerOptions={{ scrollbars: false }}
         />):null}
       </TabPane>);

@@ -198,9 +198,7 @@ class SignReportList extends React.Component {
           pageSize={this.state.currentpage*10}
           scrollRenderAheadDistance={200}
           scrollEventThrottle={20}
-          style={{
-            height: document.documentElement.clientHeight,
-          }}
+          useBodyScroll={true}
           scrollerOptions={{ scrollbars: false }}
         />):null}
       </TabPane>);

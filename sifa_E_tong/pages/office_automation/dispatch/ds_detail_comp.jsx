@@ -21,7 +21,10 @@ class DS_DetailComp extends React.Component {
       this.state = {
         moduleNameCn:'发文管理',
         modulename:'fwgl', //模块名
-        subTabsArr:["","content"], // such as :["","content","send","verify"]
+        formParams:{
+
+        },
+        editSave:1, //修改保存计数。
         curSubTab:'content',
         isHide:false,
         formData:{},
@@ -69,9 +72,28 @@ class DS_DetailComp extends React.Component {
   }
 
   onClickSave = ()=> {
-    Toast.info('保存成功!', 1);
-    this.props.backToTableListCall();
-    let form = this.props.form;
+    this.setState({
+      selectedTab: 'saveTab',
+    });
+    OAUtils.saveModuleFormData({
+      moduleName:this.state.moduleNameCn,
+      tokenunid:this.props.tokenunid,
+      unid:this.props.detailInfo.unid,
+      formParams:Object.assign({},this.state.formParams,this.state.formData), //特有的表单参数数据。
+      successCall: (data)=>{
+        console.log("保存-发文管理的表单数据:",data);
+        Toast.info('保存成功!', 1);
+        let formData = OAUtils.formatFormData(data.values);
+        this.setState({
+          // formData,
+          // formDataRaw:data.values,
+        });
+      },
+      errorCall:(res)=>{
+        //TODO
+      }
+    });
+    // this.props.backToTableListCall();
   }
 
   render() {

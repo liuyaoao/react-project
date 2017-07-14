@@ -238,7 +238,6 @@ class DS_DetailContentComp extends React.Component {
                     id="fileUploadForm"
                     action={this.state.uploadAttachmentUrl}
                     method="post"
-                    target="_blank"
                     onSubmit={this.onUploadFileSubmit}>
                   <input type="file" name="inputName" id="choosefile" style={{display:'inline-block',width:'76%'}} onChange={this.onFileUploadChange}/>
                   <input type="submit" value="上传附件" id="submitBtn" style={{display:'inline-block',color:'black'}}/>

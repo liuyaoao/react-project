@@ -76,11 +76,27 @@ class Vehicle_DetailComp extends React.Component {
     this.setState({curSubTab:'content'});
   }
   onClickAddSave = ()=>{ //点击了保存
-    //TODO
     this.setState({
       selectedTab: 'saveTab',
     });
-    this.props.backToTableListCall();
+    OAUtils.saveModuleFormData({
+      moduleName:this.state.moduleNameCn,
+      tokenunid:this.props.tokenunid,
+      unid:this.props.detailInfo.unid,
+      formParams:Object.assign({},this.state.formParams,this.state.formData), //特有的表单参数数据。
+      successCall: (data)=>{
+        console.log("保存-车辆管理的表单数据:",data);
+        let formData = OAUtils.formatFormData(data.values);
+        this.setState({
+          // formData,
+          // formDataRaw:data.values,
+        });
+      },
+      errorCall:(res)=>{
+        //TODO
+      }
+    });
+    // this.props.backToTableListCall();
   }
 
 

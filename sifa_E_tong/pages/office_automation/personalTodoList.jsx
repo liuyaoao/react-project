@@ -144,11 +144,7 @@ class PersonalTodoList extends React.Component {
           pageSize={this.state.currentpage*10}
           scrollRenderAheadDistance={200}
           scrollEventThrottle={20}
-          style={{
-            height: document.documentElement.clientHeight,
-            border: '1px solid #ddd',
-            margin: '0.1rem 0',
-          }}
+          useBodyScroll={true}
           scrollerOptions={{ scrollbars: true }}
         />):null}
         {(showDetail && detailInfo.moduleName=="发文管理")?

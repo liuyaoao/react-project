@@ -286,15 +286,22 @@ export function formatFormData(values){
 }
 //保存模块编辑的表单数据
 export function saveModuleFormData(params) {
+  const moduleName2FormName = {
+    "签报管理":"hcit.module.qbgl.ui.FrmCld",
+    "发文管理":"hcit.module.fwgl.ui.FrmFwcld",
+    "收文管理":"hcit.module.swgl.ui.FrmSwcld",
+    "督办管理":"hcit.module.duban3.ui.FrmDbjgl",
+    "车辆管理":"hcit.module.clgl2.ui.FrmClsq"
+  }
   let options = Object.assign({},{
     url: 'http://10.192.0.241/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.MobileToOpenForm&ispost=1',
   },params);
   let param = encodeURIComponent(JSON.stringify({
-    "ver" : "1",
+    "ver" : "2",
     "params" : {
-      "formname" : "hcit.module.qbgl.ui.FrmCld",
-      "formdata" : {
+      "formname" : moduleName2FormName[options.moduleName],
+      "formdata" : Object.assign({},{
         "__EVENTTARGET_S" : "M|btSave|OnClickHandler",
 					"unid" : "7503130A0817AE0BEF2AC1031B1AD425",
 					"flowsessionid" : "7505030E062E1C529F7AC1031B154725",
@@ -309,12 +316,12 @@ export function saveModuleFormData(params) {
 					"btFx" : "",
 					"btBwgz" : "",
 					"btZw" : "",
-					"ngr_show" : "admin",
-					"ngrq_show" : "2017-04-19",
-					"bt" : "88888888888888",
-					"nr" : "测试内容"
+					"ngr_show" : "",
+					"ngrq_show" : "",
+					"bt" : "",
+					"nr" : ""
 
-      }
+      }, options.formParams || {} )
     }
   }));
   finalRequestServer(options,param);
