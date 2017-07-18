@@ -4,7 +4,7 @@ import React from 'react';
 import * as Utils from 'utils/utils.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import { Modal, WingBlank, WhiteSpace, SwipeAction,
-    Tabs, ListView,SearchBar, Button} from 'antd-mobile';
+    Tabs, ListView, Button} from 'antd-mobile';
 import { Icon} from 'antd';
 const TabPane = Tabs.TabPane;
 import SignReportAdd from './signReportAdd_comp.jsx';
@@ -102,6 +102,13 @@ class SignReportList extends React.Component {
   backToTableListCall = ()=>{   //返回到列表页。
     this.setState({showAdd:false,showDetail:false});
   }
+  updateListViewCall = ()=>{ //跟新列表。
+    this.setState({
+      listData:[],
+      currentpage:1
+    });
+    this.getServerListData(this.state.activeTabkey,1);
+  }
   render() {
     const separator = (sectionID, rowID) => (
       <div
@@ -183,7 +190,6 @@ class SignReportList extends React.Component {
           <Button className="btn" type="primary" onClick={this.onClickAddNew}><Icon type="plus"/>新建</Button>
         </WingBlank>
         <WhiteSpace />
-        <SearchBar placeholder="搜索" />
         {this.state.isLoading?<div style={{textAlign:'center'}}><Icon type="loading"/></div>:null}
         {
           (!this.state.isLoading && this.state.listData.length<=0)?
@@ -216,6 +222,7 @@ class SignReportList extends React.Component {
         {this.state.showAdd?
           <SignReportAdd
             tokenunid={this.props.tokenunid}
+            updateListViewCall={this.updateListViewCall}
             backToTableListCall={this.backToTableListCall}
           />:null}
         {this.state.showDetail?
@@ -223,6 +230,7 @@ class SignReportList extends React.Component {
             activeTabkey={this.state.activeTabkey}
             detailInfo={this.state.detailInfo}
             tokenunid={this.props.tokenunid}
+            updateListViewCall={this.updateListViewCall}
             backToTableListCall={this.backToTableListCall}
           />:null}
       </div>

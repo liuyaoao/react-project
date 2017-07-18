@@ -3,7 +3,7 @@ import $ from 'jquery';
 import React from 'react';
 import * as Utils from 'utils/utils.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
-import { Modal,WhiteSpace, SwipeAction,Popup, Tabs, RefreshControl, ListView,SearchBar, Button} from 'antd-mobile';
+import { Modal,WhiteSpace, SwipeAction,Popup, Tabs, RefreshControl, ListView, Button} from 'antd-mobile';
 import { Icon} from 'antd';
 const TabPane = Tabs.TabPane;
 import DS_DetailComp from './ds_detail_comp.jsx';//详情
@@ -114,6 +114,13 @@ class DispatchList extends React.Component {
   onClickAddEdit = ()=>{
     this.setState({showDetail:false, showAdd: true});
   }
+  updateListViewCall = ()=>{ //跟新列表。
+    this.setState({
+      listData:[],
+      currentpage:1
+    });
+    this.getServerListData(this.state.activeTabkey,1);
+  }
 
   render() {
     const separator = (sectionID, rowID) => (
@@ -191,7 +198,6 @@ class DispatchList extends React.Component {
       }
       return (<TabPane tab={tabName} key={tabName} >
         <Button className="btn" type="primary" style={{margin:"0.16rem"}} onClick={()=>this.onClickAddEdit()}><Icon type="plus" /> 新建</Button>
-        <SearchBar placeholder="搜索" />
         {this.state.isLoading?<div style={{textAlign:'center'}}><Icon type="loading"/></div>:null}
         {(!this.state.isLoading && this.state.listData.length<=0)?
           <div style={{textAlign:'center'}}>暂无数据</div>:null}
@@ -225,6 +231,7 @@ class DispatchList extends React.Component {
         {this.state.showAdd?
           (<DS_AddComp
             tokenunid={this.props.tokenunid}
+            updateListViewCall={this.updateListViewCall}
             backToTableListCall={()=>this.backToTableListCall()}
             />):null
         }
@@ -232,6 +239,7 @@ class DispatchList extends React.Component {
           (<DS_DetailComp
             detailInfo={this.state.detailInfo}
             tokenunid={this.props.tokenunid}
+            updateListViewCall={this.updateListViewCall}
             backToTableListCall={()=>this.backToTableListCall()}
             />):null
         }

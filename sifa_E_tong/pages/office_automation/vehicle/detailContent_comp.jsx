@@ -7,7 +7,7 @@ import moment from 'moment';
 import { createForm } from 'rc-form';
 
 import myWebClient from 'client/my_web_client.jsx';
-import { WingBlank, WhiteSpace,DatePicker, Button, InputItem, NavBar,
+import { Toast,WingBlank, WhiteSpace,DatePicker, Button, InputItem, NavBar,
   TextareaItem,Flex,List,Picker} from 'antd-mobile';
 
 import {Icon } from 'antd';
@@ -40,8 +40,29 @@ class DetailContentComp extends React.Component {
         });
       }
     }
+    if(nextProps.editSaveTimes != this.props.editSaveTimes){ //点击了保存按钮了。
+      this.editSave();
+    }
   }
 
+  editSave = ()=>{
+    let tempFormData = this.props.form.getFieldsValue();
+    OAUtils.saveModuleFormData({
+      moduleName:this.props.moduleNameCn,
+      tokenunid:this.props.tokenunid,
+      unid:this.props.detailInfo.unid,
+      formParams:Object.assign({},this.props.formParams,this.props.formData,tempFormData), //特有的表单参数数据。
+      successCall: (data)=>{
+        console.log("保存-车辆管理的表单数据:",data);
+        let formData = OAUtils.formatFormData(data.values);
+        this.props.editSaveSuccCall(formData,data.values);
+        Toast.info('修补保存成功!!', 2);
+      },
+      errorCall:(res)=>{
+        Toast.info('修补保存失败!!', 1);
+      }
+    });
+  }
   onStartUseTimeChange = (val)=>{  //开始--用车时间
     console.log("onStartUseTimeChange--:",val);
     this.setState({
@@ -89,7 +110,7 @@ class DetailContentComp extends React.Component {
           <Flex>
             <Flex.Item>
               <InputItem placeholder={'请输入...'}
-                {...getFieldProps('peopleNum',{initialValue:formData.sxrs||'-'})}
+                {...getFieldProps('sxrs',{initialValue:formData.sxrs||'-'})}
                 editable={true}
                 labelNumber={5}>随行人数：</InputItem>
             </Flex.Item>
@@ -97,7 +118,7 @@ class DetailContentComp extends React.Component {
           <Flex>
             <Flex.Item>
               <InputItem placeholder={'请输入...'}
-                {...getFieldProps('useDays',{initialValue:formData.ycts||'-'})}
+                {...getFieldProps('ycts',{initialValue:formData.ycts||'-'})}
                 editable={true}
                 labelNumber={5}>用车天数：</InputItem>
             </Flex.Item>
@@ -131,7 +152,7 @@ class DetailContentComp extends React.Component {
           <Flex>
             <Flex.Item>
               <InputItem placeholder={'请输入...'}
-                {...getFieldProps('carLicense',{initialValue:formData.cph||'-'})}
+                {...getFieldProps('cph',{initialValue:formData.cph||'-'})}
                 editable={true}
                 labelNumber={4}>车牌号：</InputItem>
             </Flex.Item>
@@ -139,7 +160,7 @@ class DetailContentComp extends React.Component {
           <Flex>
             <Flex.Item>
               <InputItem placeholder={'请输入...'}
-                {...getFieldProps('driver',{initialValue:formData.jsy||'-'})}
+                {...getFieldProps('jsy',{initialValue:formData.jsy||'-'})}
                 editable={true}
                 labelNumber={4}>驾驶员：</InputItem>
             </Flex.Item>
@@ -147,7 +168,7 @@ class DetailContentComp extends React.Component {
           <Flex>
             <Flex.Item>
               <InputItem placeholder={'请输入...'}
-                {...getFieldProps('driver',{initialValue:formData.ccdd||'-'})}
+                {...getFieldProps('ccdd',{initialValue:formData.ccdd||'-'})}
                 editable={true}
                 labelNumber={5}>用车地点：</InputItem>
             </Flex.Item>
@@ -157,7 +178,7 @@ class DetailContentComp extends React.Component {
             <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>用车事由：</div>
               <TextareaItem
-                {...getFieldProps('reason',{initialValue:formData.ycsy||'-'})}
+                {...getFieldProps('ycsy',{initialValue:formData.ycsy||'-'})}
                 title=""
                 placeholder={'请输入...'}
                 rows={5}

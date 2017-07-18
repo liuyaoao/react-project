@@ -4,10 +4,10 @@ import React from 'react';
 // import myWebClient from 'client/my_web_client.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import UserStore from 'stores/user_store.jsx';
-import { WingBlank, WhiteSpace, Button, InputItem,
-  TextareaItem, Flex, TabBar, Picker, List, Toast } from 'antd-mobile';
+import { Toast, WingBlank, WhiteSpace, Button, InputItem,
+  TextareaItem, Flex, TabBar, Picker, List } from 'antd-mobile';
 
-import { Icon, Select } from 'antd';
+import { Icon, Upload } from 'antd';
 import { createForm } from 'rc-form';
 import CommonFlowTraceComp from '../common_flowTrace_comp.jsx'; //办文跟踪
 import CommonNotionComp from '../common/common_notion_comp.jsx';
@@ -41,6 +41,30 @@ class DS_DetailContentComp extends React.Component {
         jjcd_value:nextProps.formData.jjcd || "",
       });
     }
+    if(nextProps.editSaveTimes != this.props.editSaveTimes){ //点击了保存按钮了。
+      this.editSave();
+    }
+  }
+  editSave = ()=>{  //编辑保存
+    let tempFormData = this.props.form.getFieldsValue();
+    tempFormData['gwlc'] = this.state.gwlc_value;
+    tempFormData['mj'] = this.state.mj_value;
+    tempFormData['jjcd'] = this.state.jjcd_value;
+    OAUtils.saveModuleFormData({
+      moduleName:this.props.moduleNameCn,
+      tokenunid:this.props.tokenunid,
+      unid:this.props.detailInfo.unid,
+      formParams:Object.assign({},this.props.formParams,this.props.formData,tempFormData), //特有的表单参数数据。
+      successCall: (data)=>{
+        console.log("保存-发文管理的表单数据:",data);
+        let formData = OAUtils.formatFormData(data.values);
+        this.props.editSaveSuccCall(formData,data.values);
+        Toast.info('修补保存成功!!', 2);
+      },
+      errorCall:(res)=>{
+        Toast.info('修补保存失败!!', 1);
+      }
+    });
   }
   getFormVerifyNotion = ()=>{ //获取历史阅文意见数据。
     OAUtils.getFormVerifyNotion({
@@ -94,34 +118,45 @@ class DS_DetailContentComp extends React.Component {
     this.setState({jjcd_value:val[0]});
   }
   onFileUploadChange = (file)=>{
-    let index = document.getElementById("choosefile").value.indexOf('fakepath')+9;
-    let filename = document.getElementById("choosefile").value.substring(index);
+    // let index = document.getElementById("choosefile").value.indexOf('fakepath')+9;
+    // let filename = document.getElementById("choosefile").value.substring(index);
     // console.log("上传文件时，选择文件的change事件----：",file,filename);
     this.setState({
       uploadAttachmentUrl:OAUtils.getUploadAttachmentUrl({
         docunid:this.props.detailInfo.unid,
-        filename:filename,
+        filename:file.name,
         moduleName:this.props.moduleNameCn
       })
     });
-  }
-  onUploadFileSubmit = ()=>{
-    // let uploadForm = document.getElementById("fileUploadForm");
-    // let res = fetch(this.state.uploadAttachmentUrl, {
-    //     method: 'POST',
-    //     body: new FormData(uploadForm)
-    //   }).then((response) => {
-    //
-    //     console.log("after file upload message:",response);
-    //     return response;
-    // });
-    // return false;
   }
 
   render() {
     const {attachmentList,mj_value,jjcd_value,gwlc_value} = this.state;
     const { detailInfo, formData, formDataRaw , tokenunid, modulename } = this.props;
     const { getFieldProps, getFieldError } = this.props.form;
+    let uploadProps = {
+      name: 'inputName',
+      action: this.state.uploadAttachmentUrl,
+      showUploadList:false, //是否展示上传文件列表。
+      headers: {
+        authorization: 'authorization-text',
+      },
+      beforeUpload:(file,fileList)=>{
+        this.onFileUploadChange(file);
+        return true;
+      },
+      onChange:(info)=>{
+        if (info.file.status !== 'uploading') {
+          console.log(info.file, info.fileList);
+        }
+        if (info.file.status === 'done') {
+          Toast.info(`${info.file.name} 文件上传成功！`);
+          this.getFormAttachmentList();
+        } else if (info.file.status === 'error') {
+          Toast.info(`${info.file.name} 文件上传失败！`);
+        }
+      }
+    };
     let secrecyItems = formDataRaw.mj?formDataRaw.mj.items:[];
     let secrecyType = secrecyItems.map((item)=>{ //密级
       return {
@@ -145,11 +180,10 @@ class DS_DetailContentComp extends React.Component {
       }
     });
     let gwlc_val = gwlc_value || (formDataRaw.gwlc?formDataRaw.gwlc.value:'');
-    console.log("gwlc_val----:",gwlc_val,fileFlowTypes);
     return (
       <div style={{marginBottom: "100px"}}>
         <div className={'oa_detail_cnt'}>
-          <div className={'oa_detail_title'} style={{width:'100%',textAlign:'center'}}>{detailInfo.fileTitle}</div>
+          <div className={'oa_detail_title'} style={{width:'100%',textAlign:'center'}}>{formData.wjbt}</div>
           <Flex>
             <Flex.Item>
               <div className="select_container">
@@ -163,8 +197,16 @@ class DS_DetailContentComp extends React.Component {
             </Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem placeholder="--" value={formData.fwwh} labelNumber={2}>文号</InputItem></Flex.Item>
-            <Flex.Item><InputItem placeholder="--" value={formData.fs} labelNumber={2} type="Number">份数</InputItem></Flex.Item>
+            <Flex.Item><InputItem placeholder="--" value={formData.fwwh} labelNumber={3}>文号:</InputItem></Flex.Item>
+            <Flex.Item>
+              <InputItem placeholder="请输入..."
+                {...getFieldProps('fs',{
+                  initialValue: formData.fs,
+                })}
+                labelNumber={3}
+                type="Number">份数:
+              </InputItem>
+            </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
@@ -192,8 +234,8 @@ class DS_DetailContentComp extends React.Component {
             <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>标题：</div>
               <TextareaItem
-                {...getFieldProps('bt',{
-                  initialValue: detailInfo.fileTitle,
+                {...getFieldProps('wjbt',{
+                  initialValue: formData.wjbt,
                 })}
                 title=""
                 rows={3}
@@ -231,17 +273,14 @@ class DS_DetailContentComp extends React.Component {
                 }}>下载正文附件</Button>
             </Flex.Item>
           </Flex>
-          <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginTop:'0.1rem'}}/>
+
           <Flex>
-            <Flex.Item style={{marginLeft:'0.2rem'}}>
-              <form enctype="multipart/form-data"
-                    id="fileUploadForm"
-                    action={this.state.uploadAttachmentUrl}
-                    method="post"
-                    onSubmit={this.onUploadFileSubmit}>
-                  <input type="file" name="inputName" id="choosefile" style={{display:'inline-block',width:'76%'}} onChange={this.onFileUploadChange}/>
-                  <input type="submit" value="上传附件" id="submitBtn" style={{display:'inline-block',color:'black'}}/>
-              </form>
+            <Flex.Item className={'uploadContainer'}>
+              <Upload {...uploadProps}>
+                <Button type="primary" style={{width:'100%'}}>
+                  <Icon type="upload" /> 上传附件
+                </Button>
+              </Upload>
             </Flex.Item>
           </Flex>
           <Flex>
@@ -255,13 +294,13 @@ class DS_DetailContentComp extends React.Component {
               }
             </Flex.Item>
           </Flex>
-
+          <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginTop:'0.1rem'}}/>
           <Flex>
-            <Flex.Item><InputItem placeholder="--" labelNumber={4}>领导签发</InputItem></Flex.Item>
+            <Flex.Item><InputItem placeholder="--" labelNumber={5}>领导签发:</InputItem></Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
-              <div className={'detail_textarea_title'}>传批意见</div>
+              <div className={'detail_textarea_title'}>传批意见:</div>
               <div className="textarea_container">
                 <CommonNotionComp
                   notionList={this.state.historyNotionType2List['传批意见'] || []} />
@@ -271,7 +310,7 @@ class DS_DetailContentComp extends React.Component {
           <Flex>
             <Flex.Item>
               <div id="JZYJ">
-                <div className={'detail_textarea_title'}>局长审核意见</div>
+                <div className={'detail_textarea_title'}>局长审核意见:</div>
                 <div className="textarea_container">
                   <CommonNotionComp
                     notionList={this.state.historyNotionType2List['局长审核意见'] || []} />
@@ -282,7 +321,7 @@ class DS_DetailContentComp extends React.Component {
           <Flex>
             <Flex.Item>
               <div id="FGYJ">
-                <div className={'detail_textarea_title'}>分管领导意见</div>
+                <div className={'detail_textarea_title'}>分管领导意见:</div>
                 <div className="textarea_container">
                   <CommonNotionComp
                     notionList={this.state.historyNotionType2List['分管领导意见'] || []} />
@@ -292,7 +331,7 @@ class DS_DetailContentComp extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div className={'detail_textarea_title'}>处室负责人意见</div>
+              <div className={'detail_textarea_title'}>处室负责人意见:</div>
               <CommonNotionComp
                 notionList={this.state.historyNotionType2List['部门意见'] || []} />
             </Flex.Item>
@@ -300,7 +339,7 @@ class DS_DetailContentComp extends React.Component {
           <Flex>
             <Flex.Item>
               <div id="HG">
-                <div className={'detail_textarea_title'}>核稿</div>
+                <div className={'detail_textarea_title'}>核稿:</div>
                 <div className="textarea_container">
                   <CommonNotionComp
                     notionList={this.state.historyNotionType2List['部门意见'] || []} />
@@ -309,13 +348,13 @@ class DS_DetailContentComp extends React.Component {
             </Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem placeholder="--" value={formData.zbbm_show} labelNumber={4}>拟稿单位</InputItem></Flex.Item>
+            <Flex.Item><InputItem placeholder="--" value={formData.zbbm_show} labelNumber={5}>拟稿单位:</InputItem></Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem placeholder="--" labelNumber={4} value={formData.ngr_show}>拟稿人</InputItem></Flex.Item>
+            <Flex.Item><InputItem placeholder="--" labelNumber={4} value={formData.ngr_show}>拟稿人:</InputItem></Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem placeholder="--" editable="fasle" value={formData.ngrq_show}>日期</InputItem></Flex.Item>
+            <Flex.Item><InputItem placeholder="--" editable="fasle" value={formData.ngrq_show} labelNumber={3}>日期:</InputItem></Flex.Item>
           </Flex>
           <div style={{height:'0.5rem',width:'100%',margin:'1em 0',background:'#efe9e9'}}></div>
           <div style={{height:'2.5em',lineHeight:'2.5em',marginLeft:'0.2rem',borderBottom:'1px solid #d6d1d1'}}>

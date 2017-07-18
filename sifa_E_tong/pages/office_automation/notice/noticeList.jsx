@@ -6,7 +6,7 @@ import * as Utils from 'utils/utils.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 
 import { Modal,WhiteSpace, SwipeAction, InputItem,TextareaItem,
-  RefreshControl, Button,Tabs,List,ListView,SearchBar} from 'antd-mobile';
+  RefreshControl, Button,Tabs,List,ListView} from 'antd-mobile';
 import Notice_DetailComp from './noticeDetail_comp.jsx';
 import Notice_AddEditComp from './noticeAddEdit_comp.jsx';
 import { Icon} from 'antd';
@@ -224,7 +224,6 @@ class NoticeList extends React.Component {
       return (<TabPane tab={tabName} key={tabName} >
         <Button type="primary" style={{margin:'0 auto',marginTop:'0.1rem',width:'98%'}}
         onClick={()=>this.onClickAddEdit()}><Icon type="plus" />新建</Button>
-        <SearchBar placeholder="搜索" />
         {this.state.isLoading?<div style={{textAlign:'center'}}><Icon type="loading"/></div>:null}
         {(!this.state.isLoading && this.state.listData.length<=0)?
           <div style={{textAlign:'center'}}>暂无数据</div>:null}

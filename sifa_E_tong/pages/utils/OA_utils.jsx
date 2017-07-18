@@ -218,7 +218,7 @@ export function getModuleFormData(params) {
     "params" : {
       "formname" : moduleName2FormName[options.moduleName],
 				"formparam" : {
-					"unid" : options.unid,
+					"unid" : options.unid||"",
 				},
         "formdata" : Object.assign({},{
           "unid" : "",
@@ -250,6 +250,7 @@ export function getModuleFormData(params) {
 					"ngrq_show" : "", //拟稿日期
           "zbbm_show":"",  //拟稿单位（部门）
 					"bt" : "", //标题。
+          "wjbt":"",  //发文管理--标题。
 					"nr" : ""
         }, options.formParams||{})
     }

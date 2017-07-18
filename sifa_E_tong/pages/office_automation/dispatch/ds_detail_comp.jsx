@@ -10,9 +10,9 @@ import DS_DetailContentComp from './ds_detail_content_comp.jsx';
 import BottomTabBarComp from './bottomTabBar_comp.jsx';
 import DS_SendContentComp from './ds_send_content_comp.jsx';//发文详情页-- 发送
 import CommonVerifyComp from '../common_verify_comp.jsx';
-import DS_MainContentComp from './ds_main_content_comp.jsx';//发文详情页-- 正文
-import DS_UploadContentComp from './ds_upload_content_comp.jsx';//发文详情页-- 上传附件
-import DS_FlowContentComp from './ds_flow_content_comp.jsx';//发文详情页-- 查看流程
+// import DS_MainContentComp from './ds_main_content_comp.jsx';//发文详情页-- 正文
+// import DS_UploadContentComp from './ds_upload_content_comp.jsx';//发文详情页-- 上传附件
+// import DS_FlowContentComp from './ds_flow_content_comp.jsx';//发文详情页-- 查看流程
 
 class DS_DetailComp extends React.Component {
   constructor(props) {
@@ -22,11 +22,11 @@ class DS_DetailComp extends React.Component {
         moduleNameCn:'发文管理',
         modulename:'fwgl', //模块名
         formParams:{
-
+          wjbt:'',  //标题。
         },
-        editSave:1, //修改保存计数。
         curSubTab:'content',
         isHide:false,
+        editSaveTimes:1,  //编辑保存的次数。
         formData:{},
         formDataRaw: {}
       };
@@ -63,37 +63,42 @@ class DS_DetailComp extends React.Component {
     }
     // setTimeout(()=>this.props.backToTableListCall(),1000);
   }
-  onBackDetailCall = ()=>{
-    this.setState({curSubTab:'content'});
-  }
 
   onBackSendContentCall = () => {
     this.setState({curSubTab:'send'});
   }
 
-  onClickSave = ()=> {
+  onClickAddSave = ()=>{ //点击了保存
+    let {editSaveTimes} = this.state;
     this.setState({
       selectedTab: 'saveTab',
+      editSaveTimes:++editSaveTimes,
     });
+  }
+  editSaveSuccCall = (formData,formDataRaw)=>{ //跟新表单数据。
+    this.getServerFormData();
+    this.props.updateListViewCall();
+  }
+  editSave = ()=>{  //编辑保存
+    let tempFormData = this.props.form.getFieldsValue();
+    tempFormData['gwlc'] = this.state.gwlc_value;
+    tempFormData['mj'] = this.state.mj_value;
+    tempFormData['jjcd'] = this.state.jjcd_value;
     OAUtils.saveModuleFormData({
-      moduleName:this.state.moduleNameCn,
+      moduleName:this.props.moduleNameCn,
       tokenunid:this.props.tokenunid,
       unid:this.props.detailInfo.unid,
-      formParams:Object.assign({},this.state.formParams,this.state.formData), //特有的表单参数数据。
+      formParams:Object.assign({},this.props.formParams,this.props.formData,tempFormData), //特有的表单参数数据。
       successCall: (data)=>{
         console.log("保存-发文管理的表单数据:",data);
-        Toast.info('保存成功!', 1);
         let formData = OAUtils.formatFormData(data.values);
-        this.setState({
-          // formData,
-          // formDataRaw:data.values,
-        });
+        this.props.editSaveSuccCall(formData,data.values);
+        Toast.info('修补保存成功!!', 2);
       },
       errorCall:(res)=>{
-        //TODO
+        Toast.info('修补保存失败!!', 1);
       }
     });
-    // this.props.backToTableListCall();
   }
 
   render() {
@@ -119,6 +124,9 @@ class DS_DetailComp extends React.Component {
               formData={formData}
               formDataRaw={this.state.formDataRaw}
               modulename={this.state.modulename}
+              editSaveTimes={this.state.editSaveTimes}
+              formParams={this.state.formParams}
+              editSaveSuccCall={this.editSaveSuccCall}
               backToTableListCall={()=>this.props.backToTableListCall()} />):null}
             <div className="custom_tabBar">
               <BottomTabBarComp
@@ -126,7 +134,7 @@ class DS_DetailComp extends React.Component {
                 isAddNew={false}
                 formDataRaw={this.state.formDataRaw}
                 selectedTab={this.state.selectedTab}
-                onClickAddSave={()=>this.onClickSave()}
+                onClickAddSave={()=>this.onClickAddSave()}
                 onClickVerifyBtn={()=>{
                   this.setState({
                     curSubTab:'verify',
@@ -148,24 +156,22 @@ class DS_DetailComp extends React.Component {
                   docunid={detailInfo.unid}
                   modulename={this.state.modulename}
                   otherssign={formData["_otherssign"]}
-                  backDetailCall={this.onBackDetailCall}
                   gwlcunid={formData["gwlc"]} isShow={true}/>):null}
             {this.state.curSubTab == "verify"?
               (<CommonVerifyComp
                 tokenunid={this.props.tokenunid}
-                backDetailCall={this.onBackDetailCall}
                 docunid={detailInfo.unid}
                 modulename={this.state.modulename}
                 gwlcunid={formData["gwlc"]}
                 isShow={true}/>):null}
-            {this.state.curSubTab == "upload"?
+            {/*this.state.curSubTab == "upload"?
               (<DS_UploadContentComp
                 tokenunid={this.props.tokenunid}
-                backDetailCall={this.onBackDetailCall} isShow={true}/>):null}
+                 isShow={true}/>):null*/}
             {/*this.state.curSubTab == "article"?
               (<DS_MainContentComp
                 tokenunid={this.props.tokenunid}
-                backDetailCall={this.onBackDetailCall} isShow={true}/>):null */}
+                isShow={true}/>):null */}
         </div>
       </div>
     )
@@ -176,7 +182,6 @@ DS_DetailComp.defaultProps = {
 };
 
 DS_DetailComp.propTypes = {
-  // onBackDetailCall:React.PropTypes.func,
   // isShow:React.PropTypes.bool,
 };
 

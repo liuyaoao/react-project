@@ -3,7 +3,7 @@ import $ from 'jquery';
 import React from 'react';
 import * as Utils from 'utils/utils.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
-import { Modal,WingBlank, WhiteSpace,Popup, SwipeAction,Button, Tabs, ListView,SearchBar} from 'antd-mobile';
+import { Modal,WingBlank, WhiteSpace,Popup, SwipeAction,Button, Tabs, ListView} from 'antd-mobile';
 import { Icon} from 'antd';
 const TabPane = Tabs.TabPane;
 
@@ -103,6 +103,13 @@ class SuperviseList extends React.Component {
   backToTableListCall = ()=>{   //返回到列表页。
     this.setState({showAdd:false,showDetail:false});
   }
+  updateListViewCall = ()=>{ //跟新列表。
+    this.setState({
+      listData:[],
+      currentpage:1
+    });
+    this.getServerListData(this.state.activeTabkey,1);
+  }
   render() {
     const separator = (sectionID, rowID) => (
       <div
@@ -183,7 +190,6 @@ class SuperviseList extends React.Component {
           <Button className="btn" type="primary" onClick={this.onClickAddNew}><Icon type="plus"/>新建</Button>
         </WingBlank>
         <WhiteSpace />
-        <SearchBar placeholder="搜索" />
         {this.state.isLoading?<div style={{textAlign:'center'}}><Icon type="loading"/></div>:null}
         {(!this.state.isLoading && this.state.listData.length<=0)?
           <div style={{textAlign:'center'}}>暂无数据</div>:null}
@@ -215,6 +221,7 @@ class SuperviseList extends React.Component {
         {this.state.showAdd?
           <SuperviseAdd
             tokenunid={this.props.tokenunid}
+            updateListViewCall={this.updateListViewCall}
             backToTableListCall={this.backToTableListCall}
           />:null}
         {this.state.showDetail?
@@ -222,6 +229,7 @@ class SuperviseList extends React.Component {
             tokenunid={this.props.tokenunid}
             activeTabkey={this.state.activeTabkey}
             detailInfo={this.state.detailInfo}
+            updateListViewCall={this.updateListViewCall}
             backToTableListCall={this.backToTableListCall}
           />:null}
       </div>

@@ -6,7 +6,7 @@ import * as Utils from 'utils/utils.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 
 import { Modal,WhiteSpace, SwipeAction, InputItem,TextareaItem,
-  RefreshControl, Button,Tabs,List,ListView,SearchBar} from 'antd-mobile';
+  RefreshControl, Button,Tabs,List,ListView} from 'antd-mobile';
 
 import Vehicle_DetailComp from './detail_comp.jsx';
 import Vehicle_AddEditComp from './addEdit_comp.jsx';
@@ -97,6 +97,13 @@ class VehicleList extends React.Component {
   backToTableListCall = ()=>{
     this.setState({showDetail:false,showAddEdit:false});
   }
+  updateListViewCall = ()=>{
+    this.setState({
+      listData:[],
+      currentpage:1
+    });
+    this.getServerListData(this.state.activeTabkey,1);
+  }
   onClickLoadMore = (evt)=>{
     let {currentpage,totalPageCount,hasMore} = this.state;
     if (!this.state.isMoreLoading && !hasMore) {
@@ -180,7 +187,6 @@ class VehicleList extends React.Component {
       return (<TabPane tab={tabName} key={tabName} >
         <Button type="primary" style={{margin:'0 auto',marginTop:'0.1rem',width:'98%'}}
         onClick={()=>this.onClickAddEdit()}><Icon type="plus" />新建</Button>
-        <SearchBar placeholder="搜索" />
         {this.state.isLoading?<div style={{textAlign:'center'}}><Icon type="loading"/></div>:null}
         {(!this.state.isLoading && this.state.listData.length<=0)?
           <div style={{textAlign:'center'}}>暂无数据</div>:null}
@@ -212,6 +218,7 @@ class VehicleList extends React.Component {
             (
               <Vehicle_AddEditComp
                 tokenunid={this.props.tokenunid}
+                updateListViewCall={this.updateListViewCall}
                 backToTableListCall={()=>this.backToTableListCall()}
                 />
             ):null}
@@ -220,6 +227,7 @@ class VehicleList extends React.Component {
               <Vehicle_DetailComp
                 tokenunid={this.props.tokenunid}
                 detailInfo={this.state.detailInfo}
+                updateListViewCall={this.updateListViewCall}
                 backToTableListCall={()=>this.backToTableListCall()}
                 />
             ):null}

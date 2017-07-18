@@ -12,7 +12,7 @@ import { Icon, Select } from 'antd';
 import { createForm } from 'rc-form';
 import moment from 'moment';
 
-class DS_EditContentComp extends React.Component {
+class DS_AddContentComp extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
@@ -27,14 +27,32 @@ class DS_EditContentComp extends React.Component {
     this.setState({loginUserName:me.username||''});
   }
 
-
-  shouldComponentUpdate(nextProps){
-    if(this.props.formData !== nextProps.formData){
-
+  componentWillReceiveProps(nextProps){
+    if(nextProps.newAdding && !this.props.newAdding){ //点击了保存按钮了。
+      this.addNewSave();
     }
-    return true;
   }
-
+  addNewSave = ()=>{  //编辑保存
+    let tempFormData = this.props.form.getFieldsValue();
+    tempFormData['gwlc'] = this.state.gwlc_value;
+    tempFormData['mj'] = this.state.mj_value;
+    tempFormData['jjcd'] = this.state.jjcd_value;
+    OAUtils.saveModuleFormData({
+      moduleName:this.props.moduleNameCn,
+      tokenunid:this.props.tokenunid,
+      unid:this.props.detailInfo.unid,
+      formParams:Object.assign({},this.props.formParams,this.props.formData,tempFormData), //特有的表单参数数据。
+      successCall: (data)=>{
+        console.log("保存-发文管理的表单数据:",data);
+        let formData = OAUtils.formatFormData(data.values);
+        this.props.editSaveSuccCall(formData,data.values);
+        Toast.info('修补保存成功!!', 2);
+      },
+      errorCall:(res)=>{
+        Toast.info('修补保存失败!!', 1);
+      }
+    });
+  }
   handleChange = (value)=> {
     if(value === "1"){
       //发文
@@ -63,11 +81,6 @@ class DS_EditContentComp extends React.Component {
     }
   }
 
-  onClickSave = ()=> {
-    Toast.info('保存成功!', 1);
-    this.props.backToTableListCall();
-    let form = this.props.form;
-  }
   render() {
     const { getFieldProps, getFieldError } = this.props.form;
     const secrecy = [{label: '秘密',value: '秘密'},{label: '机密',value: '机密'}];
@@ -203,12 +216,8 @@ class DS_EditContentComp extends React.Component {
   }
 }
 
-DS_EditContentComp.defaultProps = {
+DS_AddContentComp.defaultProps = {
 };
-
-DS_EditContentComp.propTypes = {
+DS_AddContentComp.propTypes = {
 };
-
-
-
-export default createForm()(DS_EditContentComp);
+export default createForm()(DS_AddContentComp);

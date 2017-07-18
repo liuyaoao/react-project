@@ -6,12 +6,12 @@ import { createForm } from 'rc-form';
 
 // import myWebClient from 'client/my_web_client.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
-import { WingBlank, WhiteSpace, Button, InputItem, NavBar,
+import { Toast,WingBlank, WhiteSpace, Button, InputItem, NavBar,
   TextareaItem,Flex,List,Picker} from 'antd-mobile';
 
 import CommonNotionComp from '../common/common_notion_comp.jsx';
 
-import {Icon } from 'antd';
+import {Icon,Upload } from 'antd';
 //签报管理的编辑详情内容
 class DetailContentCompRaw extends React.Component {
   constructor(props) {
@@ -22,6 +22,7 @@ class DetailContentCompRaw extends React.Component {
         uploadAttachmentUrl:'',  //上传公文附件的url.
         historyNotionType2List:{},
         attachmentList:[],  //附件列表
+        gwlc:'', //公文流程，也就是请示类别。
       };
   }
   componentWillMount(){
@@ -31,6 +32,35 @@ class DetailContentCompRaw extends React.Component {
       this.getFormVerifyNotion();
       this.getFormAttachmentList();
     }
+  }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.formData.gwlc!=this.props.formData.gwlc){
+      this.setState({
+        gwlc :nextProps.formData.gwlc
+      });
+    }
+    if(nextProps.editSaveTimes != this.props.editSaveTimes){ //点击了保存按钮了。
+      this.editSave();
+    }
+  }
+  editSave = ()=>{  //编辑保存
+    let tempFormData = this.props.form.getFieldsValue();
+    tempFormData['gwlc'] = this.state.gwlc;
+    OAUtils.saveModuleFormData({
+      moduleName:this.props.moduleNameCn,
+      tokenunid:this.props.tokenunid,
+      unid:this.props.detailInfo.unid,
+      formParams:Object.assign({},this.props.formParams,this.props.formData,tempFormData), //特有的表单参数数据。
+      successCall: (data)=>{
+        console.log("保存-签报管理的表单数据:",data);
+        let formData = OAUtils.formatFormData(data.values);
+        this.props.editSaveSuccCall(formData,data.values);
+        Toast.info('修补保存成功!!', 2);
+      },
+      errorCall:(res)=>{
+        Toast.info('修补保存失败!!', 1);
+      }
+    });
   }
   getFormVerifyNotion = ()=>{ //获取历史阅文意见数据。
     OAUtils.getFormVerifyNotion({
@@ -67,20 +97,22 @@ class DetailContentCompRaw extends React.Component {
         moduleName:this.props.moduleNameCn
       });
       return (
-        <div key={index}><a href={downloadUrl} data-unid={item.unid}>{item.attachname}</a><br/></div>
+        <div key={index} style={{marginLeft:'0.2rem'}}><a href={downloadUrl} data-unid={item.unid}>{item.attachname}</a><br/></div>
       );
     });
   }
   onFileUploadChange = (file)=>{
-    var index = document.getElementById("choosefile").value.indexOf('fakepath')+9;
-    let filename = document.getElementById("choosefile").value.substring(index);
-    // console.log("上传文件时，选择文件的change事件----：",file,filename);
     this.setState({
       uploadAttachmentUrl:OAUtils.getUploadAttachmentUrl({
         docunid:this.props.detailInfo.unid,
-        filename:filename,
+        filename:file.name,
         moduleName:this.props.moduleNameCn
       })
+    });
+  }
+  onGwlcPickerOk = (val)=>{
+    this.setState({
+      gwlc:val[0]
     });
   }
 
@@ -88,6 +120,29 @@ class DetailContentCompRaw extends React.Component {
     const {attachmentList} = this.state;
     const { getFieldProps } = this.props.form;
     const {detailInfo, formData, formDataRaw} = this.props;
+    let uploadProps = {
+      name: 'inputName',
+      action: this.state.uploadAttachmentUrl,
+      showUploadList:false, //是否展示上传文件列表。
+      headers: {
+        authorization: 'authorization-text',
+      },
+      beforeUpload:(file,fileList)=>{
+        this.onFileUploadChange(file);
+        return true;
+      },
+      onChange:(info)=>{
+        if (info.file.status !== 'uploading') {
+          console.log(info.file, info.fileList);
+        }
+        if (info.file.status === 'done') {
+          Toast.info(`${info.file.name} 文件上传成功！`);
+          this.getFormAttachmentList();
+        } else if (info.file.status === 'error') {
+          Toast.info(`${info.file.name} 文件上传失败！`);
+        }
+      }
+    };
     let items = formDataRaw.gwlc?formDataRaw.gwlc.items:[];
     //请示类别当前值就是gwlc字段的值。--公文流程。
     let owerPleaTypes = items.map((item)=>{ //请示类别。
@@ -113,7 +168,7 @@ class DetailContentCompRaw extends React.Component {
             <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>标题：</div>
               <TextareaItem
-                {...getFieldProps('subjectTitle',{
+                {...getFieldProps('bt',{
                   initialValue: formData.bt,
                 })}
                 title=""
@@ -126,9 +181,9 @@ class DetailContentCompRaw extends React.Component {
             <Flex.Item>
               <List style={{ backgroundColor: 'white' }} className={'picker_list'}>
                 <Picker data={owerPleaTypes} cols={1}
-                  disabled={true}
-                  value={[formData.gwlc||'']}
-                  onOk={this.onPickerOk}>
+                  disabled={false}
+                  value={[this.state.gwlc||'']}
+                  onOk={this.onGwlcPickerOk}>
                   <List.Item arrow="horizontal">请示类别：</List.Item>
                 </Picker>
               </List>
@@ -143,16 +198,14 @@ class DetailContentCompRaw extends React.Component {
                 }}>下载正文附件</Button>
             </Flex.Item>
           </Flex>
-
+          
           <Flex>
-            <Flex.Item style={{marginLeft:'0.2rem'}}>
-              <form
-                enctype="multipart/form-data"
-                action={this.state.uploadAttachmentUrl}
-                method="post">
-                <input type="file" name="file" id="choosefile" style={{display:'inline-block',width:'76%'}} onChange={this.onFileUploadChange}/>
-                <input type="submit" value="上传附件" id="submitBtn" style={{color:'black'}}/>
-              </form>
+            <Flex.Item className={'uploadContainer'}>
+              <Upload {...uploadProps}>
+                <Button type="primary" style={{width:'100%'}}>
+                  <Icon type="upload" /> 上传附件
+                </Button>
+              </Upload>
             </Flex.Item>
           </Flex>
           <Flex>
@@ -166,7 +219,7 @@ class DetailContentCompRaw extends React.Component {
               }
             </Flex.Item>
           </Flex>
-
+          <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginTop:'0.1rem'}}/>
           <Flex>
             <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>领导批示：</div>
@@ -208,7 +261,7 @@ class DetailContentCompRaw extends React.Component {
             <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>事由：</div>
               <TextareaItem
-                {...getFieldProps('reason',{ initialValue:formData.nr || '' })}
+                {...getFieldProps('nr',{ initialValue:formData.nr || '' })}
                 title=""
                 rows={5}
                 labelNumber={0}

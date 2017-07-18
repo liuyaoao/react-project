@@ -39,6 +39,7 @@ class Vehicle_DetailComp extends React.Component {
         },
         hidden: false,
         selectedTab:'',
+        editSaveTimes:1, //编辑保存的次数。
         curSubTab:'content',
         formData:{}, //经过前端处理的表单数据
         formDataRaw:{}, //没有经过处理的后端返回的表单数据。
@@ -76,29 +77,20 @@ class Vehicle_DetailComp extends React.Component {
     this.setState({curSubTab:'content'});
   }
   onClickAddSave = ()=>{ //点击了保存
+    let {editSaveTimes} = this.state;
     this.setState({
       selectedTab: 'saveTab',
-    });
-    OAUtils.saveModuleFormData({
-      moduleName:this.state.moduleNameCn,
-      tokenunid:this.props.tokenunid,
-      unid:this.props.detailInfo.unid,
-      formParams:Object.assign({},this.state.formParams,this.state.formData), //特有的表单参数数据。
-      successCall: (data)=>{
-        console.log("保存-车辆管理的表单数据:",data);
-        let formData = OAUtils.formatFormData(data.values);
-        this.setState({
-          // formData,
-          // formDataRaw:data.values,
-        });
-      },
-      errorCall:(res)=>{
-        //TODO
-      }
+      editSaveTimes:++editSaveTimes,
     });
     // this.props.backToTableListCall();
   }
-
+  editSaveSuccCall = (formData,formDataRaw)=>{
+    this.props.updateListViewCall();
+    this.setState({
+      formData,
+      formDataRaw
+    });
+  }
 
   render() {
     return (
@@ -115,9 +107,13 @@ class Vehicle_DetailComp extends React.Component {
         <div style={{marginTop:'60px'}}>
           {this.state.curSubTab == "content"?
             (<DetailContentComp
+              moduleNameCn={this.state.moduleNameCn}
               detailInfo={this.props.detailInfo}
+              formParams={this.state.formParams}
               formData={this.state.formData}
               formDataRaw={this.state.formDataRaw}
+              editSaveTimes={this.state.editSaveTimes}
+              editSaveSuccCall={this.editSaveSuccCall}
               />):null}
         </div>
 

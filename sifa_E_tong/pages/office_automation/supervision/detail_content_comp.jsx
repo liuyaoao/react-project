@@ -6,7 +6,7 @@ import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import moment from 'moment';
 import { createForm } from 'rc-form';
 
-import { WingBlank, WhiteSpace, Button, InputItem,
+import { Toast,WingBlank, WhiteSpace, Button, InputItem,
   TextareaItem,Flex,List,Picker} from 'antd-mobile';
 
 import {Icon,Upload } from 'antd';
@@ -21,6 +21,7 @@ class DetailContentCompRaw extends React.Component {
         uploadAttachmentUrl:'',  //上传公文附件的url.
         historyNotionType2List:[],
         attachmentList:[],
+        dblx:'', //督办类型。
       };
   }
   componentWillMount(){
@@ -30,6 +31,36 @@ class DetailContentCompRaw extends React.Component {
       this.getFormVerifyNotion();
       this.getFormAttachmentList();
     }
+  }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.formData.dblx!=this.props.formData.dblx){
+      this.setState({
+        dblx :nextProps.formData.dblx
+      });
+    }
+    if(nextProps.editSaveTimes != this.props.editSaveTimes){ //点击了保存按钮了。
+      this.editSave();
+    }
+  }
+
+  editSave = ()=>{
+    let tempFormData = this.props.form.getFieldsValue();
+    tempFormData['dblx'] = this.state.dblx;
+    OAUtils.saveModuleFormData({
+      moduleName:this.props.moduleNameCn,
+      tokenunid:this.props.tokenunid,
+      unid:this.props.detailInfo.unid,
+      formParams:Object.assign({},this.props.formParams,this.props.formData,tempFormData), //特有的表单参数数据。
+      successCall: (data)=>{
+        console.log("保存-督办管理的表单数据:",data);
+        let formData = OAUtils.formatFormData(data.values);
+        this.props.editSaveSuccCall(formData,data.values);
+        Toast.info('修补保存成功!!', 2);
+      },
+      errorCall:(res)=>{
+        Toast.info('修补保存失败!!', 1);
+      }
+    });
   }
   getFormVerifyNotion = ()=>{ //获取历史阅文意见数据。
     OAUtils.getFormVerifyNotion({
@@ -66,39 +97,52 @@ class DetailContentCompRaw extends React.Component {
         moduleName:this.props.moduleNameCn
       });
       return (
-        <div key={index}><a href={downloadUrl} data-unid={item.unid}>{item.attachname}</a><br/></div>
+        <div key={index} style={{marginLeft:'0.2rem'}}><a href={downloadUrl} data-unid={item.unid}>{item.attachname}</a><br/></div>
       );
     });
   }
   onFileUploadChange = (file)=>{
-    var index = document.getElementById("choosefile").value.indexOf('fakepath')+9;
-    let filename = document.getElementById("choosefile").value.substring(index);
-    // console.log("上传文件时，选择文件的change事件----：",file,filename);
     this.setState({
       uploadAttachmentUrl:OAUtils.getUploadAttachmentUrl({
         docunid:this.props.detailInfo.unid,
-        filename:filename,
+        filename:file.name,
         moduleName:this.props.moduleNameCn
       })
     });
   }
-  onUploadFileSubmit = ()=>{
-    // let uploadForm = document.getElementById("fileUploadForm");
-    // let res = fetch(this.state.uploadAttachmentUrl, {
-    //     method: 'POST',
-    //     body: new FormData(uploadForm)
-    //   }).then((response) => {
-    //
-    //     console.log("after file upload message:",response);
-    //     return response;
-    // });
-    // return false;
+  onDblxPickerOk = (val)=>{
+    this.setState({
+      dblx:val[0],
+    });
   }
 
   render() {
     const {attachmentList} = this.state;
     const { getFieldProps } = this.props.form;
     const {detailInfo, formData, formDataRaw} = this.props;
+    let uploadProps = {
+      name: 'inputName',
+      action: this.state.uploadAttachmentUrl,
+      showUploadList:false, //是否展示上传文件列表。
+      headers: {
+        authorization: 'authorization-text',
+      },
+      beforeUpload:(file,fileList)=>{
+        this.onFileUploadChange(file);
+        return true;
+      },
+      onChange:(info)=>{
+        if (info.file.status !== 'uploading') {
+          console.log(info.file, info.fileList);
+        }
+        if (info.file.status === 'done') {
+          Toast.info(`${info.file.name} 文件上传成功！`);
+          this.getFormAttachmentList();
+        } else if (info.file.status === 'error') {
+          Toast.info(`${info.file.name} 文件上传失败！`);
+        }
+      }
+    };
     let items = formDataRaw.dblx?formDataRaw.dblx.items:[];
     //督办类别当前值就是dblx字段的值。
     let superviseTypes = items.map((item)=>{ //督办类别
@@ -116,8 +160,8 @@ class DetailContentCompRaw extends React.Component {
             <Flex.Item>
               <List style={{ backgroundColor: 'white' }}>
                 <Picker data={superviseTypes} cols={1}
-                  value={[formData.dblx||'']}
-                  onOk={this.onPickerOk}>
+                  value={[this.state.dblx||'']}
+                  onOk={this.onDblxPickerOk}>
                   <List.Item arrow="horizontal">督办类型：</List.Item>
                 </Picker>
               </List>
@@ -126,7 +170,7 @@ class DetailContentCompRaw extends React.Component {
           <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginBottom:'0.1rem'}}/>
           <Flex>
             <Flex.Item>
-              <InputItem {...getFieldProps('receiveFileNum', {initialValue:formData.lsh})}
+              <InputItem {...getFieldProps('lsh', {initialValue:formData.lsh||'-'})}
                 editable={true}
                 labelNumber={4}>收文号：</InputItem>
             </Flex.Item>
@@ -134,7 +178,7 @@ class DetailContentCompRaw extends React.Component {
           <Flex>
             <Flex.Item>
               <InputItem
-                {...getFieldProps('receiveFileTime', {
+                {...getFieldProps('swrq', {
                     initialValue:formData.swrq
                   })
                 }
@@ -146,7 +190,7 @@ class DetailContentCompRaw extends React.Component {
             <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>来文单位：</div>
               <TextareaItem
-                {...getFieldProps('sendFileUnit',{initialValue:formData.lwdw})}
+                {...getFieldProps('lwdw',{initialValue:formData.lwdw})}
                 title=""
                 autoHeight
                 labelNumber={0}
@@ -155,21 +199,21 @@ class DetailContentCompRaw extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <InputItem {...getFieldProps('deadlineTime', {initialValue:formData.blsx})}
+              <InputItem {...getFieldProps('blsx', {initialValue:formData.blsx})}
                 editable={true}
                 labelNumber={5}>截止日期：</InputItem>
             </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
-              <InputItem {...getFieldProps('cuiBan', {initialValue:formData.cb})}
+              <InputItem {...getFieldProps('cb', {initialValue:formData.cb})}
                 editable={true}
                 labelNumber={4}>催办：</InputItem>
             </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
-              <InputItem {...getFieldProps('yuanHao', {initialValue:formData.yh})}
+              <InputItem {...getFieldProps('yh', {initialValue:formData.yh})}
                 editable={true}
                 labelNumber={4}>原号：</InputItem>
             </Flex.Item>
@@ -178,7 +222,7 @@ class DetailContentCompRaw extends React.Component {
             <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>文件标题：</div>
               <TextareaItem
-                {...getFieldProps('subjectTitle',{initialValue:formData.bt})}
+                {...getFieldProps('bt',{initialValue:formData.bt})}
                 title=""
                 rows={4}
                 labelNumber={0}
@@ -203,31 +247,26 @@ class DetailContentCompRaw extends React.Component {
                 }}>下载正文附件</Button>
             </Flex.Item>
           </Flex>
-
-          <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginBottom:'0.1rem'}}/>
-
           <Flex>
-            <Flex.Item style={{marginLeft:'0.2rem'}}>
-              <form enctype="multipart/form-data"
-                    id="fileUploadForm"
-                    action={this.state.uploadAttachmentUrl}
-                    method="post"
-                    target="_blank"
-                    onsubmit={this.onUploadFileSubmit}>
-                  <input type="file" name="file" id="choosefile" style={{display:'inline-block',width:'76%'}} onChange={this.onFileUploadChange}/>
-                  <input type="submit" value="上传附件" id="submitBtn" style={{color:'black'}}/>
-              </form>
+            <Flex.Item className={'uploadContainer'}>
+              <Upload {...uploadProps}>
+                <Button type="primary" style={{width:'100%'}}>
+                  <Icon type="upload" /> 上传附件
+                </Button>
+              </Upload>
             </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>附件列表：{attachmentList.length<=0?(<span>无附件</span>):null}</div>
+              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>附件列表：
+                {attachmentList.length<=0?
+                  (<span>无附件</span>):null}
+                </div>
               { this.state.attachmentList.length>0?
                 (this.getAttachmentListEle(this.state.attachmentList)):null
               }
             </Flex.Item>
           </Flex>
-
           <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginBottom:'0.1rem'}}/>
           <Flex>
             <Flex.Item>

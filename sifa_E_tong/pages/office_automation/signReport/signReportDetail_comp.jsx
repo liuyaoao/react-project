@@ -26,9 +26,12 @@ class SignReportDetail extends React.Component {
         date: zhNow,
         moduleNameCn:'签报管理',
         modulename:'qbgl', //模块名
+        formParams:{
+        },
         hidden: false,
         selectedTab:'',
         curSubTab:'content',
+        editSaveTimes:1,  //编辑保存的次数。
         formData:{}, //经过前端处理的表单数据
         formDataRaw:{}, //没有经过处理的后端返回的表单数据。
       };
@@ -71,11 +74,15 @@ class SignReportDetail extends React.Component {
     });
   }
   onClickAddSave = ()=>{ //点击了保存
-    //TODO
+    let {editSaveTimes} = this.state;
     this.setState({
       selectedTab: 'saveTab',
+      editSaveTimes:++editSaveTimes,
     });
-    this.props.backToTableListCall();
+  }
+  editSaveSuccCall = (formData,formDataRaw)=>{ //跟新表单数据。
+    this.getServerFormData();
+    this.props.updateListViewCall();
   }
 
   render() {
@@ -100,12 +107,15 @@ class SignReportDetail extends React.Component {
           {this.state.curSubTab == "content"?
             (
               <DetailContentComp
-              activeTabkey={this.props.activeTabkey}
-              moduleNameCn={this.state.moduleNameCn}
-              tokenunid={this.props.tokenunid}
-              formData={formData}
-              formDataRaw={formDataRaw}
-              detailInfo={detailInfo} />
+                editSaveTimes={this.state.editSaveTimes}
+                moduleNameCn={this.state.moduleNameCn}
+                activeTabkey={this.props.activeTabkey}
+                tokenunid={this.props.tokenunid}
+                formData={formData}
+                formDataRaw={formDataRaw}
+                formParams={this.state.formParams}
+                editSaveSuccCall={this.editSaveSuccCall}
+                detailInfo={detailInfo} />
             ):null}
         </div>
         {this.state.curSubTab == "send"?

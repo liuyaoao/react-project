@@ -3,7 +3,7 @@ import $ from 'jquery';
 import React from 'react';
 import * as Utils from 'utils/utils.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
-import { Modal,WhiteSpace, SwipeAction, Tabs, RefreshControl, ListView,SearchBar} from 'antd-mobile';
+import { Modal,WhiteSpace, SwipeAction, Tabs, RefreshControl, ListView} from 'antd-mobile';
 import { Icon} from 'antd';
 const TabPane = Tabs.TabPane;
 
@@ -172,7 +172,6 @@ class IncomingList extends React.Component {
         dataSource = this.state.dataSource.cloneWithRows([]);
       }
       return (<TabPane tab={tabName} key={tabName} >
-        <SearchBar placeholder="搜索" />
         {this.state.isLoading?<div style={{textAlign:'center'}}><Icon type="loading"/></div>:null}
         {(!this.state.isLoading && this.state.listData.length<=0)?
           <div style={{textAlign:'center'}}>暂无数据</div>:null}

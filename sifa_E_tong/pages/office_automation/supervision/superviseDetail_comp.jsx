@@ -25,10 +25,20 @@ class SuperviseDetail extends React.Component {
         date: zhNow,
         moduleNameCn:'督办管理',
         modulename:'duban', //模块名
+        formParams:{
+          "dblx":"",  //督办管理--督办类型。
+          "lsh":"",   //督办管理--收文号。
+          "swrq":"",  //督办管理--收文日期。
+          "lwdw":"",  //督办管理--来为单位。
+          "blsx":"",  //督办管理--办理时限，也就是截至日期。
+          "cb":"",  //督办管理--催办。
+          "yh":"",  //督办管理--原号。
+        },
         hidden: false,
         selectedTab:'',
         visible:false,
         curSubTab:'content',
+        editSaveTimes:1, //编辑保存的次数。
         formData:{}, //经过前端处理的表单数据
         formDataRaw:{}, //没有经过处理的后端返回的表单数据。
       };
@@ -61,11 +71,15 @@ class SuperviseDetail extends React.Component {
     this.setState({curSubTab:'content',selectedTab:''});
   }
   onClickAddSave = ()=>{ //点击了保存
-    //TODO
+    let {editSaveTimes} = this.state;
     this.setState({
-      selectedTab: '',
+      selectedTab: 'saveTab',
+      editSaveTimes:++editSaveTimes,
     });
-    this.props.backToTableListCall();
+  }
+  editSaveSuccCall = (formData,formDataRaw)=>{ //跟新表单数据。
+    this.getServerFormData();
+    this.props.updateListViewCall();
   }
 
   render() {
@@ -89,10 +103,13 @@ class SuperviseDetail extends React.Component {
           {this.state.curSubTab == "content"?
             (
               <DetailContentComp
-                activeTabkey={this.props.activeTabkey}
+                editSaveTimes={this.state.editSaveTimes}
                 moduleNameCn={this.state.moduleNameCn}
+                activeTabkey={this.props.activeTabkey}
                 formData={formData}
                 formDataRaw={formDataRaw}
+                formParams={this.state.formParams}
+                editSaveSuccCall={this.editSaveSuccCall}
                 detailInfo={detailInfo} />
             ):null
           }

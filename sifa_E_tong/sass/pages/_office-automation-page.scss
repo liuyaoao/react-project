@@ -303,3 +303,9 @@
 .am-toast{
   z-index: 10001 !important;
 }
+.uploadContainer{
+  .ant-upload.ant-upload-select.ant-upload-select-text{
+    margin: 0.1rem 5%;
+    width: 90%
+  }
+}

@@ -8,7 +8,7 @@ import SearchZoneComp from './searchZone_comp.jsx';
 
 // import myWebClient from 'client/my_web_client.jsx';
 import { Modal,WhiteSpace, SwipeAction, Flex,Button,
-  Tabs, RefreshControl, ListView,SearchBar,Picker,
+  Tabs, RefreshControl, ListView, Picker,
   List,NavBar,DatePicker,InputItem} from 'antd-mobile';
 import { Icon} from 'antd';
 const TabPane = Tabs.TabPane;
