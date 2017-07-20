@@ -192,7 +192,7 @@ class DetailContentCompRaw extends React.Component {
               <TextareaItem
                 {...getFieldProps('lwdw',{initialValue:formData.lwdw})}
                 title=""
-                autoHeight
+                rows={3}
                 labelNumber={0}
               />
             </Flex.Item>

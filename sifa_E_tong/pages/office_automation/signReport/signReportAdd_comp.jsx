@@ -10,45 +10,59 @@ import {Icon } from 'antd';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 
-
 import AddContentComp from './add_content_comp.jsx';
-import CommonSendComp from '../common_send_comp.jsx';
-import CommonVerifyComp from '../common_verify_comp.jsx';
-
-const zhNow = moment().locale('zh-cn').utcOffset(8);
+// import CommonSendComp from '../common_send_comp.jsx';
+// import CommonVerifyComp from '../common_verify_comp.jsx';
 
 class SignReportAdd extends React.Component {
   constructor(props) {
       super(props);
       this.onNavBarLeftClick = this.onNavBarLeftClick.bind(this);
       this.state = {
-        date: zhNow,
+        moduleNameCn:'签报管理',
+        modulename:'qbgl', //模块名
+        formParams:{
+          "nr":'',  //事由
+        },
         hidden: false,
+        newAdding:false, //是否正在新建。
         selectedTab:'',
         curSubTab:'content',
+        formData:{},
+        formDataRaw: {}
       };
   }
   componentWillMount(){
+    this.getServerFormData();
+  }
+  getServerFormData = ()=>{
+    OAUtils.getModuleFormData({
+      moduleName:this.state.moduleNameCn,
+      tokenunid:this.props.tokenunid,
+      // unid:this.props.detailInfo.unid,
+      formParams:this.state.formParams, //特有的表单参数数据。
+      successCall: (data)=>{
+        let formDataRaw = data.values;
+        let formData = OAUtils.formatFormData(data.values);
+        this.setState({
+          formData,
+          formDataRaw
+        });
+        console.log("get 签报管理新建时的表单数据:",data);
+      }
+    });
   }
   onNavBarLeftClick = (e) => {
     this.props.backToTableListCall();
   }
-  onBackDetailCall = ()=>{
-    this.setState({curSubTab:'content'});
-  }
-  onClickAddSave = ()=>{ //点击了保存
-    //TODO
+  onClickAddNewSave = ()=> { //点击了保存。
     this.setState({
-      selectedTab: 'saveTab',
+      newAdding:true,
     });
-    this.props.backToTableListCall();
   }
 
   render() {
-     const detailInfo = {};
-    //  let clsName = this.props.isShow && !this.state.isHide?
-    //  'oa_detail_container ds_detail_container oa_detail_container_show':
-    //  'oa_detail_container ds_detail_container oa_detail_container_hide';
+    let {formData,formDataRaw,newAdding} = this.state;
     return (
       <div className={"oa_detail_container ds_detail_container"}>
         <NavBar className="mobile_navbar_custom"
@@ -62,18 +76,17 @@ class SignReportAdd extends React.Component {
         </NavBar>
         <div style={{marginTop:'60px'}}>
           {this.state.curSubTab == "content"?
-            (<AddContentComp detailInfo={detailInfo} />):null}
+            (<AddContentComp
+              tokenunid={this.props.tokenunid}
+              moduleNameCn={this.state.moduleNameCn}
+              modulename={this.state.modulename}
+              formData={formData}
+              formDataRaw={formDataRaw}
+              newAdding={newAdding}
+              formParams={this.state.formParams}
+              afterAddNewCall={this.props.afterAddNewCall} />):null
+          }
         </div>
-
-        {this.state.curSubTab == "send"? (<CommonSendComp
-          tokenunid={this.props.tokenunid}
-          backDetailCall={this.onBackDetailCall} isShow={true}/>):null}
-        {this.state.curSubTab == "verify"?
-          (<CommonVerifyComp
-            tokenunid={this.props.tokenunid}
-            backDetailCall={this.onBackDetailCall}
-            isShow={true}/>):
-          null}
         <TabBar
           unselectedTintColor="#949494"
           tintColor="#33A3F4"
@@ -86,37 +99,7 @@ class SignReportAdd extends React.Component {
             icon={ <Icon type="save" style={{fontSize:'0.4rem'}}/> }
             selectedIcon={<Icon type="save" style={{color:'blue',fontSize:'0.4rem'}}/>}
             selected={this.state.selectedTab === 'saveTab'}
-            onPress={() => this.onClickAddSave()}
-          >
-          <div></div>
-          </TabBar.Item>
-          <TabBar.Item
-            title="阅文意见"
-            key="阅文意见"
-            icon={ <Icon type="edit" style={{fontSize:'0.4rem'}} /> }
-            selectedIcon={<Icon type="edit" style={{color:'blue', fontSize:'0.4rem'}}/>}
-            selected={this.state.selectedTab === 'verifyTab'}
-            onPress={() => {
-              this.setState({
-                curSubTab:'verify',
-                selectedTab: 'verifyTab',
-              });
-            }}
-          >
-          <div></div>
-          </TabBar.Item>
-          <TabBar.Item
-            title="发送"
-            key="发送"
-            icon={ <Icon type="export" style={{fontSize:'0.4rem'}} /> }
-            selectedIcon={<Icon type="export" style={{color:'blue', fontSize:'0.4rem'}}/>}
-            selected={this.state.selectedTab === 'sendTab'}
-            onPress={() => {
-              this.setState({
-                curSubTab:'send',
-                selectedTab: 'sendTab',
-              });
-            }}
+            onPress={() => this.onClickAddNewSave()}
           >
           <div></div>
           </TabBar.Item>

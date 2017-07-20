@@ -1,12 +1,9 @@
 import $ from 'jquery';
 import React from 'react';
-import * as Utils from 'utils/utils.jsx';
-import UserStore from 'stores/user_store.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import moment from 'moment';
 import { createForm } from 'rc-form';
 
-import myWebClient from 'client/my_web_client.jsx';
 import { Toast,WingBlank, WhiteSpace,DatePicker, Button, InputItem, NavBar,
   TextareaItem,Flex,List,Picker} from 'antd-mobile';
 
@@ -16,8 +13,6 @@ class DetailContentComp extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-        loginUser:{},
-        loginUserName:'',
         nowDate:moment(new Date()).format('YYYY-MM-DD HH:MM'),
         startTime:moment(new Date()).format('YYYY-MM-DD HH:MM'),
         endTime:moment(new Date()).format('YYYY-MM-DD HH:MM'),
@@ -25,9 +20,6 @@ class DetailContentComp extends React.Component {
       };
   }
   componentWillMount(){
-    var me = UserStore.getCurrentUser() || {};
-    console.log("me-----:",me,me.nickname,me.organizations);
-    this.setState({loginUserName:me.username||'', loginUser:me});
   }
   componentWillReceiveProps(nextProps){
     let formData = nextProps.formData;
@@ -35,8 +27,8 @@ class DetailContentComp extends React.Component {
       if(formData.ycrq){
         console.log("formData-----:",formData);
         this.setState({
-          startTime : moment(formData.ycrq+" "+formData.ycsjHour+":"+formData.ycsjMinute),
-          endTime : moment(formData.hcrq+" "+formData.hcsjHour+":"+formData.hcsjMinute)
+          startTime : moment(formData.ycrq+" "+formData.ycsjHour+":"+formData.ycsjMinute).format('YYYY-MM-DD HH:MM'),
+          endTime : moment(formData.hcrq+" "+formData.hcsjHour+":"+formData.hcsjMinute).format('YYYY-MM-DD HH:MM')
         });
       }
     }
@@ -46,7 +38,15 @@ class DetailContentComp extends React.Component {
   }
 
   editSave = ()=>{
+    let {startTime, endTime} = this.state;
+    // console.log("startTime, endTime--:",startTime,endTime);
     let tempFormData = this.props.form.getFieldsValue();
+    tempFormData['ycrq'] = startTime.split(' ')[0]; //用车日期。
+    tempFormData['ycsjHour'] = startTime.split(' ')[1].split(':')[0];
+    tempFormData['ycsjMinute'] = startTime.split(' ')[1].split(':')[1];
+    tempFormData['hcrq'] = endTime.split(' ')[0];  //回车日期。
+    tempFormData['hcsjHour'] = endTime.split(' ')[1].split(':')[0];
+    tempFormData['hcsjMinute'] = endTime.split(' ')[1].split(':')[1];
     OAUtils.saveModuleFormData({
       moduleName:this.props.moduleNameCn,
       tokenunid:this.props.tokenunid,
@@ -66,13 +66,13 @@ class DetailContentComp extends React.Component {
   onStartUseTimeChange = (val)=>{  //开始--用车时间
     console.log("onStartUseTimeChange--:",val);
     this.setState({
-      startTime:val,
+      startTime:val.format('YYYY-MM-DD HH:MM'),
     });
   }
   onEndUseTimeChange = (val)=>{ //结束--回车时间
     console.log("onEndUseTimeChange--:",val);
     this.setState({
-      endTime:val,
+      endTime:val.format('YYYY-MM-DD HH:MM'),
     });
   }
 

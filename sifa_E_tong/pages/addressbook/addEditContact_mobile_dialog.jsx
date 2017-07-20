@@ -158,7 +158,9 @@ class AddEditContactMobileDialog extends React.Component {
     let arr = [];
     organizations.filter((val)=>{
       if(val){
+        console.log(val);
         let obj = this.props.organizationsFlatDataMap[val];
+        
         arr.push({
           label:obj.name||'',
           value:obj.id||''

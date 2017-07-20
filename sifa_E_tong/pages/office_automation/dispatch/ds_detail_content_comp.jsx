@@ -59,10 +59,10 @@ class DS_DetailContentComp extends React.Component {
         console.log("保存-发文管理的表单数据:",data);
         let formData = OAUtils.formatFormData(data.values);
         this.props.editSaveSuccCall(formData,data.values);
-        Toast.info('修补保存成功!!', 2);
+        Toast.info('修改保存成功!!', 2);
       },
       errorCall:(res)=>{
-        Toast.info('修补保存失败!!', 1);
+        Toast.info('修改保存失败!!', 1);
       }
     });
   }
@@ -105,7 +105,7 @@ class DS_DetailContentComp extends React.Component {
       );
     });
   }
-  onPickerGWLCOk = (val)=>{ //选择 密级
+  onPickerGWLCOk = (val)=>{ //选择 公文流程
     console.log("onPickerGWLCOk--:",val);
     this.setState({gwlc_value:val[0]});
   }
@@ -118,9 +118,6 @@ class DS_DetailContentComp extends React.Component {
     this.setState({jjcd_value:val[0]});
   }
   onFileUploadChange = (file)=>{
-    // let index = document.getElementById("choosefile").value.indexOf('fakepath')+9;
-    // let filename = document.getElementById("choosefile").value.substring(index);
-    // console.log("上传文件时，选择文件的change事件----：",file,filename);
     this.setState({
       uploadAttachmentUrl:OAUtils.getUploadAttachmentUrl({
         docunid:this.props.detailInfo.unid,

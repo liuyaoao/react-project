@@ -95,7 +95,7 @@ class DispatchList extends React.Component {
     this.getServerListData(key,1);
   }
   onClickOneRow = (rowData)=>{
-    console.log("发文管理 click rowData:",rowData);
+    // console.log("发文管理 click rowData:",rowData);
     this.setState({detailInfo:rowData, showDetail:true,showAdd: false});
   }
 
@@ -120,6 +120,10 @@ class DispatchList extends React.Component {
       currentpage:1
     });
     this.getServerListData(this.state.activeTabkey,1);
+  }
+  afterAddNewCall = (formData)=>{
+    this.onClickOneRow(formData);
+    this.updateListViewCall();
   }
 
   render() {
@@ -231,7 +235,7 @@ class DispatchList extends React.Component {
         {this.state.showAdd?
           (<DS_AddComp
             tokenunid={this.props.tokenunid}
-            updateListViewCall={this.updateListViewCall}
+            afterAddNewCall={this.afterAddNewCall}
             backToTableListCall={()=>this.backToTableListCall()}
             />):null
         }

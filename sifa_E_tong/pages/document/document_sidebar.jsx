@@ -35,7 +35,8 @@ export default class DocumentSidebar extends React.Component {
       let openKey = nextProps.departmentData[0].resourceId || '';
       // this.updateAddressBookList(openKey);
       // this.updateAddressBookBreadcrumb([openKey]);
-      // console.log(openKey);
+      console.log(nextProps);
+      console.log('GGGGGGGGGGGGGGGGGGGGGGG');
       this.setState({openKeys: [this.props.currentFileType]});
     }
   }

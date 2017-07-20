@@ -3,15 +3,12 @@ import $ from 'jquery';
 import React from 'react';
 import * as Utils from 'utils/utils.jsx';
 import { createForm } from 'rc-form';
-import myWebClient from 'client/my_web_client.jsx';
+import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import Notice_SendShareComp from './noticeSendShare_comp.jsx';
-import { WingBlank, WhiteSpace, Button, InputItem, NavBar,
-  TextareaItem,Flex,DatePicker,List, Picker,Switch,ImagePicker,TabBar,Toast} from 'antd-mobile';
+import { WingBlank, WhiteSpace, Button, InputItem,
+  TextareaItem,Flex,DatePicker,List, Picker,Switch,TabBar,Toast} from 'antd-mobile';
 import {Icon} from 'antd';
 import moment from 'moment';
-import 'moment/locale/zh-cn';
-//import { district, provinceLite as province } from 'antd-mobile-demo-data';
-import * as GlobalActions from 'actions/global_actions.jsx';
 const data = [{
   url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg',
   id: '2121',
@@ -20,158 +17,166 @@ const data = [{
   id: '2122',
 }];
 
-const zhNow = moment().locale('zh-cn').utcOffset(8);
 class Notice_AddEditContentComp extends React.Component {
   constructor(props) {
       super(props);
-      this.onNavBarLeftClick = this.onNavBarLeftClick.bind(this);
-      this.onNavBarRightClick = this.onNavBarRightClick.bind(this);
       this.state = {
-        date: zhNow,
-        subTabsArr:["","content"], // such as :["","content","send","verify"]
-        curSubTab:'content',
         isHide:false,
-        enteringValue:zhNow,
-        publicValue:zhNow,
-        validValue:zhNow,
-        cols: 1,
-        sValue:['未审核'],
+        verifyTypes : [
+            [{label: '未审核',value: '0'},
+              {label: '已通过',value: '1'},
+              {label: '未通过',value: '-1'} ],
+        ],
+        lrrq: moment(new Date()).format('YYYY-MM-DD'), // 录入日期。
+        fbsj: moment(new Date()).format('YYYY-MM-DD'),  //发布时间
+        gqsj: moment(new Date()).format('YYYY-MM-DD'),  //过期时间
+        shbz:'-1', //审核情况，初始为：未审核
+        fbfw_fbtoall:false, //是否指定发布范围。 默认为false.表示全部。
+        uploadAttachmentUrl:'',
+        customAttachmentList:[],
         files: data,
       };
   }
   componentWillMount(){
   }
-  onClickSubTab = (data)=>{
-    // console.log("onClickSubTab-target:",e.target);
-    console.log("onClickSubTab-target:");
-    let tabNameCn = data.replace(/\s+/g,"");
-    let tabNameCn2En = { "发送共享":"upload"}
-    this.props.afterChangeTabCall(tabNameCn2En[tabNameCn]);
+  componentWillReceiveProps(nextProps){
+    if(nextProps.newAdding && !this.props.newAdding){ //点击了保存按钮了。
+      this.addNewSave();
+    }
+  }
+  addNewSave = ()=>{  //新增保存
+    let tempFormData = this.props.form.getFieldsValue();
+    tempFormData['lrrq'] = this.state.lrrq;
+    tempFormData['fbsj'] = this.state.fbsj;
+    tempFormData['gqsj'] = this.state.gqsj;
+    tempFormData['shbz'] = this.state.shbz;
+    tempFormData['fbfw_fbtoall'] = tempFormData.fbfw_fbtoall ? "1" :"0";
+    tempFormData['autoshowfj'] = tempFormData.autoshowfj ? "1" :"0";
+    tempFormData['candownloadfj'] = tempFormData.candownloadfj ? "1" :"0";
+    OAUtils.saveModuleFormData({
+      moduleName:this.props.moduleNameCn,
+      tokenunid:this.props.tokenunid,
+      unid:this.props.formData.unid,
+      formParams:Object.assign({},this.props.formParams,this.props.formData,tempFormData), //特有的表单参数数据。
+      successCall: (data)=>{
+        console.log("新建-签报管理的返回数据:",data);
+        let formData = OAUtils.formatFormData(data.values);
+        this.props.afterAddNewCall(formData);
+        Toast.info('新建保存成功!!', 2);
+      },
+      errorCall:(res)=>{
+        Toast.info('新建保存失败!!', 1);
+      }
+    });
   }
   onImageChange = (files, type, index) => {
-      console.log(files, type, index);
-      this.setState({
-        files,
-      });
-    }
-  onNavBarLeftClick = (e) => {
-    this.setState({isHide:true});
-    this.props.backToTableListCall();
-    //setTimeout(()=>this.props.backToTableListCall(),1000);
-  }
-  onNavBarRightClick = (...args) => {
-    GlobalActions.emitUserLoggedOutEvent();
-  }
-  onenteringValueChange = (enteringValue) => {
-    // console.log('onChange', date);
+    console.log(files, type, index);
     this.setState({
-      enteringValue,
+      files,
     });
   }
-  onpublicValueChange = (publicValue) => {
-    // console.log('onChange', date);
+
+  onLrrqChange = (val) => { //录入日期。
     this.setState({
-      publicValue,
+      lrrq:val.format('YYYY-MM-DD'),
     });
   }
-  onvalidValueChange = (validValue) => {
-    // console.log('onChange', date);
+  onFbsjChange = (val) => { //发布时间
     this.setState({
-      validValue,
+      fbsj:val.format('YYYY-MM-DD'),
     });
   }
-  onClickSendShare = ()=>{
-    this.setState({showSendShare:true});
+  onGqsjChange = (val) => { //过期时间，有效日期。
+    this.setState({
+      gqsj:val.format('YYYY-MM-DD'),
+    });
   }
-  renderContent = (pageText)=> {
-    return (
-      <div style={{ backgroundColor: 'white', height: '100%', textAlign: 'center' }}>
-        <div style={{ paddingTop: 60 }}>你已点击“{pageText}” tab， 当前展示“{pageText}”信息</div>
-        <a style={{ display: 'block', marginTop: 40, marginBottom: 600, color: '#108ee9' }}
-          onClick={(e) => {
-            e.preventDefault();
-            this.setState({
-              hidden: !this.state.hidden,
-            });
-          }}
-        >
-          点击切换 tab-bar 显示/隐藏
-        </a>
-      </div>
-    );
+  onFileUploadChange = (file)=>{ //获取上传附件的地址。
+    this.setState({
+      uploadAttachmentUrl:OAUtils.getUploadCustomUrl({
+        docunid:this.props.formData.unid,
+        filename:file.name,
+        moduleName:this.props.moduleNameCn
+      })
+    });
   }
-  onClickSave = ()=> {
-    Toast.info('保存成功!', 1);
-    this.props.backToTableListCall();
+  getFormAttachmentList = ()=>{ //获取附件列表
+    OAUtils.getFormCustomAttachmentList({
+      tokenunid: this.props.tokenunid,
+      moduleName:this.props.moduleNameCn,
+      docunid:this.props.formData.unid,
+      successCall: (data)=>{
+        console.log("get 通知公告的自定义附件列表 data:",data);
+        this.setState({
+          customAttachmentList:data.values.filelist || [],
+        });
+      }
+    });
   }
   render() {
     const { getFieldProps } = this.props.form;
-    const { files } = this.state;
-    const detailInfo = {};
-    const seasons = [
-            [
-              {
-                label: '未审核',
-                value: '未审核',
-              },
-              {
-                label: '已通过',
-                value: '已通过',
-              },
-              {
-                label: '未通过',
-                value: '未通过',
-              }
-            ],
-            // [
-            //   {
-            //     label: '2013',
-            //     value: '2013',
-            //   },
-            //   {
-            //     label: '2014',
-            //     value: '2014',
-            //   },
-            // ],
-            // [
-            //   {
-            //     label: '2013',
-            //     value: '2013',
-            //   },
-            //   {
-            //     label: '2014',
-            //     value: '2014',
-            //   },
-            // ]
-    ];
-    // const datastate = [
-    //   { value: '全部',label: '全部'},
-    //   {value: '指定', label: '指定'},
-    //   { value: '二哈',label: '二哈'},
-    //   <Picker
-    //     data={datastate}
-    //     cols={this.state.cols}
-    //     value={this.state.sValue}
-    //     onChange={v => this.setState({ sValue: v })}
-    //   >
-    //   <List.Item arrow="horizontal">审核情况</List.Item>
-    //   </Picker>
-    //  ];
-    //  let clsName = this.props.isShow && !this.state.isHide?
-    //  'oa_detail_container ds_detail_container oa_detail_container_show':
-    //  'oa_detail_container ds_detail_container oa_detail_container_hide';
+    const { files,customAttachmentList,verifyTypes } = this.state;
+    let customAttachment = customAttachmentList.filter((item)=>{ //文件附件。
+      if(item.attachname.indexOf('.png')!=-1 ||item.attachname.indexOf('.jpeg')!=-1||item.attachname.indexOf('.jpg')!=-1||item.attachname.indexOf('.gif')!=-1){
+        return false; //如果是图片则返回false，过滤出去。
+      }else{
+        return true;  //
+      }
+    }).map((item,index)=>{
+      let downloadUrl = OAUtils.getCustomAttachmentUrl({
+        moduleName:"信息发布",
+        fileunid:item.unid
+      });
+    });
+    let customImages = customAttachmentList.filter((item)=>{ //图片附件
+      if(item.attachname.indexOf('.png')!=-1 ||item.attachname.indexOf('.jpeg')!=-1||item.attachname.indexOf('.jpg')!=-1||item.attachname.indexOf('.gif')!=-1){
+        return true; //如果是图片则返回true
+      }else{
+        return false;  //过滤掉非图片文件。
+      }
+    }).map((item,index)=>{
+      let downloadUrl = OAUtils.getCustomAttachmentUrl({
+        moduleName:"信息发布",
+        fileunid:item.unid
+      });
+    });
+    let uploadAttachProps = { //上传附件的配置。
+      name: 'inputName',
+      action: this.state.uploadAttachmentUrl,
+      showUploadList:false, //是否展示上传文件列表。
+      headers: {
+        authorization: 'authorization-text',
+      },
+      beforeUpload:(file,fileList)=>{
+        this.onFileUploadChange(file);
+        return true;
+      },
+      onChange:(info)=>{
+        if (info.file.status !== 'uploading') {
+          console.log(info.file, info.fileList);
+        }
+        if (info.file.status === 'done') {
+          Toast.info(`${info.file.name} 上传成功！`);
+          this.getFormAttachmentList();
+        } else if (info.file.status === 'error') {
+          Toast.info(`${info.file.name} 上传失败！`);
+        }
+      }
+    };
+
     return (
           <div className="oa_detail_cnt">
-            <div style={{marginLeft:'-0.1rem',marginRight:'-0.2rem'}}>
+            <div>
                 <Flex>
                   <Flex.Item>
                     <div className="select_container">
                       <DatePicker className="forss"
                         mode="date"
-                        onChange={this.onenteringValueChange}
-                        value={this.state.enteringValue}
+                        disabled={true}
+                        onChange={this.onLrrqChange}
+                        value={moment(this.state.lrrq)}
                       >
-                      <List.Item arrow="horizontal">录入时间</List.Item>
+                      <List.Item arrow="horizontal">录入时间:</List.Item>
                       </DatePicker>
                     </div>
                   </Flex.Item>
@@ -181,10 +186,10 @@ class Notice_AddEditContentComp extends React.Component {
                     <div className="select_container">
                       <DatePicker className="forss"
                         mode="date"
-                        onChange={this.onpublicValueChange}
-                        value={this.state.publicValue}
+                        onChange={this.onFbsjChange}
+                        value={moment(this.state.fbsj)}
                       >
-                      <List.Item arrow="horizontal">发布日期</List.Item>
+                      <List.Item arrow="horizontal">发布日期:</List.Item>
                       </DatePicker>
                     </div>
                   </Flex.Item>
@@ -194,8 +199,8 @@ class Notice_AddEditContentComp extends React.Component {
                     <div className="select_container">
                       <DatePicker className="forss"
                         mode="date"
-                        onChange={this.onvalidValueChange}
-                        value={this.state.validValue}
+                        onChange={this.onGqsjChange}
+                        value={this.state.gqsj}
                       >
                       <List.Item arrow="horizontal">有效期</List.Item>
                       </DatePicker>
@@ -203,27 +208,48 @@ class Notice_AddEditContentComp extends React.Component {
                   </Flex.Item>
                 </Flex>
                 <Flex>
-                  <Flex.Item><InputItem  editable={true} labelNumber={2} placeholder="标题">标题</InputItem></Flex.Item>
-                </Flex>
-                <Flex>
-                  <Flex.Item><InputItem  editable={true} labelNumber={3} placeholder="副标题">副标题</InputItem></Flex.Item>
-                </Flex>
-                <Flex>
-                  <Flex.Item><InputItem  editable={true} labelNumber={4} placeholder="文章来源">文章来源</InputItem></Flex.Item>
-                </Flex>
-                <Flex>
-                  <Flex.Item><InputItem  editable={true} labelNumber={4} placeholder="所属类别">通知公告</InputItem></Flex.Item>
-                </Flex>
-                <Flex>
-                  <Flex.Item><InputItem  editable={true} labelNumber={3} placeholder="录入人">录入人</InputItem></Flex.Item>
+                  <Flex.Item>
+                    <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>标题：</div>
+                    <TextareaItem
+                      {...getFieldProps('bt')}
+                      placeholder={'请输入...'}
+                      rows={2}
+                    />
+                  </Flex.Item>
                 </Flex>
                 <Flex>
                   <Flex.Item>
-                    <List renderHeader={() => '内容'}>
-                         <TextareaItem
-                           rows={5}
-                         />
-                     </List>
+                    <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>副标题：</div>
+                    <TextareaItem
+                      {...getFieldProps('fbt')}
+                      placeholder={'请输入...'}
+                      rows={3}
+                    />
+                  </Flex.Item>
+                </Flex>
+                <Flex>
+                  <Flex.Item>
+                    <InputItem {...getFieldProps('wzly')} labelNumber={5} placeholder="请输入...">文章来源：</InputItem>
+                  </Flex.Item>
+                </Flex>
+                <Flex>
+                  <Flex.Item>
+                    <InputItem {...getFieldProps('lbName')} labelNumber={5} placeholder="请输入...">通知类别：</InputItem>
+                  </Flex.Item>
+                </Flex>
+                <Flex>
+                  <Flex.Item>
+                    <InputItem editable={false} value={formData.lrrName} labelNumber={4}>录入人：</InputItem>
+                  </Flex.Item>
+                </Flex>
+                <Flex>
+                  <Flex.Item>
+                    <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>内容：</div>
+                    <TextareaItem
+                      {...getFieldProps('nr')}
+                      placeholder={'请输入...'}
+                      rows={4}
+                    />
                   </Flex.Item>
                 </Flex>
                 <Flex>
@@ -231,13 +257,65 @@ class Notice_AddEditContentComp extends React.Component {
                     <div className="select_container">
                       <List.Item
                       extra={<Switch
-                          {...getFieldProps('Switch1', {
-                            initialValue: true,
+                          {...getFieldProps('fbfw_fbtoall', {
+                            initialValue: false,
+                            valuePropName: 'checked',
+                          })}
+                        onClick={(checked) => { this.setState({fbfw_fbtoall:checked}); }}
+                      />}>
+                        是否指定发布范围：
+                      </List.Item>
+                    </div>
+                  </Flex.Item>
+                </Flex>
+
+                {this.state.fbfw_fbtoall?(
+                  <div>
+                    <Flex>
+                      <Flex.Item>
+                        <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>发布部门：</div>
+                        <TextareaItem
+                          {...getFieldProps('fbfw_org')}
+                          placeholder={'请输入...'}
+                          rows={3}
+                        />
+                      </Flex.Item>
+                    </Flex>
+                    <Flex>
+                      <Flex.Item>
+                        <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>发布群组：</div>
+                        <TextareaItem
+                          {...getFieldProps('fbfw_group')}
+                          placeholder={'请输入...'}
+                          rows={3}
+                        />
+                      </Flex.Item>
+                    </Flex>
+                    <Flex>
+                      <Flex.Item>
+                        <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>发布人员：</div>
+                        <TextareaItem
+                          {...getFieldProps('fbfw_person')}
+                          placeholder={'请输入...'}
+                          rows={3}
+                        />
+                      </Flex.Item>
+                    </Flex>
+                  </div>
+                ):null}
+
+                <Flex>
+                  <Flex.Item>
+                    <div className="select_container">
+                      <List.Item
+                      extra={<Switch
+                          {...getFieldProps('autoshowfj', {
+                            initialValue: false,
                             valuePropName: 'checked',
                           })}
                         onClick={(checked) => { console.log(checked); }}
                       />}>
-                        全部发布范围
+                        是否自动显示附件:
                       </List.Item>
                     </div>
                   </Flex.Item>
@@ -245,12 +323,11 @@ class Notice_AddEditContentComp extends React.Component {
                 <Flex>
                   <Flex.Item>
                     <div className="select_container">
-                        <Picker
-                              data={seasons}
-                              cascade={false}
-                              extra="请选择(可选)"
-                              value={this.state.sValue}
-                              onChange={v => this.setState({ sValue: v })}
+                        <Picker cols={1}
+                              data={verifyTypes}
+                              extra="请选择"
+                              value={[this.state.shbz]}
+                              onOk={v => this.setState({ shbz: v[0] })}
                         >
                         <List.Item arrow="horizontal">审核情况</List.Item>
                         </Picker>
@@ -259,78 +336,55 @@ class Notice_AddEditContentComp extends React.Component {
                 </Flex>
                 <Flex>
                   <Flex.Item>
-                    <div className="select_container">
-                      <List.Item
-                      extra={<Switch
-                          {...getFieldProps('Switch2', {
-                            initialValue: true,
-                            valuePropName: 'checked',
-                          })}
-                        onClick={(checked) => { console.log(checked); }}
-                      />}>
-                        是否启动附件
-                      </List.Item>
-                    </div>
-                  </Flex.Item>
-                </Flex>
-                <Flex>
-                  <Flex.Item>
-                        <List renderHeader={() => '相关图片'}>
-                              <ImagePicker
-                                  files={files}
-                                  onChange={this.onImageChange}
-                                  onImageClick={(index, fs) => console.log(index, fs)}
-                                  selectable={files.length < 5}
-                             />
-                         </List>
-
+                    <Upload {...uploadAttachProps}>
+                      <Button type="primary" style={{width:'100%'}}>
+                        <Icon type="upload" /> 上传图片
+                      </Button>
+                    </Upload>
                   </Flex.Item>
               </Flex>
+              <Flex>
+                <Flex.Item>
+                  <div style={{margin:'0.2rem 0 0 0.3rem',color:'black'}}>已上传图片列表：{customAttachmentList.length<=0?(<span>无图片</span>):null}</div>
+                    { customAttachmentList.length>0?
+                      (<div>{customImages}</div>):null
+                    }
+                </Flex.Item>
+              </Flex>
+              <Flex>
+                <Flex.Item>
+                  <div className="select_container">
+                    <List.Item
+                    extra={<Switch
+                        {...getFieldProps('candownloadfj', {
+                          initialValue: true,
+                          valuePropName: 'checked',
+                        })}
+                      onClick={(checked) => { console.log(checked); }}
+                    />}>
+                      是否允许下载附件:
+                    </List.Item>
+                  </div>
+                </Flex.Item>
+              </Flex>
+              <Flex>
+                <Flex.Item className={'uploadContainer'}>
+                  <Upload {...uploadAttachProps}>
+                    <Button type="primary" style={{width:'100%'}}>
+                      <Icon type="upload" /> 上传附件
+                    </Button>
+                  </Upload>
+                </Flex.Item>
+              </Flex>
+              <Flex>
+                <Flex.Item>
+                  <div style={{margin:'0.2rem 0 0 0.3rem',color:'black'}}>通知公告的附件：{customAttachmentList.length<=0?(<span>无附件</span>):null}</div>
+                    { customAttachmentList.length>0?
+                      (<div>{customAttachment}</div>):null
+                    }
+                </Flex.Item>
+              </Flex>
             </div>
-                <TabBar
-                unselectedTintColor="#949494"
-                tintColor="#33A3F4"
-                barTintColor="white"
-                hidden={this.state.hidden}
-                >
-                      <TabBar.Item
-                        title="返回"
-                        key="返回"
-                        icon={
-                          <Icon type="left-circle" size="lg" />
-                        }
-                        selectedIcon={
-                          <Icon type="left-circle" size="lg" style={{color:"rgb(51, 163, 244)",fontSize:'0.3rem'}} />
-                        }
-                        selected={this.state.selectedTab === 'blueTab'}
-                        onPress={this.onNavBarLeftClick}
-                        data-seed="logId"
-                      >
-                        {this.renderContent('返回')}
-                      </TabBar.Item>
-                      <TabBar.Item
-                        icon={<Icon type="save" size="lg" />}
-                        selectedIcon={<Icon type="save" size="lg" style={{color:"rgb(51, 163, 244)",fontSize:'0.3rem'}} />}
-                        title="保存"
-                        key="保存"
-                        selected={this.state.selectedTab === 'redTab'}
-                        onPress={() => this.onClickSave()}
-                        data-seed="logId1"
-                      >
-                        {this.renderContent('保存')}
-                      </TabBar.Item>
-                      <TabBar.Item
-                        icon={<Icon type="upload" size="lg" />}
-                        selectedIcon={<Icon type="upload" size="lg" style={{color:"rgb(51, 163, 244)",fontSize:'0.3rem'}} />}
-                        title="发送共享"
-                        key="发送共享"
-                        selected={this.state.selectedTab === 'greenTab'}
-
-                        onPress={()=>this.onClickSubTab("发送共享")}
-                      >
-                        {this.renderContent('发送共享')}
-                      </TabBar.Item>
-                </TabBar>
           </div>
     )
   }

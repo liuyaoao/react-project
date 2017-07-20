@@ -1,64 +1,87 @@
 //通知公告的详情页.
 import $ from 'jquery';
 import React from 'react';
-import * as Utils from 'utils/utils.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
-
 import { WingBlank, WhiteSpace, Button, InputItem, NavBar,
   TextareaItem,Flex,DatePicker,List} from 'antd-mobile';
 
 import {Icon} from 'antd';
 import moment from 'moment';
-import 'moment/locale/zh-cn';
 
-
-const zhNow = moment().locale('zh-cn').utcOffset(8);
 class Notice_DetailComp extends React.Component {
   constructor(props) {
       super(props);
       this.onNavBarLeftClick = this.onNavBarLeftClick.bind(this);
       this.state = {
-        validValue:zhNow,
+        moduleNameCn:'信息发布',
+        modulename:'xxfb', //模块名
+        formParams:{
+          lrrq:"",  //录入时间
+          lrrName:"",  //录入人。
+          fbsj:"",  //发布日期
+          wzrq:"",  //文章日期
+          gqsj:"",  //有效日期
+          bt:"",  //标题
+          fbt:"",  //副标题
+          wzly:"",  //文章来源。
+          lbName:"",  //所属类别。
+          gjz:"",  //关键字。
+          nr:"",  //内容
+          fbfw_fbtoall:"",  //发布范围
+          autoshowfj:"",  //是否自动显示附件
+          shbz:"",  //审核情况，有列表。
+          candownloadfj:"",  //是否允许下载附件
+
+        },
         customAttachmentList:[], //自定义附件列表
+        formData:{},
+        formDataRaw:{},
       };
   }
   componentWillMount(){
     this.getFormCustomAttachmentList();
   }
-  getFormCustomAttachmentList = ()=>{
+  getFormCustomAttachmentList = ()=>{  //获取自定义附件列表
     OAUtils.getFormCustomAttachmentList({
       tokenunid: this.props.tokenunid,
-      moduleName:"信息发布",
+      moduleName:this.state.moduleNameCn,
       docunid:this.props.detailInfo.unid,
       successCall: (data)=>{
         console.log("get 通知公告的自定义附件列表 data:",data);
         this.setState({
-          customAttachmentList:data.values.filelist,
+          customAttachmentList:data.values.filelist || [],
         });
+        if(!data.values.filelist || data.values.filelist.length<=0){
+          this.getServerFormData();
+        }
+      }
+    });
+  }
+  getServerFormData = ()=>{  //获取表单数据
+    OAUtils.getModuleFormData({
+      moduleName:this.state.moduleNameCn,
+      tokenunid:this.props.tokenunid,
+      unid:this.props.detailInfo.unid,
+      formParams:this.state.formParams,
+      successCall: (data)=>{
+        let formDataRaw = data.values;
+        let formData = OAUtils.formatFormData(data.values);
+        this.setState({
+          formData,
+          formDataRaw
+        });
+        console.log("get 通知公告的表单数据:",data,formData);
       }
     });
   }
   onNavBarLeftClick = (e) => {
     this.props.backToTableListCall();
-    //setTimeout(()=>this.props.backToTableListCall(),1000);
   }
-
-  onpublicValueChange = (publicValue) => {
-    this.setState({
-      publicValue,
-    });
-  }
-  onvalidValueChange = (validValue) => {
-    this.setState({
-      validValue,
-    });
-  }
-
 
   render() {
     let {detailInfo} = this.props;
-    let {customAttachmentList} = this.state;
-    let customAttachment = this.state.customAttachmentList.map((item,index)=>{
+    let { formData, formDataRaw, customAttachmentList} = this.state;
+    let customAttachment = customAttachmentList.map((item,index)=>{
       let downloadUrl = OAUtils.getCustomAttachmentUrl({
         moduleName:"信息发布",
         fileunid:item.unid
@@ -84,59 +107,106 @@ class Notice_DetailComp extends React.Component {
         </NavBar>
         <div style={{marginTop:'60px'}}>
           <div className={'oa_detail_cnt'}>
-            <div style={{marginLeft:'-0.1rem',marginRight:'-0.2rem'}}>
-
-                <Flex>
-                  <Flex.Item>
-                    <div className="select_container">
-                      <DatePicker className="forss"
-                        mode="date"
-                        onChange={this.onpublicValueChange}
-                        value={moment(detailInfo.publishTime)}
-                      >
-                      <List.Item arrow="horizontal">发布日期</List.Item>
-                      </DatePicker>
-                    </div>
-                  </Flex.Item>
-                </Flex>
-                <Flex>
-                  <Flex.Item>
-                    <div className="select_container">
-                      <DatePicker className="forss"
-                        mode="date"
-                        onChange={this.onvalidValueChange}
-                        value={this.state.validValue}
-                      >
-                      <List.Item arrow="horizontal">有效期</List.Item>
-                      </DatePicker>
-                    </div>
-                  </Flex.Item>
-                </Flex>
-                <Flex>
-                  <Flex.Item><InputItem
-                    editable={false}
-                    labelNumber={2}
-                    value={detailInfo.fileTitle}
-                    placeholder="标题">标题</InputItem></Flex.Item>
-                </Flex>
-                <Flex>
-                  <Flex.Item>
-                    <div style={{margin:'0.2rem 0 0 0.3rem',color:'black'}}>通知公告的附件：{customAttachmentList.length<=0?(<span>无附件</span>):null}</div>
-                      { customAttachmentList.length>0?
-                        (<div>{customAttachment}</div>):null
-                      }
-                  </Flex.Item>
-                </Flex>
-                <Flex>
-                  <Flex.Item>
-                    <List renderHeader={() => '内容'}>
-                         <TextareaItem
-                           editable={false}
-                           rows={8}
-                         />
-                     </List>
-                  </Flex.Item>
-                </Flex>
+            <div>
+              {customAttachmentList.length<=0 ?
+                (<div>
+                  <Flex>
+                    <Flex.Item><InputItem
+                      editable={false}
+                      labelNumber={4}
+                      value={formData.lrrName}>录入人：</InputItem></Flex.Item>
+                  </Flex>
+                  <Flex>
+                    <Flex.Item><InputItem
+                      editable={false}
+                      labelNumber={5}
+                      value={formData.lrrq}>录入时间：</InputItem></Flex.Item>
+                  </Flex>
+                    <Flex>
+                      <Flex.Item>
+                        <div className="select_container">
+                          <DatePicker className="forss"
+                            mode="date"
+                            disabled={true}
+                            value={moment(formData.fbsj)}
+                          >
+                          <List.Item arrow="horizontal">发布日期：</List.Item>
+                          </DatePicker>
+                        </div>
+                      </Flex.Item>
+                    </Flex>
+                    <Flex>
+                      <Flex.Item><InputItem
+                        editable={false}
+                        labelNumber={5}
+                        value={formData.gqsj}>有效日期：</InputItem></Flex.Item>
+                    </Flex>
+                    <Flex>
+                      <Flex.Item><InputItem
+                        editable={false}
+                        labelNumber={2}
+                        value={formData.bt||'-'}>标题</InputItem></Flex.Item>
+                    </Flex>
+                    <Flex>
+                      <Flex.Item>
+                        <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>副标题：</div>
+                        <TextareaItem
+                          editable={false}
+                          rows={3}
+                          value={formData.fbt||'-'} />
+                      </Flex.Item>
+                    </Flex>
+                    <Flex>
+                      <Flex.Item>
+                        <div style={{margin:'0.2rem 0 0 0.3rem',color:'black'}}>通知公告的附件：{customAttachmentList.length<=0?(<span>无附件</span>):null}</div>
+                          { customAttachmentList.length>0?
+                            (<div>{customAttachment}</div>):null
+                          }
+                      </Flex.Item>
+                    </Flex>
+                    <Flex>
+                      <Flex.Item>
+                        <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>内容：</div>
+                        <div style={{width:'96%',border:'1px solid gray',height:'4rem',margin:'0 auto'}}
+                          dangerouslySetInnerHTML={{__html:formData.nr}}></div>
+                      </Flex.Item>
+                    </Flex>
+                </div>) :
+                (<div>
+                  <Flex>
+                    <Flex.Item><InputItem
+                      editable={false}
+                      labelNumber={3}
+                      value={detailInfo.fileTitle||'-'}>标题:</InputItem></Flex.Item>
+                  </Flex>
+                  <Flex>
+                    <Flex.Item><InputItem
+                      editable={false}
+                      labelNumber={5}
+                      value={detailInfo.publishTime||'-'}>发布日期：</InputItem></Flex.Item>
+                  </Flex>
+                  <Flex>
+                    <Flex.Item><InputItem
+                      editable={false}
+                      labelNumber={5}
+                      value={detailInfo.type||'-'}>所属类别：</InputItem></Flex.Item>
+                  </Flex>
+                  <Flex>
+                    <Flex.Item><InputItem
+                      editable={false}
+                      labelNumber={5}
+                      value={detailInfo.unit||'-'}>所属单位：</InputItem></Flex.Item>
+                  </Flex>
+                  <Flex>
+                    <Flex.Item>
+                      <div style={{margin:'0.2rem 0 0 0.3rem',color:'black'}}>通知公告的附件：{customAttachmentList.length<=0?(<span>无附件</span>):null}</div>
+                        { customAttachmentList.length>0?
+                          (<div>{customAttachment}</div>):null
+                        }
+                    </Flex.Item>
+                  </Flex>
+                </div>)
+              }
             </div>
 
           </div>

@@ -15,22 +15,34 @@ class DS_AddComp extends React.Component {
         moduleNameCn:'发文管理',
         modulename:'fwgl', //模块名
         formParams:{
-          wjbt:'',  //标题。
+          "wjbt":'',  //标题。
+          "fwwh":"", //发文管理的--文号。
+          "mj":"", //发文管理的--密级。
+          "jjcd":"",  //发文管理的--缓急。
+          "fs":"",  //发文管理的--份数。
+          "zsdw":"", //发文管理--主送
+          "csdw":"", //发文管理--抄送
         },
         newAdding:false, //是否正在新建。
         curSubTab:'content',
+        dispatchTypes:{  //诡异的编码方式。
+          "发文":"·¢ÎÄ",
+          "领导小组发文":"Áìµ¼Ð¡×é·¢ÎÄ",
+          "领导小组办公室发文":"Áìµ¼Ð¡×é°ì¹«ÊÒ·¢ÎÄ"
+        },
         formData:{},
         formDataRaw: {}
       };
   }
   componentWillMount(){
-    this.getServerFormData();
+    this.getServerFormData(this.state.dispatchTypes['发文']);
   }
-  getServerFormData = ()=>{
+  getServerFormData = (inifwlx)=>{
     OAUtils.getModuleFormData({
       moduleName:this.state.moduleNameCn,
       tokenunid:this.props.tokenunid,
       // unid:this.props.detailInfo.unid,
+      "inifwlx":inifwlx,
       formParams:this.state.formParams, //特有的表单参数数据。
       successCall: (data)=>{
         let formDataRaw = data.values;
@@ -39,7 +51,7 @@ class DS_AddComp extends React.Component {
           formData,
           formDataRaw
         });
-        console.log("get 发文管理的表单数据:",data,formData);
+        console.log("get 发文管理新建时的表单数据:",data);
       }
     });
   }
@@ -47,18 +59,17 @@ class DS_AddComp extends React.Component {
     this.setState({curSubTab:'content'});
     this.props.backToTableListCall();
   }
-
-  onClickAddNewSave = ()=> {
-    // Toast.info('保存成功!', 1);
+  onClickAddNewSave = ()=> { //点击了保存。
     this.setState({
       newAdding:true,
     });
   }
-
+  changeDispatchTypeCall = (dispatchTypeCn)=>{
+    this.getServerFormData(this.state.dispatchTypes[dispatchTypeCn]);
+  }
   render() {
      const { detailInfo } = this.props;
      const {formData,formDataRaw,newAdding} = this.state;
-
     return (
       <div className={'oa_detail_container ds_detail_container'}>
         <NavBar className="mobile_navbar_custom"
@@ -74,10 +85,14 @@ class DS_AddComp extends React.Component {
           {this.state.curSubTab == "content" ?
             (<DS_AddContentComp
               tokenunid={this.props.tokenunid}
+              moduleNameCn={this.state.moduleNameCn}
+              modulename={this.state.modulename}
               formData={formData}
               formDataRaw={formDataRaw}
               newAdding={newAdding}
-              backToTableListCall={()=>this.props.backToTableListCall()} />
+              formParams={this.state.formParams}
+              changeDispatchTypeCall={this.changeDispatchTypeCall}
+              afterAddNewCall={this.props.afterAddNewCall} />
             ):null
           }
           <div className="custom_tabBar">

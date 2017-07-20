@@ -39,14 +39,14 @@ class NoticeList extends React.Component {
   }
   componentWillMount(){
     //从服务端获取数据。
-    this.getServerListData(this.state.rootlbunid,this.state.activeTabkey,this.state.currentpage);
+    this.getServerListData(this.state.activeTabkey,this.state.currentpage);
   }
-  getServerListData = (rootlbunid,keyName,currentpage)=>{ //从服务端获取列表数据
+  getServerListData = (keyName,currentpage)=>{ //从服务端获取列表数据
     this.setState({isLoading:true});
     OAUtils.getNoticeListData({
       tokenunid: this.props.tokenunid,
       currentpage:currentpage,
-      rootlbunid:rootlbunid,
+      rootlbunid:this.state.rootlbunid,
       shbz:({"待审核":"0", "已通过":"1", "未通过":"-1"})[keyName],
       viewcolumntitles:this.state.colsNameCn.join(','),
       successCall: (data)=>{
@@ -88,14 +88,14 @@ class NoticeList extends React.Component {
       listData:[],
       currentpage:1
     });
-    this.getServerListData(this.state.rootlbunid,key,1);
+    this.getServerListData(key,1);
   }
   onClickOneRow = (rowData)=>{
-    console.log("通知公告 click rowData:",rowData);
-    this.setState({detailInfo:rowData, showDetail:true});
+    // console.log("通知公告 click rowData:",rowData);
+    this.setState({detailInfo:rowData, showDetail:true, showAddEdit:false});
   }
   onClickAddEdit = ()=>{
-    this.setState({showAddEdit:true});
+    this.setState({showAddEdit:true, showDetail:false});
   }
   backToTableListCall = ()=>{
     this.setState({showDetail:false,showAddEdit:false});
@@ -106,8 +106,20 @@ class NoticeList extends React.Component {
       return;
     }
     this.setState({ isMoreLoading: true });
-    this.getServerListData(this.state.rootlbunid, this.state.activeTabkey,currentpage);
+    this.getServerListData(this.state.activeTabkey,currentpage);
   }
+  updateListViewCall = ()=>{ //跟新列表。
+    this.setState({
+      listData:[],
+      currentpage:1
+    });
+    this.getServerListData(this.state.activeTabkey,1);
+  }
+  afterAddNewCall = (formData)=>{ //新建后处理。
+    this.onClickOneRow(formData);
+    this.updateListViewCall();
+  }
+
   render() {
     const separator = (sectionID, rowID) => (
       <div
@@ -221,26 +233,33 @@ class NoticeList extends React.Component {
       return (<div style={{ padding: 10, textAlign: 'center' }}>没有更多了！</div>);
     }
     let multiTabPanels = this.state.tabsArr.map((tabName,index)=>{
-      return (<TabPane tab={tabName} key={tabName} >
-        <Button type="primary" style={{margin:'0 auto',marginTop:'0.1rem',width:'98%'}}
-        onClick={()=>this.onClickAddEdit()}><Icon type="plus" />新建</Button>
-        {this.state.isLoading?<div style={{textAlign:'center'}}><Icon type="loading"/></div>:null}
-        {(!this.state.isLoading && this.state.listData.length<=0)?
-          <div style={{textAlign:'center'}}>暂无数据</div>:null}
-
-        {(!this.state.showAddEdit && !this.state.showDetail)?(<ListView
-          dataSource={this.state.dataSource}
-          renderRow={listRow}
-          renderSeparator={separator}
-          renderFooter={listViewRenderFooter}
-          initialListSize={this.state.currentpage*10}
-          pageSize={this.state.currentpage*10}
-          scrollRenderAheadDistance={400}
-          scrollEventThrottle={20}
-          useBodyScroll={true}
-          scrollerOptions={{ scrollbars: false }}
-        />):null}
-      </TabPane>);
+      return (
+        <TabPane tab={tabName} key={tabName} >
+          <Button type="primary"
+            style={{margin:'0 auto',marginTop:'0.1rem',width:'98%'}}
+            onClick={()=>this.onClickAddEdit()}>
+            <Icon type="plus" />新建
+          </Button>
+          {
+            this.state.isLoading?<div style={{textAlign:'center'}}><Icon type="loading"/></div>:null
+          }
+          {
+            (!this.state.isLoading && this.state.listData.length<=0)?
+            <div style={{textAlign:'center'}}>暂无数据</div>:null
+          }
+          {(!this.state.showAddEdit && !this.state.showDetail)?(<ListView
+            dataSource={this.state.dataSource}
+            renderRow={listRow}
+            renderSeparator={separator}
+            renderFooter={listViewRenderFooter}
+            initialListSize={this.state.currentpage*10}
+            pageSize={this.state.currentpage*10}
+            scrollRenderAheadDistance={400}
+            scrollEventThrottle={20}
+            useBodyScroll={true}
+            scrollerOptions={{ scrollbars: false }}
+          />):null}
+        </TabPane>);
     });
     return (
       <div className="noticeList">
@@ -255,6 +274,7 @@ class NoticeList extends React.Component {
             (
               <Notice_AddEditComp
                 tokenunid={this.props.tokenunid}
+                afterAddNewCall={this.afterAddNewCall}
                 backToTableListCall={()=>this.backToTableListCall()}
                 />
             ):null}

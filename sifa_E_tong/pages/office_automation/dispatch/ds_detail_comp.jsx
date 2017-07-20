@@ -22,7 +22,13 @@ class DS_DetailComp extends React.Component {
         moduleNameCn:'发文管理',
         modulename:'fwgl', //模块名
         formParams:{
-          wjbt:'',  //标题。
+          "wjbt":'',  //标题。
+          "fwwh":"", //发文管理的--文号。
+          "mj":"", //发文管理的--密级。
+          "jjcd":"",  //发文管理的--缓急。
+          "fs":"",  //发文管理的--份数。
+          "zsdw":"", //发文管理--主送
+          "csdw":"", //发文管理--抄送
         },
         curSubTab:'content',
         isHide:false,
@@ -42,6 +48,7 @@ class DS_DetailComp extends React.Component {
       moduleName:this.state.moduleNameCn,
       tokenunid:this.props.tokenunid,
       unid:this.props.detailInfo.unid,
+      formParams:this.state.formParams,
       successCall: (data)=>{
         let formDataRaw = data.values;
         let formData = OAUtils.formatFormData(data.values);
@@ -61,13 +68,10 @@ class DS_DetailComp extends React.Component {
     }else{
       this.setState({curSubTab:'content'});
     }
-    // setTimeout(()=>this.props.backToTableListCall(),1000);
   }
-
   onBackSendContentCall = () => {
     this.setState({curSubTab:'send'});
   }
-
   onClickAddSave = ()=>{ //点击了保存
     let {editSaveTimes} = this.state;
     this.setState({
@@ -78,27 +82,6 @@ class DS_DetailComp extends React.Component {
   editSaveSuccCall = (formData,formDataRaw)=>{ //跟新表单数据。
     this.getServerFormData();
     this.props.updateListViewCall();
-  }
-  editSave = ()=>{  //编辑保存
-    let tempFormData = this.props.form.getFieldsValue();
-    tempFormData['gwlc'] = this.state.gwlc_value;
-    tempFormData['mj'] = this.state.mj_value;
-    tempFormData['jjcd'] = this.state.jjcd_value;
-    OAUtils.saveModuleFormData({
-      moduleName:this.props.moduleNameCn,
-      tokenunid:this.props.tokenunid,
-      unid:this.props.detailInfo.unid,
-      formParams:Object.assign({},this.props.formParams,this.props.formData,tempFormData), //特有的表单参数数据。
-      successCall: (data)=>{
-        console.log("保存-发文管理的表单数据:",data);
-        let formData = OAUtils.formatFormData(data.values);
-        this.props.editSaveSuccCall(formData,data.values);
-        Toast.info('修补保存成功!!', 2);
-      },
-      errorCall:(res)=>{
-        Toast.info('修补保存失败!!', 1);
-      }
-    });
   }
 
   render() {

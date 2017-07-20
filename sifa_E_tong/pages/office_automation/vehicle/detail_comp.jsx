@@ -1,7 +1,6 @@
 //车辆管理的详情页.
 import $ from 'jquery';
 import React from 'react';
-import * as Utils from 'utils/utils.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 
 import { WingBlank, WhiteSpace, Button, InputItem, NavBar,

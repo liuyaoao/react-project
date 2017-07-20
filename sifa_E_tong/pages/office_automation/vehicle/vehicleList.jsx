@@ -88,11 +88,11 @@ class VehicleList extends React.Component {
     this.getServerListData(key,1);
   }
   onClickOneRow = (rowData)=>{
-    console.log("车辆管理 click rowData:",rowData);
-    this.setState({detailInfo:rowData, showDetail:true});
+    // console.log("车辆管理 click rowData:",rowData);
+    this.setState({detailInfo:rowData, showDetail:true,showAddEdit:false});
   }
   onClickAddEdit = ()=>{
-    this.setState({showAddEdit:true});
+    this.setState({showDetail:false, showAddEdit:true});
   }
   backToTableListCall = ()=>{
     this.setState({showDetail:false,showAddEdit:false});
@@ -103,6 +103,10 @@ class VehicleList extends React.Component {
       currentpage:1
     });
     this.getServerListData(this.state.activeTabkey,1);
+  }
+  afterAddNewCall = (formData)=>{ //新建后处理。
+    this.onClickOneRow(formData);
+    this.updateListViewCall();
   }
   onClickLoadMore = (evt)=>{
     let {currentpage,totalPageCount,hasMore} = this.state;
@@ -218,7 +222,7 @@ class VehicleList extends React.Component {
             (
               <Vehicle_AddEditComp
                 tokenunid={this.props.tokenunid}
-                updateListViewCall={this.updateListViewCall}
+                afterAddNewCall={this.afterAddNewCall}
                 backToTableListCall={()=>this.backToTableListCall()}
                 />
             ):null}

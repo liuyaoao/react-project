@@ -1,12 +1,11 @@
 //通知公告的新增页.
 import $ from 'jquery';
 import React from 'react';
-import * as Utils from 'utils/utils.jsx';
-import myWebClient from 'client/my_web_client.jsx';
+import * as OAUtils from 'pages/utils/OA_utils.jsx';
 // import Notice_SendShareComp from './noticeSendShare_comp.jsx';
 import AddEditContentComp from './addEditContent_comp.jsx';
-import CommonSendComp from '../common_send_comp.jsx';
-import CommonVerifyComp from '../common_verify_comp.jsx';
+// import CommonSendComp from '../common_send_comp.jsx';
+// import CommonVerifyComp from '../common_verify_comp.jsx';
 
 import { WingBlank, WhiteSpace,NavBar,TabBar} from 'antd-mobile';
 import {Icon} from 'antd';
@@ -19,32 +18,61 @@ class Vehicle_AddEditComp extends React.Component {
       super(props);
       this.onNavBarLeftClick = this.onNavBarLeftClick.bind(this);
       this.state = {
-        date: zhNow,
+        moduleNameCn:'车辆管理',
+        modulename:'clgl2', //模块名
+        formParams:{
+          ycts:'', //用车天数。
+          sxrs:'', //随行人数。
+          jsy:'',  //驾驶员。
+          cph:'',  //车牌号。
+          ccdd:'',  //用车地点。
+          ycsy:'',  //用车事由。
+          ycrq:'',  //用车时间-日期。
+          ycsjHour:'',  //用车时间-小时。
+          ycsjMinute:'',  //用车时间-分钟。
+          hcrq:'',  //回车时间-日期。
+          hcsjHour:'',  //回车时间-小时。
+          hcsjMinute:'',  //回车时间-分钟。
+        },
         hidden: false,
+        newAdding:false, //是否正在新建。
         selectedTab:'',
         curSubTab:'content',
+        formData:{},
+        formDataRaw: {}
       };
   }
   componentWillMount(){
+    this.getServerFormData();
+  }
+  getServerFormData = ()=>{
+    OAUtils.getModuleFormData({
+      moduleName:this.state.moduleNameCn,
+      tokenunid:this.props.tokenunid,
+      // unid:this.props.detailInfo.unid,
+      formParams:this.state.formParams, //特有的表单参数数据。
+      successCall: (data)=>{
+        let formDataRaw = data.values;
+        let formData = OAUtils.formatFormData(data.values);
+        this.setState({
+          formData,
+          formDataRaw
+        });
+        console.log("get 车辆管理新建时的表单数据:",data);
+      }
+    });
   }
   onNavBarLeftClick = (e) => {
     this.props.backToTableListCall();
   }
-  onBackDetailCall = ()=>{
-    this.setState({curSubTab:'content'});
-  }
-  onClickAddSave = ()=>{ //点击了保存
-    //TODO
+  onClickAddNewSave = ()=> { //点击了保存。
     this.setState({
-      selectedTab: 'saveTab',
+      newAdding:true,
     });
-    this.props.backToTableListCall();
   }
 
   render() {
-    //  let clsName = this.props.isShow && !this.state.isHide?
-    //  'oa_detail_container ds_detail_container oa_detail_container_show':
-    //  'oa_detail_container ds_detail_container oa_detail_container_hide';
+    let {formData,formDataRaw,newAdding} = this.state;
     return (
       <div className={"oa_detail_container ds_detail_container"}>
         <NavBar className="mobile_navbar_custom"
@@ -58,18 +86,17 @@ class Vehicle_AddEditComp extends React.Component {
         </NavBar>
         <div style={{marginTop:'60px'}}>
           {this.state.curSubTab == "content"?
-            (<AddEditContentComp />):null}
+            (<AddEditContentComp
+              tokenunid={this.props.tokenunid}
+              moduleNameCn={this.state.moduleNameCn}
+              modulename={this.state.modulename}
+              formData={formData}
+              formDataRaw={formDataRaw}
+              newAdding={newAdding}
+              formParams={this.state.formParams}
+              afterAddNewCall={this.props.afterAddNewCall}
+              />):null}
         </div>
-
-        {this.state.curSubTab == "send"? (<CommonSendComp
-          tokenunid={this.props.tokenunid}
-          backDetailCall={this.onBackDetailCall} isShow={true}/>):null}
-        {this.state.curSubTab == "verify"?
-          (<CommonVerifyComp
-            tokenunid={this.props.tokenunid}
-            backDetailCall={this.onBackDetailCall}
-            isShow={true}/>):
-          null}
         <TabBar
           unselectedTintColor="#949494"
           tintColor="#33A3F4"
@@ -82,37 +109,7 @@ class Vehicle_AddEditComp extends React.Component {
             icon={ <Icon type="save" style={{fontSize:'0.4rem'}}/> }
             selectedIcon={<Icon type="save" style={{color:'blue',fontSize:'0.4rem'}}/>}
             selected={this.state.selectedTab === 'saveTab'}
-            onPress={() => this.onClickAddSave()}
-          >
-          <div></div>
-          </TabBar.Item>
-          <TabBar.Item
-            title="阅文意见"
-            key="阅文意见"
-            icon={ <Icon type="edit" style={{fontSize:'0.4rem'}} /> }
-            selectedIcon={<Icon type="edit" style={{color:'blue', fontSize:'0.4rem'}}/>}
-            selected={this.state.selectedTab === 'verifyTab'}
-            onPress={() => {
-              this.setState({
-                curSubTab:'verify',
-                selectedTab: 'verifyTab',
-              });
-            }}
-          >
-          <div></div>
-          </TabBar.Item>
-          <TabBar.Item
-            title="发送"
-            key="发送"
-            icon={ <Icon type="export" style={{fontSize:'0.4rem'}} /> }
-            selectedIcon={<Icon type="export" style={{color:'blue', fontSize:'0.4rem'}}/>}
-            selected={this.state.selectedTab === 'sendTab'}
-            onPress={() => {
-              this.setState({
-                curSubTab:'send',
-                selectedTab: 'sendTab',
-              });
-            }}
+            onPress={() => this.onClickAddNewSave()}
           >
           <div></div>
           </TabBar.Item>

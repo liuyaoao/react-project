@@ -36,10 +36,30 @@ class ModulesMobileComp extends React.Component {
           showItemSum:0, //可显示的模块数。
           itemRowSum:1,
           permissionData:UserStore.getPermissionData(),
+          todoTotalPageCount:0, //OA待办事项的总条数。
         };
     }
     componentWillMount(){
       this.refreshModules();
+      var me = UserStore.getCurrentUser() || {};
+      this.setState({loginUserName:me.username || ''});
+      OAUtils.loginOASystem({oaUserName:me.oaUserName,oaPassword:me.oaPassword}, (res)=>{ //登录OA系统获取认证id。
+        this.getServerTODOListData(res.values.tockenunid);
+      });
+    }
+    getServerTODOListData = (tokenunid)=>{ //获取OA系统的待办事项列表
+      OAUtils.getPersonalTodoListData({
+        tokenunid: tokenunid,
+        currentpage:1,
+        urlparam:{ key:'dbsx',type:3 },
+        viewcolumntitles:'标题,模块',
+        successCall: (data)=>{
+          console.log("待办事项的list data:",data);
+          this.setState({
+            todoTotalPageCount:data.totalcount,
+          });
+        }
+      });
     }
     refreshModules(){
       let delModules = (localStorage.getItem(this.props.localStoreKey4Modules) || '').split(',');

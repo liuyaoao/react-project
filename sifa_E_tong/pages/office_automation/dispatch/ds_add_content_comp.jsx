@@ -3,7 +3,6 @@ import $ from 'jquery';
 import React from 'react';
 // import * as Utils from 'utils/utils.jsx';
 // import myWebClient from 'client/my_web_client.jsx';
-import UserStore from 'stores/user_store.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import { WingBlank, WhiteSpace, Button, InputItem, NavBar,
   TextareaItem,Flex, TabBar, Picker, List, Toast } from 'antd-mobile';
@@ -16,20 +15,24 @@ class DS_AddContentComp extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-        loginUserName:'',
         nowDate:moment(new Date()).format('YYYY-MM-DD'),
-        flow: [{label: '发文',value: '发文'},{label: '司法局发文流程',value: '司法局发文流程'}],
-        dzTitle: "长沙市司法局文件"
+        dzTitle: "长沙市司法局文件",
+        gwlc_value:'', //公文流程
+        mj_value:'', //密级
+        jjcd_value:'', //缓急
       };
   }
   componentWillMount(){
-    var me = UserStore.getCurrentUser() || {};
-    this.setState({loginUserName:me.username||''});
   }
 
   componentWillReceiveProps(nextProps){
     if(nextProps.newAdding && !this.props.newAdding){ //点击了保存按钮了。
       this.addNewSave();
+    }
+    if(nextProps.formData.gwlc != this.props.formData.gwlc){
+      this.setState({
+        gwlc_value:nextProps.formData.gwlc
+      });
     }
   }
   addNewSave = ()=>{  //编辑保存
@@ -40,23 +43,40 @@ class DS_AddContentComp extends React.Component {
     OAUtils.saveModuleFormData({
       moduleName:this.props.moduleNameCn,
       tokenunid:this.props.tokenunid,
-      unid:this.props.detailInfo.unid,
+      unid:this.props.formData.unid,
       formParams:Object.assign({},this.props.formParams,this.props.formData,tempFormData), //特有的表单参数数据。
       successCall: (data)=>{
-        console.log("保存-发文管理的表单数据:",data);
+        console.log("新建-发文管理的返回表单数据:",data);
         let formData = OAUtils.formatFormData(data.values);
-        this.props.editSaveSuccCall(formData,data.values);
-        Toast.info('修补保存成功!!', 2);
+        this.props.afterAddNewCall(formData);
+        Toast.info('新建保存成功!!', 2);
       },
       errorCall:(res)=>{
-        Toast.info('修补保存失败!!', 1);
+        Toast.info('新建保存失败!!', 1);
       }
     });
   }
+
+  onPickerGWLCOk = (val)=>{ //选择 公文流程
+    console.log("onPickerGWLCOk--:",val);
+    this.setState({gwlc_value:val[0]});
+  }
+  onPickerSecrecyTypeOk = (val)=>{ //选择 密级
+    console.log("onPickerSecrecyTypeOk--:",val);
+    this.setState({mj_value:val[0]});
+  }
+  onPickerUrgencyTypeOk = (val)=>{ //选择 缓急
+    console.log("onPickerUrgencyTypeOk--:",val);
+    this.setState({jjcd_value:val[0]});
+  }
+
   handleChange = (value)=> {
     if(value === "1"){
       //发文
-      this.setState({dzTitle: "长沙市司法局文件", flow: [{label: '发文',value: '发文'},{label: '司法局发文流程',value: '司法局发文流程'}]});
+      this.props.changeDispatchTypeCall("发文");
+      this.setState({
+        dzTitle: "长沙市司法局文件",
+      });
       $("#FGYJ").show();
       $("#HG").show();
       $("#JZYJ").show();
@@ -64,7 +84,10 @@ class DS_AddContentComp extends React.Component {
       $("#LDFW").hide();
     }else if(value === "2"){
       //领导小组发文
-      this.setState({dzTitle: "领导小组文件(稿纸)", flow: [{label: '领导小组发文',value: '领导小组发文'},{label: '司法局发文流程',value: '司法局发文流程'}]});
+      this.props.changeDispatchTypeCall("领导小组发文");
+      this.setState({
+        dzTitle: "领导小组文件(稿纸)",
+      });
       $("#FGYJ").hide();
       $("#HG").hide();
       $("#JZYJ").show();
@@ -72,7 +95,10 @@ class DS_AddContentComp extends React.Component {
       $("#LDFW").show();
     }else if(value === "3"){
       //领导小组办公室发文
-      this.setState({dzTitle: "领导小组办公室文件(稿纸)", flow: [{label: '领导小组办公室发文',value: '领导小组办公室发文'},{label: '司法局发文流程',value: '司法局发文流程'}]});
+      this.props.changeDispatchTypeCall("领导小组办公室发文");
+      this.setState({
+        dzTitle: "领导小组办公室文件(稿纸)",
+      });
       $("#FGYJ").hide();
       $("#HG").hide();
       $("#JZYJ").hide();
@@ -83,11 +109,38 @@ class DS_AddContentComp extends React.Component {
 
   render() {
     const { getFieldProps, getFieldError } = this.props.form;
-    const secrecy = [{label: '秘密',value: '秘密'},{label: '机密',value: '机密'}];
-    const urgency = [{label: '急',value: '急'},{label: '紧急',value: '紧急'},{label: '特急',value: '特急'},{label: '特提',value: '特提'}];
+    const {gwlc_value, mj_value, jjcd_value} = this.state;
+    let {formData,formDataRaw} = this.props;
+
+    let secrecyItems = formDataRaw.mj?formDataRaw.mj.items:[];
+    let secrecyType = secrecyItems.map((item)=>{ //密级
+      return {
+        label:item.text,
+        value:item.value
+      }
+    });
+    let urgencyItems = formDataRaw.jjcd?formDataRaw.jjcd.items:[];
+    let urgencyType = urgencyItems.map((item)=>{ //缓急
+      return {
+        label:item.text,
+        value:item.value
+      }
+    });
+    //公文流程当前值就是gwlc字段的值。--公文流程。
+    let items = formDataRaw.gwlc?formDataRaw.gwlc.items:[];
+    let fileFlowTypes = items.map((item)=>{ //公文流程。
+      return {
+        label:item.text,
+        value:item.value
+      }
+    });
+
     return (
       <div style={{marginBottom: "100px"}}>
-        <Select defaultValue="请选择您要起草的发文类型" onChange={this.handleChange} style={{margin:"0.16rem"}} id="dsType">
+        <div style={{marginLeft:"0.1rem"}}>请选择您要起草的发文类型:</div>
+        <Select defaultValue="1"
+          onChange={this.handleChange}
+          style={{margin:"0.16rem",width:'96%'}} id="dsType">
           <Select.Option value="1">发文</Select.Option>
           <Select.Option value="2">领导小组发文</Select.Option>
           <Select.Option value="3">领导小组办公室发文</Select.Option>
@@ -95,20 +148,26 @@ class DS_AddContentComp extends React.Component {
         <div className={'oa_detail_cnt'}>
           <div className={'oa_detail_title'} style={{width:'100%',textAlign:'center'}}>{this.state.dzTitle}</div>
           <Flex>
-            <Flex.Item><InputItem editable={false} labelNumber={3}>文号：</InputItem></Flex.Item>
-            <Flex.Item><InputItem placeholder="请输入..." labelNumber={3} type="Number">份数：</InputItem></Flex.Item>
+            <Flex.Item><InputItem editable={false} labelNumber={3} {...getFieldProps('fwwh')} >文号：</InputItem></Flex.Item>
+            <Flex.Item>
+              <InputItem placeholder="请输入..." {...getFieldProps('fs')} labelNumber={3} type="Number">份数：</InputItem>
+            </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
               <div className="select_container">
-                <Picker data={secrecy} cols={1} {...getFieldProps('secrecy')}>
+                <Picker data={secrecyType} cols={1}
+                  value={[mj_value]}
+                  onOk={this.onPickerSecrecyTypeOk}>
                   <List.Item arrow="horizontal">密级：</List.Item>
                 </Picker>
               </div>
             </Flex.Item>
             <Flex.Item>
               <div className="select_container">
-                <Picker data={urgency} cols={1} {...getFieldProps('urgency')}>
+                <Picker data={urgencyType} cols={1}
+                  value={[jjcd_value]}
+                  onOk={this.onPickerUrgencyTypeOk} >
                   <List.Item arrow="horizontal">缓急</List.Item>
                 </Picker>
               </div>
@@ -116,47 +175,42 @@ class DS_AddContentComp extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div className={'detail_textarea_title'}>标题：</div>
-              <div className="textarea_container">
-                <TextareaItem
-                  title=""
-                  rows={3}
-                  placeholder="请输入..."
-                  labelNumber={0}
-                  />
-              </div>
+              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>标题：</div>
+              <TextareaItem
+                {...getFieldProps('wjbt')}
+                title=""
+                rows={3}
+                placeholder="请输入..."
+                labelNumber={0}
+              />
             </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
               <div className={'detail_textarea_title'}>主送：</div>
-              <div className="textarea_container">
-                <TextareaItem
-                  title=""
-                  rows={3}
-                  placeholder="请输入..."
-                  labelNumber={0}
-                  />
-              </div>
+              <TextareaItem
+                {...getFieldProps('zsdw')}
+                rows={3}
+                placeholder="请输入..."
+              />
             </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
               <div className={'detail_textarea_title'}>抄送：</div>
-              <div className="textarea_container">
-                <TextareaItem
-                  title=""
-                  rows={3}
-                  placeholder="请输入..."
-                  labelNumber={0}
-                  />
-              </div>
+              <TextareaItem
+                {...getFieldProps('csdw')}
+                rows={3}
+                placeholder="请输入..."
+              />
             </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
               <div className="select_container">
-                <Picker data={this.state.flow} cols={1} {...getFieldProps('flow')}>
+                <Picker data={fileFlowTypes} cols={1}
+                  value={[gwlc_value]}
+                  onOk={this.onPickerGWLCOk}>
                   <List.Item arrow="horizontal">公文流程</List.Item>
                 </Picker>
               </div>
@@ -193,21 +247,27 @@ class DS_AddContentComp extends React.Component {
             </Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem value="148中心"
-              editable={true}
-              labelNumber={5}>拟稿单位：</InputItem>
+            <Flex.Item>
+              <InputItem value={formData.zbbm_show}
+                editable={false}
+                labelNumber={5}>拟稿单位：
+              </InputItem>
             </Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem value={this.state.loginUserName}
-              editable={true}
-              labelNumber={4}>拟稿人：</InputItem>
-          </Flex.Item>
+            <Flex.Item>
+              <InputItem value={formData.ngr_show}
+                editable={false}
+                labelNumber={4}>拟稿人：
+              </InputItem>
+            </Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem value={this.state.nowDate}
-              editable={true}
-              labelNumber={5}>拟稿日期：</InputItem>
+            <Flex.Item>
+              <InputItem value={formData.ngrq_show}
+                editable={false}
+                labelNumber={5}>拟稿日期：
+              </InputItem>
             </Flex.Item>
           </Flex>
         </div>

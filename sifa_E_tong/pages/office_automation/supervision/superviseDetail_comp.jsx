@@ -54,6 +54,7 @@ class SuperviseDetail extends React.Component {
       moduleName:this.state.moduleNameCn,
       tokenunid:this.props.tokenunid,
       unid:this.props.detailInfo.unid,
+      formParams:this.state.formParams,
       successCall: (data)=>{
         console.log("get 督办管理的表单数据:",data);
         let formData = OAUtils.formatFormData(data.values);

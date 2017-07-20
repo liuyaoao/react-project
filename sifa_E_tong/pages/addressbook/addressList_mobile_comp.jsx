@@ -61,16 +61,19 @@ class AddressListMobileComp extends React.Component {
             onOpen={() => console.log('global open')}
             onClose={() => console.log('global close')}
             >
-              <div className="addressbook_row">
+
+
+              <div className="addressbook_row" onClick={this.state.hasOperaPermission ? ()=>{this.showAddEditDialog(text,record,index)} : ''}
+              >
                 <span className="addressbook_avator">
                   <img className="member_icon" width="54" height="54" src={this.props.iconArr[index]}/>
                 </span>
                 <div className="addressbook_detail">
                     <div className="member_name">
                       <span>({record.userName}) &nbsp;</span>
-                      {this.state.hasOperaPermission ? (<div className="addressbook_oper">
+                      {/* {this.state.hasOperaPermission ? (<div className="addressbook_oper">
                         <a href="javascript:;" onClick={()=>{this.showAddEditDialog(text,record,index)}} style={{marginLeft:'1em'}}><Icon type="edit" />编辑</a>
-                      </div>):null}
+                      </div>):null} */}
                     </div>
                     <div className="member_email"><span>电子邮件：</span>{record.email}</div>
                     <div className="member_phone"><span>电话号码：</span>{record.telephoneNumber+','+record.groupShortCode}</div>
@@ -89,7 +92,7 @@ class AddressListMobileComp extends React.Component {
 
   }
   showAddEditDialog(text,record,index){
-    console.log("text:"+text+"index:"+index);
+    // console.log("text:"+text+"index:"+index);
     let data = record || {};
     this.props.showAddEditDialog(data);
   }

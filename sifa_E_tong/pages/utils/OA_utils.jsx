@@ -207,35 +207,24 @@ export function getModuleFormData(params) {
     "发文管理":"hcit.module.fwgl.ui.FrmFwcld",
     "收文管理":"hcit.module.swgl.ui.FrmSwcld",
     "督办管理":"hcit.module.duban3.ui.FrmDbjgl",
-    "车辆管理":"hcit.module.clgl2.ui.FrmClsq"
+    "车辆管理":"hcit.module.clgl2.ui.FrmClsq",
+    "信息发布":"hcit.module.xxfb.ui.FrmXxlrd",  //也就是通知公告
   }
   let options = Object.assign({},{
     url: 'http://10.192.0.241/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.MobileToOpenForm',
   },params);
   let param = encodeURIComponent(JSON.stringify({
-    "ver" : "1",
+    "ver" : "2",
     "params" : {
       "formname" : moduleName2FormName[options.moduleName],
 				"formparam" : {
 					"unid" : options.unid||"",
+          "inifwlx":options.inifwlx || "",
 				},
         "formdata" : Object.assign({},{
           "unid" : "",
 					"flowsessionid" : "",
-          "fwwh":"", //发文管理的--文号。
-          "mj":"", //发文管理的--密级。
-          "jjcd":"",  //发文管理的--缓急。
-          "fs":"",  //发文管理的--份数。
-          "dblx":"",  //督办管理--督办类型。
-          "lsh":"",   //督办管理--收文号。
-          "swrq":"",  //督办管理--收文日期。
-          "lwdw":"",  //督办管理--来为单位。
-          "blsx":"",  //督办管理--办理时限，也就是截至日期。
-          "cb":"",  //督办管理--催办。
-          "yh":"",  //督办管理--原号。
-          "zsdw":"", //主送
-          "csdw":"", //抄送
 					"gwlc" : "", //公文流程，即发文管理的公文流程,或者签报管理的请示类别，是下拉列表。
 					"btSave" : "", //保存按钮
 					"btYwyj" : "",  //阅文意见按钮
@@ -250,7 +239,6 @@ export function getModuleFormData(params) {
 					"ngrq_show" : "", //拟稿日期
           "zbbm_show":"",  //拟稿单位（部门）
 					"bt" : "", //标题。
-          "wjbt":"",  //发文管理--标题。
 					"nr" : ""
         }, options.formParams||{})
     }
@@ -304,10 +292,9 @@ export function saveModuleFormData(params) {
       "formname" : moduleName2FormName[options.moduleName],
       "formdata" : Object.assign({},{
         "__EVENTTARGET_S" : "M|btSave|OnClickHandler",
-					"unid" : "7503130A0817AE0BEF2AC1031B1AD425",
-					"flowsessionid" : "7505030E062E1C529F7AC1031B154725",
-					"gwlc" : "73031413313105FB779A00622EA63DF1",
-					"_otherssign" : "7505030E0A1523A73EFAC1031B3CD525",
+					"flowsessionid" : "",
+					"gwlc" : "",
+					"_otherssign" : "",
           "btSave" : "",
 					"btYwyj" : "",
 					"btSend" : "",
@@ -471,7 +458,28 @@ export function getUploadAttachmentUrl(params){
   return url;
 }
 
-
+//获取表单自定义附件的上传地址。 upload
+export function getUploadCustomUrl(params){
+  let url='';
+  const moduleName2filetablename = {
+    "信息发布":"xxfb_fj",
+  };
+  const moduleName2StrUrl = {
+    "信息发布":"hcit.module.xxfb.agent.XxfbAttachmentOperation",
+  };
+  var strUrl = "http://10.192.0.241/openagent?agent="+moduleName2StrUrl[params.moduleName]+"&json=1&version=2&opcode=1";
+  var paramJson ={
+      ver : "2",
+      params :{
+          "docunid":params.docunid,
+          "filename" : params.filename,
+          "filetablename" : moduleName2filetablename[params.moduleName],
+          "issaveattachfile" : "true"
+      }
+  };
+  url = strUrl + "&param=" + encodeURIComponent(JSON.stringify(paramJson));
+  return url;
+}
 //获取表单自定义附件列表。
 export function getFormCustomAttachmentList(params){
   const moduleName2filetablename = {

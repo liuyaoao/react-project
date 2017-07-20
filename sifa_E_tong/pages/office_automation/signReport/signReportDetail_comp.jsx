@@ -27,6 +27,7 @@ class SignReportDetail extends React.Component {
         moduleNameCn:'签报管理',
         modulename:'qbgl', //模块名
         formParams:{
+          "nr":'',  //事由
         },
         hidden: false,
         selectedTab:'',
@@ -47,6 +48,7 @@ class SignReportDetail extends React.Component {
       moduleName:this.state.moduleNameCn,
       tokenunid:this.props.tokenunid,
       unid:this.props.detailInfo.unid,
+      formParams:this.state.formParams,
       successCall: (data)=>{
         console.log("get 签报管理的表单数据:",data);
         let formData = OAUtils.formatFormData(data.values);

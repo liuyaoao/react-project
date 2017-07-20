@@ -92,15 +92,15 @@ class SignReportList extends React.Component {
     });
     this.getServerListData(key,1);
   }
-  onClickAddNew = ()=>{
-    this.setState({showAdd:true});
-  }
   onClickOneRow = (rowData)=>{
-    console.log("签报管理的 click rowData:",rowData);
-    this.setState({detailInfo:rowData, showDetail:true});
+    // console.log("签报管理的 click rowData:",rowData);
+    this.setState({detailInfo:rowData, showDetail:true, showAdd:false });
+  }
+  onClickAddNew = ()=>{
+    this.setState({showAdd:true,showDetail:false});
   }
   backToTableListCall = ()=>{   //返回到列表页。
-    this.setState({showAdd:false,showDetail:false});
+    this.setState({showAdd:false,showDetail:false });
   }
   updateListViewCall = ()=>{ //跟新列表。
     this.setState({
@@ -109,6 +109,11 @@ class SignReportList extends React.Component {
     });
     this.getServerListData(this.state.activeTabkey,1);
   }
+  afterAddNewCall = (formData)=>{ //新建后处理。
+    this.onClickOneRow(formData);
+    this.updateListViewCall();
+  }
+
   render() {
     const separator = (sectionID, rowID) => (
       <div
@@ -222,7 +227,7 @@ class SignReportList extends React.Component {
         {this.state.showAdd?
           <SignReportAdd
             tokenunid={this.props.tokenunid}
-            updateListViewCall={this.updateListViewCall}
+            afterAddNewCall={this.afterAddNewCall}
             backToTableListCall={this.backToTableListCall}
           />:null}
         {this.state.showDetail?

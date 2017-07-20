@@ -1,13 +1,12 @@
 import $ from 'jquery';
 import React from 'react';
 import * as Utils from 'utils/utils.jsx';
-import UserStore from 'stores/user_store.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import moment from 'moment';
 import { createForm } from 'rc-form';
 
 import myWebClient from 'client/my_web_client.jsx';
-import { WingBlank, WhiteSpace, Button, InputItem, NavBar,
+import { Toast, WingBlank, WhiteSpace, InputItem,
   TextareaItem,Flex,List,Picker} from 'antd-mobile';
 
 import {Icon } from 'antd';
@@ -16,58 +15,78 @@ class AddContentCompRaw extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-        loginUserName:'',
-        nowDate:moment(new Date()).format('YYYY-MM-DD'),
-        tabName:"content",
+        // nowDate:moment(new Date()).format('YYYY-MM-DD'),
+        gwlc_value:'', //公文流程--请示类别。
       };
   }
   componentWillMount(){
-    var me = UserStore.getCurrentUser() || {};
-    this.setState({loginUserName:me.username||''});
+  }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.newAdding && !this.props.newAdding){ //点击了保存按钮了。
+      this.addNewSave();
+    }
+    if(nextProps.formData.gwlc != this.props.formData.gwlc){
+      this.setState({
+        gwlc_value:nextProps.formData.gwlc
+      });
+    }
+  }
+  addNewSave = ()=>{  //编辑保存
+    let tempFormData = this.props.form.getFieldsValue();
+    tempFormData['gwlc'] = this.state.gwlc_value;
+    OAUtils.saveModuleFormData({
+      moduleName:this.props.moduleNameCn,
+      tokenunid:this.props.tokenunid,
+      unid:this.props.formData.unid,
+      formParams:Object.assign({},this.props.formParams,this.props.formData,tempFormData), //特有的表单参数数据。
+      successCall: (data)=>{
+        console.log("新建-签报管理的返回数据:",data);
+        let formData = OAUtils.formatFormData(data.values);
+        this.props.afterAddNewCall(formData);
+        Toast.info('新建保存成功!!', 2);
+      },
+      errorCall:(res)=>{
+        Toast.info('新建保存失败!!', 1);
+      }
+    });
+  }
+  onPleaTypesPickerOk = (val)=>{
+    this.setState({gwlc_value:val[0]});
   }
 
   render() {
     const { getFieldProps } = this.props.form;
-    let owerPleaTypes = [
-      {
-        label:"其他请示事项（新）",
-        value:"其他请示事项（新）"
-      },{
-        label:"资金类请示事项（新）",
-        value:"资金类请示事项（新）"
-      },{
-        label:"文电分办",
-        value:"文电分办"
-      },{
-        label:"会议、活动（新）",
-        value:"会议、活动（新）"
-      },{
-        label:"需报送上级机关或平级机关的公文（新）",
-        value:"需报送上级机关或平级机关的公文（新）"
+    let {formData,formDataRaw} = this.props;
+    let items = formDataRaw.gwlc?formDataRaw.gwlc.items:[];
+    //请示类别当前值就是gwlc字段的值。--公文流程。
+    let owerPleaTypes = items.map((item)=>{ //请示类别。
+      return {
+        label:item.text,
+        value:item.value
       }
-    ];
+    });
     return (
       <div>
         <div className={'oa_detail_cnt'}>
           <div className={'oa_detail_title'} style={{width:'100%',textAlign:'center'}}>长沙司法局工作(报告)单</div>
           <Flex>
-            <Flex.Item><InputItem value={this.state.loginUserName}
+            <Flex.Item><InputItem value={formData.ngr_show}
               placeholder={'请输入...'}
-              editable={true}
+              editable={false}
               labelNumber={4}>拟稿人：</InputItem>
           </Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem value="148中心"
+            <Flex.Item><InputItem value={formData.zbbm_show}
               placeholder={'请输入...'}
-              editable={true}
+              editable={false}
               labelNumber={5}>拟稿单位：</InputItem>
             </Flex.Item>
           </Flex>
           <Flex>
-            <Flex.Item><InputItem value={this.state.nowDate}
+            <Flex.Item><InputItem value={formData.ngrq_show}
               placeholder={'请输入...'}
-              editable={true}
+              editable={false}
               labelNumber={5}>拟稿日期：</InputItem>
             </Flex.Item>
           </Flex>
@@ -75,7 +94,7 @@ class AddContentCompRaw extends React.Component {
             <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>标题：</div>
               <TextareaItem
-                {...getFieldProps('subjectTitle')}
+                {...getFieldProps('bt')}
                 title=""
                 placeholder={'请输入...'}
                 rows={4}
@@ -86,7 +105,9 @@ class AddContentCompRaw extends React.Component {
           <Flex>
             <Flex.Item>
               <List style={{ backgroundColor: 'white' }} className={'picker_list'}>
-                <Picker data={owerPleaTypes} cols={1} {...getFieldProps('pleaType')} onOk={this.onPickerOk}>
+                <Picker data={owerPleaTypes} cols={1}
+                  value={[this.state.gwlc_value]}
+                   onOk={this.onPleaTypesPickerOk}>
                   <List.Item arrow="horizontal">请示类别：</List.Item>
                 </Picker>
               </List>
@@ -111,7 +132,7 @@ class AddContentCompRaw extends React.Component {
             <Flex.Item>
               <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>事由：</div>
               <TextareaItem
-                {...getFieldProps('reason')}
+                {...getFieldProps('nr')}
                 title=""
                 placeholder={'请输入...'}
                 rows={5}

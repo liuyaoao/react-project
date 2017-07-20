@@ -94,11 +94,11 @@ class SuperviseList extends React.Component {
     this.getServerListData(key,1);
   }
   onClickOneRow = (rowData)=>{
-    console.log("督办管理某行的点击--rowData:",rowData);
-    this.setState({detailInfo:rowData, showDetail:true});
+    // console.log("督办管理某行的点击--rowData:",rowData);
+    this.setState({detailInfo:rowData, showDetail:true, showAdd:false });
   }
   onClickAddNew = ()=>{
-    this.setState({showAdd:true});
+    this.setState({showAdd:true,showDetail:false});
   }
   backToTableListCall = ()=>{   //返回到列表页。
     this.setState({showAdd:false,showDetail:false});
@@ -109,6 +109,10 @@ class SuperviseList extends React.Component {
       currentpage:1
     });
     this.getServerListData(this.state.activeTabkey,1);
+  }
+  afterAddNewCall = (formData)=>{ //新建后处理。
+    this.onClickOneRow(formData);
+    this.updateListViewCall();
   }
   render() {
     const separator = (sectionID, rowID) => (
@@ -221,7 +225,7 @@ class SuperviseList extends React.Component {
         {this.state.showAdd?
           <SuperviseAdd
             tokenunid={this.props.tokenunid}
-            updateListViewCall={this.updateListViewCall}
+            afterAddNewCall={this.afterAddNewCall}
             backToTableListCall={this.backToTableListCall}
           />:null}
         {this.state.showDetail?
