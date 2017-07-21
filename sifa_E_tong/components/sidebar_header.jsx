@@ -81,6 +81,7 @@ export default class SidebarHeader extends React.Component {
         let tutorialTip = null;
         if (this.state.showTutorialTip) {
             tutorialTip = createMenuTip(this.toggleDropdown);
+            console.log('Nishi',tutorialTip)
         }
 
         let teamNameWithToolTip = null;

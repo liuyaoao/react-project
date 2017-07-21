@@ -1077,7 +1077,7 @@
 
         .team__header {
             @include clearfix;
-            pointer-events: none;
+            // pointer-events: none;
 
             .user__name {
                 display: none;

@@ -9,6 +9,8 @@ import myWebClient from 'client/my_web_client.jsx';
 import { Icon,notification,Table, Pagination} from 'antd';
 import DocumentAddModalPC from './add_modal_pc.jsx';
 import DocumentAddLawyerModalPC from './add_lawyer_modal_pc.jsx';
+import DocumentAddLawfirmModalPC from './add_lawfim_modal_pc.jsx';
+import DocumentAddJudExamModalPC from './add_judicialexam_modal_pc.jsx'
 
 notification.config({
   top: 68,
@@ -42,20 +44,22 @@ class DocumentListPC extends React.Component {
   render() {
     const { loading, selectedRowKeys } = this.state;
     const { data, currentFileType, currentFileSubType, departmentTypes, currentDepartment } = this.props;
+
+
     const columns = [{
-        title: '姓名',
-        dataIndex: 'userName',
-        key: 'userName',
+        title: currentDepartment == '律所' ? '律所名称' : '姓名',
+        dataIndex: currentDepartment == '律所' ? 'lawOfficeName' : 'userName',
+        key: currentDepartment == '律所' ? 'lawOfficeName' : 'userName',
         width: '15%',
       }, {
-        title: '性别',
-        dataIndex: 'gender',
-        key: 'gender',
+        title: currentDepartment == '律所' ? '律所负责人' : '性别',
+        dataIndex: currentDepartment == '律所' ? 'lawOfficePrincipal' : 'gender',
+        key: currentDepartment == '律所' ? 'lawOfficePrincipal' : 'gender',
         width: '15%',
       }, {
-        title: currentFileSubType=="律师" ? '律所地址' : '地址',
-        dataIndex: currentFileSubType=="律师" ? 'lawOfficeAddress' : 'createParty',
-        key: currentFileSubType=="律师" ? 'lawOfficeAddress' : 'createParty',
+        title: (currentFileSubType=="律师" || currentDepartment == '律所') ? '律所地址' : '地址',
+        dataIndex: (currentFileSubType=="律师" || currentDepartment == '律所') ? 'lawOfficeAddress' : 'createParty',
+        key: (currentFileSubType=="律师" || currentDepartment == '律所') ? 'lawOfficeAddress' : 'createParty',
       },
       {
         title: '操作',
@@ -84,6 +88,38 @@ class DocumentListPC extends React.Component {
       // departmentTypes: departmentTypes,
       handleSearch: this.props.handleSearch.bind(this)
     }
+
+    let add_ele = '';
+
+    if(currentDepartment == '律所'){
+
+        console.log('添加：',currentDepartment);
+        add_ele = <DocumentAddLawfirmModalPC {...addModalField}>
+          <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
+        </DocumentAddLawfirmModalPC>
+
+    }else if (currentDepartment == '司法考试处') {
+
+        console.log('添加：',currentDepartment);
+        add_ele = <DocumentAddJudExamModalPC {...addModalField}>
+          <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
+        </DocumentAddJudExamModalPC>
+    }else {
+
+      if (currentFileSubType == '律师') {
+        console.log('添加：',currentFileSubType);
+        add_ele = <DocumentAddLawyerModalPC {...addModalField}>
+          <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
+        </DocumentAddLawyerModalPC>
+      } else {
+        console.log('添加：',currentFileSubType);
+        add_ele = <DocumentAddModalPC {...addModalField}>
+          <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
+        </DocumentAddModalPC>
+      }
+    }
+
+
     return (
       <div className="doc-search-list">
         <div style={{ marginBottom: 16 }}>
@@ -91,14 +127,7 @@ class DocumentListPC extends React.Component {
           {this.state.hasOperaPermission?
             (<span>
                 <button type="button" className="btn btn-danger pull-right" disabled={!hasSelected} onClick={this.handleDeleteBatch.bind(this)}><Icon type="delete" /> 批量删除</button>
-                {currentFileSubType == '律师' ?
-                  <DocumentAddLawyerModalPC {...addModalField}>
-                    <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
-                  </DocumentAddLawyerModalPC> :
-                  <DocumentAddModalPC {...addModalField}>
-                    <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
-                  </DocumentAddModalPC>
-                }
+                {add_ele}
               </span>):null
           }
         </div>

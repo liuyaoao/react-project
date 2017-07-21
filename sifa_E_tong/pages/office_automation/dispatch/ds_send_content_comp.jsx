@@ -3,10 +3,10 @@ import $ from 'jquery';
 import React from 'react';
 // import * as Utils from 'utils/utils.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
-import { SearchBar, Tabs, Button, List, Flex, Toast, Switch } from 'antd-mobile';
+import {  Tabs, Button, List, Flex, Toast, Switch } from 'antd-mobile';
 import { Icon } from 'antd';
 import { createForm } from 'rc-form';
-import DS_DepartmentComp from './ds_department_comp.jsx';//发文详情页-- 查看流程
+import DS_DepartmentComp from './ds_department_comp.jsx';//发文详情页
 
 const TabPane = Tabs.TabPane;
 
@@ -17,6 +17,7 @@ class DS_SendContentComp extends React.Component {
         showDepartment: false,
         flowBranchList:[], //流程分支列表
         flowBranch2PersonMap:{}, //流程分支对应的人员列表
+        activeTabkey:'',
       };
   }
   componentWillMount(){
@@ -48,6 +49,7 @@ class DS_SendContentComp extends React.Component {
       }
     });
     this.setState({
+      activeTabkey:flowBranchList[0]['value'],
       flowBranch2PersonMap,
       flowBranchList,
     });
@@ -61,45 +63,49 @@ class DS_SendContentComp extends React.Component {
 
   onClickSend = () => {
     //保存发送的信息 并且返回到详情页
-    let checkedList = $(".checkbox_list :checked");
-    let person = {};
-    if(checkedList.length){
-      person={name: checkedList[0].attributes[2].value, persons:""};
-      for(let i=0; i<checkedList.length; i++){
-        if(person.persons === ""){
-          person.persons = checkedList[i].id;
-        }else{
-          person.persons += checkedList[i].id;
-        }
-      }
+    let checkedList = $(".checkbox_list .checkbox_"+this.state.activeTabkey+":checked");
+    let personunids = {name: this.state.activeTabkey, persons:[]};
+    checkedList.each((index,ele)=>{
+      personunids.persons.push(ele.id);
+    });
+    if(personunids.persons.length<=0){
+      Toast.info("请先选择发送人员！",2);
+      return;
     }
-    this.saveFlowSendInfo(person);
+    personunids.persons = personunids.persons.join(',');
+    this.saveFlowSendInfo(personunids);
   }
-  saveFlowSendInfo = (person)=>{ //保存发送的信息
+  saveFlowSendInfo = (personunids)=>{ //保存发送的信息
     OAUtils.saveFlowSendInfo({
       docunid: this.props.docunid,
       gwlcunid:this.props.gwlcunid,
       modulename:this.props.modulename,
       title: this.props.detailInfo.fileTitle,
-      message: 1,
-      personunids: person,
+      message: 1,  //提示方式，1为网络消息，2为手机短信
+      personunids: [personunids],
       successCall: (data)=>{
-        console.log("发送保存成功:",data);
-        this.props.backDetailCall();
+        console.log("发送成功:",data);
+        Toast.info('发送成功!', 2);
+        this.props.onBackToDetailCall();
       },
       errorCall:(data)=>{
         Toast.info('发送失败!', 1);
-        this.props.backDetailCall();
+        this.props.onBackToDetailCall();
       }
     });
   }
 
-  onClickShowDepartment = () => {
-    this.setState({showDepartment: true});
-  }
+  // onClickShowDepartment = () => {
+  //   this.setState({showDepartment: true});
+  // }
 
-  onBackSendContentCall = () => {
-    this.setState({showDepartment: false});
+  // onBackSendContentCall = () => {
+  //   this.setState({showDepartment: false});
+  // }
+  handleTabClick = (key)=>{
+    this.setState({
+      activeTabkey:key,
+    });
   }
 
   render() {
@@ -108,46 +114,55 @@ class DS_SendContentComp extends React.Component {
     return (
       <div style={{minHeight:"5rem",padding:"0.2rem"}}>
         {!this.state.showDepartment? (
-          <Tabs defaultActiveKey="0">
+          <Tabs
+            defaultActiveKey={this.state.activeTabkey}
+            activeKey={this.state.activeTabkey}
+            pageSize={5}
+            onTabClick={this.handleTabClick}
+            swipeable={false}>
             {flowBranchList.map((k,index) => (
-              <TabPane tab={k.value} key={index}>
+              <TabPane tab={k.label} key={k.value}>
                   <div className="flex-container">
                     <div className="sub-title">
                       <h5 className="pull-left">长沙市司法局</h5>
-                      {/*
-                      <Button className="btn pull-right" inline size="small" type="primary" onClick={this.onClickShowDepartment}>按部门</Button>
-                      */}
-                    </div>
-                    <div className="searchBar_custom">
-                      <SearchBar placeholder="搜索" />
                     </div>
                     <div className="checkbox_list">
-                      {flowBranch2PersonMap[k.value].map(i => (
-                        <div key={i.unid} className="checkbox_custom">
-                          <input type="checkbox" id={i.unid} data={k.value} className="checkbox" />
-                          <label htmlFor={i.unid}><span className="box"><i></i></span>{i.commonname}</label>
+                      {flowBranch2PersonMap[k.value].map(person => (
+                        <div key={person.unid} className="checkbox_custom">
+                          <input type="checkbox" id={person.unid} data-unid={person.unid} className={"checkbox_"+k.value} />
+                          <label htmlFor={person.unid}><span className="box"><i></i></span>{person.commonname}</label>
                         </div>
                       ))}
                     </div>
-                    <div className="switch_custom">
-                      <List.Item
-                        extra={<Switch
-                          {...getFieldProps('Switch1', {
-                            initialValue: true,
-                            valuePropName: 'checked',
-                          })}
-                          onClick={(checked) => { console.log(checked); }}
-                        />}
-                      >网络消息</List.Item>
-                    </div>
-                    <Button className="btn" type="primary" onClick={this.onClickSend}>发送</Button>
-                    <div id="errorMsg">选择发送人员失败！</div>
+
                   </div>
               </TabPane>
             ))}
           </Tabs>
         ):null}
-        {this.state.showDepartment? (<DS_DepartmentComp backSendContentCall={()=>this.onBackSendContentCall()} isShow={true}/>):null}
+        <div className="switch_custom">
+          <List.Item
+            extra={<Switch
+              {...getFieldProps('message_1', {
+                initialValue: false,
+                valuePropName: 'checked',
+              })}
+              onClick={(checked) => { console.log(checked); }}
+            />}
+          >网络消息</List.Item>
+          <List.Item
+            extra={<Switch
+              {...getFieldProps('message_2', {
+                initialValue: false,
+                valuePropName: 'checked',
+              })}
+              onClick={(checked) => { console.log(checked); }}
+            />}
+          >手机短信</List.Item>
+        </div>
+        <Button className="btn" type="primary" onClick={this.onClickSend}>发送</Button>
+
+        {/*this.state.showDepartment? (<DS_DepartmentComp backSendContentCall={()=>this.onBackSendContentCall()} isShow={true}/>):null*/}
       </div>
     )
   }

@@ -23,6 +23,8 @@ import WrappedSearchFormPC from './document/search_form_pc.jsx';
 import WrappedSearchFormMobile from './document/search_form_mobile.jsx';
 import DocumentEditModalPC from './document/edit_modal_pc.jsx';
 import DocumentEditLawyerModalPC from './document/edit_lawyer_modal_pc.jsx';
+import DocumentEditLawfirmModalPC from './document/edit_lawfim_modal_pc.jsx';
+import DocumentEditJudExamModalPC from './document/edit_judicialexam_modal_pc.jsx'
 import DocumentSidebar from './document/document_sidebar.jsx';
 import DocumentListPC from './document/documentList_pc_comp.jsx';
 
@@ -97,15 +99,35 @@ class DocumentPage extends React.Component {
     if (param) {
       _param = param;
       this.setState({searchParam: param});
+      // console.log('属性1',_param);
+      if(_param.department == '律所' || _param.department == '司法考试处'){
+
+        _param.fileInfoSubType = _param.department;
+
+        delete  _param.department;
+      }
     } else {
       _param = this.state.searchParam;
+      if(_param.department == '律所' || _param.department == '司法考试处'){
+
+        _param.fileInfoSubType = _param.department;
+
+        delete  _param.department;
+      }
     }
     const {currentFileType, currentFileSubType, currentDepartment} = this.state;
     if (!param || !param.fileInfoType) {
       _param.fileInfoType = currentFileType;
+
       if(currentFileSubType) _param.fileInfoSubType = currentFileSubType;
       if(currentDepartment){
-        _param.department = currentDepartment;
+
+        if(currentDepartment == '律所' || currentDepartment == '司法考试处'){
+          _param.fileInfoSubType = currentDepartment
+        }else{
+
+          _param.department = currentDepartment;
+        }
       }else{
         let department = [];
         this.state.departmentData.map((parent) => {
@@ -157,9 +179,18 @@ class DocumentPage extends React.Component {
       if (parnts.indexOf(row.parntName) > -1) {
         getChild(row);
       } else {
-        parnts.push(row.parntName);
-        nodes.push( { resourceId: row.parntName, resourceName: row.parntName, sub: []});
-        getChild(row);
+
+        if(row.parntName == "律所" || row.parntName == '司法考试处'){
+
+          // console.log('2222');
+          nodes.push(row);
+        }else {
+
+          parnts.push(row.parntName);
+          console.log(row.parntName);
+          nodes.push( { resourceId: row.parntName, resourceName: row.parntName, sub: []});
+          getChild(row);
+        }
       }
     }
     return nodes;
@@ -171,7 +202,9 @@ class DocumentPage extends React.Component {
         if (res && res.ok) {
          //  console.log(res.text);
           const result = JSON.parse(res.text);
+          console.log('my name',result);
           const resource = this.convertSiderData(result);
+          // console.log('her name',resource);
           // console.log("departmentData-档案管理-权限部门数据-:",resource);
           this.setState({departmentData: resource});
           callback && callback(resource[0]['resourceName'],resource);
@@ -323,7 +356,7 @@ class DocumentPage extends React.Component {
         </Layout>);
   }
   getSearchForm() {
-    const {currentFileType, currentFileSubType, departmentData} = this.state;
+    const {currentFileType, currentFileSubType, departmentData,currentDepartment} = this.state;
     return this.state.isMobile ?
             (
               <WrappedSearchFormMobile
@@ -338,6 +371,7 @@ class DocumentPage extends React.Component {
                 currentFileType={currentFileType}
                 currentFileSubType={currentFileSubType}
                 handleSearch={this.handleSearch}
+                currentDepartment={currentDepartment}
                 openNotification={this.openNotification}/>
           );
   }
@@ -401,6 +435,7 @@ class DocumentPage extends React.Component {
     const {visibleEditModel, memberInfo, currentFileType, currentFileSubType, departmentTypes, departmentData, currentDepartment} = this.state;
     // console.log('departmentData--:',departmentData);
     let sidebarMenuMarTop = this.state.isMobile ? '60px' : '0';
+
     const sidebar = (
       <Sider width={240} className="custom_ant_sidebar addressSidebar"
         style={{ background: '#2071a7',color:'#fff',marginTop:sidebarMenuMarTop,overflow: 'auto' }}>
@@ -424,9 +459,31 @@ class DocumentPage extends React.Component {
       handleSearch: this.handleSearch,
       handleCancelModal: this.handleCancelModal
     }
+
+
+    let edit_ele = '';
+    if(currentDepartment == '律所'){
+
+      edit_ele = <DocumentEditLawfirmModalPC {...editModalField}></DocumentEditLawfirmModalPC>
+
+    }else if(currentDepartment == '司法考试处') {
+
+      edit_ele = <DocumentEditJudExamModalPC {...editModalField}></DocumentEditJudExamModalPC>
+
+    }else {
+
+      if(currentFileSubType == '律师' ){
+
+        edit_ele = <DocumentEditLawyerModalPC {...editModalField}></DocumentEditLawyerModalPC>
+      }else {
+        edit_ele = <DocumentEditModalPC {...editModalField}></DocumentEditModalPC>
+      }
+    }
+
+
     return (<div className="document_container">
       {finalEle}
-      {currentFileSubType == '律师' ? <DocumentEditLawyerModalPC {...editModalField}></DocumentEditLawyerModalPC> : <DocumentEditModalPC {...editModalField}></DocumentEditModalPC>}
+      {edit_ele}
 
     </div>);
   }

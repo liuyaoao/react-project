@@ -193,14 +193,6 @@ class CommonVerifyCompRaw extends React.Component {
       {label:"报名",value:"报名"},
       {label:"同意报",value:"同意报"},
     ];
-    // let clsName = this.props.isShow && !this.state.isHide?
-    // 'oa_detail_container ds_detail_container oa_detail_container_show':
-    // 'oa_detail_container ds_detail_container oa_detail_container_hide';
-    // <div>文字意见</div>
-    // rightContent={[
-    //   <Icon key={1} type="save" onClick={this.onClickSave}/>,
-    //   <span key={2} onClick={this.onClickSave}>保存</span>
-    // ]}
     return (
       <div className={'oa_detail_container ds_detail_container'}>
         <NavBar className="mobile_navbar_custom"

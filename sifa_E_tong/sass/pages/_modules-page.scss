@@ -248,6 +248,12 @@ a.modules_font:hover{
     height: 1.2rem;
     transform: translate(25%, 0);
   }
+  .am-badge.am-badge-not-a-wrapper{
+    width: 26px;
+    position: absolute;
+    right: -12px;
+    top: 0;
+  }
 }
 
 @media screen and (max-width: 768px) {

@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import React from 'react';
-import { Button} from 'antd-mobile';
+import { Button,Badge} from 'antd-mobile';
 import { Layout, Menu, Icon} from 'antd';
 const { SubMenu } = Menu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -11,9 +11,20 @@ class OaSiderbarComp extends React.Component {
       super(props);
       this.state = {
         current: '待办事项',
+        todoTotalItemCount:localStorage.getItem("sifa_e_tong_todoItemCount"),
       };
   }
   componentWillMount(){
+    this.setState({
+      todoTotalItemCount:localStorage.getItem("sifa_e_tong_todoItemCount"),
+    });
+  }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.isOpen && !this.props.isOpen){
+      this.setState({
+        todoTotalItemCount:localStorage.getItem("sifa_e_tong_todoItemCount"),
+      });
+    }
   }
   handleClick = (item) => {
     console.log('OA menu click item:',item);
@@ -65,7 +76,9 @@ class OaSiderbarComp extends React.Component {
           onClick={this.handleClick}
         >
           <MenuItemGroup key="个人办公" title="个人办公">
-            <Menu.Item key="待办事项"><Icon type="schedule" />待办事项</Menu.Item>
+            <Menu.Item key="待办事项"><Icon type="schedule" />
+              待办事项<Badge style={{width:'26px'}} text={this.state.todoTotalItemCount} overflowCount={99} />
+            </Menu.Item>
           </MenuItemGroup>
           <MenuItemGroup key="行政办公" title="行政办公">
             <Menu.Item key="收文管理"><Icon type="switcher" />收文管理</Menu.Item>

@@ -119,7 +119,7 @@ class LoginRecordPage extends React.Component {
         onOpenChange: this.onOpenChange,
       };
       const sidebarMobile = (
-        <OaSiderbarComp afterChooseMenuItemCall={(key)=>{this.afterChooseMenuItemCall(key)}} />
+        <OaSiderbarComp isOpen={this.state.open} afterChooseMenuItemCall={(key)=>{this.afterChooseMenuItemCall(key)}} />
       );
       return (
         <div className="Office_Automation_container">

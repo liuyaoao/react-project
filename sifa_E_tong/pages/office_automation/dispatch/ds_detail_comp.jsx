@@ -69,8 +69,8 @@ class DS_DetailComp extends React.Component {
       this.setState({curSubTab:'content'});
     }
   }
-  onBackSendContentCall = () => {
-    this.setState({curSubTab:'send'});
+  onBackToDetailCall = () => {
+    this.setState({curSubTab:'content',selectedTab:''});
   }
   onClickAddSave = ()=>{ //点击了保存
     let {editSaveTimes} = this.state;
@@ -133,20 +133,23 @@ class DS_DetailComp extends React.Component {
             </div>
             {this.state.curSubTab == "send"?
               (<DS_SendContentComp
-                  backSendContentCall={this.onBackSendContentCall}
                   detailInfo={detailInfo}
                   tokenunid={this.props.tokenunid}
                   docunid={detailInfo.unid}
+                  moduleNameCn={this.state.moduleNameCn}
                   modulename={this.state.modulename}
                   otherssign={formData["_otherssign"]}
-                  gwlcunid={formData["gwlc"]} isShow={true}/>):null}
+                  gwlcunid={formData["gwlc"]}
+                  onBackToDetailCall={this.onBackToDetailCall}
+                />):null}
             {this.state.curSubTab == "verify"?
               (<CommonVerifyComp
                 tokenunid={this.props.tokenunid}
                 docunid={detailInfo.unid}
                 modulename={this.state.modulename}
                 gwlcunid={formData["gwlc"]}
-                isShow={true}/>):null}
+                onBackToDetailCall={this.onBackToDetailCall}
+              />):null}
             {/*this.state.curSubTab == "upload"?
               (<DS_UploadContentComp
                 tokenunid={this.props.tokenunid}
@@ -163,7 +166,6 @@ class DS_DetailComp extends React.Component {
 
 DS_DetailComp.defaultProps = {
 };
-
 DS_DetailComp.propTypes = {
   // isShow:React.PropTypes.bool,
 };

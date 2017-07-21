@@ -44,7 +44,7 @@ class SearchFormPC extends React.Component {
             param[key] = values[key];
           }
         });
-        // console.log('Received search params: ', param);
+        console.log('Received search params: ', param);
         this.props.handleSearch(param);
       }
     });
@@ -67,27 +67,66 @@ class SearchFormPC extends React.Component {
     return true;
   }
   fileUploadChange(obj) {
-    // console.log('file upload change', obj);
+    console.log('file upload change', obj);
     if(obj.file.status == "done" && obj.file.response == "success"){
+      console.log('success');
       this.props.openNotification('success', '档案导入成功');
       this.props.handleSearch();
     } else if (obj.file.status == "error") {
+      console.log('faiel');
       this.props.openNotification('error', '档案导入失败');
     }
   }
 
   render() {
     const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
+
+    let aLink = '',action_url = '';
+    if ( this.props.currentFileSubType == '律师' ) {
+
+      aLink = <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
+        href={window.serverUrl+"/modle/LawyerFile.xlsx"}><Icon type="download" /> 下载模板(律师)</a>
+
+        action_url = MyWebClient.getLawyerfileInfoImportUrl();
+    } else if ( this.props.currentDepartment == '律所' ) {
+
+
+        aLink = <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
+          href={window.serverUrl+"/modle/layfirm.xlsx"}><Icon type="download" /> 下载模板(律所)</a>
+
+          action_url = MyWebClient.getlawfirmfileInfoImportUrl();
+    } else if ( this.props.currentDepartment == '司法考试处' ){
+
+
+        aLink = <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
+          href={window.serverUrl+"/modle/judexam.xlsx"}><Icon type="download" /> 下载模板(司法考试处)</a>
+
+          action_url = MyWebClient.getjudicialexamInfoImportUrl();
+    } else {
+
+
+        aLink = <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
+          href={window.serverUrl+"/modle/personnelFiles.xlsx"}><Icon type="download" /> 下载模板(人事)</a>
+
+          action_url = MyWebClient.getfileInfoImportUrl();
+
+
+    }
+
+
     const uploadField = {
       name: 'file',
-      action: this.props.currentFileSubType == '律师' ? MyWebClient.getLawyerfileInfoImportUrl() : MyWebClient.getfileInfoImportUrl(),
+      action: action_url,
       headers:MyWebClient.defaultHeaders,
       showUploadList:false,
       accept: 'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       beforeUpload: this.beforeUploadCall,
       onChange: this.fileUploadChange
     }
+    // console.log('搜索栏',this.props.currentFileSubType);
     // "/static/template/" + (this.props.currentFileSubType == '律师' ? '律师人事档案模板' : '其他人事档案模板') + ".xlsx"
+
+
     return (
       <Form layout="inline"
         className="ant-advanced-search-form"
@@ -98,11 +137,39 @@ class SearchFormPC extends React.Component {
             <Input placeholder="" />
           )}
         </FormItem>*/}
-        <FormItem label="姓名" className="p-r-10">
-          {getFieldDecorator('userName')(
-            <Input placeholder="" />
-          )}
+
+
+        {
+          this.props.currentDepartment == '律所'
+          ?
+        <FormItem label="律所名称" className="p-r-10">
+          {
+            getFieldDecorator('lawOfficeName')(
+              <Input placeholder="" />
+            )
+          }
         </FormItem>
+        :
+        <FormItem label="姓名" className="p-r-10">
+          {
+            getFieldDecorator('userName')(
+              <Input placeholder="" />
+            )
+          }
+        </FormItem>
+        }
+
+        {
+          this.props.currentDepartment == '律所'
+          ?
+        <FormItem label="律所责任人" className="p-r-10">
+          {
+            getFieldDecorator('lawOfficePrincipal')(
+              <Input placeholder="" />
+            )
+          }
+        </FormItem>
+        :
         <FormItem label="性别">
           {getFieldDecorator('gender')(
             <RadioGroup>
@@ -111,6 +178,9 @@ class SearchFormPC extends React.Component {
             </RadioGroup>
           )}
         </FormItem>
+        }
+
+
         <FormItem label="">
           <button type="submit" className="btn btn-primary comment-btn"><Icon type="search" /> 搜索</button>
         </FormItem>
@@ -118,16 +188,7 @@ class SearchFormPC extends React.Component {
           <Upload {...uploadField}>
             <button type="button" className="btn btn-default"><Icon type="upload" /> 导入</button>
           </Upload>
-          {this.props.currentFileSubType == '律师'?
-            (
-              <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
-                href={window.serverUrl+"/modle/LawyerFile.xlsx"}><Icon type="download" /> 下载模板(律师)</a>
-            ):
-            (
-              <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
-                href={window.serverUrl+"/modle/personnelFiles.xlsx"}><Icon type="download" /> 下载模板(人事)</a>
-            )
-          }
+          { aLink }
         </FormItem>) : null}
       </Form>
     );

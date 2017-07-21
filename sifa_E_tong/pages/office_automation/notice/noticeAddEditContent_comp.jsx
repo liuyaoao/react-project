@@ -7,34 +7,24 @@ import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import Notice_SendShareComp from './noticeSendShare_comp.jsx';
 import { WingBlank, WhiteSpace, Button, InputItem,
   TextareaItem,Flex,DatePicker,List, Picker,Switch,TabBar,Toast} from 'antd-mobile';
-import {Icon} from 'antd';
+import {Icon,Upload} from 'antd';
 import moment from 'moment';
-const data = [{
-  url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg',
-  id: '2121',
-}, {
-  url: 'https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg',
-  id: '2122',
-}];
 
 class Notice_AddEditContentComp extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
         isHide:false,
-        verifyTypes : [
-            [{label: '未审核',value: '0'},
+        verifyTypes : [{label: '未审核',value: '0'},
               {label: '已通过',value: '1'},
               {label: '未通过',value: '-1'} ],
-        ],
         lrrq: moment(new Date()).format('YYYY-MM-DD'), // 录入日期。
         fbsj: moment(new Date()).format('YYYY-MM-DD'),  //发布时间
         gqsj: moment(new Date()).format('YYYY-MM-DD'),  //过期时间
-        shbz:'-1', //审核情况，初始为：未审核
+        shbz:'0', //审核情况，初始为：未审核
         fbfw_fbtoall:false, //是否指定发布范围。 默认为false.表示全部。
         uploadAttachmentUrl:'',
         customAttachmentList:[],
-        files: data,
       };
   }
   componentWillMount(){
@@ -69,12 +59,12 @@ class Notice_AddEditContentComp extends React.Component {
       }
     });
   }
-  onImageChange = (files, type, index) => {
-    console.log(files, type, index);
-    this.setState({
-      files,
-    });
-  }
+  // onImageChange = (files, type, index) => {
+  //   console.log(files, type, index);
+  //   this.setState({
+  //     files,
+  //   });
+  // }
 
   onLrrqChange = (val) => { //录入日期。
     this.setState({
@@ -115,7 +105,8 @@ class Notice_AddEditContentComp extends React.Component {
   }
   render() {
     const { getFieldProps } = this.props.form;
-    const { files,customAttachmentList,verifyTypes } = this.state;
+    const { customAttachmentList,verifyTypes } = this.state;
+    const {formData} = this.props;
     let customAttachment = customAttachmentList.filter((item)=>{ //文件附件。
       if(item.attachname.indexOf('.png')!=-1 ||item.attachname.indexOf('.jpeg')!=-1||item.attachname.indexOf('.jpg')!=-1||item.attachname.indexOf('.gif')!=-1){
         return false; //如果是图片则返回false，过滤出去。
@@ -200,7 +191,7 @@ class Notice_AddEditContentComp extends React.Component {
                       <DatePicker className="forss"
                         mode="date"
                         onChange={this.onGqsjChange}
-                        value={this.state.gqsj}
+                        value={moment(this.state.gqsj)}
                       >
                       <List.Item arrow="horizontal">有效期</List.Item>
                       </DatePicker>
@@ -239,7 +230,7 @@ class Notice_AddEditContentComp extends React.Component {
                 </Flex>
                 <Flex>
                   <Flex.Item>
-                    <InputItem editable={false} value={formData.lrrName} labelNumber={4}>录入人：</InputItem>
+                    <InputItem editable={false} value={formData.lrrName||''} labelNumber={4}>录入人：</InputItem>
                   </Flex.Item>
                 </Flex>
                 <Flex>
@@ -335,7 +326,7 @@ class Notice_AddEditContentComp extends React.Component {
                   </Flex.Item>
                 </Flex>
                 <Flex>
-                  <Flex.Item>
+                  <Flex.Item className={'uploadContainer'}>
                     <Upload {...uploadAttachProps}>
                       <Button type="primary" style={{width:'100%'}}>
                         <Icon type="upload" /> 上传图片
@@ -384,6 +375,7 @@ class Notice_AddEditContentComp extends React.Component {
                     }
                 </Flex.Item>
               </Flex>
+              <WhiteSpace size='md' style={{height:'1rem'}}/>
             </div>
           </div>
     )

@@ -4,7 +4,7 @@ import React from 'react';
 import {Link} from 'react-router/es6';
 import UserStore from 'stores/user_store.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
-import {Popup, Toast, List, NavBar, Button}  from 'antd-mobile';
+import {Popup, Toast, List, NavBar, Button,Badge}  from 'antd-mobile';
 import {Icon,Row, Col,Button as ButtonPc, Checkbox} from 'antd';
 
 import * as commonUtils from '../utils/common_utils.jsx';
@@ -36,7 +36,7 @@ class ModulesMobileComp extends React.Component {
           showItemSum:0, //可显示的模块数。
           itemRowSum:1,
           permissionData:UserStore.getPermissionData(),
-          todoTotalPageCount:0, //OA待办事项的总条数。
+          todoTotalItemCount:0, //OA待办事项的总条数。
         };
     }
     componentWillMount(){
@@ -54,9 +54,10 @@ class ModulesMobileComp extends React.Component {
         urlparam:{ key:'dbsx',type:3 },
         viewcolumntitles:'标题,模块',
         successCall: (data)=>{
-          console.log("待办事项的list data:",data);
+          console.log("待办事项的list,为了获取待办事项数目--:",data);
+          localStorage.setItem("sifa_e_tong_todoItemCount",data.itemcount);
           this.setState({
-            todoTotalPageCount:data.totalcount,
+            todoTotalItemCount:data.itemcount,
           });
         }
       });
@@ -103,13 +104,18 @@ class ModulesMobileComp extends React.Component {
                       style={{background:backColor}}>
                   <img className='' src={item.iconName} style={{}}/>
                 </Link>
-                <span>{item.name}</span>
-                {this.state.showDelIcon?(<ButtonPc shape="circle"
-                  className={'moduleDelIcon'}
-                  onClick={this.onClickDeleteModule}
-                  type={'default'}
-                  icon="close"
-                  data-moduleid={item.id} />):null}
+                <span>
+                  {item.name}
+                  {item.name=="OA系统"?<Badge style={{width:'26px'}} text={this.state.todoTotalItemCount} overflowCount={99} />:null}
+                </span>
+                {this.state.showDelIcon?
+                  (<ButtonPc shape="circle"
+                    className={'moduleDelIcon'}
+                    onClick={this.onClickDeleteModule}
+                    type={'default'}
+                    icon="close"
+                    data-moduleid={item.id} />):null
+                }
               </Col>
             );
           }else{

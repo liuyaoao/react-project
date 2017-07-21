@@ -92,6 +92,8 @@ class Vehicle_DetailComp extends React.Component {
   }
 
   render() {
+    const {detailInfo} = this.props;
+    const {formData,formDataRaw} = this.state;
     return (
       <div className={"oa_detail_container ds_detail_container"}>
         <NavBar className="mobile_navbar_custom"
@@ -116,9 +118,17 @@ class Vehicle_DetailComp extends React.Component {
               />):null}
         </div>
 
-        {this.state.curSubTab == "send"? (<CommonSendComp
-          tokenunid={this.props.tokenunid}
-          backDetailCall={this.onBackDetailCall} isShow={true}/>):null}
+        {this.state.curSubTab == "send"?
+          (<CommonSendComp
+            detailInfo={detailInfo}
+            tokenunid={this.props.tokenunid}
+            docunid={detailInfo.unid}
+            moduleNameCn={this.state.moduleNameCn}
+            modulename={this.state.modulename}
+            otherssign={formData["_otherssign"]}
+            gwlcunid={formData["gwlc"]}
+            onBackToDetailCall={this.onBackDetailCall}
+          />):null}
         {this.state.curSubTab == "verify"?
           (<CommonVerifyComp
             tokenunid={this.props.tokenunid}

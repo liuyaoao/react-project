@@ -122,12 +122,15 @@ class SignReportDetail extends React.Component {
         </div>
         {this.state.curSubTab == "send"?
           (<CommonSendComp
-            tokenunid={this.props.tokenunid}
-            docunid={detailInfo.unid}
-            modulename={this.state.modulename}
-            otherssign={formData["_otherssign"]}
-            backDetailCall={this.onBackDetailCall}
-            gwlcunid={formData["gwlc"]} />):null}
+              detailInfo={detailInfo}
+              tokenunid={this.props.tokenunid}
+              docunid={detailInfo.unid}
+              moduleNameCn={this.state.moduleNameCn}
+              modulename={this.state.modulename}
+              otherssign={formData["_otherssign"]}
+              gwlcunid={formData["gwlc"]}
+              onBackToDetailCall={this.onBackDetailCall}
+            />):null}
         {this.state.curSubTab == "verify"?
           (<CommonVerifyComp
             tokenunid={this.props.tokenunid}

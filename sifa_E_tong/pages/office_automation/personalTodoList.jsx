@@ -47,6 +47,7 @@ class PersonalTodoList extends React.Component {
       successCall: (data)=>{
         console.log("get 待办事项的list data:",data);
         let {colsNameEn} = this.state;
+        localStorage.setItem("sifa_e_tong_todoItemCount",data.itemcount);
         let parseData = OAUtils.formatServerListData(colsNameEn, data.values);
         let listData = this.state.listData.concat(parseData);
         console.log("待办事项的format list data:",listData);

@@ -655,6 +655,7 @@ export default class Sidebar extends React.Component {
         trackEvent('ui', 'ui_channel_selected');
     }
 
+    
     render() {
         // Check if we have all info needed to render
         if (this.state.currentTeam == null || this.state.currentUser == null) {
@@ -917,6 +918,7 @@ export default class Sidebar extends React.Component {
                     teamName={this.state.currentTeam.name}
                     teamType={this.state.currentTeam.type}
                     currentUser={this.state.currentUser}
+
                 />
 
                 <UnreadChannelIndicator

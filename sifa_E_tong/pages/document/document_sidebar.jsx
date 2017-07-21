@@ -25,7 +25,6 @@ export default class DocumentSidebar extends React.Component {
   componentDidMount() {
     if(this.props.departmentData && this.props.departmentData.length ){
       let openKey = this.props.departmentData[0].resourceId || '';
-      console.log(openKey);
       this.setState({openKeys: [openKey]});
     }
   }
@@ -35,13 +34,14 @@ export default class DocumentSidebar extends React.Component {
       let openKey = nextProps.departmentData[0].resourceId || '';
       // this.updateAddressBookList(openKey);
       // this.updateAddressBookBreadcrumb([openKey]);
-      console.log(nextProps);
-      console.log('GGGGGGGGGGGGGGGGGGGGGGG');
+      // console.log(nextProps);
+      // console.log('GGGGGGGGGGGGGGGGGGGGGGG');
       this.setState({openKeys: [this.props.currentFileType]});
     }
   }
   // menu item click handler
    handleClick = (e) => {
+    //  console.log('click tree',e);
     this.setState({ current: e.key });
     // console.log(e.item.props.children);
     // console.log("e.keyPath",e.keyPath);
@@ -52,6 +52,14 @@ export default class DocumentSidebar extends React.Component {
         userName: '', gender: ''
       });
       let currentFileSubType = e.keyPath[1];
+
+      // if(e.item.props.children == '律所' || e.item.props.children == '司法考试处'){
+      //
+      //   currentFileSubType = e.item.props.children
+      //   // console.log('lvsuo',currentFileSubType);
+      // }else{
+      //   currentFileSubType = e.keyPath[1]
+      // }
       this.props.setCurrentFileSubType(currentFileSubType);
       this.props.setCurrentDepartment(currentDepartment);
       const searchParam = {

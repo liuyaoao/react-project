@@ -1,9 +1,9 @@
 //通知公告的新增页.
 import $ from 'jquery';
 import React from 'react';
-import * as Utils from 'utils/utils.jsx';
-import myWebClient from 'client/my_web_client.jsx';
-import Notice_SendShareComp from './noticeSendShare_comp.jsx';
+import * as OAUtils from 'pages/utils/OA_utils.jsx';
+// import myWebClient from 'client/my_web_client.jsx';
+// import Notice_SendShareComp from './noticeSendShare_comp.jsx';
 import Notice_AddEditContentComp from './noticeAddEditContent_comp.jsx';
 import { WingBlank, WhiteSpace,NavBar,TabBar} from 'antd-mobile';
 import {Icon} from 'antd';
@@ -34,7 +34,6 @@ class Notice_AddEditComp extends React.Component {
           autoshowfj:"",  //是否自动显示附件 ， "0":无，"1":附件
           shbz:"",  //审核情况，有列表。
           candownloadfj:"",  //是否允许下载附件 ，"0":否， "1":是
-
         },
         isHide:false,
         newAdding:false, //是否正在新建。
@@ -51,14 +50,18 @@ class Notice_AddEditComp extends React.Component {
       tokenunid:this.props.tokenunid,
       // unid:this.props.detailInfo.unid,
       formParams:this.state.formParams, //特有的表单参数数据。
+      urlParams:{
+        lbunid:'72060E133431242D987C0A80A4124268',
+        rootlbunid:'72060E133431242D987C0A80A4124268'
+      },
       successCall: (data)=>{
         let formDataRaw = data.values;
+        console.log("get 通知公告新建时的表单数据:",data);
         let formData = OAUtils.formatFormData(data.values);
         this.setState({
           formData,
           formDataRaw
         });
-        console.log("get 签报管理新建时的表单数据:",data);
       }
     });
   }

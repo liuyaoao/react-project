@@ -29,8 +29,8 @@ var config = {
     output: {
         path: path.join(__dirname, './dist/static'),
         publicPath: '/static/',
-        filename: '[name].123456.js',
-        chunkFilename: '[name].654321.js'
+        filename: '[name].1206.js',
+        chunkFilename: '[name].2021.js'
     },
     // output: {
     //     path: 'dist',
