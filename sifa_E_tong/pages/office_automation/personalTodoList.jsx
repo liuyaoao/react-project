@@ -2,7 +2,7 @@
 import $ from 'jquery';
 import React from 'react';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
-import { WhiteSpace, WingBlank, Button,RefreshControl, ListView} from 'antd-mobile';
+import { WhiteSpace, WingBlank, Button, ListView} from 'antd-mobile';
 import {Icon} from 'antd';
 
 import DS_DetailComp from './dispatch/ds_detail_comp.jsx';  //发文管理--详情页。
@@ -20,7 +20,7 @@ class PersonalTodoList extends React.Component {
         colsNameEn:["fileTitle", "moduleName", "property","urgency","fileSender", "sendTime"],
         currentpage:1, //当前页码。
         totalPageCount:1, //总页数。
-        isLoading:false, //是否在加载列表数据
+        isLoading:false, //是否在加载列表数据.
         isMoreLoading:false, //是否正在加载更多。
         hasMore:false, //是否还有更多数据。
         listData:[], //原生list数据

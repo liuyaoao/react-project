@@ -1,12 +1,9 @@
-//信息发布的通知公告
+//信息发布的通知公告--列表
 import $ from 'jquery';
 import React from 'react';
-import * as Utils from 'utils/utils.jsx';
-// import myWebClient from 'client/my_web_client.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 
-import { Modal,WhiteSpace, SwipeAction, InputItem,TextareaItem,
-  RefreshControl, Button,Tabs,List,ListView} from 'antd-mobile';
+import { Modal,WhiteSpace, SwipeAction,Button,Tabs,List,ListView,Toast} from 'antd-mobile';
 import Notice_DetailComp from './noticeDetail_comp.jsx';
 import Notice_AddEditComp from './noticeAddEdit_comp.jsx';
 import { Icon} from 'antd';
@@ -79,8 +76,40 @@ class NoticeList extends React.Component {
       { text: '确定', onPress: () => this.confirmDelete(selectedId) },
     ]);
   }
+  showVerifyConfirmDialog = (record,toVerifyState)=>{
+    let selectedId = record.id ? record.id : '';
+    alert(toVerifyState, '确定'+toVerifyState+'吗？', [
+      { text: '取消', onPress: () => console.log('cancel') },
+      { text: '确定', onPress: () => this.confirmVerify(selectedId,toVerifyState) },
+    ]);
+  }
+  confirmVerify = (selectedId, toVerifyState)=>{
+    OAUtils.verifyNotice({
+      tokenunid: this.props.tokenunid,
+      successCall: (data)=>{
+        Toast.info("审核成功",2);
+        console.log("审核成功:",data);
+        this.handleTabClick(this.state.activeTabkey);
+      },
+      errorCall: (data)=>{
+        Toast.info("审核失败",2);
+        console.log("审核失败:",data);
+      }
+    });
+  }
   confirmDelete = (selectedId)=>{ //确认删除
-    //TODO.
+    OAUtils.deleteItem({
+      tokenunid: this.props.tokenunid,
+      successCall: (data)=>{
+        console.log("删除成功:",data);
+        Toast.info("删除成功",2);
+        this.handleTabClick(this.state.activeTabkey);
+      },
+      errorCall: (data)=>{
+        Toast.info("删除失败",2);
+        console.log("删除失败:",data);
+      }
+    });
   }
   handleTabClick = (key)=>{
     this.setState({
@@ -134,68 +163,47 @@ class NoticeList extends React.Component {
     );
 
     const listRow = (rowData, sectionID, rowID) => {
-      let disExamine=[
-        {
-          text: '审核不通过',
-          onPress: () => console.log('cancel'),
-          style: { backgroundColor: '#ddd', color: 'white' },
-        },
-        {
-          text: '删除',
-          onPress: ()=>{this.showDeleteConfirmDialog(rowData)},
-          style: { backgroundColor: '#F4333C', color: 'white' },
-        },
-      ];
-      let disPass=[
-        {
-          text: '审核通过',
-          onPress: () => console.log('cancel'),
-          style: { backgroundColor: '#108ee9', color: 'white' },
-        },
-        {
-          text: '删除',
-          onPress: ()=>{this.showDeleteConfirmDialog(rowData)},
-          style: { backgroundColor: '#F4333C', color: 'white' },
-        },
-      ];
-      let waitExamine=[
-        {
-          text: '审核通过',
-          onPress: () => console.log('cancel'),
-          style: { backgroundColor: '#108ee9', color: 'white' },
-        },
-        {
-          text: '审核不通过',
-          onPress: () => console.log('cancel'),
-          style: { backgroundColor: '#ddd', color: 'white' },
-        },
-        {
-          text: '删除',
-          onPress: ()=>{this.showDeleteConfirmDialog(rowData)},
-          style: { backgroundColor: '#F4333C', color: 'white' },
-        },
-      ];
-      let otherOption=[
-        {
-          text: '取消',
-          onPress: () => console.log('cancel'),
-          style: { backgroundColor: '#ddd', color: 'white' },
-        },
-        {
-          text: '删除',
-          onPress: ()=>{this.showDeleteConfirmDialog(rowData)},
-          style: { backgroundColor: '#F4333C', color: 'white' },
-        },
-      ];
+      let verifyNotPass = {
+        text: '审核不通过',
+        onPress: () => {this.showVerifyConfirmDialog(rowData,"审核不通过")},
+        style: { backgroundColor: '#108ee9', color: 'white' },
+      };
+      let verifyPass = {
+        text: '审核通过',
+        onPress: () => {this.showVerifyConfirmDialog(rowData,"审核通过")},
+        style: { backgroundColor: '#108ee9', color: 'white' },
+      };
+      let deleteEle = {
+        text: '删除',
+        onPress: ()=>{this.showDeleteConfirmDialog(rowData)},
+        style: { backgroundColor: '#F4333C', color: 'white' },
+      };
+      let cancelEle = {
+        text: '取消',
+        onPress: () => console.log('cancel'),
+        style: { backgroundColor: '#ddd', color: 'white' },
+      };
+      let swipeRight=[];
+      switch(rowData.verifyState){
+        case "待审核":
+          swipeRight.push(verifyPass,verifyNotPass,deleteEle);
+          break;
+        case "已通过":
+          swipeRight.push(verifyNotPass,deleteEle);
+          break;
+        case "未通过":
+          swipeRight.push(verifyPass,deleteEle);
+          break;
+        default:
+          swipeRight.push(cancelEle,deleteEle);
+        break;
+      }
+
       return (
         <SwipeAction style={{ backgroundColor: 'gray' }}
           autoClose
           disabled={false}
-          right={(rowData.verifyState.indexOf('已通过')!=-1)?disExamine:
-          (rowData.verifyState.indexOf('未通过')!=-1)?disPass:(rowData.verifyState.indexOf('待审核')!=-1)?
-          waitExamine:otherOption}
-          onOpen={() => console.log('global open')}
-          onClose={() => console.log('global close')}
+          right={swipeRight}
           >
           <div key={rowID} className={'custom_listView_item'}
             style={{

@@ -3,7 +3,7 @@ import $ from 'jquery';
 import React from 'react';
 import * as Utils from 'utils/utils.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
-import { Modal, WingBlank, WhiteSpace, SwipeAction,
+import { Modal, WingBlank, WhiteSpace, SwipeAction,Toast,
     Tabs, ListView, Button} from 'antd-mobile';
 import { Icon} from 'antd';
 const TabPane = Tabs.TabPane;
@@ -82,7 +82,18 @@ class SignReportList extends React.Component {
     ]);
   }
   confirmDelete = (selectedId)=>{ //确认删除
-    //TODO.
+    OAUtils.deleteItem({
+      tokenunid: this.props.tokenunid,
+      successCall: (data)=>{
+        console.log("删除成功:",data);
+        Toast.info("删除成功",2);
+        this.handleTabClick(this.state.activeTabkey);
+      },
+      errorCall: (data)=>{
+        Toast.info("删除失败",2);
+        console.log("删除失败:",data);
+      }
+    });
   }
   handleTabClick = (key)=>{ //切换tab，重新获取列表数据
     this.setState({

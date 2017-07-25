@@ -10,6 +10,8 @@ import MyWebClient from 'client/my_web_client.jsx';
 import LogOutComp from './components/log_out_comp.jsx';
 
 import moment from 'moment';
+
+import { SwipeAction } from 'antd-mobile';
 import { Drawer, List, NavBar, Popup, Modal as ModalAm } from 'antd-mobile';
 const ModalAmAlert = ModalAm.alert;
 import { Layout, Menu, Breadcrumb, Icon, Row, Col, Table, Modal, notification } from 'antd';
@@ -241,10 +243,13 @@ class DocumentPage extends React.Component {
   }
   showDeleteConfirm(doc, callback) {
     let _this = this;
+
     if (this.state.isMobile) {
       ModalAmAlert('删除', '确认删除吗 ?', [
         { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
-        { text: '确认', onPress: () => console.log('ok'), style: { fontWeight: 'bold' } },
+        { text: '确认', onPress: () => {if (doc.key) {
+          _this.handleDeleteDocument(doc.key.toUpperCase(), callback);
+        }}, style: { fontWeight: 'bold' } },
       ]);
     } else {
       confirm({
@@ -269,9 +274,9 @@ class DocumentPage extends React.Component {
           if (res.text === 'true') {
             _this.openNotification('success', '删除档案成功');
             _this.handleSearch();
-            if (callback && typeof callback == 'function') {
-              callback(true);
-            }
+            // if (callback && typeof callback == 'function') {
+            //   callback(true);
+            // }
           } else {
             _this.openNotification('error', '删除档案失败');
           }
@@ -363,6 +368,7 @@ class DocumentPage extends React.Component {
                 departmentData={departmentData}
                 currentFileType={currentFileType}
                 currentFileSubType={currentFileSubType}
+                currentDepartment={currentDepartment}
                 handleSearch={this.handleSearch} />
             ) :(
               <WrappedSearchFormPC
@@ -399,22 +405,65 @@ class DocumentPage extends React.Component {
         {(!data || data.length<=0) ? (<div style={{textAlign:'center',color:'gray'}}>暂无数据</div>) : null}
         <List style={{ margin: '0.1rem 0', backgroundColor: 'white' }}>
           {data.map((item, index) => (
-            <List.Item key={index}
-              extra={this.state.hasOperaPermission?
-                (<div>
-                  <a href="javascript:;" className="am-link" onClick={this.handleShowModal.bind(this, item)}>
-                    <Icon type="edit" /> 编辑
-                  </a><br/>
-                  <a href="javascript:;" className="am-link" onClick={this.showDeleteConfirm}><Icon type="delete" /> 删除</a>
-                </div>):(<span>没有权限</span>)}
-              multipleLine
-            >
-              <div>姓名：{item.userName}</div>
-              <List.Item.Brief>
-                性别: {item.gender}, 地址: {this.state.currentFileSubType=="律师" ? item.lawOfficeAddress : item.createParty}
-              </List.Item.Brief>
-            </List.Item>
-          ))}
+            <SwipeAction style={{ backgroundColor: '#f3f3f3' }}
+                autoClose
+                disabled={this.state.hasOperaPermission ? false : true}
+                right={[
+                  {
+                    text: '取消',
+                    onPress: () => console.log('cancel'),
+                    style: { backgroundColor: '#ddd', color: 'white' },
+                  },
+                  {
+                    text: '删除',
+                    onPress: ()=> {this.showDeleteConfirm(item,true)},
+                    style: { backgroundColor: '#F4333C', color: 'white' },
+                  },
+                ]}
+                onOpen={() => console.log('global open')}
+                onClose={() => console.log('global close')}
+                >
+              {/* <List.Item key={index}
+                extra={this.state.hasOperaPermission?
+                  (<div>
+                    <a href="javascript:;" className="am-link" onClick={this.handleShowModal.bind(this, item)}>
+                      <Icon type="edit" /> 编辑
+                    </a><br/>
+                    <a href="javascript:;" className="am-link" onClick={this.showDeleteConfirm}><Icon type="delete" /> 删除</a>
+                  </div>):(<span>没有权限</span>)}
+                multipleLine
+              > */}
+
+              <List.Item key={index}
+                onClick={this.state.hasOperaPermission?this.handleShowModal.bind(this, item):''}
+
+                multipleLine
+              >
+
+                {
+                  this.state.currentDepartment == '律所'
+                  ?
+                <div>律所名称：{item.lawOfficeName}</div>
+                :
+                <div>姓名：{item.userName}</div>
+                }
+                {
+                  this.state.currentDepartment == '律所'
+                  ?
+                  <List.Item.Brief>
+                    律所负责人: {item.lawOfficePrincipal}, 地址:  {item.lawOfficeAddress}
+                  </List.Item.Brief>
+                :
+                <List.Item.Brief>
+                  性别: {item.gender}, 地址: {this.state.currentFileSubType=="律师" ? item.lawOfficeAddress : item.createParty}
+                </List.Item.Brief>
+                }
+
+              </List.Item>
+
+          </SwipeAction>
+          )
+        )}
         </List>
       </div>
     )

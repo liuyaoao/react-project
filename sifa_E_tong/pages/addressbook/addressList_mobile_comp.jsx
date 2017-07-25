@@ -61,9 +61,9 @@ class AddressListMobileComp extends React.Component {
             onOpen={() => console.log('global open')}
             onClose={() => console.log('global close')}
             >
-
-
-              <div className="addressbook_row" onClick={this.state.hasOperaPermission ? ()=>{this.showAddEditDialog(text,record,index)} : ''}
+              <div className="addressbook_row"
+                style={{}}
+                onClick={this.state.hasOperaPermission ? ()=>{this.showAddEditDialog(text,record,index)} : ''}
               >
                 <span className="addressbook_avator">
                   <img className="member_icon" width="54" height="54" src={this.props.iconArr[index]}/>

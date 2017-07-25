@@ -20,7 +20,6 @@ export function loginOASystem(loginOAUser, successCall){ //登录OA系统
         var data  = decodeURIComponent(result);
         data = data.replace(/%20/g, " ");
         let res = JSON.parse(data);
-
         if(res.code == "1"){
           successCall && successCall(res);
         }
@@ -481,8 +480,8 @@ export function getUploadCustomUrl(params){
   url = strUrl + "&param=" + encodeURIComponent(JSON.stringify(paramJson));
   return url;
 }
-//获取表单自定义附件列表。
-export function getFormCustomAttachmentList(params){
+
+export function getFormCustomAttachmentList(params){ //获取表单自定义附件列表。
   const moduleName2filetablename = {
     "通知公告":"tzgg_fj",
     "信息发布":"xxfb_fj"
@@ -504,8 +503,8 @@ export function getFormCustomAttachmentList(params){
   }));
   finalRequestServer(options,param);
 }
-//获取下载自定义附件的url连接。
-export function getCustomAttachmentUrl(params){
+
+export function getCustomAttachmentUrl(params){ //获取下载自定义附件的url连接。
   const moduleName2filetablename = {
     "通知公告":"tzgg_fj",
     "信息发布":"xxfb_fj"
@@ -526,8 +525,7 @@ export function getCustomAttachmentUrl(params){
   return url;
 }
 
-//获取办文跟踪信息
-export function getDoArticleTrack(params) {
+export function getDoArticleTrack(params) { //获取办文跟踪信息
   let options = Object.assign({},{
     url: 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl:'/openagent?agent=hcit.project.moa.transform.agent.FlowTrace',
@@ -544,8 +542,7 @@ export function getDoArticleTrack(params) {
   finalRequestServer(options,param);
 }
 
-//获取发送的信息--（可发送的流程和人员列表）
-export function getFlowSendInfo(params) {
+export function getFlowSendInfo(params) { //获取发送的信息--（可发送的流程和人员列表）
   let options = Object.assign({},{
     url: 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.GetFlowSendDoc', //模块url
@@ -561,8 +558,8 @@ export function getFlowSendInfo(params) {
   }));
   finalRequestServer(options,param);
 }
-//保存发送的信息
-export function saveFlowSendInfo(params) {
+
+export function saveFlowSendInfo(params) { //保存发送的信息
   const modulename2backlogurl = {
     "qbgl":"/qbgl/frmcld.jsp",   //签报管理
     "fwgl":"/fwgl/frmfwcld.jsp", //发文管理
@@ -583,6 +580,51 @@ export function saveFlowSendInfo(params) {
       "title" : options.title,  //表单标题
       "message" : options.message, //提示方式，1为网络消息，2为手机短信
       "personunids" : JSON.stringify(options.personunids)   //字符串类型，值为"[{name:"流程分支名", persons:"逗号隔开的personUnid."}]"
+    }
+  }));
+  finalRequestServer(options,param);
+}
+
+export function deleteItem(params) { //删除各模块的某一条目
+  const modulename2backlogurl = {
+    "qbgl":"/qbgl/frmcld.jsp",   //签报管理
+    "fwgl":"/fwgl/frmfwcld.jsp", //发文管理
+    "swgl":"/swgl/frmswcld.jsp",  //收文管理
+    "duban":"/duban3/frmdbjgl.jsp"   //督办管理
+  }
+  let options = Object.assign({},{
+    url: 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.DoFlowSendV2', //模块url
+  },params);
+  let param = encodeURIComponent(JSON.stringify({
+    "ver" : "2",
+    "params" : {
+      "docunid" : options.docunid,
+      "modulename" : options.modulename,
+      "backlogurl" : modulename2backlogurl[options.modulename], //这个是跟模块有关的一个参数。
+    }
+  }));
+  finalRequestServer(options,param);
+}
+
+//通知公告的审核。（通过或不通过。）
+export function verifyNotice(params) {
+  const modulename2backlogurl = {
+    "qbgl":"/qbgl/frmcld.jsp",   //签报管理
+    "fwgl":"/fwgl/frmfwcld.jsp", //发文管理
+    "swgl":"/swgl/frmswcld.jsp",  //收文管理
+    "duban":"/duban3/frmdbjgl.jsp"   //督办管理
+  }
+  let options = Object.assign({},{
+    url: 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.DoFlowSendV2', //模块url
+  },params);
+  let param = encodeURIComponent(JSON.stringify({
+    "ver" : "2",
+    "params" : {
+      "docunid" : options.docunid,
+      "modulename" : options.modulename,
+      "backlogurl" : modulename2backlogurl[options.modulename], //这个是跟模块有关的一个参数。
     }
   }));
   finalRequestServer(options,param);
