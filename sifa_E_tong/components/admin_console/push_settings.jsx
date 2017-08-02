@@ -200,7 +200,7 @@ export default class PushSettings extends AdminSettings {
                             defaultMessage='Push Notification Server:'
                         />
                     }
-                    placeholder={Utils.localizeMessage('admin.email.pushServerEx', 'E.g.: "http://push-test.3ren.com"')}
+                    placeholder={Utils.localizeMessage('admin.email.pushServerEx', 'E.g.: "http://push-test.sameview.com"')}
                     helpText={pushServerHelpText}
                     value={this.state.pushNotificationServer}
                     onChange={this.handleChange}
