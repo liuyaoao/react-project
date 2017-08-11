@@ -70,22 +70,25 @@ class NoticeList extends React.Component {
     });
   }
   showDeleteConfirmDialog = (record)=>{
-    let selectedId = record.id ? record.id : '';
+    let selectedId = record.unid ? record.unid : '';
     alert('删除', '确定删除么??', [
       { text: '取消', onPress: () => console.log('cancel') },
       { text: '确定', onPress: () => this.confirmDelete(selectedId) },
     ]);
   }
   showVerifyConfirmDialog = (record,toVerifyState)=>{
-    let selectedId = record.id ? record.id : '';
+    let selectedId = record.unid ? record.unid : '';
     alert(toVerifyState, '确定'+toVerifyState+'吗？', [
       { text: '取消', onPress: () => console.log('cancel') },
       { text: '确定', onPress: () => this.confirmVerify(selectedId,toVerifyState) },
     ]);
   }
   confirmVerify = (selectedId, toVerifyState)=>{
+    console.log("待审核数据的unid:",selectedId);
     OAUtils.verifyNotice({
       tokenunid: this.props.tokenunid,
+      unids:selectedId+'',
+      shzt:({"审核通过":"shtg", "审核不通过":"shbtg"})[toVerifyState],
       successCall: (data)=>{
         Toast.info("审核成功",2);
         console.log("审核成功:",data);

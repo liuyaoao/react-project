@@ -490,7 +490,7 @@ export function emitUserLoggedOutEvent(redirectTo = '/', shouldSignalLogout = tr
 }
 
 export function clientLogout(redirectTo = '/') {
-    BrowserStore.clear();
+    // BrowserStore.clear();
     ErrorStore.clearLastError();
     ChannelStore.clear();
     stopPeriodicStatusUpdates();

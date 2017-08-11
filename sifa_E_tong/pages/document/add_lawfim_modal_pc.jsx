@@ -277,13 +277,21 @@ class DocumentAddLawfirmModalPC extends React.Component {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={24} id="addLawyerPunishTime">
+
+                  <Col span={24}>
+                    <FormItem {...formItemLayout} label="惩罚日期">
+                      {getFieldDecorator('lawyerIsPunish', {initialValue: memberInfo.lawyerPunishTime||''})(
+                        <Input />
+                      )}
+                    </FormItem>
+                  </Col>
+                  {/* <Col span={24} id="addLawyerPunishTime">
                     <FormItem {...formItemLayout} label="惩罚日期">
                       {getFieldDecorator('lawyerPunishTime', {initialValue: memberInfo.lawyerPunishTime ? moment(memberInfo.lawyerPunishTime, 'YYYY-MM-DD') : null})(
                         <DatePicker getCalendarContainer={() => document.getElementById('addLawyerPunishTime')} />
                       )}
                     </FormItem>
-                  </Col>
+                  </Col> */}
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="处理单位">
                       {getFieldDecorator('lawyerPunishUnit', {initialValue: memberInfo.lawyerPunishUnit||''})(

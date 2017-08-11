@@ -44,6 +44,7 @@ export default class LoginController extends React.Component {
 
         this.handleLoginIdChange = this.handleLoginIdChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
+        this.createNewVerifyCode = this.createNewVerifyCode.bind(this);
 
         let loginId = '';
         if (this.props.location.query.extra === Constants.SIGNIN_VERIFIED && this.props.location.query.email) {
@@ -57,11 +58,15 @@ export default class LoginController extends React.Component {
             samlEnabled: global.window.mm_license.IsLicensed === 'true' && global.window.mm_config.EnableSaml === 'true',
             loginId,
             password: '',
+            verifyCode:'',
+            createdVerifyCode:'',
             showMfa: false,
             loading: false
         };
     }
-
+    componentWillMount() {
+      this.createNewVerifyCode();
+    }
     componentDidMount() {
         document.title = global.window.mm_config.SiteName;
         BrowserStore.removeGlobalItem('team');
@@ -91,6 +96,22 @@ export default class LoginController extends React.Component {
         if (password !== this.state.password) {
             this.setState({password});
         }
+
+        let verifyCode = this.refs.verifyCode.value;
+        if (verifyCode !== this.state.verifyCode) {
+            this.setState({verifyCode});
+        }
+        if(verifyCode.toLowerCase() != this.state.createdVerifyCode.toLowerCase()){ //验证码有错误。
+          this.setState({
+              serverError: (
+                  <FormattedMessage
+                      id='login.noVerifyCode'
+                      defaultMessage='验证码有误！'
+                  />
+              )
+          });
+					return;
+				}
 
         // don't trim the password since we support spaces in passwords
         loginId = loginId.trim().toLowerCase();
@@ -240,6 +261,35 @@ export default class LoginController extends React.Component {
             password: e.target.value
         });
     }
+    handleVerifyCodeChange = (e)=>{ //验证码
+      this.setState({
+        verifyCode:e.target.value
+      });
+    }
+    onClickChangeVerifyCode = (e)=>{ //点击了更换验证码
+      this.createNewVerifyCode();
+    }
+    createNewVerifyCode(){
+			// 验证码组成库
+			let arrays=new Array(
+                '1','2','3','4','5','6','7','8','9','0',
+                'a','b','c','d','e','f','g','h','i','j',
+                'k','l','m','n','o','p','q','r','s','t',
+                'u','v','w','x','y','z',
+                'A','B','C','D','E','F','G','H','I','J',
+                'K','L','M','N','O','P','Q','R','S','T',
+                'U','V','W','X','Y','Z'
+          	);
+			// 重新初始化验证码
+			let code ='';
+			// 随机从数组中获取四个元素组成验证码
+			for(let i = 0; i<4; i++){
+				// 随机获取一个数组的下标
+				let r = parseInt(Math.random()*arrays.length);
+				code += arrays[r];
+			}
+			this.setState({createdVerifyCode:code});
+		}
 
     createCustomLogin() {
         if (global.window.mm_license.IsLicensed === 'true' &&
@@ -421,6 +471,18 @@ export default class LoginController extends React.Component {
                         默认账户:test3ren@163.com
                         &nbsp;密码:siteview
                         </span>*/}
+                        <div className='form-group'>
+                          <input style={{display:'inline-block',width:'50%'}}
+                              className='form-control'
+                              ref='verifyCode'
+                              name='verifyCode'
+                              value={this.state.verifyCode}
+                              onChange={this.handleVerifyCodeChange}
+                              placeholder='验证码'
+                          />
+                          <span className='verifyCodeContainer'>{this.state.createdVerifyCode}</span>
+                          <a href="#" style={{display:'inline-block',color:'#fff'}} onClick={this.onClickChangeVerifyCode}>换一个</a>
+                        </div>
                         <div className='form-group'>
                             <button
                                 id='loginButton'

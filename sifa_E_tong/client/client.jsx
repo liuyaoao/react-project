@@ -1150,14 +1150,13 @@ export default class Client {
             accept('application/json').
             end(this.handleResponse.bind(this, 'logout', success, error));
 
-        this.trackEvent('api', 'api_users_logout');
+            this.trackEvent('api', 'api_users_logout');
     }
 
     checkMfa(loginId, success, error) {
         const data = {
             login_id: loginId
         };
-
         request.
             post(`${this.getUsersRoute()}/mfa`).
             set(this.getDefaultHeadersWithToken()).

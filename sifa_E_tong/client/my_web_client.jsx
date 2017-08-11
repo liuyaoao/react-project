@@ -81,6 +81,16 @@ class MyWebClient {
       return `${this.url}${this.urlVersion}/import/fileInformation`;
     }
 
+    getlawfirmfileInfoImportUrl(){
+
+      return `${this.getfileInfoImportUrl()}/lawfirm`;
+    }
+
+    getjudicialexamInfoImportUrl(){
+
+      return `${this.getfileInfoImportUrl()}/judicialExamination`;
+    }
+
     getLawyerfileInfoImportUrl(){
       return `${this.getfileInfoImportUrl()}/lawyer`;
     }

@@ -1005,7 +1005,7 @@ export function getDisplayName(user) {
     if (user.nickname && user.nickname.trim().length > 0) {
         return user.nickname;
     }
-    var fullName = getFullName(user);
+    var fullName = user.nickname || getFullName(user);
 
     if (fullName) {
         return fullName;
@@ -1019,8 +1019,8 @@ export function displayUsername(userId) {
 }
 
 export function displayUsernameForUser(user) {
-    const nameFormat = PreferenceStore.get(Constants.Preferences.CATEGORY_DISPLAY_SETTINGS, 'name_format', 'false');
-
+    let nameFormat = PreferenceStore.get(Constants.Preferences.CATEGORY_DISPLAY_SETTINGS, 'name_format', 'false');
+    nameFormat = 'nickname_full_name';
     let username = '';
     if (user) {
         if (nameFormat === Constants.Preferences.DISPLAY_PREFER_NICKNAME) {

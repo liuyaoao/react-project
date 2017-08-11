@@ -98,7 +98,7 @@ class AddressListMobileComp extends React.Component {
   }
   showDeleteConfirmDialog = (record)=>{
     let selectedIds = record.id ? [record.id] : [];
-    alert('删除', '确定删除么???', [
+    alert('删除', '确定删除么?', [
       { text: '取消', onPress: () => console.log('cancel') },
       { text: '确定', onPress: () => this.confirmDeleteContacts(selectedIds) },
     ]);

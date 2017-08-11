@@ -220,7 +220,7 @@ class AddEditSysConfigDialog extends React.Component {
     // && nextProps.menberInfo.organizations && this.props.menberInfo.organizations
     // && (nextProps.menberInfo.organizations.length!=this.props.menberInfo.organizations.length
     if(nextProps.visible && nextProps.visible != this.props.visible){
-      let organizations = nextProps.menberInfo.organizations;
+      let organizations = nextProps.menberInfo.organizations || '';
       let treeSelectValue = this.getOrgaTreeSelectedValues(organizations.split(','));
       this.setState({treeSelectValue:treeSelectValue});
     }

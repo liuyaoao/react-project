@@ -487,7 +487,7 @@ class DocumentPage extends React.Component {
 
     const sidebar = (
       <Sider width={240} className="custom_ant_sidebar addressSidebar"
-        style={{ background: '#2071a7',color:'#fff',marginTop:sidebarMenuMarTop,overflow: 'auto' }}>
+        style={{ background: '#2071a7',color:'#fff',marginTop:sidebarMenuMarTop,overflow: 'auto', zIndex:'9999'}}>
         <DocumentSidebar currentFileType={currentFileType} currentFileSubType={currentFileSubType} departmentData={departmentData}
           searchFormPC={this.refs.searchFormPC}
           setCurrentFileSubType={this.setCurrentFileSubType.bind(this)}

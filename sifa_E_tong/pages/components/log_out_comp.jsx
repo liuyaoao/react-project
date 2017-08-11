@@ -31,7 +31,7 @@ export default class LogOutComp extends React.Component {
     onClickExitBtn(e){
       console.log("click 退出按钮：",e);
       myWebClient.removeToken();
-      browserHistory.push('/login');
+      // browserHistory.push('/login');
       GlobalActions.emitUserLoggedOutEvent('/login');
       // myWebClient.logout((data,res)=>{
       //     console.log("logout success: ",data,res);
