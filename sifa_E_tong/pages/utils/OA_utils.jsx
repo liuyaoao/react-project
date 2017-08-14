@@ -2,7 +2,7 @@ import $ from 'jquery';
 import AppDispatcher from 'dispatcher/app_dispatcher.jsx';
 
 export function loginOASystem(loginOAUser, successCall){ //登录OA系统
-  const loginUrl = 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.ValidatePerson';
+  const loginUrl = 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.ValidatePerson';
   var param = encodeURIComponent(JSON.stringify({
     "ver" : "2",
     "params" : {
@@ -15,12 +15,11 @@ export function loginOASystem(loginOAUser, successCall){ //登录OA系统
       data : {
         "param" : param
       },
-      async : false,
+      async : true,
       success : (result)=>{
         var data  = decodeURIComponent(result);
         data = data.replace(/%20/g, " ");
         let res = JSON.parse(data);
-
         if(res.code == "1"){
           successCall && successCall(res);
         }
@@ -30,7 +29,7 @@ export function loginOASystem(loginOAUser, successCall){ //登录OA系统
 //获取组织机构数据
 export function getOrganization(params) {
   let options = Object.assign({},{
-    url: 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.SynchronousOrganization', //模块url
   },params);
   let param = encodeURIComponent(JSON.stringify({
@@ -104,7 +103,7 @@ export function getNoticeListData(opts){
 //获取最新发文的列表数据
 export function getNewDispatchListData(opts){
   let options = Object.assign({},{
-    url: 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.MobileViewWork', //模块url
     urlparam:{}
   },opts);
@@ -123,7 +122,7 @@ export function getNewDispatchListData(opts){
 //获取待办事项的列表数据
 export function getPersonalTodoListData(opts){
   let options = Object.assign({},{
-    url: 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.MobileViewWork', //模块url
     urlparam:{}
   },opts);
@@ -144,7 +143,7 @@ export function getPersonalTodoListData(opts){
 export function getOAServerListData(params){ //从服务端获取列表数据
   const keyName2keyMap = {"草稿箱":1, "待办":10, "办理中":2, "已定稿":4,"已办结":4, "所有":16777215}
   let options = Object.assign({},{
-    url: 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.MobileViewWork', //模块url
   },params,{
     key: keyName2keyMap[params.keyName] || 16777215, //暂时没有的筛选条件都查所有的。
@@ -163,7 +162,7 @@ export function getOAServerListData(params){ //从服务端获取列表数据
 
 export function getOAServerListDataWithUrlParam(params){ //从服务端获取列表数据
   let options = Object.assign({},{
-    url: 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.MobileViewWork', //模块url
     urlparam:{"rootlbunid":params.rootlbunid}
   },params);
@@ -211,7 +210,7 @@ export function getModuleFormData(params) {
     "信息发布":"hcit.module.xxfb.ui.FrmXxlrd",  //也就是通知公告
   }
   let options = Object.assign({},{
-    url: 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.MobileToOpenForm',
   },params);
   let param = encodeURIComponent(JSON.stringify({
@@ -284,7 +283,7 @@ export function saveModuleFormData(params) {
     "车辆管理":"hcit.module.clgl2.ui.FrmClsq"
   }
   let options = Object.assign({},{
-    url: 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.MobileToOpenForm&ispost=1',
   },params);
   let param = encodeURIComponent(JSON.stringify({
@@ -319,7 +318,7 @@ export function saveModuleFormData(params) {
 //获取阅文意见的意见类型
 export function getVerifyNotionTypes(params) {
   let options = Object.assign({},{
-    url: 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.GetCurrentNotion', //模块url
   },params);
   let param = encodeURIComponent(JSON.stringify({
@@ -335,7 +334,7 @@ export function getVerifyNotionTypes(params) {
 //获取表单历史阅文意见
 export function getFormVerifyNotion(params) {
   let options = Object.assign({},{
-    url: 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.GetHistoryNotionList',
   },params);
   let param = encodeURIComponent(JSON.stringify({
@@ -363,7 +362,7 @@ export function parseHistoryNotionList(list){
 //保存阅文意见
 export function saveVerifyNotion(params) {
   let options = Object.assign({},{
-    url: 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.DoSaveNotion', //模块url
   },params);
   let param = encodeURIComponent(JSON.stringify({
@@ -389,7 +388,7 @@ export function getMainDocumentUrl(params){
           "docunid" : params.docunid,
       }
   };
-  url = "http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.GetFolwDocument" +
+  url = "http://218.77.44.11:10081/openagent?agent=hcit.project.moa.transform.agent.GetFolwDocument" +
         "&param=" + encodeURIComponent(JSON.stringify(paramJson));
   return url;
 }
@@ -403,7 +402,7 @@ export function getFormAttachmentList(params){
     "督办管理":"duban3_gwfj"
   }
   let options = Object.assign({},{
-    url: 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl:'/openagent?agent=hcit.project.moa.transform.agent.GetGwFjList',
     // moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.GetFlowSendDoc', //模块url
   },params);
@@ -419,7 +418,7 @@ export function getFormAttachmentList(params){
 //获取表单公文附件的下载地址。 download
 export function getAttachmentUrl(params){
   let url='';
-  var strUrl = "http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.GetGwfjData";
+  var strUrl = "http://218.77.44.11:10081/openagent?agent=hcit.project.moa.transform.agent.GetGwfjData";
   const moduleName2filetablename = {
     "签报管理":"qbgl_gwfj",
     "发文管理":"fwgl_gwfj",
@@ -439,7 +438,7 @@ export function getAttachmentUrl(params){
 //获取表单公文附件的上传地址。 upload
 export function getUploadAttachmentUrl(params){
   let url='';
-  var strUrl = "http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.DoUploadGwfj&json=1&version=2";
+  var strUrl = "http://218.77.44.11:10081/openagent?agent=hcit.project.moa.transform.agent.DoUploadGwfj&json=1&version=2";
   const moduleName2filetablename = {
     "签报管理":"qbgl_gwfj",
     "发文管理":"fwgl_gwfj",
@@ -468,7 +467,7 @@ export function getUploadCustomUrl(params){
   const moduleName2StrUrl = {
     "信息发布":"hcit.module.xxfb.agent.XxfbAttachmentOperation",
   };
-  var strUrl = "http://59.231.150.162/openagent?agent="+moduleName2StrUrl[params.moduleName]+"&json=1&version=2&opcode=1";
+  var strUrl = "http://218.77.44.11:10081/openagent?agent="+moduleName2StrUrl[params.moduleName]+"&json=1&version=2&opcode=1";
   var paramJson ={
       ver : "2",
       params :{
@@ -481,8 +480,8 @@ export function getUploadCustomUrl(params){
   url = strUrl + "&param=" + encodeURIComponent(JSON.stringify(paramJson));
   return url;
 }
-//获取表单自定义附件列表。
-export function getFormCustomAttachmentList(params){
+
+export function getFormCustomAttachmentList(params){ //获取表单自定义附件列表。
   const moduleName2filetablename = {
     "通知公告":"tzgg_fj",
     "信息发布":"xxfb_fj"
@@ -492,7 +491,7 @@ export function getFormCustomAttachmentList(params){
     "信息发布":'/openagent?agent=hcit.module.xxfb.agent.XxfbAttachmentOperation&opcode=2'
   }
   let options = Object.assign({},{
-    url: 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl:moduleName2moduleUrl[params.moduleName]
   },params);
   let param = encodeURIComponent(JSON.stringify({
@@ -504,8 +503,8 @@ export function getFormCustomAttachmentList(params){
   }));
   finalRequestServer(options,param);
 }
-//获取下载自定义附件的url连接。
-export function getCustomAttachmentUrl(params){
+
+export function getCustomAttachmentUrl(params){ //获取下载自定义附件的url连接。
   const moduleName2filetablename = {
     "通知公告":"tzgg_fj",
     "信息发布":"xxfb_fj"
@@ -522,14 +521,13 @@ export function getCustomAttachmentUrl(params){
           "filetablename":moduleName2filetablename[params.moduleName]
       }
   };
-  url = "http://59.231.150.162/"+moduleName2moduleUrl[params.moduleName] + "&param=" + encodeURIComponent(JSON.stringify(paramJson));
+  url = "http://218.77.44.11:10081/"+moduleName2moduleUrl[params.moduleName] + "&param=" + encodeURIComponent(JSON.stringify(paramJson));
   return url;
 }
 
-//获取办文跟踪信息
-export function getDoArticleTrack(params) {
+export function getDoArticleTrack(params) { //获取办文跟踪信息
   let options = Object.assign({},{
-    url: 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl:'/openagent?agent=hcit.project.moa.transform.agent.FlowTrace',
     // moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.GetFlowSendDoc', //模块url
   },params);
@@ -544,10 +542,9 @@ export function getDoArticleTrack(params) {
   finalRequestServer(options,param);
 }
 
-//获取发送的信息--（可发送的流程和人员列表）
-export function getFlowSendInfo(params) {
+export function getFlowSendInfo(params) { //获取发送的信息--（可发送的流程和人员列表）
   let options = Object.assign({},{
-    url: 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.GetFlowSendDoc', //模块url
   },params);
   let param = encodeURIComponent(JSON.stringify({
@@ -561,8 +558,8 @@ export function getFlowSendInfo(params) {
   }));
   finalRequestServer(options,param);
 }
-//保存发送的信息
-export function saveFlowSendInfo(params) {
+
+export function saveFlowSendInfo(params) { //保存发送的信息
   const modulename2backlogurl = {
     "qbgl":"/qbgl/frmcld.jsp",   //签报管理
     "fwgl":"/fwgl/frmfwcld.jsp", //发文管理
@@ -570,7 +567,7 @@ export function saveFlowSendInfo(params) {
     "duban":"/duban3/frmdbjgl.jsp"   //督办管理
   }
   let options = Object.assign({},{
-    url: 'http://59.231.150.162/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.DoFlowSendV2', //模块url
   },params);
   let param = encodeURIComponent(JSON.stringify({
@@ -583,6 +580,50 @@ export function saveFlowSendInfo(params) {
       "title" : options.title,  //表单标题
       "message" : options.message, //提示方式，1为网络消息，2为手机短信
       "personunids" : JSON.stringify(options.personunids)   //字符串类型，值为"[{name:"流程分支名", persons:"逗号隔开的personUnid."}]"
+    }
+  }));
+  finalRequestServer(options,param);
+}
+
+export function deleteItem(params) { //删除各模块的某一条目
+  const modulename2backlogurl = {
+    "qbgl":"/qbgl/frmcld.jsp",   //签报管理
+    "fwgl":"/fwgl/frmfwcld.jsp", //发文管理
+    "swgl":"/swgl/frmswcld.jsp",  //收文管理
+    "duban":"/duban3/frmdbjgl.jsp"   //督办管理
+  }
+  let options = Object.assign({},{
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.DoFlowSendV2', //模块url
+  },params);
+  let param = encodeURIComponent(JSON.stringify({
+    "ver" : "2",
+    "params" : {
+      "docunid" : options.docunid,
+      "modulename" : options.modulename,
+      "backlogurl" : modulename2backlogurl[options.modulename], //这个是跟模块有关的一个参数。
+    }
+  }));
+  finalRequestServer(options,param);
+}
+
+//通知公告的审核。（通过或不通过。）
+export function verifyNotice(params) {
+  const modulename2backlogurl = {
+    "qbgl":"/qbgl/frmcld.jsp",   //签报管理
+    "fwgl":"/fwgl/frmfwcld.jsp", //发文管理
+    "swgl":"/swgl/frmswcld.jsp",  //收文管理
+    "duban":"/duban3/frmdbjgl.jsp"   //督办管理
+  }
+  let options = Object.assign({},{
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    moduleUrl: '/openagent?agent=hcit.module.xxfb.agent.DoAudit', //模块url
+  },params);
+  let param = encodeURIComponent(JSON.stringify({
+    "ver" : "2",
+    "params" : {
+      "unids" : options.unids,
+      "shzt" : options.shzt,
     }
   }));
   finalRequestServer(options,param);

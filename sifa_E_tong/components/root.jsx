@@ -101,7 +101,7 @@ export default class Root extends React.Component {
             //     GlobalActions.redirectUserToDefaultTeam();
             // }
             else {
-                localStorage.clear();
+                // localStorage.clear();
                 browserHistory.push('/login');
                 location.reload();
             }

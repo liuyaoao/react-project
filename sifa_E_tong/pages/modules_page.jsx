@@ -40,8 +40,10 @@ class ChooseModulesPage extends React.Component {
     }
     componentWillMount() {
       this.getAllModulesData();
-      var me = UserStore.getCurrentUser() || {};
       // this.setState({loginUserName:me.username || ''});
+    }
+    componentDidMount(){
+      let me = UserStore.getCurrentUser() || {};
       OAUtils.loginOASystem({oaUserName:me.oaUserName,oaPassword:me.oaPassword}, (res)=>{ //登录OA系统获取认证id。
         this.setState({tokenunid:res.values.tockenunid});
         this.getServerListData(res.values.tockenunid);

@@ -294,3 +294,11 @@
 .doc-edit-form-mobile.ant-modal{
   top:0;
 }
+.address_book_drawer{
+  .am-drawer-sidebar{
+    z-index:12;
+  }
+  .am-drawer-overlay{
+    z-index:11;
+  }
+}

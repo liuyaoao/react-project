@@ -8,11 +8,9 @@ import {Icon} from 'antd';
 
 import DS_DetailContentComp from './ds_detail_content_comp.jsx';
 import BottomTabBarComp from './bottomTabBar_comp.jsx';
-import DS_SendContentComp from './ds_send_content_comp.jsx';//发文详情页-- 发送
+// import DS_SendContentComp from './ds_send_content_comp.jsx';//发文详情页-- 发送
+import CommonSendComp from '../common_send_comp.jsx'; //发送
 import CommonVerifyComp from '../common_verify_comp.jsx';
-// import DS_MainContentComp from './ds_main_content_comp.jsx';//发文详情页-- 正文
-// import DS_UploadContentComp from './ds_upload_content_comp.jsx';//发文详情页-- 上传附件
-// import DS_FlowContentComp from './ds_flow_content_comp.jsx';//发文详情页-- 查看流程
 
 class DS_DetailComp extends React.Component {
   constructor(props) {
@@ -132,7 +130,7 @@ class DS_DetailComp extends React.Component {
                 }} />
             </div>
             {this.state.curSubTab == "send"?
-              (<DS_SendContentComp
+              (<CommonSendComp
                   detailInfo={detailInfo}
                   tokenunid={this.props.tokenunid}
                   docunid={detailInfo.unid}

@@ -14,8 +14,8 @@ import React from 'react';
 import {FormattedHTMLMessage} from 'react-intl';
 
 export default function UserListRow({user, extraInfo, actions, actionProps, actionUserProps}) {
-    const nameFormat = PreferenceStore.get(Constants.Preferences.CATEGORY_DISPLAY_SETTINGS, 'name_format', '');
-
+    let nameFormat = PreferenceStore.get(Constants.Preferences.CATEGORY_DISPLAY_SETTINGS, 'name_format', '');
+    nameFormat = Constants.Preferences.DISPLAY_PREFER_NICKNAME; //这里写死了。
     let name = user.username;
     if (user.nickname && nameFormat === Constants.Preferences.DISPLAY_PREFER_NICKNAME) {
         name = `${user.nickname} (@${user.username})`;

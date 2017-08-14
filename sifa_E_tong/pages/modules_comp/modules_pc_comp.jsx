@@ -235,15 +235,15 @@ class ModulesPcComp extends React.Component {
                 </div>
                 {modulesItem}
 
-                <div className="row" style={{background:'#fff',height:'153px',width:'98%',marginTop:'20px'}}>
+                <div className="row" style={{background:'#fff',height:'205px',width:'98%',marginTop:'20px'}}>
                   <div className="inner">
                     <div className="title" style={{marginLeft:'20px'}}><span className="square" style={{marginRight:'5px'}}></span><span style={{verticalAlign:'text-bottom'}}>内部通知</span></div>
                       <div className="line"></div>
                         <div style={{marginTop:10}}>{noticeListItem}</div>
                   </div>
                 </div>
-                <div className="modules_footer row">
-                  <span>版权所有@长沙市司法局</span>
+                <div className="modules_footer">
+                  <span style={{marginLeft:'15px'}}>版权所有@长沙市司法局</span>
                   <span>ICP备案10200870号</span>
                   <span>技术支持：湖南必和必拓科技发展公司</span>
                 </div>

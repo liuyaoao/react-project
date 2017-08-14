@@ -2,7 +2,7 @@ import $ from 'jquery';
 import React from 'react';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import { Badge, List, InputItem,TextareaItem,
-  Flex,Picker,Button,NavBar,Radio,WhiteSpace} from 'antd-mobile';
+  Flex,Picker,Button,NavBar,Radio,WhiteSpace,Toast} from 'antd-mobile';
 import { Icon} from 'antd';
 import { createForm } from 'rc-form';
 //阅文意见
@@ -133,6 +133,11 @@ class CommonVerifyCompRaw extends React.Component {
       content:this.state.verifyCnt,
       successCall: (data)=>{
         console.log("save--签报管理的阅文意见:",data);
+        Toast.info("意见签署成功！",2);
+        this.props.backDetailCall();
+      },
+      errorCall:(data)=>{
+        Toast.info('意见签署失败!', 2);
         this.props.backDetailCall();
       }
     });

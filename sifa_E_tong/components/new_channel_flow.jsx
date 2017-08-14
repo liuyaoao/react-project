@@ -1,5 +1,3 @@
-// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
-// See License.txt for license information.
 
 import * as Utils from 'utils/utils.jsx';
 import TeamStore from 'stores/team_store.jsx';
@@ -29,6 +27,7 @@ export default class NewChannelFlow extends React.Component {
         this.urlChangeSubmitted = this.urlChangeSubmitted.bind(this);
         this.urlChangeDismissed = this.urlChangeDismissed.bind(this);
         this.channelDataChanged = this.channelDataChanged.bind(this);
+        this.onModalDismissed = this.onModalDismissed.bind(this);
 
         this.state = {
             serverError: '',
@@ -79,11 +78,11 @@ export default class NewChannelFlow extends React.Component {
         createChannel(
             channel,
             (data) => {
-                this.doOnModalExited = () => {
-                    browserHistory.push(TeamStore.getCurrentTeamRelativeUrl() + '/channels/' + data.name);
+              browserHistory.push(TeamStore.getCurrentTeamRelativeUrl() + '/channels/' + data.name);
+                this.doOnModalExited = () => { //废弃了。把上面的语句移出来了，不知道为啥要这样写。这样会导致一个bug.
                 };
 
-                this.props.onModalDismissed();
+                this.onModalDismissed();
             },
             (err) => {
                 if (err.id === 'model.channel.is_valid.2_or_more.app_error') {
@@ -110,6 +109,15 @@ export default class NewChannelFlow extends React.Component {
         if (this.doOnModalExited) {
             this.doOnModalExited();
         }
+    }
+    onModalDismissed(){
+      this.doOnModalExited = null;
+      this.setState({channelName: "",
+        channelDisplayName:"",
+        channelPurpose: '',
+        channelHeader: '',
+        nameModified: true });
+      this.props.onModalDismissed();
     }
     typeSwitched() {
         if (this.state.channelType === 'P') {
@@ -200,7 +208,7 @@ export default class NewChannelFlow extends React.Component {
                     channelData={channelData}
                     serverError={this.state.serverError}
                     onSubmitChannel={this.doSubmit}
-                    onModalDismissed={this.props.onModalDismissed}
+                    onModalDismissed={this.onModalDismissed}
                     onModalExited={this.onModalExited}
                     onTypeSwitched={this.typeSwitched}
                     onChangeURLPressed={this.urlChangeRequested}
@@ -213,7 +221,7 @@ export default class NewChannelFlow extends React.Component {
                     serverError={this.state.serverError}
                     onSubmitChannel={this.doSubmit}
                     onModalExited={this.onModalExited}
-                    onModalDismissed={this.props.onModalDismissed}
+                    onModalDismissed={this.onModalDismissed}
                     onTypeSwitched={this.typeSwitched}
                     onChangeURLPressed={this.urlChangeRequested}
                     onDataChanged={this.channelDataChanged}

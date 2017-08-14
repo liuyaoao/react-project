@@ -131,7 +131,7 @@ class DocumentListPC extends React.Component {
               </span>):null
           }
         </div>
-        <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ pageSize: 10 }} scroll={{ y: 340 }} />
+        <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ pageSize: 10 }} />
       </div>
     );
   }

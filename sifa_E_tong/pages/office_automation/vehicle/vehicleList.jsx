@@ -5,8 +5,7 @@ import * as Utils from 'utils/utils.jsx';
 // import myWebClient from 'client/my_web_client.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 
-import { Modal,WhiteSpace, SwipeAction, InputItem,TextareaItem,
-  RefreshControl, Button,Tabs,List,ListView} from 'antd-mobile';
+import { Modal,WhiteSpace, SwipeAction, Toast,Button,Tabs,List,ListView} from 'antd-mobile';
 
 import Vehicle_DetailComp from './detail_comp.jsx';
 import Vehicle_AddEditComp from './addEdit_comp.jsx';
@@ -77,7 +76,18 @@ class VehicleList extends React.Component {
     ]);
   }
   confirmDelete = (selectedId)=>{ //确认删除
-    //TODO.
+    OAUtils.deleteItem({
+      tokenunid: this.props.tokenunid,
+      successCall: (data)=>{
+        console.log("删除成功:",data);
+        Toast.info("删除成功",2);
+        this.handleTabClick(this.state.activeTabkey);
+      },
+      errorCall: (data)=>{
+        Toast.info("删除失败",2);
+        console.log("删除失败:",data);
+      }
+    });
   }
   handleTabClick = (key)=>{
     this.setState({

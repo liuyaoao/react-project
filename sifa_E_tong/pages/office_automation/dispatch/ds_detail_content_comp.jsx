@@ -1,7 +1,5 @@
 import $ from 'jquery';
 import React from 'react';
-// import * as Utils from 'utils/utils.jsx';
-// import myWebClient from 'client/my_web_client.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import UserStore from 'stores/user_store.jsx';
 import { Toast, WingBlank, WhiteSpace, Button, InputItem,
