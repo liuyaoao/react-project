@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Sidebar from './components/Sidebar.jsx'
 
 // 引入垫片兼容IE
 require('es5-shim');
@@ -14,16 +13,13 @@ import './less/main.less';
 // 配置整体组件
 export default class Init extends React.Component {
     constructor(props) {
-        super(props);        
-    } 
+        super(props);
+    }
 
     render() {
         return (
             <div>
-                <Sidebar />
-                <div id="rightWrap">
-                    {this.props.children}
-                </div>
+              {this.props.children}
             </div>
         )
     }

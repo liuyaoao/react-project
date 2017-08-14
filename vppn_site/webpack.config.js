@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 var path = require('path');
-var ExtractTextPlugin = require('extract-text-webpack-plugin'); 
-var OpenBrowserPlugin = require('open-browser-webpack-plugin'); 
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var OpenBrowserPlugin = require('open-browser-webpack-plugin');
 
 module.exports = {
 
@@ -11,7 +11,7 @@ module.exports = {
         hot: true,
         inline: true,
         progress: true,
-        contentBase: "./app", 
+        contentBase: "./app",
         port: 8080
         // 开发过程中可设置代理
         // proxy: {
@@ -46,7 +46,7 @@ module.exports = {
     plugins: [
         new webpack.optimize.CommonsChunkPlugin({name: 'vendors', filename: 'js/vendors.js'}),
         new ExtractTextPlugin("css/bundle.css"),
-        new webpack.ProvidePlugin({ $: "jquery" }),
+        new webpack.ProvidePlugin({ jquery: "jquery" }),
         new webpack.HotModuleReplacementPlugin(),
         new OpenBrowserPlugin({ url: 'http://localhost:8080/' })
     ]
