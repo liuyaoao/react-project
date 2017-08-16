@@ -29,11 +29,11 @@ module.exports = {
         new ExtractTextPlugin("css/bundle.css"),
         new webpack.ProvidePlugin({ jquery: "jquery" }),
         // 压缩配置
-        // new webpack.optimize.UglifyJsPlugin({
-        //     compress: {
-        //         warnings: false
-        //     }
-        // }),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            }
+        }),
         // 配置环境变量到Production，防止控制台警告
         new webpack.DefinePlugin({
           "process.env": {

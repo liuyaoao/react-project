@@ -1,0 +1,28 @@
+﻿const http = require('http'),//引入http模块
+express = require('express'),//引入epxress模块
+app = express();// 初始化(将express执行一次即完成初始化)
+var router = express.Router();
+var path = require('path');
+var listenPort = '10081';
+/*
+ *搭建一个服务器，直接传入初始化后的app即可，listen后为监听端口号
+ **/
+http.createServer(app).listen(listenPort,function(){
+	console.log('正常打开10081端口');
+	console.log('node express server successfully started.');
+	console.log('Serving files at: http://localhost:'+listenPort);
+	console.log("Press Ctrl+C to shutdown.");
+});
+
+app.use('/dist',express.static('app/dist'));
+
+router.get('/', function(req, res) {
+	res.sendFile(__dirname + '/app/index.html')
+});
+
+router.get('/*', function(req, res) {
+	res.sendFile(__dirname + '/app/index.html')
+});
+
+app.use('/',router);
+// module.export = router;

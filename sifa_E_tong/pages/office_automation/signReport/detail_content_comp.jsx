@@ -166,7 +166,7 @@ class DetailContentCompRaw extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>标题：</div>
+              <div className={'oaEdit_item_title'}>标题：</div>
               <TextareaItem
                 {...getFieldProps('bt',{
                   initialValue: formData.bt,
@@ -198,7 +198,7 @@ class DetailContentCompRaw extends React.Component {
                 }}>下载正文附件</Button>
             </Flex.Item>
           </Flex>
-          
+
           <Flex>
             <Flex.Item className={'uploadContainer'}>
               <Upload {...uploadProps}>
@@ -210,7 +210,7 @@ class DetailContentCompRaw extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>附件列表：
+              <div className={'oaEdit_item_title'}>附件列表：
                 {(attachmentList.length<=0) ?
                   (<span>无附件</span>):null}
               </div>
@@ -222,35 +222,35 @@ class DetailContentCompRaw extends React.Component {
           <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginTop:'0.1rem'}}/>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>领导批示：</div>
+              <div className={'oaEdit_item_title'}>领导批示：</div>
               <CommonNotionComp
               notionList={this.state.historyNotionType2List['领导批示'] || []} />
             </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>主管财务领导：</div>
+              <div className={'oaEdit_item_title'} >主管财务领导：</div>
                 <CommonNotionComp
                 notionList={this.state.historyNotionType2List['主管领导意见'] || []} />
             </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>分管领导意见：</div>
+              <div className={'oaEdit_item_title'} >分管领导意见：</div>
                 <CommonNotionComp
                 notionList={this.state.historyNotionType2List['分管领导意见'] || []} />
             </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>处室负责人：</div>
+              <div className={'oaEdit_item_title'}>处室负责人：</div>
                 <CommonNotionComp
                 notionList={this.state.historyNotionType2List['部门意见'] || []} />
             </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>核稿：</div>
+              <div className={'oaEdit_item_title'}>核稿：</div>
               <TextareaItem
               value={"--"}
               editable={false}
@@ -259,7 +259,7 @@ class DetailContentCompRaw extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>事由：</div>
+              <div className={'oaEdit_item_title'} >事由：</div>
               <TextareaItem
                 {...getFieldProps('nr',{ initialValue:formData.nr || '' })}
                 title=""

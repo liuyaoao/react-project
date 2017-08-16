@@ -92,7 +92,7 @@ class AddContentCompRaw extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>标题：</div>
+              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black',fontSize: '0.34rem'}}>标题：</div>
               <TextareaItem
                 {...getFieldProps('bt')}
                 title=""
