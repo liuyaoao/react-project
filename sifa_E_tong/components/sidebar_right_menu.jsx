@@ -354,23 +354,23 @@ export default class SidebarRightMenu extends React.Component {
         }
 
         let reportLink = null;
-        if (global.window.mm_config.ReportAProblemLink) {
-            reportLink = (
-                <li>
-                    <Link
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        to={global.window.mm_config.ReportAProblemLink}
-                    >
-                        <i className='icon fa fa-phone'/>
-                        <FormattedMessage
-                            id='sidebar_right_menu.report'
-                            defaultMessage='Report a Problem'
-                        />
-                    </Link>
-                </li>
-            );
-        }
+        // if (global.window.mm_config.ReportAProblemLink) {
+        //     reportLink = (
+        //         <li>
+        //             <Link
+        //                 target='_blank'
+        //                 rel='noopener noreferrer'
+        //                 to={global.window.mm_config.ReportAProblemLink}
+        //             >
+        //                 <i className='icon fa fa-phone'/>
+        //                 <FormattedMessage
+        //                     id='sidebar_right_menu.report'
+        //                     defaultMessage='Report a Problem'
+        //                 />
+        //             </Link>
+        //         </li>
+        //     );
+        // }
 
         let tutorialTip = null;
         if (this.state.showTutorialTip) {
@@ -380,23 +380,23 @@ export default class SidebarRightMenu extends React.Component {
         }
 
         let nativeAppLink = null;
-        if (global.window.mm_config.AppDownloadLink && !UserAgent.isMobileApp()) {
-            nativeAppLink = (
-                <li>
-                    <Link
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        to={global.window.mm_config.AppDownloadLink}
-                    >
-                        <i className='icon fa fa-mobile'/>
-                        <FormattedMessage
-                            id='sidebar_right_menu.nativeApps'
-                            defaultMessage='Download Apps'
-                        />
-                    </Link>
-                </li>
-            );
-        }
+        // if (global.window.mm_config.AppDownloadLink && !UserAgent.isMobileApp()) {
+        //     nativeAppLink = (
+        //         <li>
+        //             <Link
+        //                 target='_blank'
+        //                 rel='noopener noreferrer'
+        //                 to={global.window.mm_config.AppDownloadLink}
+        //             >
+        //                 <i className='icon fa fa-mobile'/>
+        //                 <FormattedMessage
+        //                     id='sidebar_right_menu.nativeApps'
+        //                     defaultMessage='Download Apps'
+        //                 />
+        //             </Link>
+        //         </li>
+        //     );
+        // }
 
         let addUsersToTeamModal;
         if (this.state.showAddUsersToTeamModal) {
@@ -485,7 +485,8 @@ export default class SidebarRightMenu extends React.Component {
                         {helpLink}
                         {reportLink}
                         {nativeAppLink}
-                        <li>
+                        <li className='divider'/>
+                        {/*<li>
                             <a
                                 href='#'
                                 onClick={this.handleAboutModal}
@@ -509,7 +510,7 @@ export default class SidebarRightMenu extends React.Component {
                                     defaultMessage='Logout'
                                 />
                             </a>
-                        </li>
+                        </li>*/}
                     </ul>
                 </div>
                 <UserSettingsModal

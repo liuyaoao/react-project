@@ -16,7 +16,8 @@ import head_girl from 'images/head_girl.png';
 import MyWebClient from 'client/my_web_client.jsx';
 import EditableFamilyTable from './family_table.jsx';
 
-class DocumentAddLawyerModalPC extends React.Component {
+//基层法律工作者 新增窗口
+class DocumentAddLegalWorkerModalPC extends React.Component {
   state = {
     loading: false,
     familyData: [],
@@ -374,4 +375,4 @@ class DocumentAddLawyerModalPC extends React.Component {
   }
 }
 
-export default Form.create()(DocumentAddLawyerModalPC);
+export default Form.create()(DocumentAddLegalWorkerModalPC);

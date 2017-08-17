@@ -188,7 +188,7 @@ class DetailContentCompRaw extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>来文单位：</div>
+              <div className={'oaEdit_item_title'}>来文单位：</div>
               <TextareaItem
                 {...getFieldProps('lwdw',{initialValue:formData.lwdw})}
                 title=""
@@ -220,7 +220,7 @@ class DetailContentCompRaw extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>文件标题：</div>
+              <div className={'oaEdit_item_title'}>文件标题：</div>
               <TextareaItem
                 {...getFieldProps('bt',{initialValue:formData.bt})}
                 title=""
@@ -258,7 +258,7 @@ class DetailContentCompRaw extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>附件列表：
+              <div className={'oaEdit_item_title'}>附件列表：
                 {attachmentList.length<=0?
                   (<span>无附件</span>):null}
                 </div>
@@ -270,21 +270,21 @@ class DetailContentCompRaw extends React.Component {
           <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginBottom:'0.1rem'}}/>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>拟办意见：</div>
+              <div className={'oaEdit_item_title'}>拟办意见：</div>
               <CommonNotionComp
                 notionList={this.state.historyNotionType2List['拟办意见'] || []} />
             </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>领导意见：</div>
+              <div className={'oaEdit_item_title'}>领导意见：</div>
               <CommonNotionComp
                 notionList={this.state.historyNotionType2List['领导意见'] || []} />
             </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>办理情况：<span style={{color:'red'}}>(承办意见请上传在附件中)</span></div>
+              <div className={'oaEdit_item_title'}>办理情况：<span style={{color:'red'}}>(承办意见请上传在附件中)</span></div>
               <CommonNotionComp
                 notionList={this.state.historyNotionType2List['办理情况'] || []} />
             </Flex.Item>

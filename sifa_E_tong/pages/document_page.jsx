@@ -27,6 +27,9 @@ import DocumentEditModalPC from './document/edit_modal_pc.jsx';
 import DocumentEditLawyerModalPC from './document/edit_lawyer_modal_pc.jsx';
 import DocumentEditLawfirmModalPC from './document/edit_lawfim_modal_pc.jsx';
 import DocumentEditJudExamModalPC from './document/edit_judicialexam_modal_pc.jsx'
+import DocumentEditLegalWorkerModalPC from './document/edit_legalWorker_modal_pc.jsx';
+import DocumentEditSifaDirectorModalPC from './document/edit_sifaDirector_modal_pc.jsx';
+
 import DocumentSidebar from './document/document_sidebar.jsx';
 import DocumentListPC from './document/documentList_pc_comp.jsx';
 
@@ -34,9 +37,10 @@ class DocumentPage extends React.Component {
     constructor(props) {
         super(props);
         this.getStateFromStores = this.getStateFromStores.bind(this);
-        this.handleShowModal = this.handleShowModal.bind(this);
+        this.handleShowEditModal = this.handleShowEditModal.bind(this);
         this.handleCancelModal = this.handleCancelModal.bind(this);
         this.showDeleteConfirm =this.showDeleteConfirm.bind(this);
+        this.showDeleteAllConfirm =this.showDeleteAllConfirm.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.state = this.getStateFromStores();
     }
@@ -103,24 +107,19 @@ class DocumentPage extends React.Component {
       this.setState({searchParam: param});
       // console.log('属性1',_param);
       if(_param.department == '律所' || _param.department == '司法考试处'){
-
         _param.fileInfoSubType = _param.department;
-
         delete  _param.department;
       }
     } else {
       _param = this.state.searchParam;
       if(_param.department == '律所' || _param.department == '司法考试处'){
-
         _param.fileInfoSubType = _param.department;
-
         delete  _param.department;
       }
     }
     const {currentFileType, currentFileSubType, currentDepartment} = this.state;
     if (!param || !param.fileInfoType) {
       _param.fileInfoType = currentFileType;
-
       if(currentFileSubType) _param.fileInfoSubType = currentFileSubType;
       if(currentDepartment){
 
@@ -156,7 +155,6 @@ class DocumentPage extends React.Component {
                 departArr.push(documentsData[i].department);
               }
             }
-           //  console.log(departArr);
             this.setState({ departmentTypes: departArr });
           }
         }
@@ -181,13 +179,9 @@ class DocumentPage extends React.Component {
       if (parnts.indexOf(row.parntName) > -1) {
         getChild(row);
       } else {
-
         if(row.parntName == "律所" || row.parntName == '司法考试处'){
-
-          // console.log('2222');
           nodes.push(row);
         }else {
-
           parnts.push(row.parntName);
           console.log(row.parntName);
           nodes.push( { resourceId: row.parntName, resourceName: row.parntName, sub: []});
@@ -217,7 +211,7 @@ class DocumentPage extends React.Component {
       }
     );
   }
-  handleShowModal(record) {
+  handleShowEditModal(record) {
     const {documentsData} = this.state;
     let docObj = {};
     for (let i = 0; i < documentsData.length; i++) {
@@ -225,13 +219,9 @@ class DocumentPage extends React.Component {
         record = documentsData[i], docObj = documentsData[i];
       }
     }
-    // console.log("memberInfo -- record:",record);
     this.setState({ memberInfo: record });
     this.setState({ visibleEditModel: true });
     Object.keys(docObj).forEach((key) => {
-      // if (key == 'fileInfoType' || key == 'fileInfoSubType' || key == 'familyMember' || key == 'department') {
-      //   delete docObj[key]
-      // }
       if (key == 'birthDay' || key == 'joinPartyTime' || key == 'joinWorkerTime'
         || key == 'reportingTime' || key == 'approvalTime' || key == 'appointAndRemoveTime' ) {
         docObj[key] = docObj[key] ? moment(docObj[key], 'YYYY-MM-DD') : null;
@@ -243,7 +233,6 @@ class DocumentPage extends React.Component {
   }
   showDeleteConfirm(doc, callback) {
     let _this = this;
-
     if (this.state.isMobile) {
       ModalAmAlert('删除', '确认删除吗 ?', [
         { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
@@ -274,9 +263,6 @@ class DocumentPage extends React.Component {
           if (res.text === 'true') {
             _this.openNotification('success', '删除档案成功');
             _this.handleSearch();
-            // if (callback && typeof callback == 'function') {
-            //   callback(true);
-            // }
           } else {
             _this.openNotification('error', '删除档案失败');
           }
@@ -284,6 +270,48 @@ class DocumentPage extends React.Component {
       },
       (e, err, res) => {
         _this.openNotification('error', '删除档案失败');
+      }
+    )
+  }
+  showDeleteAllConfirm(){ //是否确认一键全部删除
+    let _this = this;
+    if (this.state.isMobile) {
+      ModalAmAlert('删除', '确认一键全部删除吗 ?', [
+        { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
+        { text: '确认', onPress: () => {if (doc.key) {
+          // _this.handleDeleteAllDocument(doc.key.toUpperCase(), callback);
+        }}, style: { fontWeight: 'bold' } },
+      ]);
+    } else {
+      confirm({
+        title: '确认删除吗 ?',
+        content: '',
+        onOk() {
+          if (doc.key) {
+            // _this.handleDeleteAllDocument(doc.key.toUpperCase(), callback);
+          }
+        },
+        onCancel() {
+          console.log('Cancel');
+        },
+      });
+    }
+  }
+  handleDeleteAllDocument(){
+    let _this = this;
+    MyWebClient.deleteFileInfo(id,
+      (data, res) => {
+        if (res && res.ok) {
+          if (res.text === 'true') {
+            _this.openNotification('success', '删除全部档案成功');
+            _this.handleSearch();
+          } else {
+            _this.openNotification('error', '删除全部档案失败');
+          }
+        }
+      },
+      (e, err, res) => {
+        _this.openNotification('error', '删除全部档案失败');
       }
     )
   }
@@ -369,6 +397,7 @@ class DocumentPage extends React.Component {
                 currentFileType={currentFileType}
                 currentFileSubType={currentFileSubType}
                 currentDepartment={currentDepartment}
+                showDeleteAllConfirm={this.showDeleteAllConfirm}
                 handleSearch={this.handleSearch} />
             ) :(
               <WrappedSearchFormPC
@@ -396,7 +425,8 @@ class DocumentPage extends React.Component {
         currentDepartment={currentDepartment}
         departmentData={departmentData}
         showDeleteConfirm={this.showDeleteConfirm}
-        handleShowModal={this.handleShowModal}
+        showDeleteAllConfirm={this.showDeleteAllConfirm}
+        handleShowEditModal={this.handleShowEditModal}
         handleSearch={this.handleSearch}></DocumentListPC>
     )
 
@@ -426,7 +456,7 @@ class DocumentPage extends React.Component {
               {/* <List.Item key={index}
                 extra={this.state.hasOperaPermission?
                   (<div>
-                    <a href="javascript:;" className="am-link" onClick={this.handleShowModal.bind(this, item)}>
+                    <a href="javascript:;" className="am-link" onClick={this.handleShowEditModal.bind(this, item)}>
                       <Icon type="edit" /> 编辑
                     </a><br/>
                     <a href="javascript:;" className="am-link" onClick={this.showDeleteConfirm}><Icon type="delete" /> 删除</a>
@@ -434,31 +464,22 @@ class DocumentPage extends React.Component {
                 multipleLine
               > */}
 
-              <List.Item key={index}
-                onClick={this.state.hasOperaPermission?this.handleShowModal.bind(this, item):''}
-
-                multipleLine
-              >
-
+              <List.Item key={index} multipleLine
+                onClick={this.state.hasOperaPermission?this.handleShowEditModal.bind(this, item):''}>
                 {
-                  this.state.currentDepartment == '律所'
-                  ?
-                <div>律所名称：{item.lawOfficeName}</div>
-                :
-                <div>姓名：{item.userName}</div>
+                  this.state.currentDepartment == '律所'?
+                    <div>律所名称：{item.lawOfficeName}</div>:
+                    <div>姓名：{item.userName}</div>
                 }
                 {
-                  this.state.currentDepartment == '律所'
-                  ?
+                  this.state.currentDepartment == '律所'?
                   <List.Item.Brief>
                     律所负责人: {item.lawOfficePrincipal}, 地址:  {item.lawOfficeAddress}
+                  </List.Item.Brief>:
+                  <List.Item.Brief>
+                    性别: {item.gender}, 地址: {this.state.currentFileSubType=="律师" ? item.lawOfficeAddress : item.createParty}
                   </List.Item.Brief>
-                :
-                <List.Item.Brief>
-                  性别: {item.gender}, 地址: {this.state.currentFileSubType=="律师" ? item.lawOfficeAddress : item.createParty}
-                </List.Item.Brief>
                 }
-
               </List.Item>
 
           </SwipeAction>
@@ -508,33 +529,27 @@ class DocumentPage extends React.Component {
       handleSearch: this.handleSearch,
       handleCancelModal: this.handleCancelModal
     }
-
-
     let edit_ele = '';
     if(currentDepartment == '律所'){
-
       edit_ele = <DocumentEditLawfirmModalPC {...editModalField}></DocumentEditLawfirmModalPC>
-
     }else if(currentDepartment == '司法考试处') {
-
       edit_ele = <DocumentEditJudExamModalPC {...editModalField}></DocumentEditJudExamModalPC>
-
+    }else if(currentFileSubType == '律师' ){
+      edit_ele = <DocumentEditLawyerModalPC {...editModalField}></DocumentEditLawyerModalPC>
+    }else if(currentFileSubType == '基层法律工作者' ){
+      edit_ele = <DocumentEditLegalWorkerModalPC {...editModalField}></DocumentEditLegalWorkerModalPC>
+    }else if(currentFileSubType == '司法所长' ){
+      edit_ele = <DocumentEditSifaDirectorModalPC {...editModalField}></DocumentEditSifaDirectorModalPC>
     }else {
-
-      if(currentFileSubType == '律师' ){
-
-        edit_ele = <DocumentEditLawyerModalPC {...editModalField}></DocumentEditLawyerModalPC>
-      }else {
-        edit_ele = <DocumentEditModalPC {...editModalField}></DocumentEditModalPC>
-      }
+      edit_ele = <DocumentEditModalPC {...editModalField}></DocumentEditModalPC>
     }
 
-
-    return (<div className="document_container">
-      {finalEle}
-      {edit_ele}
-
-    </div>);
+    return (
+      <div className="document_container">
+        {finalEle}
+        {edit_ele}
+      </div>
+    );
   }
 }
 

@@ -149,7 +149,7 @@ class Notice_DetailComp extends React.Component {
                     </Flex>
                     <Flex>
                       <Flex.Item>
-                        <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>副标题：</div>
+                        <div className={'oaEdit_item_title'}>副标题：</div>
                         <TextareaItem
                           editable={false}
                           rows={3}
@@ -158,7 +158,7 @@ class Notice_DetailComp extends React.Component {
                     </Flex>
                     <Flex>
                       <Flex.Item>
-                        <div style={{margin:'0.2rem 0 0 0.3rem',color:'black'}}>通知公告的附件：{customAttachmentList.length<=0?(<span>无附件</span>):null}</div>
+                        <div className={'oaEdit_item_title'}>通知公告的附件：{customAttachmentList.length<=0?(<span>无附件</span>):null}</div>
                           { customAttachmentList.length>0?
                             (<div>{customAttachment}</div>):null
                           }
@@ -166,7 +166,7 @@ class Notice_DetailComp extends React.Component {
                     </Flex>
                     <Flex>
                       <Flex.Item>
-                        <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>内容：</div>
+                        <div className={'oaEdit_item_title'}>内容：</div>
                         <div style={{width:'96%',border:'1px solid gray',height:'4rem',margin:'0 auto'}}
                           dangerouslySetInnerHTML={{__html:formData.nr}}></div>
                       </Flex.Item>
@@ -199,7 +199,7 @@ class Notice_DetailComp extends React.Component {
                   </Flex>
                   <Flex>
                     <Flex.Item>
-                      <div style={{margin:'0.2rem 0 0 0.3rem',color:'black'}}>通知公告的附件：{customAttachmentList.length<=0?(<span>无附件</span>):null}</div>
+                      <div className={'oaEdit_item_title'}>通知公告的附件：{customAttachmentList.length<=0?(<span>无附件</span>):null}</div>
                         { customAttachmentList.length>0?
                           (<div>{customAttachment}</div>):null
                         }

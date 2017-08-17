@@ -73,12 +73,13 @@ class AddressBookPage extends React.Component {
       console.log("me info:",me);
       this.setState({loginUserName:me.username||''});
       // this.getServerOrganizationsData();
-      organizationUtils.getServerOrganizationsData();
-      OrganizationStore.addOrgaChangeListener(this.updateOrganizationData);
+      organizationUtils.getServerContactDirectory((objArr)=>{
+        console.log("getContactDirectoryData-获取通讯录的目录结构数据-:",objArr);
+        
+      });
       this.getAddressBookCnt(this.state.organizationKey);
     }
     componentWillUnmount(){
-      OrganizationStore.removeOrgaChangeListener(this.updateOrganizationData);
     }
     updateOrganizationData(){
       this.setState({

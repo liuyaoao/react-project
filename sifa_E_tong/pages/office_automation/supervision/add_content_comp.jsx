@@ -139,7 +139,7 @@ class AddContentCompRaw extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>来文单位：</div>
+              <div className={'oaEdit_item_title'}>来文单位：</div>
               <TextareaItem
                 {...getFieldProps('lwdw')}
                 placeholder={'请输入...'}
@@ -179,7 +179,7 @@ class AddContentCompRaw extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>文件标题：</div>
+              <div className={'oaEdit_item_title'}>文件标题：</div>
               <TextareaItem
                 placeholder={'请输入...'}
                 {...getFieldProps('bt')}
@@ -201,7 +201,7 @@ class AddContentCompRaw extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>正文列表：</div>
+              <div className={'oaEdit_item_title'}>正文列表：</div>
             </Flex.Item>
           </Flex>
           <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginBottom:'0.1rem'}}/>
@@ -216,7 +216,7 @@ class AddContentCompRaw extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>附件列表：</div>
+              <div className={'oaEdit_item_title'}>附件列表：</div>
             </Flex.Item>
           </Flex>
           <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginBottom:'0.1rem'}}/>
@@ -228,7 +228,7 @@ class AddContentCompRaw extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>办理情况：<span style={{color:'red'}}>(承办意见请上传在附件中)</span></div>
+              <div className={'oaEdit_item_title'}>办理情况：<span style={{color:'red'}}>(承办意见请上传在附件中)</span></div>
               <TextareaItem
                 {...getFieldProps('reason')}
                 title=""

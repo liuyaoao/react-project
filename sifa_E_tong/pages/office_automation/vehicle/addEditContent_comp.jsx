@@ -166,7 +166,7 @@ class AddEditContentComp extends React.Component {
 
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>用车事由：</div>
+              <div className={'oaEdit_item_title'}>用车事由：</div>
               <TextareaItem
                 {...getFieldProps('ycsy')}
                 title=""

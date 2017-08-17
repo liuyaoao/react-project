@@ -53,36 +53,39 @@ class SearchFormMobile extends React.Component {
     });
     Popup.hide();
   }
+  onClickDeleteAll = ()=>{ //全部删除
+    //TODO
+    this.props.showDeleteAllConfirm();
+  }
   render() {
     const { getFieldProps } = this.props.form;
     // <InputItem clear autoFocus value="123" placeholder="请输入部门" {...getFieldProps('department')}>部门</InputItem>
     return (
       <div className="am-doc-list">
         <List>
-
-          {this.props.currentDepartment == '律所'
-          ?
-            <InputItem clear autoFocus placeholder="请输入律所名称" {...getFieldProps('lawOfficeName')}>律所名称</InputItem>
-          :
+          {
+            this.props.currentDepartment == '律所'?
+            <InputItem clear autoFocus placeholder="请输入律所名称" {...getFieldProps('lawOfficeName')}>律所名称</InputItem>:
             <InputItem clear autoFocus placeholder="请输入姓名" {...getFieldProps('userName')}>姓名</InputItem>
           }
-
-          {this.props.currentDepartment == '律所'
-          ?
-            <InputItem clear autoFocus placeholder="请输入律所责任人" {...getFieldProps('lawOfficePrincipal')}>律所负责人</InputItem>
-          :
-          <InputItem clear onClick={this.showSelectGender} placeholder="请选择" {...getFieldProps('gender')}>
-            性别 <Icon type="down" />
-          </InputItem>
+          {
+            this.props.currentDepartment == '律所'?
+            <InputItem clear autoFocus placeholder="请输入律所责任人" {...getFieldProps('lawOfficePrincipal')}>律所负责人</InputItem>:
+            <InputItem clear onClick={this.showSelectGender} placeholder="请选择" {...getFieldProps('gender')}>
+              性别 <Icon type="down" />
+            </InputItem>
           }
-
-
         </List>
         <div style={{ margin: '0.16rem' }}>
           {
             this.state.hasOperaPermission ?
             (<Button type="primary" onClick={this.onClickSubmit}><Icon type="search" /> 搜索</Button>):
             (<span style={{textAlign:'center'}}>没有权限</span>)
+          }
+          {
+            this.state.hasOperaPermission ?
+            (<Button type="warning" onClick={this.onClickDeleteAll} style={{marginTop:'10px'}}><Icon type="delete" />全部删除</Button>):
+            (null)
           }
         </div>
       </div>

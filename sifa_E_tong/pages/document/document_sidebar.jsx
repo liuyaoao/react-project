@@ -32,34 +32,23 @@ export default class DocumentSidebar extends React.Component {
   componentWillReceiveProps(nextProps){
     if(this.props.departmentData !== nextProps.departmentData && nextProps.departmentData.length ){
       let openKey = nextProps.departmentData[0].resourceId || '';
-      // this.updateAddressBookList(openKey);
-      // this.updateAddressBookBreadcrumb([openKey]);
-      // console.log(nextProps);
-      // console.log('GGGGGGGGGGGGGGGGGGGGGGG');
       this.setState({openKeys: [this.props.currentFileType]});
     }
   }
   // menu item click handler
-   handleClick = (e) => {
+   handleClick = (e) => { //仅表示点击了菜单的叶子节点响应。
     //  console.log('click tree',e);
     this.setState({ current: e.key });
-    // console.log(e.item.props.children);
-    // console.log("e.keyPath",e.keyPath);
+    // console.log("e.item.props.children--:",e.item.props.children);
+    // console.log("e.keyPath--:",e.keyPath);
     if (e.item.props.children) {
       const {currentFileType} = this.props;
       const currentDepartment = e.item.props.children;
       this.props.searchFormPC && this.props.searchFormPC.setFieldsValue({
-        userName: '', gender: ''
+        userName: '', gender: '',lawOfficePrincipal:'',lawOfficeName:''
       });
       let currentFileSubType = e.keyPath[1];
 
-      // if(e.item.props.children == '律所' || e.item.props.children == '司法考试处'){
-      //
-      //   currentFileSubType = e.item.props.children
-      //   // console.log('lvsuo',currentFileSubType);
-      // }else{
-      //   currentFileSubType = e.keyPath[1]
-      // }
       this.props.setCurrentFileSubType(currentFileSubType);
       this.props.setCurrentDepartment(currentDepartment);
       const searchParam = {

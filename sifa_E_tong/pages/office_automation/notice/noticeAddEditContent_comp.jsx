@@ -200,7 +200,7 @@ class Notice_AddEditContentComp extends React.Component {
                 </Flex>
                 <Flex>
                   <Flex.Item>
-                    <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>标题：</div>
+                    <div className={'oaEdit_item_title'}>标题：</div>
                     <TextareaItem
                       {...getFieldProps('bt')}
                       placeholder={'请输入...'}
@@ -210,7 +210,7 @@ class Notice_AddEditContentComp extends React.Component {
                 </Flex>
                 <Flex>
                   <Flex.Item>
-                    <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>副标题：</div>
+                    <div className={'oaEdit_item_title'}>副标题：</div>
                     <TextareaItem
                       {...getFieldProps('fbt')}
                       placeholder={'请输入...'}
@@ -235,7 +235,7 @@ class Notice_AddEditContentComp extends React.Component {
                 </Flex>
                 <Flex>
                   <Flex.Item>
-                    <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>内容：</div>
+                    <div className={'oaEdit_item_title'}>内容：</div>
                     <TextareaItem
                       {...getFieldProps('nr')}
                       placeholder={'请输入...'}
@@ -264,7 +264,7 @@ class Notice_AddEditContentComp extends React.Component {
                   <div>
                     <Flex>
                       <Flex.Item>
-                        <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>发布部门：</div>
+                        <div className={'oaEdit_item_title'}>发布部门：</div>
                         <TextareaItem
                           {...getFieldProps('fbfw_org')}
                           placeholder={'请输入...'}
@@ -274,7 +274,7 @@ class Notice_AddEditContentComp extends React.Component {
                     </Flex>
                     <Flex>
                       <Flex.Item>
-                        <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>发布群组：</div>
+                        <div className={'oaEdit_item_title'}>发布群组：</div>
                         <TextareaItem
                           {...getFieldProps('fbfw_group')}
                           placeholder={'请输入...'}
@@ -284,7 +284,7 @@ class Notice_AddEditContentComp extends React.Component {
                     </Flex>
                     <Flex>
                       <Flex.Item>
-                        <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>发布人员：</div>
+                        <div className={'oaEdit_item_title'}>发布人员：</div>
                         <TextareaItem
                           {...getFieldProps('fbfw_person')}
                           placeholder={'请输入...'}
@@ -336,7 +336,7 @@ class Notice_AddEditContentComp extends React.Component {
               </Flex>
               <Flex>
                 <Flex.Item>
-                  <div style={{margin:'0.2rem 0 0 0.3rem',color:'black'}}>已上传图片列表：{customAttachmentList.length<=0?(<span>无图片</span>):null}</div>
+                  <div className={'oaEdit_item_title'}>已上传图片列表：{customAttachmentList.length<=0?(<span>无图片</span>):null}</div>
                     { customAttachmentList.length>0?
                       (<div>{customImages}</div>):null
                     }
@@ -369,7 +369,7 @@ class Notice_AddEditContentComp extends React.Component {
               </Flex>
               <Flex>
                 <Flex.Item>
-                  <div style={{margin:'0.2rem 0 0 0.3rem',color:'black'}}>通知公告的附件：{customAttachmentList.length<=0?(<span>无附件</span>):null}</div>
+                  <div className={'oaEdit_item_title'}>通知公告的附件：{customAttachmentList.length<=0?(<span>无附件</span>):null}</div>
                     { customAttachmentList.length>0?
                       (<div>{customAttachment}</div>):null
                     }

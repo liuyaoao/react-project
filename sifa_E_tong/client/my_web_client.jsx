@@ -81,14 +81,18 @@ class MyWebClient {
       return `${this.url}${this.urlVersion}/import/fileInformation`;
     }
 
-    getlawfirmfileInfoImportUrl(){
-
+    getlawfirmfileInfoImportUrl(){ //律所 导入地址。
       return `${this.getfileInfoImportUrl()}/lawfirm`;
     }
 
-    getjudicialexamInfoImportUrl(){
-
+    getjudicialexamInfoImportUrl(){ //司法考试处 导入地址。
       return `${this.getfileInfoImportUrl()}/judicialExamination`;
+    }
+    getLegalWorkerImportUrl(){ //法律工作者 导入地址。
+      return `${this.getfileInfoImportUrl()}/grassrootsLegalWerviceWorkers`;
+    }
+    getSifa_DirectorImportUrl(){ //司法所长 导入地址。
+      return `${this.getfileInfoImportUrl()}/superintendent`;
     }
 
     getLawyerfileInfoImportUrl(){
@@ -220,96 +224,17 @@ class MyWebClient {
         }
     }
 
-    // General Routes Section
-
-    // getClientConfig(success, error) {
-    //     return request.
-    //         get(`${this.getGeneralRoute()}/client_props`).
-    //         set(this.defaultHeaders).
-    //         type('application/json').
-    //         accept('application/json').
-    //         end(this.handleResponse.bind(this, 'getClientConfig', success, error));
-    // }
-    //
-    // getTranslations(url, success, error) {
-    //     return request.
-    //         get(url).
-    //         set(this.defaultHeaders).
-    //         type('application/json').
-    //         accept('application/json').
-    //         end(this.handleResponse.bind(this, 'getTranslations', success, error));
-    // }
-    //
-    // getInitialLoad(success, error) {
-    //     request.
-    //         get(`${this.getUsersRoute()}/initial_load`).
-    //         set(this.defaultHeaders).
-    //         type('application/json').
-    //         accept('application/json').
-    //         end(this.handleResponse.bind(this, 'getInitialLoad', success, error));
-    // }
-
-    // login(loginId, password, mfaToken, success, error) {
-    //     this.doLogin({login_id: loginId, password, token: mfaToken}, success, error);
-    //
-    //     this.trackEvent('api', 'api_users_login');
-    // }
-    //
-    // loginById(id, password, mfaToken, success, error) {
-    //     this.doLogin({id, password, token: mfaToken}, success, error);
-    //
-    //     this.trackEvent('api', 'api_users_login');
-    // }
-    //
-    // loginByLdap(loginId, password, mfaToken, success, error) {
-    //     this.doLogin({login_id: loginId, password, token: mfaToken, ldap_only: 'true'}, success, error);
-    //
-    //     this.trackEvent('api', 'api_users_login');
-    //     this.trackEvent('api', 'api_users_login_ldap');
-    // }
-    //
-    // doLogin(outgoingData, success, error) {
-    //     let _this = this;  // eslint-disable-line consistent-this
-    //
-    //     request.
-    //         post(`${this.getUsersRoute()}/login`).
-    //         set(this.defaultHeaders).
-    //         type('application/json').
-    //         accept('application/json').
-    //         send(outgoingData).
-    //         end(this.handleResponse.bind(
-    //             this,
-    //             'login',
-    //             (data, res) => {
-    //                 if (res && res.header) {
-    //                     _this.token = res.header[HEADER_TOKEN];
-    //                     localStorage.setItem(_this.tokenName,_this.token+""); //把登录成功的token记在localStorage里，在就不用再重新登录了。
-    //                     if (_this.useToken) {
-    //                         _this.defaultHeaders[HEADER_AUTH] = `${HEADER_BEARER} ${_this.token}`;
-    //                     }
-    //                 }
-    //                 if (success) {
-    //                     success(data, res);
-    //                 }
-    //             },
-    //             error
-    //         ));
-    // }
-    //
-    // logout(success, error) {
-    //   let _this = this;
-    //     request.
-    //         post(`${this.getUsersRoute()}/logout`).
-    //         set(this.defaultHeaders).
-    //         type('application/json').
-    //         accept('application/json').
-    //         end(this.handleResponse.bind(this, 'logout', (data,res)=>{
-    //           localStorage.removeItem(_this.tokenName);
-    //           success && success(data,res);
-    //         }, error));
-    //
-    //         this.trackEvent('api', 'api_users_logout');
-    // }
+    getContactDirectoryData(success,error){ //获取通讯录的目录结构数据
+      this.defaultHeaders[HEADER_TOKEN] = localStorage.getItem(this.tokenName);
+      request.
+          post(`${this.getUsersRoute()}/contacts/directory`).
+          set(this.defaultHeaders).
+          type('application/json').
+          accept('application/json').
+          end(this.handleResponse.bind(this, 'contacts_directory', (data,res)=>{
+            success && success(data,res);
+          }, error));
+    }
 
     getServerAddressBook(param, success, error) {
       let _this = this;

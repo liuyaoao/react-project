@@ -175,7 +175,7 @@ class DS_AddContentComp extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>标题：</div>
+              <div className={'oaEdit_item_title'}>标题：</div>
               <TextareaItem
                 {...getFieldProps('wjbt')}
                 title=""
@@ -187,7 +187,7 @@ class DS_AddContentComp extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div className={'detail_textarea_title'}>主送：</div>
+              <div className={'oaEdit_item_title detail_textarea_title'}>主送：</div>
               <TextareaItem
                 {...getFieldProps('zsdw')}
                 rows={3}
@@ -197,7 +197,7 @@ class DS_AddContentComp extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div className={'detail_textarea_title'}>抄送：</div>
+              <div className={'oaEdit_item_title detail_textarea_title'}>抄送：</div>
               <TextareaItem
                 {...getFieldProps('csdw')}
                 rows={3}

@@ -19,7 +19,6 @@ export function getServerOrganizationsData(){ //从服务端获取组织机构�
       // console.log("request server orgnizasitions response error info:", err);
   });
 }
-
 export function getOrganizationsFlatDataArr(objArr){ //得到平级的组织结构数据。是一个object数组，去掉了subOrganization字段。
   let flatArr = [];
   $.each(objArr, (index, obj)=>{
@@ -81,6 +80,22 @@ export function getPermissionFlatMap(flatDataArr) {
   return flatDataMap;
 }
 
-export function getNearestPoint() {
+//获取通讯录的目录结构数据。
+export function getServerContactDirectory(successCallback){ //获取通讯录的目录结构数据。
+  myWebClient.getContactDirectoryData((data,res)=>{
+      let objArr = JSON.parse(res.text);
 
+      successCallback && successCallback(objArr);
+      // let flatDataArr = getOrganizationsFlatDataArr(objArr); //平行的object数组结构。
+      // let flatDataMap = getOrganizationsFlatMap(flatDataArr);
+      // AppDispatcher.handleServerAction({
+      //     type: "received_new_organizations",
+      //     organizationsData: objArr,
+      //     organizationsFlatData: flatDataArr,
+      //     organizationsFlatDataMap:flatDataMap
+      // });
+  }, (e,err,res)=>{
+      // notification.error({message:"获取组织结构数据失败了！"});
+      // console.log("request server orgnizasitions response error info:", err);
+  });
 }

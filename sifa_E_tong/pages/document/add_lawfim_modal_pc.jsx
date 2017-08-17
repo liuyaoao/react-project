@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import React from 'react';
 import moment from 'moment';
+import * as Utils from 'utils/utils.jsx';
 
 import { Row, Col, Form, Icon, Input, Button, Radio, Table, Modal, DatePicker, notification, Select } from 'antd';
 const RadioButton = Radio.Button;
@@ -20,6 +21,7 @@ class DocumentAddLawfirmModalPC extends React.Component {
     familyData: [],
     member: {},
     visible: false,
+    isMobile: Utils.isMobile(),
   }
   showModal = () => {
     this.setState({
@@ -182,12 +184,13 @@ class DocumentAddLawfirmModalPC extends React.Component {
     }
     const { children, departmentTypes } = this.props;
     const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
+    let clsname = this.state.isMobile ? "doc-edit-form doc-edit-form-mobile" :"doc-edit-form doc-edit-form-pc";
     return (
       <span>
         <span onClick={this.showModal}>
           { children }
         </span>
-      <Modal className="doc-edit-form"
+      <Modal className={clsname}
         visible={this.state.visible}
         title="添加档案"
         onOk={this.handleOk}

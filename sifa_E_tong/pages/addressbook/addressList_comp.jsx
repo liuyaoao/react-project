@@ -108,6 +108,22 @@ class AddressListComp extends React.Component {
       }
     );
   }
+  showDeleteAllConfirmDialog = ()=>{ //删除所有
+    let _this = this;
+    confirm({
+      title: '确认一键全部删除吗 ?',
+      content: '',
+      onOk() {
+        _this.confirmDeleteAllContacts(selectedIds);
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
+  confirmDeleteAllContacts(){
+    //TODO
+  }
 
   render() {
     const { columns, selectedRowKeys } = this.state;
@@ -132,9 +148,16 @@ class AddressListComp extends React.Component {
           {this.state.hasOperaPermission ? (
             <button type="button"
               className="btn btn-danger pull-right mr_10"
-              disabled={!hasSelected}
               onClick={()=>this.showDeleteConfirmDialog({})}>
               <Icon type="delete" />批量删除
+            </button>
+          ):null}
+          {this.state.hasOperaPermission ? (
+            <button type="button"
+              className="btn btn-danger pull-right mr_10"
+              disabled={!hasSelected}
+              onClick={()=>this.showDeleteAllConfirmDialog({})}>
+              <Icon type="delete" />全部删除
             </button>
           ):null}
         </div>

@@ -119,6 +119,24 @@ class AddressListMobileComp extends React.Component {
     );
   }
 
+  onClickDeleteAll = ()=>{
+    alert('删除', '确定全部删除吗?', [
+      { text: '取消', onPress: () => console.log('cancel') },
+      { text: '确定', onPress: () => this.confirmDeleteAllContacts() },
+    ]);
+  }
+  confirmDeleteAllContacts(){ //删除所有用户
+    // myWebClient.deleteAllContacts(contactsIds,
+    //   (data,res)=>{
+    //     notification.success({message: '全部联系人删除成功！'});
+    //     console.log("联系人删除成功：",data);
+    //     this.props.afterDeleteContactsCall();
+    //   },(e,err,res)=>{
+    //     notification.error({message: '全部联系人删除失败！'});
+    //   }
+    // );
+  }
+
   render() {
     const { columns } = this.state;
     const { addressListData } = this.props;
@@ -126,12 +144,21 @@ class AddressListMobileComp extends React.Component {
     return (
       <div className={cls_name}>
         <div style={{ marginBottom: 12 }}>
-          {this.state.hasOperaPermission ? (<button type="button"
-              className="btn btn-primary pull-right"
-              style={{marginRight: '1em'}}
-              onClick={()=>{this.showAddEditDialog('',null,null)}}>
-              <Icon type="plus" />新增
-            </button>
+          {this.state.hasOperaPermission ? (
+            <div>
+              <button type="button"
+                  className="btn btn-danger pull-right"
+                  style={{marginRight: '1em'}}
+                  onClick={()=>{this.onClickDeleteAll()}}>
+                  <Icon type="delete" />全部删除
+                </button>
+                <button type="button"
+                  className="btn btn-primary pull-right"
+                  style={{marginRight: '1em'}}
+                  onClick={()=>{this.showAddEditDialog('',null,null)}}>
+                  <Icon type="plus" />新增
+                  </button>
+            </div>
           ):null}
         </div>
         <div className='addressbook_list mobile_addressbook_list' style={{width:'100%'}}>

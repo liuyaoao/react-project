@@ -227,7 +227,7 @@ class DS_DetailContentComp extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.2rem',color:'black'}}>标题：</div>
+              <div className={'oaEdit_item_title'}>标题：</div>
               <TextareaItem
                 {...getFieldProps('wjbt',{
                   initialValue: formData.wjbt,
@@ -240,7 +240,7 @@ class DS_DetailContentComp extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div className={'detail_textarea_title'}>主送：</div>
+              <div className={'oaEdit_item_title detail_textarea_title'}>主送：</div>
               <TextareaItem
                 {...getFieldProps('zsdw',{
                   initialValue: formData.zsdw,
@@ -251,7 +251,7 @@ class DS_DetailContentComp extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div className={'detail_textarea_title'}>抄送：</div>
+              <div className={'oaEdit_item_title detail_textarea_title'}>抄送：</div>
               <TextareaItem
                 {...getFieldProps('csdw',{
                   initialValue: formData.csdw,
@@ -280,7 +280,7 @@ class DS_DetailContentComp extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div style={{margin:'0.2rem 0 0 0.3rem',color:'black'}}>附件列表：
+              <div className={'oaEdit_item_title'}>附件列表：
                 {attachmentList.length<=0?
                   (<span>无附件</span>):null}
               </div>
@@ -295,7 +295,7 @@ class DS_DetailContentComp extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div className={'detail_textarea_title'}>传批意见:</div>
+              <div className={'oaEdit_item_title detail_textarea_title'}>传批意见:</div>
               <div className="textarea_container">
                 <CommonNotionComp
                   notionList={this.state.historyNotionType2List['传批意见'] || []} />
@@ -305,7 +305,7 @@ class DS_DetailContentComp extends React.Component {
           <Flex>
             <Flex.Item>
               <div id="JZYJ">
-                <div className={'detail_textarea_title'}>局长审核意见:</div>
+                <div className={'oaEdit_item_title detail_textarea_title'}>局长审核意见:</div>
                 <div className="textarea_container">
                   <CommonNotionComp
                     notionList={this.state.historyNotionType2List['局长审核意见'] || []} />
@@ -316,7 +316,7 @@ class DS_DetailContentComp extends React.Component {
           <Flex>
             <Flex.Item>
               <div id="FGYJ">
-                <div className={'detail_textarea_title'}>分管领导意见:</div>
+                <div className={'oaEdit_item_title detail_textarea_title'}>分管领导意见:</div>
                 <div className="textarea_container">
                   <CommonNotionComp
                     notionList={this.state.historyNotionType2List['分管领导意见'] || []} />
@@ -326,7 +326,7 @@ class DS_DetailContentComp extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <div className={'detail_textarea_title'}>处室负责人意见:</div>
+              <div className={'oaEdit_item_title detail_textarea_title'}>处室负责人意见:</div>
               <CommonNotionComp
                 notionList={this.state.historyNotionType2List['部门意见'] || []} />
             </Flex.Item>
@@ -334,7 +334,7 @@ class DS_DetailContentComp extends React.Component {
           <Flex>
             <Flex.Item>
               <div id="HG">
-                <div className={'detail_textarea_title'}>核稿:</div>
+                <div className={'oaEdit_item_title detail_textarea_title'}>核稿:</div>
                 <div className="textarea_container">
                   <CommonNotionComp
                     notionList={this.state.historyNotionType2List['部门意见'] || []} />

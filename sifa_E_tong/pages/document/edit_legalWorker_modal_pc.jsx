@@ -1,10 +1,9 @@
-//添加律师档案的弹窗
 import $ from 'jquery';
 import React from 'react';
 import moment from 'moment';
 import * as Utils from 'utils/utils.jsx';
 
-import { Row, Col, Form, Icon, Input, Button, Radio, Table, Modal, DatePicker, notification, Select } from 'antd';
+import { Row, Col, Form, Icon, Input, Button, Radio, Table, Modal, DatePicker, notification, Select, Checkbox } from 'antd';
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -15,52 +14,85 @@ import head_girl from 'images/head_girl.png';
 
 import MyWebClient from 'client/my_web_client.jsx';
 import EditableFamilyTable from './family_table.jsx';
-
-class DocumentAddLawyerModalPC extends React.Component {
+//基层法律工作者 编辑窗口
+class DocumentEditLegalWorkerModalPC extends React.Component {
   state = {
     loading: false,
     familyData: [],
     member: {},
-    visible: false,
     isMobile: Utils.isMobile(),
+  }
+  componentWillReceiveProps(nextProps) {
+    const {memberInfo} = this.props;
+    if (nextProps.memberInfo.id !== memberInfo.id) {
+      console.log(nextProps.memberInfo.id, nextProps.memberInfo.userName);
+      this.handleGetFamilyMembers(nextProps.memberInfo.id);
+    }
   }
   showModal = () => {
     this.setState({
       visible: true,
     });
   }
-  handleCancel = () => {
-    this.setState({ visible: false });
-    this.props.form.resetFields();
-  }
   handleOk = () => {
     this.setState({ loading: true });
     const {memberInfo} = this.props;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
         values['lawyerFirstPracticeTime'] =  values['lawyerFirstPracticeTime'] ? values['lawyerFirstPracticeTime'].format('YYYY-MM-DD') : '';
         values['lawyerPracticeTime'] = values['lawyerPracticeTime'] ? values['lawyerPracticeTime'].format('YYYY-MM-DD') : '';
         values['lawyerPunishTime'] = values['lawyerPunishTime'] ? values['lawyerPunishTime'].format('YYYY-MM-DD') : '';
-        const info = {
-          ...values,
-          // id: memberInfo.id,
-          familyMember: []
-        }
-        const {familyData} = this.state;
-        const fdata = familyData.map((item) => {
-          const obj = {};
-          Object.keys(item).forEach((key) => {
-            if (key !== 'key') {
-              obj[key] = item[key].value;
-            }
-          });
-          return obj;
-        });
-        info.familyMember = fdata;
-        this.handleAddDocument(info);
+        console.log('Received values of form: ', values);
+        values.id = memberInfo.id;
+        // console.log(values);
+        const info = Object.assign({}, memberInfo, values);
+        delete info['key'];
+        info['familyMember']=[];
+        // console.log(info);
+        this.handleEditDocument(info);
       }
     });
+  }
+  handleCancel = () => {
+    this.props.form.resetFields();
+    this.props.handleCancelModal();
+  }
+  // getFamilyMembers() {
+  //   const { familyData } = this.state;
+  //   const {memberInfo} = this.props;
+  //   // console.log(familyData);
+  //   return <EditableFamilyTable operate="edit" data={familyData} memberInfo={memberInfo} setFamilyData={this.setFamilyData.bind(this)} handleGetFamilyMembers={this.handleGetFamilyMembers.bind(this)}></EditableFamilyTable>
+  // }
+  // setFamilyData(familyData) {
+  //   this.setState({ familyData });
+  // }
+  handleEditDocument(param) {
+    let _this = this;
+    param.fileInfoType = this.props.currentFileType;
+    // param.fileInfoSubType = this.props.currentFileSubType;
+    // param.department = this.props.currentDepartment;
+    param.lawyerDepartment = param.lawyerDepartment ? param.lawyerDepartment : this.getDefaultDepartment(param.fileInfoSubType);
+    // console.log(param);
+    MyWebClient.updateFileInfo(param,
+      (data, res) => {
+        if (res && res.ok) {
+          if (res.text === 'true') {
+            _this.openNotification('success', '编辑档案成功');
+            _this.props.handleSearch();
+          } else {
+            _this.openNotification('error', '编辑档案失败');
+          }
+          _this.setState({ loading: false});
+          _this.handleCancel();
+        }
+      },
+      (e, err, res) => {
+        _this.openNotification('error', '编辑档案失败');
+        console.log('get error:', res ? res.text : '');
+        _this.setState({ loading: false});
+        _this.handleCancel();
+      }
+    );
   }
   getDefaultDepartment = (fileInfoSubType)=>{
     let lawyerDepartment = '';
@@ -72,60 +104,24 @@ class DocumentAddLawyerModalPC extends React.Component {
     }
     return lawyerDepartment;
   }
-  handleAddDocument(param) {
-    let _this = this;
-    param.fileInfoType = this.props.currentFileType;
-    param.fileInfoSubType = this.props.currentFileSubType;
-    let lawyerDepartment = '';
-    if(this.props.currentDepartment){
-      lawyerDepartment = this.props.currentDepartment;
-    }else{
-      lawyerDepartment = this.getDefaultDepartment(this.props.currentFileSubType);
-    }
-    param.lawyerDepartment = lawyerDepartment;
-    // console.log(param);
-    MyWebClient.createFileInfo(param,
-      (data, res) => {
-        if (res && res.ok) {
-          console.log(res.text);
-          if (res.text === 'true') {
-            _this.openNotification('success', '添加档案成功');
-            _this.props.handleSearch();
-          } else {
-            _this.openNotification('error', '添加档案失败');
-          }
-          _this.setState({ loading: false});
-          _this.handleCancel();
-        }
-      },
-      (e, err, res) => {
-        _this.openNotification('error', '添加档案失败');
-        console.log('get error:', res ? res.text : '');
-        _this.setState({ loading: false});
-        _this.handleCancel();
-      }
-    );
-  }
   handleGetFamilyMembers(id) {
     let _this = this;
-    MyWebClient.getSearchFileFamilyMember(id,
+    MyWebClient.getSearchFileFamilyMember(id.toUpperCase(),
       (data, res) => {
         if (res && res.ok) {
           const data = JSON.parse(res.text);
          //  console.log(data);
-          const familyData = []
-          for (var i = 0; i < data.length; i++) {
-            const member = data[i];
-            const memberObj = {};
-            memberObj.key = member.id;
-            Object.keys(member).forEach((key) => {
-              memberObj[key] = {
+          const familyData = data.map((item) => {
+            const obj = {};
+            obj.key = item.id;
+            Object.keys(item).forEach((key) => {
+              obj[key] = {
                 editable: false,
-                value: member[key],
+                value: item[key]
               }
             });
-            familyData.push(memberObj);
-          }
+            return obj;
+          });
           _this.setState({ familyData });
         }
       },
@@ -165,38 +161,38 @@ class DocumentAddLawyerModalPC extends React.Component {
         sm: { span: 14 },
       },
     };
-    const { memberInfo } = this.props;
+    const formTailLayout = {
+      labelCol: { span: 4 },
+      wrapperCol: { span: 8, offset: 4 },
+    };
+    // let familyMembersTable = this.getFamilyMembers();
+    const { memberInfo, departmentTypes } = this.props;
     // console.log(memberInfo);
-    let defaultGender = null, head_img = head_boy;
+    let defaultGender = null, head_img = null;
     if (memberInfo.gender == '男') {
       head_img = head_boy;
     } else if (memberInfo.gender == '女') {
       head_img = head_girl;
     }
-    const { children, departmentTypes } = this.props;
-    const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
+    const { getFieldDecorator } = this.props.form;
     let clsname = this.state.isMobile ? "doc-edit-form doc-edit-form-mobile" :"doc-edit-form doc-edit-form-pc";
     return (
-      <span>
-        <span onClick={this.showModal}>
-          { children }
-        </span>
       <Modal className={clsname}
-        visible={this.state.visible}
-        title="添加档案"
+        visible={this.props.visible}
+        title="编辑档案"
         onOk={this.handleOk}
         onCancel={this.handleCancel}
         width="880px"
         footer={[
           <Button key="submit" type="primary" size="large" loading={this.state.loading} onClick={this.handleOk}>
-            添加
+            修改
           </Button>,
           <Button key="back" size="large" onClick={this.handleCancel}>取消</Button>,
         ]}
       >
         <div className="doc-edit">
-          <div className="head-img"><img src={head_img} style={{width: "108px", paddingTop: "2px"}} /></div>
-          <Form className="edit-form">
+          {this.state.isMobile?null:(<div className="head-img"><img src={head_img} style={{width: "108px", paddingTop: "2px"}} /></div>)}
+          <Form className={this.state.isMobile?"":"edit-form"}>
             <Row>
               <Col span={24} className="tag-list">
                 <p className="info-title">
@@ -204,10 +200,15 @@ class DocumentAddLawyerModalPC extends React.Component {
                   <a href="javascript:;" className="pull-right p-r-10" onClick={this.handleToggleTag}><Icon type="up" /></a>
                 </p>
                 <Row className="info-body">
+                  <FormItem label="id" style={{display: "none"}}>
+                    {getFieldDecorator('id', {initialValue: memberInfo.id || ''})(
+                      <Input type="text" placeholder="" />
+                    )}
+                  </FormItem>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="姓名">
                       {getFieldDecorator('userName', {
-                        initialValue: memberInfo.userName||'',
+                        initialValue: memberInfo.userName || '',
                         rules: [{
                           required: true, message: '请输入姓名',
                         }],
@@ -216,46 +217,30 @@ class DocumentAddLawyerModalPC extends React.Component {
                       )}
                     </FormItem>
                   </Col>
-                  {/*<Col span={24} id="addDepartmentSelect">
-                    <FormItem {...formItemLayout} label="部门">
-                      {getFieldDecorator('department', {initialValue: ''})(
-                          <Select
-                            mode="combobox"
-                            size="default"
-                            onChange={this.handleChangeDepart}
-                            getPopupContainer={() => document.getElementById('addDepartmentSelect')}
-                          >
-                            {departmentTypes.map((item, index) => {
-                              return <Option key={item}>{item}</Option>
-                            })}
-                          </Select>
-                      )}
-                    </FormItem>
-                  </Col>*/}
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="律所名称">
-                      {getFieldDecorator('lawOfficeName', {initialValue: memberInfo.lawOfficeName||''})(
+                      {getFieldDecorator('lawOfficeName', {initialValue: memberInfo.lawOfficeName || ''})(
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
                   </Col>
                   {/*<Col span={24}>
                     <FormItem {...formItemLayout} label="律所负责人">
-                      {getFieldDecorator('lawOfficePrincipal', {initialValue: memberInfo.lawOfficePrincipal||''})(
+                      {getFieldDecorator('lawOfficePrincipal', {initialValue: memberInfo.lawOfficePrincipal || ''})(
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="律所地址">
-                      {getFieldDecorator('lawOfficeAddress', {initialValue: memberInfo.lawOfficeAddress||''})(
+                      {getFieldDecorator('lawOfficeAddress', {initialValue: memberInfo.lawOfficeAddress || ''})(
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
                   </Col>*/}
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="性别">
-                      {getFieldDecorator('gender', {initialValue: memberInfo.gender||''})(
+                      {getFieldDecorator('gender', {initialValue: memberInfo.gender || ''})(
                         <RadioGroup>
                           <RadioButton value="男">男</RadioButton>
                           <RadioButton value="女">女</RadioButton>
@@ -263,6 +248,22 @@ class DocumentAddLawyerModalPC extends React.Component {
                       )}
                     </FormItem>
                   </Col>
+                  {/*<Col span={24} id="editDepartmentSelect">
+                    <FormItem {...formItemLayout} label="部门">
+                      {getFieldDecorator('department', {initialValue: memberInfo.department || ''})(
+                        <Select
+                          mode="combobox"
+                          size="default"
+                          onChange={this.handleChangeDepart}
+                          getPopupContainer={() => document.getElementById('editDepartmentSelect')}
+                        >
+                          {departmentTypes ? departmentTypes.map((item, index) => {
+                            return <Option key={item}>{item}</Option>
+                          }) : null}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>*/}
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="执业证号">
                       {getFieldDecorator('lawyerLicenseNo', {initialValue: memberInfo.lawyerLicenseNo||''})(
@@ -293,21 +294,27 @@ class DocumentAddLawyerModalPC extends React.Component {
                   </Col>
                   <Col span={24} id="addFirstPracticeTime">
                     <FormItem {...formItemLayout} label="首次执业时间">
-                      {getFieldDecorator('lawyerFirstPracticeTime', {initialValue: memberInfo.lawyerFirstPracticeTime ? moment(memberInfo.lawyerFirstPracticeTime, 'YYYY-MM-DD') : null})(
+                      {getFieldDecorator('lawyerFirstPracticeTime',
+                        {
+                          initialValue: (memberInfo.lawyerFirstPracticeTime && memberInfo.lawyerFirstPracticeTime!='null') ? moment(memberInfo.lawyerFirstPracticeTime, 'YYYY-MM-DD') : null
+                        })(
                         <DatePicker getCalendarContainer={() => document.getElementById('addFirstPracticeTime')} />
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={24} id="addPracticeTime">
+                  <Col span={24} id="addLawyerPracticeTime">
                     <FormItem {...formItemLayout} label="执业时间">
-                      {getFieldDecorator('lawyerPracticeTime', {initialValue: memberInfo.lawyerPracticeTime ? moment(memberInfo.lawyerPracticeTime, 'YYYY-MM-DD') : null})(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addPracticeTime')} />
+                      {getFieldDecorator('lawyerPracticeTime',
+                        {
+                          initialValue: (memberInfo.lawyerPracticeTime && memberInfo.lawyerPracticeTime!='null') ? moment(memberInfo.lawyerPracticeTime, 'YYYY-MM-DD') : null
+                        })(
+                        <DatePicker getCalendarContainer={() => document.getElementById('addLawyerPracticeTime')} />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="是否受过行政处罚或行业处分">
-                      {getFieldDecorator('lawyerIsPunish', {initialValue: memberInfo.lawyerIsPunish||''})(
+                      {getFieldDecorator('lawyerIsPunish', {initialValue: memberInfo.lawyerIsPunish || ''})(
                         <Input />
                       )}
                     </FormItem>
@@ -315,14 +322,17 @@ class DocumentAddLawyerModalPC extends React.Component {
 
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="惩罚日期">
-                      {getFieldDecorator('lawyerIsPunish', {initialValue: memberInfo.lawyerPunishTime||''})(
+                      {getFieldDecorator('lawyerIsPunish', {initialValue: memberInfo.lawyerPunishTime || ''})(
                         <Input />
                       )}
                     </FormItem>
                   </Col>
                   {/* <Col span={24} id="addLawyerPunishTime">
                     <FormItem {...formItemLayout} label="惩罚日期">
-                      {getFieldDecorator('lawyerPunishTime', {initialValue: memberInfo.lawyerPunishTime ? moment(memberInfo.lawyerPunishTime, 'YYYY-MM-DD') : null})(
+                      {getFieldDecorator('lawyerPunishTime',
+                        {
+                          initialValue: (memberInfo.lawyerPunishTime && memberInfo.lawyerPunishTime!='null')  ? moment(memberInfo.lawyerPunishTime, 'YYYY-MM-DD') : null
+                        })(
                         <DatePicker getCalendarContainer={() => document.getElementById('addLawyerPunishTime')} />
                       )}
                     </FormItem>
@@ -347,7 +357,6 @@ class DocumentAddLawyerModalPC extends React.Component {
           </Form>
         </div>
       </Modal>
-    </span>
     )
   }
   handleToggleTag(e) {
@@ -374,4 +383,4 @@ class DocumentAddLawyerModalPC extends React.Component {
   }
 }
 
-export default Form.create()(DocumentAddLawyerModalPC);
+export default Form.create()(DocumentEditLegalWorkerModalPC);

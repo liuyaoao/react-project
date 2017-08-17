@@ -187,9 +187,8 @@ class DocumentEditModalPC extends React.Component {
           <Button key="submit" type="primary" size="large" loading={this.state.loading} onClick={this.handleOk}>
             修改
           </Button>,
-          <Button key="back" size="large" onClick={this.handleCancel}>取消</Button>,
-        ]}
-      >
+          <Button key="back" size="large" onClick={this.handleCancel}>取消</Button>]}
+        >
         <div className="doc-edit">
           {this.state.isMobile?null:(<div className="head-img"><img src={head_img} style={{width: "108px", paddingTop: "2px"}} /></div>)}
           <Form className={this.state.isMobile?"":"edit-form"}>
