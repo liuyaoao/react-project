@@ -114,7 +114,7 @@ class AddressListComp extends React.Component {
       title: '确认一键全部删除吗 ?',
       content: '',
       onOk() {
-        _this.confirmDeleteAllContacts(selectedIds);
+        _this.confirmDeleteAllContacts();
       },
       onCancel() {
         console.log('Cancel');
@@ -122,7 +122,15 @@ class AddressListComp extends React.Component {
     });
   }
   confirmDeleteAllContacts(){
-    //TODO
+    myWebClient.deleteAllContacts(
+      (data,res)=>{
+        notification.success({message: '全部联系人删除成功！'});
+        console.log("联系人删除成功：",data);
+        this.props.afterDeleteContactsCall();
+      },(e,err,res)=>{
+        notification.error({message: '全部联系人删除失败！'});
+      }
+    );
   }
 
   render() {
@@ -138,26 +146,26 @@ class AddressListComp extends React.Component {
       <div className={cls_name}>
         <div style={{ marginBottom: 12 }}>
           <span style={{ marginLeft: 8 }}>{hasSelected ? `选中 ${selectedRowKeys.length} 项` : ''}</span>
-          {this.state.hasOperaPermission ? (<button type="button"
-              className="btn btn-primary pull-right"
-              disabled={hasSelected}
-              onClick={()=>{this.showAddEditDialog('',null,null)}}>
-              <Icon type="plus" />新增
-            </button>
-          ):null}
           {this.state.hasOperaPermission ? (
             <button type="button"
               className="btn btn-danger pull-right mr_10"
-              onClick={()=>this.showDeleteConfirmDialog({})}>
-              <Icon type="delete" />批量删除
+              onClick={()=>this.showDeleteAllConfirmDialog({})}>
+              <Icon type="delete" />全部删除
             </button>
           ):null}
           {this.state.hasOperaPermission ? (
             <button type="button"
               className="btn btn-danger pull-right mr_10"
               disabled={!hasSelected}
-              onClick={()=>this.showDeleteAllConfirmDialog({})}>
-              <Icon type="delete" />全部删除
+              onClick={()=>this.showDeleteConfirmDialog({})}>
+              <Icon type="delete" />批量删除
+            </button>
+          ):null}
+          {this.state.hasOperaPermission ? (<button type="button"
+              className="btn btn-primary pull-right mr_10"
+              disabled={hasSelected}
+              onClick={()=>{this.showAddEditDialog('',null,null)}}>
+              <Icon type="plus" />新增
             </button>
           ):null}
         </div>

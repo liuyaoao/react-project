@@ -5,8 +5,8 @@ import UserStore from 'stores/user_store.jsx';
 import * as Utils from 'utils/utils.jsx';
 import myWebClient from 'client/my_web_client.jsx';
 
-import { Modal,SwipeAction,List } from 'antd-mobile';
-import { Row, Col, Icon,notification, Input, Button as ButtonPc,Table, Pagination, Tooltip,message } from 'antd';
+import { Modal,SwipeAction,List,Button } from 'antd-mobile';
+import { Row, Col, Icon,notification, Input, Tooltip,message } from 'antd';
 const alert = Modal.alert;
 import signup_logo from 'images/signup_logo.png';
 import avatorIcon_man from 'images/avator_icon/avator_man.png';
@@ -29,67 +29,19 @@ class AddressListMobileComp extends React.Component {
       let permissionData = UserStore.getPermissionData();
       let hasOperaPermission = permissionData['address_book'].indexOf('action') != -1;
       this.state = {
-        columns:[],
         isModalOpen:false,
         selectedIds:[],
         permissionData:permissionData,
         hasOperaPermission:hasOperaPermission, //是否有操作权限。
+        currentPage:1, //当前页。
       };
   }
 
   componentWillMount(){
-    const columns = [{
-      title: '联系人',
-      dataIndex: 'Contacts',
-      render:(text,record,index) => (
-        <div key={record.id+123456}>
-          <SwipeAction style={{ backgroundColor: '#f3f3f3' }}
-            autoClose
-            disabled={this.state.hasOperaPermission ? false : true}
-            right={[
-              {
-                text: '取消',
-                onPress: () => console.log('cancel'),
-                style: { backgroundColor: '#ddd', color: 'white' },
-              },
-              {
-                text: '删除',
-                onPress: ()=>{this.showDeleteConfirmDialog(record)},
-                style: { backgroundColor: '#F4333C', color: 'white' },
-              },
-            ]}
-            onOpen={() => console.log('global open')}
-            onClose={() => console.log('global close')}
-            >
-              <div className="addressbook_row"
-                style={{}}
-                onClick={this.state.hasOperaPermission ? ()=>{this.showAddEditDialog(text,record,index)} : ''}
-              >
-                <span className="addressbook_avator">
-                  <img className="member_icon" width="54" height="54" src={this.props.iconArr[index]}/>
-                </span>
-                <div className="addressbook_detail">
-                    <div className="member_name">
-                      <span>({record.userName}) &nbsp;</span>
-                      {/* {this.state.hasOperaPermission ? (<div className="addressbook_oper">
-                        <a href="javascript:;" onClick={()=>{this.showAddEditDialog(text,record,index)}} style={{marginLeft:'1em'}}><Icon type="edit" />编辑</a>
-                      </div>):null} */}
-                    </div>
-                    <div className="member_email"><span>电子邮件：</span>{record.email}</div>
-                    <div className="member_phone"><span>电话号码：</span>{record.telephoneNumber+','+record.groupShortCode}</div>
-                </div>
-              </div>
-          </SwipeAction>
-        </div>
-          )
-    }];
-    this.setState({columns:columns});
   }
   componentDidMount(){
-
   }
   onClickDeleteContact = (text,record)=>{
-
   }
   showAddEditDialog(text,record,index){
     // console.log("text:"+text+"index:"+index);
@@ -126,20 +78,41 @@ class AddressListMobileComp extends React.Component {
     ]);
   }
   confirmDeleteAllContacts(){ //删除所有用户
-    // myWebClient.deleteAllContacts(contactsIds,
-    //   (data,res)=>{
-    //     notification.success({message: '全部联系人删除成功！'});
-    //     console.log("联系人删除成功：",data);
-    //     this.props.afterDeleteContactsCall();
-    //   },(e,err,res)=>{
-    //     notification.error({message: '全部联系人删除失败！'});
-    //   }
-    // );
+    myWebClient.deleteAllContacts(
+      (data,res)=>{
+        notification.success({message: '全部联系人删除成功！'});
+        console.log("联系人删除成功：",data);
+        this.props.afterDeleteContactsCall();
+      },(e,err,res)=>{
+        notification.error({message: '全部联系人删除失败！'});
+      }
+    );
+  }
+  onClickPrePage = ()=>{ //上一页
+    let currentPage = this.state.currentPage;
+    if(currentPage > 1){
+      this.setState({
+        currentPage:currentPage-1,
+      });
+    }
+  }
+  onClickNextPage = ()=>{ //下一页
+    let currentPage = this.state.currentPage;
+    const pageCount = Math.ceil(this.props.addressListData.length/10);
+    if(currentPage < pageCount){
+      this.setState({
+        currentPage:currentPage+1,
+      });
+    }
   }
 
   render() {
-    const { columns } = this.state;
+    const { currentPage } = this.state;
     const { addressListData } = this.props;
+    const totalCount = addressListData.length;
+    const pageCount = Math.ceil(addressListData.length/10);
+    let curPageData = addressListData.slice(10*(currentPage-1), 10*currentPage);
+
     let cls_name = "addressTableList " + this.props.className;
     return (
       <div className={cls_name}>
@@ -153,8 +126,8 @@ class AddressListMobileComp extends React.Component {
                   <Icon type="delete" />全部删除
                 </button>
                 <button type="button"
-                  className="btn btn-primary pull-right"
-                  style={{marginRight: '1em'}}
+                  className="btn btn-primary pull-left"
+                  style={{marginLeft: '1em'}}
                   onClick={()=>{this.showAddEditDialog('',null,null)}}>
                   <Icon type="plus" />新增
                   </button>
@@ -162,11 +135,56 @@ class AddressListMobileComp extends React.Component {
           ):null}
         </div>
         <div className='addressbook_list mobile_addressbook_list' style={{width:'100%'}}>
-          <Table
-            columns={columns}
-            showHeader={false}
-            dataSource={addressListData}
-            pagination={{ pageSize: 10 }}/>
+          <List style={{ margin: '0.1rem 0', backgroundColor: 'white' }}>
+            {curPageData.map((record, index) => (
+              <SwipeAction style={{ backgroundColor: '#f3f3f3' }}
+                autoClose
+                disabled={this.state.hasOperaPermission ? false : true}
+                right={[
+                  {
+                    text: '取消',
+                    onPress: () => console.log('cancel'),
+                    style: { backgroundColor: '#ddd', color: 'white' },
+                  },
+                  {
+                    text: '删除',
+                    onPress: ()=>{this.showDeleteConfirmDialog(record)},
+                    style: { backgroundColor: '#F4333C', color: 'white' },
+                  },
+                ]}
+                onOpen={() => console.log('global open')}
+                onClose={() => console.log('global close')}
+                >
+                <List.Item key={index} multipleLine
+                  onClick={this.state.hasOperaPermission ? ()=>{this.showAddEditDialog(text,record,index)} : ''}>
+                  <div className="addressbook_row">
+                    <span className="addressbook_avator">
+                      <img className="member_icon" width="54" height="54" src={this.props.iconArr[index]}/>
+                    </span>
+                    <div className="addressbook_detail">
+                      <div className="member_name">
+                        <span>({record.userName}) &nbsp;</span>
+                        </div>
+                        <div className="member_email"><span>电话短号：</span>{record.groupShortCode}</div>
+                        <div className="member_phone"><span>电话号码：</span>{record.telephoneNumber}</div>
+                      </div>
+                    </div>
+                </List.Item>
+              </SwipeAction>
+              )
+            )}
+          </List>
+        </div>
+        <div className="mobile_page_cnt">
+          <div className="pre_page">
+            <Button type="default" onClick={this.onClickPrePage}><Icon type="double-left" /> 上一页</Button>
+          </div>
+          <div className="page_num">
+            <span>{pageCount>0?currentPage:0}</span>/<span>{pageCount}</span>
+          </div>
+          <div className="next_page">
+            <Button type="default" onClick={this.onClickNextPage}>上一页<Icon type="double-right" /></Button>
+          </div>
         </div>
       </div>
     );

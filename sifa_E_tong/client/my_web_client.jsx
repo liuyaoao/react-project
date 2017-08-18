@@ -273,6 +273,17 @@ class MyWebClient {
             success && success(data,res);
           }, error));
     }
+    deleteAllContacts(success,error){ //删除联系人。contactsIds为逗号隔开的字符串。
+      this.defaultHeaders[HEADER_TOKEN] = localStorage.getItem(this.tokenName);
+      request.
+          post(`${this.getUsersRoute()}/contacts/deleteAll`).
+          set(this.defaultHeaders).
+          type('application/json').
+          accept('application/json').
+          end(this.handleResponse.bind(this, 'deleteAll_Contacts', (data,res)=>{
+            success && success(data,res);
+          }, error));
+    }
 
     getOrganizationsData(success,error){
       this.defaultHeaders[HEADER_TOKEN] = localStorage.getItem(this.tokenName);
@@ -471,6 +482,18 @@ class MyWebClient {
           accept('application/json').
           send(id).
           end(this.handleResponse.bind(this, 'deleteFileInfo', success, error));
+    }
+    deleteFileInfoAll(params,success,error){ //删除所有档案，根据模板类型来删。
+      this.defaultHeaders[HEADER_TOKEN] = localStorage.getItem(this.tokenName);
+      request.
+          post(`${this.getfileInformationUrl()}/deleteFileInfoFor`).
+          set(this.defaultHeaders).
+          type('application/json').
+          accept('application/json').
+          send(params).
+          end(this.handleResponse.bind(this, 'deleteFileInfoFor_all', (data,res)=>{
+            success && success(data,res);
+          }, error));
     }
 
     // search file info family member

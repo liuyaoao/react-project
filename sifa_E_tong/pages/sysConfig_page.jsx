@@ -1,8 +1,7 @@
 //系统设置页面，只有PC端的。
 import $ from 'jquery';
-
 import React from 'react';
-import {Link,browserHistory} from 'react-router/es6';
+import {browserHistory} from 'react-router/es6';
 import {FormattedMessage, FormattedHTMLMessage} from 'react-intl';
 import TeamStore from 'stores/team_store.jsx';
 import UserStore from 'stores/user_store.jsx';

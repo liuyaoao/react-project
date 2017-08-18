@@ -1,3 +1,4 @@
+//用户信息新增和编辑界面
 import $ from 'jquery';
 import React from 'react';
 import OrganizationStore from 'pages/stores/organization_store.jsx';

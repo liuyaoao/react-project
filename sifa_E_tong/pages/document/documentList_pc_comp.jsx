@@ -162,7 +162,11 @@ class DocumentListPC extends React.Component {
           <span style={{ marginLeft: 8 }}>{hasSelected ? `选中 ${selectedRowKeys.length} 项` : ''}</span>
           {this.state.hasOperaPermission?
             (<span>
-              <button type="button" className="btn btn-danger pull-right" onClick={this.handleDeleteAll}><Icon type="delete" /> 全部删除</button>
+              <button type="button" style={{marginLeft:'10px'}}
+                className="btn btn-danger pull-right"
+                onClick={this.handleDeleteAll}>
+                <Icon type="delete" /> 全部删除
+              </button>
               <button type="button" className="btn btn-danger pull-right" disabled={!hasSelected} onClick={this.handleDeleteBatch.bind(this)}><Icon type="delete" /> 批量删除</button>
               {add_ele}
               </span>):null

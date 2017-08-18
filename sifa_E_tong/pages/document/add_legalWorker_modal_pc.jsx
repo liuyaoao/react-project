@@ -233,13 +233,15 @@ class DocumentAddLegalWorkerModalPC extends React.Component {
                       )}
                     </FormItem>
                   </Col>*/}
-                  <Col span={24}>
+
+                  {/*<Col span={24}>
                     <FormItem {...formItemLayout} label="律所名称">
                       {getFieldDecorator('lawOfficeName', {initialValue: memberInfo.lawOfficeName||''})(
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
-                  </Col>
+                  </Col>*/}
+
                   {/*<Col span={24}>
                     <FormItem {...formItemLayout} label="律所负责人">
                       {getFieldDecorator('lawOfficePrincipal', {initialValue: memberInfo.lawOfficePrincipal||''})(
@@ -265,6 +267,13 @@ class DocumentAddLegalWorkerModalPC extends React.Component {
                     </FormItem>
                   </Col>
                   <Col span={24}>
+                    <FormItem {...formItemLayout} label="执业机构">
+                      {getFieldDecorator('lawOfficeAddress', {initialValue: memberInfo.lawOfficeAddress||''})(
+                        <Input type="text" placeholder="" />
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={24}>
                     <FormItem {...formItemLayout} label="执业证号">
                       {getFieldDecorator('lawyerLicenseNo', {initialValue: memberInfo.lawyerLicenseNo||''})(
                         <Input type="text" placeholder="" />
@@ -279,66 +288,9 @@ class DocumentAddLegalWorkerModalPC extends React.Component {
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayout} label="执业证类别">
-                      {getFieldDecorator('lawyerPracticeType', {initialValue: memberInfo.lawyerPracticeType||''})(
+                    <FormItem {...formItemLayout} label="联系方式">
+                      {getFieldDecorator('inServiceEducation', {initialValue: memberInfo.inServiceEducation||''})(
                         <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="资格证号">
-                      {getFieldDecorator('lawyerQualificationCode', {initialValue: memberInfo.lawyerQualificationCode||''})(
-                        <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={24} id="addFirstPracticeTime">
-                    <FormItem {...formItemLayout} label="首次执业时间">
-                      {getFieldDecorator('lawyerFirstPracticeTime', {initialValue: memberInfo.lawyerFirstPracticeTime ? moment(memberInfo.lawyerFirstPracticeTime, 'YYYY-MM-DD') : null})(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addFirstPracticeTime')} />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={24} id="addPracticeTime">
-                    <FormItem {...formItemLayout} label="执业时间">
-                      {getFieldDecorator('lawyerPracticeTime', {initialValue: memberInfo.lawyerPracticeTime ? moment(memberInfo.lawyerPracticeTime, 'YYYY-MM-DD') : null})(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addPracticeTime')} />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="是否受过行政处罚或行业处分">
-                      {getFieldDecorator('lawyerIsPunish', {initialValue: memberInfo.lawyerIsPunish||''})(
-                        <Input />
-                      )}
-                    </FormItem>
-                  </Col>
-
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="惩罚日期">
-                      {getFieldDecorator('lawyerIsPunish', {initialValue: memberInfo.lawyerPunishTime||''})(
-                        <Input />
-                      )}
-                    </FormItem>
-                  </Col>
-                  {/* <Col span={24} id="addLawyerPunishTime">
-                    <FormItem {...formItemLayout} label="惩罚日期">
-                      {getFieldDecorator('lawyerPunishTime', {initialValue: memberInfo.lawyerPunishTime ? moment(memberInfo.lawyerPunishTime, 'YYYY-MM-DD') : null})(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addLawyerPunishTime')} />
-                      )}
-                    </FormItem>
-                  </Col> */}
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="处理单位">
-                      {getFieldDecorator('lawyerPunishUnit', {initialValue: memberInfo.lawyerPunishUnit||''})(
-                        <Input />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="惩罚结果">
-                      {getFieldDecorator('lawyerPunishResult', {initialValue: memberInfo.lawyerPunishResult||''})(
-                        <Input />
                       )}
                     </FormItem>
                   </Col>

@@ -32,6 +32,7 @@ import DocumentEditSifaDirectorModalPC from './document/edit_sifaDirector_modal_
 
 import DocumentSidebar from './document/document_sidebar.jsx';
 import DocumentListPC from './document/documentList_pc_comp.jsx';
+import DocumentListMobile from './document/documentList_mobile_comp.jsx';
 
 class DocumentPage extends React.Component {
     constructor(props) {
@@ -196,9 +197,7 @@ class DocumentPage extends React.Component {
     MyWebClient.getFileDepartment(organizations,
       (data, res) => {
         if (res && res.ok) {
-         //  console.log(res.text);
           const result = JSON.parse(res.text);
-          console.log('my name',result);
           const resource = this.convertSiderData(result);
           // console.log('her name',resource);
           // console.log("departmentData-档案管理-权限部门数据-:",resource);
@@ -278,18 +277,16 @@ class DocumentPage extends React.Component {
     if (this.state.isMobile) {
       ModalAmAlert('删除', '确认一键全部删除吗 ?', [
         { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
-        { text: '确认', onPress: () => {if (doc.key) {
-          // _this.handleDeleteAllDocument(doc.key.toUpperCase(), callback);
-        }}, style: { fontWeight: 'bold' } },
+        { text: '确认', onPress: () => {
+          _this.handleDeleteAllDocument();
+        }, style: { fontWeight: 'bold' } },
       ]);
     } else {
       confirm({
         title: '确认删除吗 ?',
         content: '',
         onOk() {
-          if (doc.key) {
-            // _this.handleDeleteAllDocument(doc.key.toUpperCase(), callback);
-          }
+          _this.handleDeleteAllDocument();
         },
         onCancel() {
           console.log('Cancel');
@@ -299,7 +296,10 @@ class DocumentPage extends React.Component {
   }
   handleDeleteAllDocument(){
     let _this = this;
-    MyWebClient.deleteFileInfo(id,
+    MyWebClient.deleteFileInfoAll({
+      fileInfoType:this.state.currentFileType,
+      fileInfoSubType:this.state.currentFileSubType,
+    },
       (data, res) => {
         if (res && res.ok) {
           if (res.text === 'true') {
@@ -421,8 +421,8 @@ class DocumentPage extends React.Component {
       <DocumentListPC data={data}
         currentFileType={currentFileType}
         currentFileSubType={currentFileSubType}
-        departmentTypes={departmentTypes}
         currentDepartment={currentDepartment}
+        departmentTypes={departmentTypes}
         departmentData={departmentData}
         showDeleteConfirm={this.showDeleteConfirm}
         showDeleteAllConfirm={this.showDeleteAllConfirm}
@@ -431,62 +431,14 @@ class DocumentPage extends React.Component {
     )
 
     let docSearchMobileList = (//构造手机端的列表视图
-      <div className="am-doc-list doc-table">
-        {(!data || data.length<=0) ? (<div style={{textAlign:'center',color:'gray'}}>暂无数据</div>) : null}
-        <List style={{ margin: '0.1rem 0', backgroundColor: 'white' }}>
-          {data.map((item, index) => (
-            <SwipeAction style={{ backgroundColor: '#f3f3f3' }}
-                autoClose
-                disabled={this.state.hasOperaPermission ? false : true}
-                right={[
-                  {
-                    text: '取消',
-                    onPress: () => console.log('cancel'),
-                    style: { backgroundColor: '#ddd', color: 'white' },
-                  },
-                  {
-                    text: '删除',
-                    onPress: ()=> {this.showDeleteConfirm(item,true)},
-                    style: { backgroundColor: '#F4333C', color: 'white' },
-                  },
-                ]}
-                onOpen={() => console.log('global open')}
-                onClose={() => console.log('global close')}
-                >
-              {/* <List.Item key={index}
-                extra={this.state.hasOperaPermission?
-                  (<div>
-                    <a href="javascript:;" className="am-link" onClick={this.handleShowEditModal.bind(this, item)}>
-                      <Icon type="edit" /> 编辑
-                    </a><br/>
-                    <a href="javascript:;" className="am-link" onClick={this.showDeleteConfirm}><Icon type="delete" /> 删除</a>
-                  </div>):(<span>没有权限</span>)}
-                multipleLine
-              > */}
+      <DocumentListMobile data={data}
+        currentFileType={currentFileType}
+        currentFileSubType={currentFileSubType}
+        currentDepartment={currentDepartment}
+        showDeleteConfirm={this.showDeleteConfirm}
+        handleShowEditModal={this.handleShowEditModal}
+        ></DocumentListMobile>
 
-              <List.Item key={index} multipleLine
-                onClick={this.state.hasOperaPermission?this.handleShowEditModal.bind(this, item):''}>
-                {
-                  this.state.currentDepartment == '律所'?
-                    <div>律所名称：{item.lawOfficeName}</div>:
-                    <div>姓名：{item.userName}</div>
-                }
-                {
-                  this.state.currentDepartment == '律所'?
-                  <List.Item.Brief>
-                    律所负责人: {item.lawOfficePrincipal}, 地址:  {item.lawOfficeAddress}
-                  </List.Item.Brief>:
-                  <List.Item.Brief>
-                    性别: {item.gender}, 地址: {this.state.currentFileSubType=="律师" ? item.lawOfficeAddress : item.createParty}
-                  </List.Item.Brief>
-                }
-              </List.Item>
-
-          </SwipeAction>
-          )
-        )}
-        </List>
-      </div>
     )
 
     return this.state.isMobile ? docSearchMobileList : docSearchPCList;

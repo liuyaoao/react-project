@@ -54,7 +54,6 @@ class SearchFormMobile extends React.Component {
     Popup.hide();
   }
   onClickDeleteAll = ()=>{ //全部删除
-    //TODO
     this.props.showDeleteAllConfirm();
   }
   render() {

@@ -51,7 +51,7 @@ class AddEditContactMobileDialog extends React.Component {
   getOrganiTreeSelectData(objArr){
     let treeArr = [];
     $.each(objArr, (index, obj)=>{
-      if(!obj.subOrganization || obj.subOrganization.length<=0){ //已经是子节点了。
+      if(!obj.subtrees || obj.subtrees.length<=0){ //已经是子节点了。
         treeArr.push({
           key:obj.id,
           value:obj.id,
@@ -62,7 +62,7 @@ class AddEditContactMobileDialog extends React.Component {
           key:obj.id,
           value:obj.id,
           label:obj.name,
-          children:this.getOrganiTreeSelectData(obj.subOrganization)
+          children:this.getOrganiTreeSelectData(obj.subtrees)
         });
       }
     });
@@ -252,7 +252,7 @@ class AddEditContactMobileDialog extends React.Component {
                   <Input/>
                 )}
               </FormItem>
-              <FormItem {...formItemLayout} label="组织机构:">
+              <FormItem {...formItemLayout} label="目录结构:">
                 <TreeSelect {...treeSelectProps} />
               </FormItem>
               <FormItem {...formItemLayout} label="电话:">

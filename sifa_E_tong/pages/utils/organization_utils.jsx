@@ -85,9 +85,9 @@ export function getServerContactDirectory(successCallback){ //获取通讯录的
   myWebClient.getContactDirectoryData((data,res)=>{
       let objArr = JSON.parse(res.text);
 
-      successCallback && successCallback(objArr);
-      // let flatDataArr = getOrganizationsFlatDataArr(objArr); //平行的object数组结构。
-      // let flatDataMap = getOrganizationsFlatMap(flatDataArr);
+      let flatDataArr = getDirectoryFlatDataArr(objArr,''); //平行的object数组结构。
+      let flatDataMap = getDirectoryFlatMap(flatDataArr);
+      successCallback && successCallback(objArr,flatDataArr,flatDataMap);
       // AppDispatcher.handleServerAction({
       //     type: "received_new_organizations",
       //     organizationsData: objArr,
@@ -98,4 +98,29 @@ export function getServerContactDirectory(successCallback){ //获取通讯录的
       // notification.error({message:"获取组织结构数据失败了！"});
       // console.log("request server orgnizasitions response error info:", err);
   });
+}
+
+export function getDirectoryFlatDataArr(objArr,parentId){ //得到平级的组织结构数据。是一个object数组，
+  let flatArr = [];
+  $.each(objArr, (index, obj)=>{
+    obj.parentId = parentId;
+    obj.id = obj.name;
+    if(!obj.subtrees || obj.subtrees.length<=0){ //已经是子节点了。
+      flatArr.push({id:obj.name || "123456",parentId:parentId, name:obj.name || "123456",subtreeNum:0});
+    }else{ //表示还有孩子节点存在。
+      flatArr.push({id:obj.name || "123456",parentId:parentId, name:obj.name || "123456",subtreeNum:obj.subtrees.length});
+      let childConfig = obj.subtrees;
+      let childrens = getDirectoryFlatDataArr(childConfig,obj.name);
+      flatArr.push(...childrens); //递归调用
+    }
+  });
+  return flatArr;
+}
+
+export function getDirectoryFlatMap(flatDataArr) {
+  let flatDataMap = {};
+  $.each(flatDataArr,(index,obj)=>{  //平行的键值对的map结构。
+    flatDataMap[obj.id] = obj;
+  });
+  return flatDataMap;
 }

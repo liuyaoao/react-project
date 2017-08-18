@@ -23,7 +23,6 @@ export default class AddressSidebarMenuComp extends React.Component {
         organizationsFlatData:React.PropTypes.array,
         organizationsFlatDataMap:React.PropTypes.object,
         onClickMenuItem: React.PropTypes.func,
-        getAddressBookCnt: React.PropTypes.func.isRequired,
         setBreadcrumbData: React.PropTypes.func.isRequired
       };
   }
@@ -38,29 +37,30 @@ export default class AddressSidebarMenuComp extends React.Component {
   componentWillMount() {
     if(this.props.organizationsData && (this.props.organizationsData[0])){
       let openKey = this.props.organizationsData[0].id || '';
-      this.updateAddressBookList(openKey);
+      this.updateAddressBookList(openKey,'','');
       this.updateAddressBookBreadcrumb([openKey]);
       this.setState({"openKeys":[openKey]});
     }
-
   }
-
   componentWillReceiveProps(nextProps){
   }
+
   // menu item click handler
-   handleClick = (e) => {
+  handleMenuItemClick = (e) => {
     console.log('Clicked: ', e);
+    if(!e.key){return;}
     this.setState({ current: e.key });
-    e.key && this.updateAddressBookList(e.key);
     let tempArr = e.keyPath;
+    e.key && this.updateAddressBookList(tempArr[0], tempArr[1]||'', tempArr[2]||'');
     this.updateAddressBookBreadcrumb(tempArr.reverse());
     this.props.onClickMenuItem();
   }
   onMenuOpenChange = (openKeys) => {
     const state = this.state;
+    console.log('openKeys: ', openKeys);
     const latestOpenKey = openKeys.find(key => !(state.openKeys.indexOf(key) > -1));
     const latestCloseKey = state.openKeys.find(key => !(openKeys.indexOf(key) > -1));
-    latestOpenKey && this.updateAddressBookList(latestOpenKey);
+    latestOpenKey && this.updateAddressBookList(openKeys[0]||'', openKeys[1]||'', '');
     if(latestOpenKey){
       let breadcrumbKeys = [], parentid = latestOpenKey;
       while(parentid && parentid != "-1" && parentid!= -1){
@@ -81,9 +81,7 @@ export default class AddressSidebarMenuComp extends React.Component {
       id:'-1',
       name:'全部',
       parentId:'',
-      organizationLevel:1,
-      privilegeLevel:'1',
-      subOrganization:null
+      subtrees:null
     }
     $.each(openKeys,(index,val)=>{
       openMenuNameArr.push(organizationsFlatDataMap[val]["name"]);
@@ -91,11 +89,11 @@ export default class AddressSidebarMenuComp extends React.Component {
     this.props.setBreadcrumbData(openMenuNameArr);
   }
 
-  updateAddressBookList(organizationKey){
-    if(!organizationKey || organizationKey=='-1'){
-      organizationKey = '';
+  updateAddressBookList(organization, secondaryDirectory, level3Catalog){
+    if(!organization || organization=='-1'){
+      organization = '';
     }
-    this.props.getAddressBookCnt(organizationKey);
+    this.props.updateDirectoryData(organization, secondaryDirectory, level3Catalog);
   }
 
   getMenuItemList(sidebarConfig){
@@ -103,10 +101,10 @@ export default class AddressSidebarMenuComp extends React.Component {
     let _this = this;
     $.each(sidebarConfig, (index, obj)=>{
       // console.log("sidebarConfig obj:",obj);
-      if(!obj.subOrganization || obj.subOrganization.length<=0){ //已经是子节点了。
+      if(!obj.subtrees || obj.subtrees.length<=0){ //已经是子节点了。
         ele.push((<Menu.Item key={obj.id}>{obj.name}</Menu.Item>));
       }else{ //表示还有孩子节点存在。
-        let childConfig = obj.subOrganization;
+        let childConfig = obj.subtrees;
         let tempEle = _this.getMenuItemList(childConfig);
         ele.push((<SubMenu key={obj.id} title={<span>{obj.name}</span>}>{tempEle}</SubMenu>)); //递归调用
       }
@@ -119,9 +117,7 @@ export default class AddressSidebarMenuComp extends React.Component {
       id:'-1',
       name:'全部',
       parentId:'',
-      organizationLevel:1,
-      privilegeLevel:'1',
-      subOrganization:null
+      subtrees:null
 
     });
     const sidebarMenuList =  this.getMenuItemList(organizationsData);
@@ -133,7 +129,7 @@ export default class AddressSidebarMenuComp extends React.Component {
             selectedKeys={[this.state.current]}
             style={{ width: 240 }}
             onOpenChange={this.onMenuOpenChange}
-            onClick={this.handleClick} >
+            onClick={this.handleMenuItemClick} >
             {sidebarMenuList}
           </Menu>
 

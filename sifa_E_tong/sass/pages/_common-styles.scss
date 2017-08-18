@@ -155,3 +155,36 @@
 .doc-edit-form-mobile .ant-form .ant-row label{
   font-size:0.34rem;
 }
+//手机端的分页
+.mobile_page_cnt{
+  position:relative;
+  margin:10px auto;
+  width:98%;
+  .pre_page{
+    position:absolute;
+    left:6px;
+    top:0;
+  }
+  .page_num{
+    text-align:center;
+    width:80%;
+    margin:5px auto;
+    padding-top:10px;
+    color:black;
+  }
+  .next_page{
+    position:absolute;
+    right:6px;
+    top:0;
+  }
+}
+.am-list-item .am-list-line .am-list-content .addressbook_row img{
+  width:1.5rem;
+  height:1.5rem;
+}
+.am-list-item .am-list-line .am-list-content .addressbook_row span:nth-child(1){
+  padding-left: 0px;
+}
+.am-list-item .am-list-line .am-list-content .addressbook_row img{
+  padding-right: 0px;
+}

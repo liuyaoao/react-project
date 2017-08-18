@@ -23,7 +23,6 @@ import AddressListMobileComp from './addressbook/addressList_mobile_comp.jsx';
 import AddEditContactDialog from './addressbook/addEditContact_dialog.jsx';
 import AddEditContactMobileDialog from './addressbook/addEditContact_mobile_dialog.jsx';
 import AddressSearchComp from './addressbook/addressSearch_comp.jsx';
-// import List  from 'antd-mobile/lib/list';
 
 import signup_logo from 'images/signup_logo.png';
 import avatorIcon_man from 'images/avator_icon/avator_man.png';
@@ -39,7 +38,6 @@ class AddressBookPage extends React.Component {
         this.getStateFromStores = this.getStateFromStores.bind(this);
         this.onNavBarLeftClick = this.onNavBarLeftClick.bind(this);
         this.onSubmitSearch = this.onSubmitSearch.bind(this);
-        this.updateOrganizationData = this.updateOrganizationData.bind(this);
         this.state = this.getStateFromStores();
     }
     getStateFromStores() {
@@ -47,7 +45,9 @@ class AddressBookPage extends React.Component {
         return {
             open: false,
             position: 'left',
-            organizationKey:'',
+            organization:'',  //一级目录
+            secondaryDirectory:'',  //二级目录
+            level3Catalog:'',  //三级目录
             addressbookData:[],
             breadcrumbData:['全部'],
             loginUserName:'',
@@ -73,33 +73,30 @@ class AddressBookPage extends React.Component {
       console.log("me info:",me);
       this.setState({loginUserName:me.username||''});
       // this.getServerOrganizationsData();
-      organizationUtils.getServerContactDirectory((objArr)=>{
-        console.log("getContactDirectoryData-获取通讯录的目录结构数据-:",objArr);
-        
+      organizationUtils.getServerContactDirectory((objArr, flatDataArr, flatDataMap)=>{
+        console.log("getContactDirectoryData-获取通讯录的目录结构数据-:",objArr,flatDataArr);
+        this.setState({
+          "organizationsData":objArr||[],
+          "organizationsFlatData":flatDataArr||[],
+          "organizationsFlatDataMap":flatDataMap||{}
+        });
       });
-      this.getAddressBookCnt(this.state.organizationKey);
+      this.getAddressBookCnt({
+        organization:this.state.organization
+      });
     }
+
     componentWillUnmount(){
     }
-    updateOrganizationData(){
-      this.setState({
-        "organizationsData":OrganizationStore.getOrgaData()||[],
-        "organizationsFlatData":OrganizationStore.getOrgaFlatData()||[],
-        "organizationsFlatDataMap":OrganizationStore.getOrgaFlatMap()||{}
-      });
-    }
-    getAddressBookCnt(organizations){
-      let params = {};
-      if(typeof organizations == "string"){ //表示传入的是组织结构名。
-        params = {"organization":organizations};
-        this.setState({organizationKey:organizations});
-      }else if(typeof organizations == "object"){ //表示传入的搜索的对象参数。
-        params = organizations;
-      }
+
+    getAddressBookCnt(params){
+      !params.secondaryDirectory ? delete params.secondaryDirectory :null;
+      !params.level3Catalog ? delete params.level3Catalog :null;
+
       myWebClient.getServerAddressBook(params,
         (data,res)=>{
           let objArr = JSON.parse(res.text);
-          console.log("request server addressbook error res text:",objArr);
+          // console.log("request server addressbook error res text:",objArr);
           objArr = addressBookUtils.parseContactsData(objArr);
           this.setState({"addressbookData":objArr});
         },(e, err, res)=>{
@@ -116,7 +113,9 @@ class AddressBookPage extends React.Component {
     onSubmitSearch(value){
       console.log("onSubmitSearch:",value);
       let params = {
-        "organization":this.state.organizationKey
+        "organization":this.state.organization,
+        "secondaryDirectory":this.state.secondaryDirectory,
+        "level3Catalog":this.state.level3Catalog,
       }
       if(value){
         params['filter'] = value;
@@ -124,7 +123,7 @@ class AddressBookPage extends React.Component {
       this.getAddressBookCnt(params);
     }
     showAddEditDialog = (data)=>{ //显示新增编辑弹窗。
-      console.log("showAddressBook--AddEditDialog--:");
+      // console.log("showAddressBook--AddEditDialog--:");
       let info = data || {};
       this.setState({contactInfo:info, isShowEditDialog:true});
     }
@@ -136,6 +135,15 @@ class AddressBookPage extends React.Component {
     }
     afterDeleteContactsCall = ()=>{
       this.onSubmitSearch();
+    }
+    updateDirectoryData = (organization,secondaryDirectory,level3Catalog)=>{
+      let params = {
+        "organization":organization,
+        "secondaryDirectory":secondaryDirectory,
+        "level3Catalog":level3Catalog,
+      };
+      this.setState(params);
+      this.getAddressBookCnt(params);
     }
 
     getMobileElements(sidebar){
@@ -243,7 +251,7 @@ class AddressBookPage extends React.Component {
               organizationsFlatData={this.state.organizationsFlatData}
               organizationsFlatDataMap={this.state.organizationsFlatDataMap}
               onClickMenuItem={()=>{this.setState( {open:!this.state.open} ); }}
-              getAddressBookCnt={(key)=>{this.getAddressBookCnt(key)}}
+              updateDirectoryData={this.updateDirectoryData}
               setBreadcrumbData={(arr)=>{this.setBreadcrumbData(arr)}} />
         </Sider>
       );

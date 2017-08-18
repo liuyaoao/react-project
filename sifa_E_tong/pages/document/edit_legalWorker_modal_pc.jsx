@@ -57,22 +57,10 @@ class DocumentEditLegalWorkerModalPC extends React.Component {
     this.props.form.resetFields();
     this.props.handleCancelModal();
   }
-  // getFamilyMembers() {
-  //   const { familyData } = this.state;
-  //   const {memberInfo} = this.props;
-  //   // console.log(familyData);
-  //   return <EditableFamilyTable operate="edit" data={familyData} memberInfo={memberInfo} setFamilyData={this.setFamilyData.bind(this)} handleGetFamilyMembers={this.handleGetFamilyMembers.bind(this)}></EditableFamilyTable>
-  // }
-  // setFamilyData(familyData) {
-  //   this.setState({ familyData });
-  // }
   handleEditDocument(param) {
     let _this = this;
     param.fileInfoType = this.props.currentFileType;
-    // param.fileInfoSubType = this.props.currentFileSubType;
-    // param.department = this.props.currentDepartment;
     param.lawyerDepartment = param.lawyerDepartment ? param.lawyerDepartment : this.getDefaultDepartment(param.fileInfoSubType);
-    // console.log(param);
     MyWebClient.updateFileInfo(param,
       (data, res) => {
         if (res && res.ok) {
@@ -265,6 +253,13 @@ class DocumentEditLegalWorkerModalPC extends React.Component {
                     </FormItem>
                   </Col>*/}
                   <Col span={24}>
+                    <FormItem {...formItemLayout} label="执业机构">
+                      {getFieldDecorator('lawOfficeAddress', {initialValue: memberInfo.lawOfficeAddress||''})(
+                        <Input type="text" placeholder="" />
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={24}>
                     <FormItem {...formItemLayout} label="执业证号">
                       {getFieldDecorator('lawyerLicenseNo', {initialValue: memberInfo.lawyerLicenseNo||''})(
                         <Input type="text" placeholder="" />
@@ -279,75 +274,9 @@ class DocumentEditLegalWorkerModalPC extends React.Component {
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayout} label="执业证类别">
-                      {getFieldDecorator('lawyerPracticeType', {initialValue: memberInfo.lawyerPracticeType||''})(
+                    <FormItem {...formItemLayout} label="联系方式">
+                      {getFieldDecorator('inServiceEducation', {initialValue: memberInfo.inServiceEducation||''})(
                         <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="资格证号">
-                      {getFieldDecorator('lawyerQualificationCode', {initialValue: memberInfo.lawyerQualificationCode||''})(
-                        <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={24} id="addFirstPracticeTime">
-                    <FormItem {...formItemLayout} label="首次执业时间">
-                      {getFieldDecorator('lawyerFirstPracticeTime',
-                        {
-                          initialValue: (memberInfo.lawyerFirstPracticeTime && memberInfo.lawyerFirstPracticeTime!='null') ? moment(memberInfo.lawyerFirstPracticeTime, 'YYYY-MM-DD') : null
-                        })(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addFirstPracticeTime')} />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={24} id="addLawyerPracticeTime">
-                    <FormItem {...formItemLayout} label="执业时间">
-                      {getFieldDecorator('lawyerPracticeTime',
-                        {
-                          initialValue: (memberInfo.lawyerPracticeTime && memberInfo.lawyerPracticeTime!='null') ? moment(memberInfo.lawyerPracticeTime, 'YYYY-MM-DD') : null
-                        })(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addLawyerPracticeTime')} />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="是否受过行政处罚或行业处分">
-                      {getFieldDecorator('lawyerIsPunish', {initialValue: memberInfo.lawyerIsPunish || ''})(
-                        <Input />
-                      )}
-                    </FormItem>
-                  </Col>
-
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="惩罚日期">
-                      {getFieldDecorator('lawyerIsPunish', {initialValue: memberInfo.lawyerPunishTime || ''})(
-                        <Input />
-                      )}
-                    </FormItem>
-                  </Col>
-                  {/* <Col span={24} id="addLawyerPunishTime">
-                    <FormItem {...formItemLayout} label="惩罚日期">
-                      {getFieldDecorator('lawyerPunishTime',
-                        {
-                          initialValue: (memberInfo.lawyerPunishTime && memberInfo.lawyerPunishTime!='null')  ? moment(memberInfo.lawyerPunishTime, 'YYYY-MM-DD') : null
-                        })(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addLawyerPunishTime')} />
-                      )}
-                    </FormItem>
-                  </Col> */}
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="处理单位">
-                      {getFieldDecorator('lawyerPunishUnit', {initialValue: memberInfo.lawyerPunishUnit||''})(
-                        <Input />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="惩罚结果">
-                      {getFieldDecorator('lawyerPunishResult', {initialValue: memberInfo.lawyerPunishResult||''})(
-                        <Input />
                       )}
                     </FormItem>
                   </Col>
