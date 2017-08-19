@@ -1238,6 +1238,14 @@ export function canCreateCustomEmoji(user) {
     return true;
 }
 
+export function cloneArraySimple(arr) {
+    let tempArr = [];
+    for(let i=0;i<arr.length;i++){
+      tempArr[i] = arr[i];
+    }
+    return tempArr;
+}
+
 export function isValidPassword(password) {
     let errorMsg = '';
     let errorId = 'user.settings.security.passwordError';

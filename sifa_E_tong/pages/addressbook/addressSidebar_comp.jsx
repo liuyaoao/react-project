@@ -51,8 +51,9 @@ export default class AddressSidebarMenuComp extends React.Component {
     if(!e.key){return;}
     this.setState({ current: e.key });
     let tempArr = e.keyPath;
-    e.key && this.updateAddressBookList(tempArr[0], tempArr[1]||'', tempArr[2]||'');
-    this.updateAddressBookBreadcrumb(tempArr.reverse());
+    (tempArr[0]||'').indexOf('menu-item_')!=-1 ? (tempArr[0] = "") : null;
+    e.key && this.updateAddressBookList(tempArr[2], tempArr[1]||'', tempArr[0]||'');
+    this.updateAddressBookBreadcrumb(Utils.cloneArraySimple(tempArr).reverse());
     this.props.onClickMenuItem();
   }
   onMenuOpenChange = (openKeys) => {
@@ -60,14 +61,15 @@ export default class AddressSidebarMenuComp extends React.Component {
     console.log('openKeys: ', openKeys);
     const latestOpenKey = openKeys.find(key => !(state.openKeys.indexOf(key) > -1));
     const latestCloseKey = state.openKeys.find(key => !(openKeys.indexOf(key) > -1));
-    latestOpenKey && this.updateAddressBookList(openKeys[0]||'', openKeys[1]||'', '');
     if(latestOpenKey){
       let breadcrumbKeys = [], parentid = latestOpenKey;
       while(parentid && parentid != "-1" && parentid!= -1){
         breadcrumbKeys.push(parentid);
         parentid = this.props.organizationsFlatDataMap[parentid].parentId;
       }
-      this.updateAddressBookBreadcrumb(breadcrumbKeys.reverse());
+      breadcrumbKeys.reverse();
+      latestOpenKey && this.updateAddressBookList(breadcrumbKeys[0]||'', breadcrumbKeys[1]||'', breadcrumbKeys[2]||'');
+      this.updateAddressBookBreadcrumb(Utils.cloneArraySimple(breadcrumbKeys));
     }
     this.setState({ openKeys: openKeys });
   }
@@ -84,7 +86,7 @@ export default class AddressSidebarMenuComp extends React.Component {
       subtrees:null
     }
     $.each(openKeys,(index,val)=>{
-      openMenuNameArr.push(organizationsFlatDataMap[val]["name"]);
+      val && openMenuNameArr.push(organizationsFlatDataMap[val]["name"]);
     });
     this.props.setBreadcrumbData(openMenuNameArr);
   }

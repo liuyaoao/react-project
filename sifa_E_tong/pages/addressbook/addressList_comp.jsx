@@ -9,13 +9,8 @@ import myWebClient from 'client/my_web_client.jsx';
 import { Row, Col, Icon,notification, Input, Button as ButtonPc,Table, Pagination, Tooltip,Modal,message } from 'antd';
 
 const confirm = Modal.confirm;
-import signup_logo from 'images/signup_logo.png';
 import avatorIcon_man from 'images/avator_icon/avator_man.png';
 import avatorIcon_woman from 'images/avator_icon/avator_woman.png';
-import avatorIcon01 from 'images/avator_icon/avator01.jpg';
-import avatorIcon02 from 'images/avator_icon/avator02.jpg';
-import avatorIcon03 from 'images/avator_icon/avator03.jpg';
-import avatorIcon04 from 'images/avator_icon/avator04.jpg';
 notification.config({
   top: 68,
   duration: 3
@@ -55,8 +50,8 @@ class AddressListComp extends React.Component {
                     <a href="javascript:;" onClick={()=>{this.showDeleteConfirmDialog(record)}} style={{color:'red',marginLeft:'15px'}}><Icon type="delete" />删除</a>
                   </div>):null}
                 </div>
-                <div className="member_email"><span>电子邮件：</span>{record.email}</div>
-                <div className="member_phone"><span>电话号码：</span>{record.telephoneNumber+','+record.groupShortCode}</div>
+                <div className="member_email"><span>电话短码：</span>{record.groupShortCode}</div>
+                <div className="member_phone"><span>电话号码：</span>{record.telephoneNumber}</div>
             </div>
           </div>)
     }];
@@ -182,7 +177,7 @@ class AddressListComp extends React.Component {
 }
 
 AddressListComp.defaultProps = {
-  iconArr : [avatorIcon_man,avatorIcon_woman, avatorIcon_man, avatorIcon_man,avatorIcon_man,avatorIcon_woman,avatorIcon_man,avatorIcon_man, avatorIcon_man,avatorIcon01,avatorIcon02,avatorIcon03]
+  iconArr : [avatorIcon_man,avatorIcon_woman, avatorIcon_man, avatorIcon_man,avatorIcon_man,avatorIcon_woman,avatorIcon_man,avatorIcon_man, avatorIcon_man,avatorIcon_man,avatorIcon_man,avatorIcon_man]
 };
 
 AddressListComp.propTypes = {

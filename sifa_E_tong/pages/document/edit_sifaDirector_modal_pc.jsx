@@ -25,8 +25,7 @@ class DocumentEditSifaDirectorModalPC extends React.Component {
   componentWillReceiveProps(nextProps) {
     const {memberInfo} = this.props;
     if (nextProps.memberInfo.id !== memberInfo.id) {
-      console.log(nextProps.memberInfo.id, nextProps.memberInfo.userName);
-      this.handleGetFamilyMembers(nextProps.memberInfo.id);
+      // console.log(nextProps.memberInfo.id, nextProps.memberInfo.userName);
     }
   }
   showModal = () => {
@@ -39,17 +38,12 @@ class DocumentEditSifaDirectorModalPC extends React.Component {
     const {memberInfo} = this.props;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        values['lawyerFirstPracticeTime'] =  values['lawyerFirstPracticeTime'] ? values['lawyerFirstPracticeTime'].format('YYYY-MM-DD') : '';
-        values['lawyerPracticeTime'] = values['lawyerPracticeTime'] ? values['lawyerPracticeTime'].format('YYYY-MM-DD') : '';
-        values['lawyerPunishTime'] = values['lawyerPunishTime'] ? values['lawyerPunishTime'].format('YYYY-MM-DD') : '';
-        console.log('Received values of form: ', values);
+        values['joinWorkerTime'] =  values['joinWorkerTime'] ? values['joinWorkerTime'].format('YYYY-MM-DD') : '';
+        values['birthDay'] =  values['birthDay'] ? values['birthDay'].format('YYYY-MM-DD') : '';
         values.id = memberInfo.id;
-        // console.log(values);
-        const info = Object.assign({}, memberInfo, values);
-        delete info['key'];
-        info['familyMember']=[];
-        // console.log(info);
-        this.handleEditDocument(info);
+        const param = Object.assign({}, memberInfo, values);
+        delete param['key'];
+        this.handleEditDocument(param);
       }
     });
   }
@@ -57,22 +51,11 @@ class DocumentEditSifaDirectorModalPC extends React.Component {
     this.props.form.resetFields();
     this.props.handleCancelModal();
   }
-  // getFamilyMembers() {
-  //   const { familyData } = this.state;
-  //   const {memberInfo} = this.props;
-  //   // console.log(familyData);
-  //   return <EditableFamilyTable operate="edit" data={familyData} memberInfo={memberInfo} setFamilyData={this.setFamilyData.bind(this)} handleGetFamilyMembers={this.handleGetFamilyMembers.bind(this)}></EditableFamilyTable>
-  // }
-  // setFamilyData(familyData) {
-  //   this.setState({ familyData });
-  // }
   handleEditDocument(param) {
     let _this = this;
     param.fileInfoType = this.props.currentFileType;
     // param.fileInfoSubType = this.props.currentFileSubType;
     // param.department = this.props.currentDepartment;
-    param.lawyerDepartment = param.lawyerDepartment ? param.lawyerDepartment : this.getDefaultDepartment(param.fileInfoSubType);
-    // console.log(param);
     MyWebClient.updateFileInfo(param,
       (data, res) => {
         if (res && res.ok) {
@@ -91,42 +74,6 @@ class DocumentEditSifaDirectorModalPC extends React.Component {
         console.log('get error:', res ? res.text : '');
         _this.setState({ loading: false});
         _this.handleCancel();
-      }
-    );
-  }
-  getDefaultDepartment = (fileInfoSubType)=>{
-    let lawyerDepartment = '';
-    for(let i=0;i<this.props.departmentData.length;i++){
-      let deparDt = this.props.departmentData[i];
-      if(deparDt.resourceName == fileInfoSubType){
-        lawyerDepartment = deparDt.sub[0].name;
-      }
-    }
-    return lawyerDepartment;
-  }
-  handleGetFamilyMembers(id) {
-    let _this = this;
-    MyWebClient.getSearchFileFamilyMember(id.toUpperCase(),
-      (data, res) => {
-        if (res && res.ok) {
-          const data = JSON.parse(res.text);
-         //  console.log(data);
-          const familyData = data.map((item) => {
-            const obj = {};
-            obj.key = item.id;
-            Object.keys(item).forEach((key) => {
-              obj[key] = {
-                editable: false,
-                value: item[key]
-              }
-            });
-            return obj;
-          });
-          _this.setState({ familyData });
-        }
-      },
-      (e, err, res) => {
-        console.log('get error:', res ? res.text : '');
       }
     );
   }
@@ -280,25 +227,28 @@ class DocumentEditSifaDirectorModalPC extends React.Component {
                   </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="政治面貌">
-                      {getFieldDecorator('proposeOffice', {initialValue: memberInfo.proposeOffice||''})(
+                      {getFieldDecorator('proposedOffice', {initialValue: memberInfo.proposedOffice||''})(
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={24}>
+                  <Col span={24} id="addjoinWorkerTime">
                     <FormItem {...formItemLayout} label="何时开始从事司法行政工作">
-                      {getFieldDecorator('joinWorkerTime', {initialValue: memberInfo.joinWorkerTime||''})(
-                        <Input type="text" placeholder="" />
+                      {getFieldDecorator('joinWorkerTime',
+                        {
+                          initialValue: (memberInfo.joinWorkerTime && memberInfo.joinWorkerTime!='null') ? moment(memberInfo.joinWorkerTime, 'YYYY-MM-DD') : null
+                        })(
+                        <DatePicker getCalendarContainer={() => document.getElementById('addjoinWorkerTime')} />
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={24} id="addBirthdayTime">
+                  <Col span={24} id="addbirthDayTime">
                     <FormItem {...formItemLayout} label="出生年月">
-                      {getFieldDecorator('birthday',
+                      {getFieldDecorator('birthDay',
                         {
-                          initialValue: (memberInfo.birthday && memberInfo.birthday!='null') ? moment(memberInfo.birthday, 'YYYY-MM-DD') : null
+                          initialValue: (memberInfo.birthDay && memberInfo.birthDay!='null') ? moment(memberInfo.birthDay, 'YYYY-MM-DD') : null
                         })(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addBirthdayTime')} />
+                        <DatePicker getCalendarContainer={() => document.getElementById('addbirthDayTime')} />
                       )}
                     </FormItem>
                   </Col>
@@ -326,13 +276,6 @@ class DocumentEditSifaDirectorModalPC extends React.Component {
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="联系电话">
                       {getFieldDecorator('inServiceEducation', {initialValue: memberInfo.inServiceEducation||''})(
-                        <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="所属区域">
-                      {getFieldDecorator('Department', {initialValue: memberInfo.Department||''})(
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>

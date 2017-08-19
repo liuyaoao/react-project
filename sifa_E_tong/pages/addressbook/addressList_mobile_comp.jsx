@@ -8,13 +8,8 @@ import myWebClient from 'client/my_web_client.jsx';
 import { Modal,SwipeAction,List,Button } from 'antd-mobile';
 import { Row, Col, Icon,notification, Input, Tooltip,message } from 'antd';
 const alert = Modal.alert;
-import signup_logo from 'images/signup_logo.png';
 import avatorIcon_man from 'images/avator_icon/avator_man.png';
 import avatorIcon_woman from 'images/avator_icon/avator_woman.png';
-import avatorIcon01 from 'images/avator_icon/avator01.jpg';
-import avatorIcon02 from 'images/avator_icon/avator02.jpg';
-import avatorIcon03 from 'images/avator_icon/avator03.jpg';
-import avatorIcon04 from 'images/avator_icon/avator04.jpg';
 notification.config({
   top: 68,
   duration: 3
@@ -137,7 +132,7 @@ class AddressListMobileComp extends React.Component {
         <div className='addressbook_list mobile_addressbook_list' style={{width:'100%'}}>
           <List style={{ margin: '0.1rem 0', backgroundColor: 'white' }}>
             {curPageData.map((record, index) => (
-              <SwipeAction style={{ backgroundColor: '#f3f3f3' }}
+              <SwipeAction key={index} style={{ backgroundColor: '#f3f3f3' }}
                 autoClose
                 disabled={this.state.hasOperaPermission ? false : true}
                 right={[
@@ -156,7 +151,7 @@ class AddressListMobileComp extends React.Component {
                 onClose={() => console.log('global close')}
                 >
                 <List.Item key={index} multipleLine
-                  onClick={this.state.hasOperaPermission ? ()=>{this.showAddEditDialog(text,record,index)} : ''}>
+                  onClick={ ()=>{this.state.hasOperaPermission ? this.showAddEditDialog('',record,index) : ''} }>
                   <div className="addressbook_row">
                     <span className="addressbook_avator">
                       <img className="member_icon" width="54" height="54" src={this.props.iconArr[index]}/>
@@ -183,7 +178,7 @@ class AddressListMobileComp extends React.Component {
             <span>{pageCount>0?currentPage:0}</span>/<span>{pageCount}</span>
           </div>
           <div className="next_page">
-            <Button type="default" onClick={this.onClickNextPage}>上一页<Icon type="double-right" /></Button>
+            <Button type="default" onClick={this.onClickNextPage}>下一页<Icon type="double-right" /></Button>
           </div>
         </div>
       </div>
@@ -192,7 +187,7 @@ class AddressListMobileComp extends React.Component {
 }
 
 AddressListMobileComp.defaultProps = {
-  iconArr : [avatorIcon_man,avatorIcon_woman, avatorIcon_man, avatorIcon_man,avatorIcon_man,avatorIcon_woman,avatorIcon_man,avatorIcon_man, avatorIcon_man,avatorIcon01,avatorIcon02,avatorIcon03]
+  iconArr : [avatorIcon_man,avatorIcon_woman, avatorIcon_man, avatorIcon_man,avatorIcon_man,avatorIcon_woman,avatorIcon_man,avatorIcon_man, avatorIcon_man,avatorIcon_man,avatorIcon_man,avatorIcon_man]
 };
 
 AddressListMobileComp.propTypes = {

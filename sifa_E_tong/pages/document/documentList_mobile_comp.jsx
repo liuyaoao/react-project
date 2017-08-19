@@ -102,7 +102,7 @@ class DocumentListMobile extends React.Component {
             <span>{pageCount>0?currentPage:0}</span>/<span>{pageCount}</span>
           </div>
           <div className="next_page">
-            <Button type="default" onClick={this.onClickNextPage}>上一页<Icon type="double-right" /></Button>
+            <Button type="default" onClick={this.onClickNextPage}>下一页<Icon type="double-right" /></Button>
           </div>
         </div>
 

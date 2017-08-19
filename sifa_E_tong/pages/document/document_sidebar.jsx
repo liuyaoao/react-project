@@ -40,15 +40,17 @@ export default class DocumentSidebar extends React.Component {
     //  console.log('click tree',e);
     this.setState({ current: e.key });
     // console.log("e.item.props.children--:",e.item.props.children);
-    // console.log("e.keyPath--:",e.keyPath);
+    console.log("e.keyPath--:",e.keyPath,e.item.props.children);
     if (e.item.props.children) {
       const {currentFileType} = this.props;
       const currentDepartment = e.item.props.children;
       this.props.searchFormPC && this.props.searchFormPC.setFieldsValue({
-        userName: '', gender: '',lawOfficePrincipal:'',lawOfficeName:''
+        userName: '', gender: ''
       });
       let currentFileSubType = e.keyPath[1];
-
+      if(currentDepartment == "律所"||currentDepartment == "司法考试处"||currentDepartment == "基层法律工作者" ){
+        currentFileSubType = currentDepartment;
+      }
       this.props.setCurrentFileSubType(currentFileSubType);
       this.props.setCurrentDepartment(currentDepartment);
       const searchParam = {
@@ -72,7 +74,6 @@ export default class DocumentSidebar extends React.Component {
     if (latestOpenKey) {
       this.updateDocumentList(latestOpenKey);
     }
-
   }
 
   updateDocumentList(key){
@@ -115,15 +116,6 @@ export default class DocumentSidebar extends React.Component {
   }
   render() {
     const { departmentData, currentFileType } = this.props;
-    // (departmentData[0] && departmentData[0].id!='-1') && departmentData.unshift({
-    //   id:'-1',
-    //   name:'全部',
-    //   parentId:'',
-    //   organizationLevel:1,
-    //   privilegeLevel:'1',
-    //   sub:null
-    //
-    // });
     const sidebarMenuList =  this.getMenuItemList(departmentData);
     // console.log(this.state.openKeys);
     return (

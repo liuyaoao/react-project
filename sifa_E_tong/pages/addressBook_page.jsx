@@ -1,6 +1,5 @@
 //电子通讯录页面
 import $ from 'jquery';
-
 import React from 'react';
 import {browserHistory} from 'react-router/es6';
 import OrganizationStore from 'pages/stores/organization_store.jsx';
@@ -25,12 +24,6 @@ import AddEditContactMobileDialog from './addressbook/addEditContact_mobile_dial
 import AddressSearchComp from './addressbook/addressSearch_comp.jsx';
 
 import signup_logo from 'images/signup_logo.png';
-import avatorIcon_man from 'images/avator_icon/avator_man.png';
-import avatorIcon_woman from 'images/avator_icon/avator_woman.png';
-import avatorIcon01 from 'images/avator_icon/avator01.jpg';
-import avatorIcon02 from 'images/avator_icon/avator02.jpg';
-import avatorIcon03 from 'images/avator_icon/avator03.jpg';
-import avatorIcon04 from 'images/avator_icon/avator04.jpg';
 
 class AddressBookPage extends React.Component {
     constructor(props) {
@@ -72,7 +65,13 @@ class AddressBookPage extends React.Component {
       var me = UserStore.getCurrentUser() || {};
       console.log("me info:",me);
       this.setState({loginUserName:me.username||''});
-      // this.getServerOrganizationsData();
+      this.getServerDirectoryData();
+      this.getAddressBookCnt({
+        organization:this.state.organization
+      });
+    }
+
+    getServerDirectoryData(){
       organizationUtils.getServerContactDirectory((objArr, flatDataArr, flatDataMap)=>{
         console.log("getContactDirectoryData-获取通讯录的目录结构数据-:",objArr,flatDataArr);
         this.setState({
@@ -81,18 +80,20 @@ class AddressBookPage extends React.Component {
           "organizationsFlatDataMap":flatDataMap||{}
         });
       });
-      this.getAddressBookCnt({
-        organization:this.state.organization
-      });
-    }
-
-    componentWillUnmount(){
     }
 
     getAddressBookCnt(params){
       !params.secondaryDirectory ? delete params.secondaryDirectory :null;
       !params.level3Catalog ? delete params.level3Catalog :null;
-
+      if(params.organization){
+        params.organization = params.organization.split('_')[0];
+      }
+      if(params.secondaryDirectory){
+        params.secondaryDirectory = params.secondaryDirectory.split('_')[0];
+      }
+      if(params.level3Catalog){
+        params.level3Catalog = params.level3Catalog.split('_')[0];
+      }
       myWebClient.getServerAddressBook(params,
         (data,res)=>{
           let objArr = JSON.parse(res.text);
@@ -131,6 +132,7 @@ class AddressBookPage extends React.Component {
       this.setState({ contactInfo:{}, isShowEditDialog: false });
     }
     afterAddEditContactsCall = ()=>{ //新增编辑成功后更新列表。
+      this.getServerDirectoryData();
       this.onSubmitSearch();
     }
     afterDeleteContactsCall = ()=>{
@@ -220,7 +222,7 @@ class AddressBookPage extends React.Component {
     getBreadcrumbItem(){
       let {breadcrumbData} = this.state;
       let bread_items = breadcrumbData.map((val,index)=>{
-          return <Breadcrumb.Item className="bread_item" key={index}>{val}</Breadcrumb.Item>
+          return <Breadcrumb.Item className="bread_item" key={index}>{val.split("_")[0]}</Breadcrumb.Item>
         });
       return bread_items;
     }
@@ -257,28 +259,28 @@ class AddressBookPage extends React.Component {
       );
       let finalEle = this.state.isMobile ? this.getMobileElements(sidebar) : this.getPCElements(sidebar);
       let editDialog = this.state.isMobile ?
-                            (<AddEditContactMobileDialog
-                                visible={isShowEditDialog}
-                                contactInfo={contactInfo}
-                                closeAddEditDialog={this.closeAddEditDialog}
-                                afterAddEditContactsCall={this.afterAddEditContactsCall}
-                                organizationsData={this.state.organizationsData}
-                                organizationsFlatData={this.state.organizationsFlatData}
-                                organizationsFlatDataMap={this.state.organizationsFlatDataMap}
-                              />) :
-                            (<AddEditContactDialog
-                                visible={isShowEditDialog}
-                                contactInfo={contactInfo}
-                                closeAddEditDialog={this.closeAddEditDialog}
-                                afterAddEditContactsCall={this.afterAddEditContactsCall}
-                                organizationsData={this.state.organizationsData}
-                                organizationsFlatData={this.state.organizationsFlatData}
-                                organizationsFlatDataMap={this.state.organizationsFlatDataMap}
-                              ></AddEditContactDialog>);
+                      (<AddEditContactMobileDialog
+                          visible={isShowEditDialog}
+                          contactInfo={contactInfo}
+                          closeAddEditDialog={this.closeAddEditDialog}
+                          afterAddEditContactsCall={this.afterAddEditContactsCall}
+                          organizationsData={this.state.organizationsData}
+                          organizationsFlatData={this.state.organizationsFlatData}
+                          organizationsFlatDataMap={this.state.organizationsFlatDataMap}
+                        />) :
+                      (<AddEditContactDialog
+                          visible={isShowEditDialog}
+                          contactInfo={contactInfo}
+                          closeAddEditDialog={this.closeAddEditDialog}
+                          afterAddEditContactsCall={this.afterAddEditContactsCall}
+                          organizationsData={this.state.organizationsData}
+                          organizationsFlatData={this.state.organizationsFlatData}
+                          organizationsFlatDataMap={this.state.organizationsFlatDataMap}
+                        ></AddEditContactDialog>);
       return (<div className="address_book_container">
-        {finalEle}
-        {editDialog}
-      </div>);
+                {finalEle}
+                {editDialog}
+              </div>);
     }
 }
 

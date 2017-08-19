@@ -41,7 +41,6 @@ class DocumentPage extends React.Component {
         this.handleShowEditModal = this.handleShowEditModal.bind(this);
         this.handleCancelModal = this.handleCancelModal.bind(this);
         this.showDeleteConfirm =this.showDeleteConfirm.bind(this);
-        this.showDeleteAllConfirm =this.showDeleteAllConfirm.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.state = this.getStateFromStores();
     }
@@ -107,13 +106,13 @@ class DocumentPage extends React.Component {
       _param = param;
       this.setState({searchParam: param});
       // console.log('属性1',_param);
-      if(_param.department == '律所' || _param.department == '司法考试处'){
+      if(_param.department == '律所' || _param.department == '司法考试处' || _param.department == '基层法律工作者'){
         _param.fileInfoSubType = _param.department;
         delete  _param.department;
       }
     } else {
       _param = this.state.searchParam;
-      if(_param.department == '律所' || _param.department == '司法考试处'){
+      if(_param.department == '律所' || _param.department == '司法考试处' || _param.department == '基层法律工作者'){
         _param.fileInfoSubType = _param.department;
         delete  _param.department;
       }
@@ -123,11 +122,9 @@ class DocumentPage extends React.Component {
       _param.fileInfoType = currentFileType;
       if(currentFileSubType) _param.fileInfoSubType = currentFileSubType;
       if(currentDepartment){
-
-        if(currentDepartment == '律所' || currentDepartment == '司法考试处'){
-          _param.fileInfoSubType = currentDepartment
+        if(currentDepartment == '律所' || currentDepartment == '司法考试处' || currentDepartment == '基层法律工作者'){
+          _param.fileInfoSubType = currentDepartment;
         }else{
-
           _param.department = currentDepartment;
         }
       }else{
@@ -179,12 +176,11 @@ class DocumentPage extends React.Component {
       row.resourceId = row.id, row.resourceName = row.name;
       if (parnts.indexOf(row.parntName) > -1) {
         getChild(row);
-      } else {
-        if(row.parntName == "律所" || row.parntName == '司法考试处'){
+      } else { //这里需要特殊处理，对于下一级只有一层的，前端处理去掉下一级。
+        if(row.parntName == "律所" || row.parntName == '司法考试处' || row.parntName == '基层法律工作者'){
           nodes.push(row);
         }else {
           parnts.push(row.parntName);
-          console.log(row.parntName);
           nodes.push( { resourceId: row.parntName, resourceName: row.parntName, sub: []});
           getChild(row);
         }
@@ -272,7 +268,7 @@ class DocumentPage extends React.Component {
       }
     )
   }
-  showDeleteAllConfirm(){ //是否确认一键全部删除
+  showDeleteAllConfirm = ()=>{ //是否确认一键全部删除
     let _this = this;
     if (this.state.isMobile) {
       ModalAmAlert('删除', '确认一键全部删除吗 ?', [
@@ -488,7 +484,7 @@ class DocumentPage extends React.Component {
       edit_ele = <DocumentEditJudExamModalPC {...editModalField}></DocumentEditJudExamModalPC>
     }else if(currentFileSubType == '律师' ){
       edit_ele = <DocumentEditLawyerModalPC {...editModalField}></DocumentEditLawyerModalPC>
-    }else if(currentFileSubType == '基层法律工作者' ){
+    }else if(currentDepartment == '基层法律工作者' ){
       edit_ele = <DocumentEditLegalWorkerModalPC {...editModalField}></DocumentEditLegalWorkerModalPC>
     }else if(currentFileSubType == '司法所长' ){
       edit_ele = <DocumentEditSifaDirectorModalPC {...editModalField}></DocumentEditSifaDirectorModalPC>

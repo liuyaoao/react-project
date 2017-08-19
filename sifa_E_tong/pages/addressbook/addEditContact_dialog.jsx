@@ -5,10 +5,11 @@ import myWebClient from 'client/my_web_client.jsx';
 import * as Utils from 'utils/utils.jsx';
 import superagent from 'superagent';
 
-import { Row, Col, Form, Icon, Input, Button as ButtonPc ,notification, TreeSelect, Modal,message,Switch,Radio } from 'antd';
+import { Row, Col, Form, Icon, Input, Button as ButtonPc ,notification, Select, Modal,message,Switch,Radio } from 'antd';
 const FormItem = Form.Item;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
+const Option = Select.Option;
 
 message.config({
   top: 75,
@@ -22,8 +23,9 @@ const initContactInfo = {
   id:"",
   userName:'',
   groupShortCode:'',
-  email:'',
   organization:'',
+  secondaryDirectory:'',
+  level3Catalog:'',
   telephoneNumber:''
 }
 const donNeedParams = ['key'];
@@ -35,41 +37,45 @@ class AddEditContactDialog extends React.Component {
       this.closeDialog = this.closeDialog.bind(this);
       this.handleAddOrEdit = this.handleAddOrEdit.bind(this);
       this.handleCancel = this.handleCancel.bind(this);
-      this.onTreeSelectChange = this.onTreeSelectChange.bind(this);
       this.state = {
         loading: false,
-        treeSelectData:[],
-        treeSelectValue:[],
+        selectOrganization:'', //一级目录
+        selectSecondaryDirectory:'', //二级目录
+        selectLevel3Catalog:'', //已选的三级目录
         confirmDirty:false,
         contactInfo:{},
-        isAdd:false, //判断是否是新增弹窗
+        isAdd:true, //判断是否是新增弹窗
         visible: false
       };
   }
 
   componentWillMount(){
-    // let treeSelectData = this.getOrganiTreeSelectData(this.props.organizationsData);
-    // this.setState({"treeSelectData":treeSelectData});
   }
-  getOrganiTreeSelectData(objArr){
-    let treeArr = [];
-    $.each(objArr, (index, obj)=>{
-      if(!obj.subtrees || obj.subtrees.length<=0){ //已经是子节点了。
-        treeArr.push({
-          key:obj.id,
-          value:obj.id,
-          label:obj.name
-        });
-      }else{ //表示还有孩子节点存在。
-        treeArr.push({
-          key:obj.id,
-          value:obj.id,
-          label:obj.name,
-          children:this.getOrganiTreeSelectData(obj.subtrees)
-        });
-      }
-    });
-    return treeArr;
+  componentWillReceiveProps(nextProps){
+    if(nextProps.visible
+       && nextProps.contactInfo.id != this.props.contactInfo.id){
+      this.setState({
+        selectOrganization:nextProps.contactInfo.organization||'',
+        selectSecondaryDirectory:nextProps.contactInfo.secondaryDirectory||'',
+        selectLevel3Catalog:nextProps.contactInfo.level3Catalog||''
+      });
+    }
+    if(nextProps.visible && nextProps.contactInfo.id){
+      let isAdd = !!nextProps.contactInfo.id ? false : true;
+      this.setState({
+        contactInfo:nextProps.contactInfo,
+        selectOrganization:nextProps.contactInfo.organization||'',
+        selectSecondaryDirectory:nextProps.contactInfo.secondaryDirectory||'',
+        selectLevel3Catalog:nextProps.contactInfo.level3Catalog||'',
+        isAdd:isAdd});
+    }
+    if(this.props.organizationsFlatData.length != nextProps.organizationsFlatData.length){
+    }
+
+    if(!nextProps.visible){
+      this.props.form.resetFields();
+      this.setState({contactInfo:{},selectOrganization:'',selectSecondaryDirectory:'',selectLevel3Catalog:''});
+    }
   }
   showModal = () => {
     this.setState({visible: true});
@@ -90,7 +96,7 @@ class AddEditContactDialog extends React.Component {
   }
   realSubmit(){
     let submitInfo = this.props.form.getFieldsValue();
-    console.log("新增or修改联系人信息的submitInfo参数--：",submitInfo);
+    // console.log("新增or修改联系人信息的submitInfo参数--：",submitInfo);
     let params = Object.assign({},initContactInfo,this.state.contactInfo,submitInfo);
     params = this.parseSendServerParams(params);
 
@@ -108,18 +114,19 @@ class AddEditContactDialog extends React.Component {
         console.log("addNewContacts error: ",err);
       });
   }
-
   parseSendServerParams(params){
     let {contactInfo} = this.state;
     donNeedParams.map((val)=>{
       delete params[val];
       return '';
     });
-    let organiSelectValues= this.state.treeSelectValue.map((item) => {
-      return item.value;
-    });
-    params['organization'] = organiSelectValues.join(',');
-    console.log("新增or修改用户信息的参数--：",params);
+    // let organiSelectValues= this.state.treeSelectValue.map((item) => {
+    //   return item.value;
+    // });
+    params['organization'] = this.state.selectOrganization;
+    params['secondaryDirectory'] = this.state.selectSecondaryDirectory;
+    params['level3Catalog'] = this.state.selectLevel3Catalog;
+    // console.log("新增or修改用户信息的参数--：",params);
     return params;
   }
 
@@ -128,47 +135,76 @@ class AddEditContactDialog extends React.Component {
     this.props.closeAddEditDialog();
   }
 
-  onTreeSelectChange(value){
-    // console.log("tree select value:",value);
-    this.setState({treeSelectValue:value});
+  getOrganiTreeOptions(){ //得到一级目录的options下拉选项。
+    let optionsArr = [];
+    $.each(this.props.organizationsData, (k, obj)=>{
+      if(obj.id != "-1"){
+        optionsArr.push(<Option key={k} value={obj.id}>{obj.name}</Option>);
+      }
+    });
+    return optionsArr;
   }
-
-  componentWillReceiveProps(nextProps){
-
-    if(nextProps.visible
-       && nextProps.contactInfo.id != this.props.contactInfo.id){
-      let organization = nextProps.contactInfo.organization || '';
-      let treeSelectValue = this.getOrgaTreeSelectedValues(organization.split(','));
-      this.setState({treeSelectValue:treeSelectValue});
-    }
-    if(nextProps.visible && nextProps.contactInfo){
-      let isAdd = !!nextProps.contactInfo.id ? false : true;
-      this.setState({contactInfo:nextProps.contactInfo,isAdd:isAdd});
-    }
-    if(this.props.organizationsFlatData.length != nextProps.organizationsFlatData.length){
-      let treeSelectData = this.getOrganiTreeSelectData(nextProps.organizationsData);
-      this.setState({"treeSelectData":treeSelectData});
-    }
-
-    if(!nextProps.visible){
-      this.props.form.resetFields();
-      this.setState({contactInfo:{},treeSelectValue:[]});
-    }
-  }
-
-  getOrgaTreeSelectedValues(organizations){
-    let arr = [];
-    organizations.filter((val)=>{
-      if(val){
-        let obj = this.props.organizationsFlatDataMap[val];
-        arr.push({
-          label:obj.name||'',
-          value:obj.id||''
+  getSecondaryDirectoryTreeOptions(){ //得到二级目录的options下拉选项。
+    let optionsArr = [];
+    let {selectOrganization} = this.state;
+    $.each(this.props.organizationsData, (k, obj)=>{
+      if(obj.name == selectOrganization){
+        $.each(obj.subtrees||[], (index,item)=>{
+          optionsArr.push(<Option key={index} value={item.id}>{item.name}</Option>);
         });
       }
     });
-    return arr;
+    return optionsArr;
   }
+  getLevel3CatalogTreeOptions(){ //得到3级目录的options下拉选项。
+    let optionsArr = [];
+    let {selectOrganization} = this.state;
+    let {selectSecondaryDirectory} = this.state;
+    $.each(this.props.organizationsData, (k, obj)=>{
+      if(obj.name == selectOrganization){
+        $.each(obj.subtrees||[], (i,temp)=>{
+          if(temp.name == selectSecondaryDirectory){
+            $.each(temp.subtrees||[], (index,item)=>{
+              optionsArr.push(<Option key={index} value={item.id}>{item.name}</Option>);
+            });
+          }
+        });
+      }
+    });
+    return optionsArr;
+  }
+  handleOrganiSelected = (val)=>{ //一级目录的下拉选中时
+    this.setState({
+      selectOrganization:val
+    });
+  }
+  handleSecondaryDirectorySelected = (val)=>{ //二级目录下拉选中时
+    this.setState({
+      selectSecondaryDirectory:val
+    });
+  }
+  handleLevel3CatalogSelected = (val)=>{ //三级目录下拉选中时
+    this.setState({
+      selectLevel3Catalog:val
+    });
+  }
+
+  handleOrganiChanged = (evt)=>{ //一级目录的手动输入改变
+    this.setState({
+      selectOrganization:evt.target.value
+    });
+  }
+  handleSecondaryDirectoryChanged = (evt)=>{
+    this.setState({
+      selectSecondaryDirectory:evt.target.value
+    });
+  }
+  handleLevel3CatalogChanged = (evt)=>{
+    this.setState({
+      selectLevel3Catalog:evt.target.value
+    });
+  }
+
 
   render() {
     const { getFieldDecorator, getFieldsError, getFieldError } = this.props.form;
@@ -183,21 +219,7 @@ class AddEditContactDialog extends React.Component {
       },
     };
     const { contactInfo } = this.state;
-    const treeData = this.state.treeSelectData;
-    const treeSelectProps = {
-      treeData,
-      value: this.state.treeSelectValue,
-      onChange: this.onTreeSelectChange,
-      multiple: true,
-      allowClear:true,
-      treeCheckable: true,
-      treeCheckStrictly:true,
-      showCheckedStrategy: TreeSelect.SHOW_ALL,
-      searchPlaceholder: '请选择...',
-      style: {
-        width: '100%',
-      },
-    };
+
     return (
       <Modal className="sys-edit-form"
         visible={this.props.visible}
@@ -237,15 +259,13 @@ class AddEditContactDialog extends React.Component {
                 <FormItem {...formItemLayout} label="公司电话短号">
                   {getFieldDecorator('groupShortCode', {
                     initialValue:contactInfo.groupShortCode,
-                    rules: [{
-                      required: true, message: '公司电话短号为必填项！', whitespace: true
-                    }],
                   })(
                     <Input/>
                   )}
                 </FormItem>
               </Col>
-              <Col span={24}>
+
+              {/*<Col span={24}>
                 <FormItem {...formItemLayout} label="邮箱">
                   {getFieldDecorator('email', {
                     initialValue:contactInfo.email,
@@ -258,16 +278,67 @@ class AddEditContactDialog extends React.Component {
                     <Input/>
                   )}
                 </FormItem>
-              </Col>
+              </Col>*/}
+
               <Col span={24}>
-                <FormItem {...formItemLayout} label="目录结构">
-                  <TreeSelect {...treeSelectProps} />
+                <FormItem {...formItemLayout} label="一级目录">
+                  <Select showSearch style={{ width: '50%' }}
+                    placeholder="请选择一级目录"
+                    optionFilterProp="children"
+                    value={this.state.selectOrganization}
+                    onSelect={this.handleOrganiSelected}
+                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                    >
+                    {this.getOrganiTreeOptions()}
+                  </Select>
+                  <Input value={this.state.selectOrganization}
+                    onChange={this.handleOrganiChanged}
+                    placeholder="手动填写"
+                    style={{width:'48%',display:'inline-block',marginLeft:'10px'}}/>
                 </FormItem>
               </Col>
+              <Col span={24}>
+                <FormItem {...formItemLayout} label="二级目录">
+                  <Select showSearch style={{ width: '50%' }}
+                    placeholder="请选择二级目录"
+                    optionFilterProp="children"
+                    value={this.state.selectSecondaryDirectory}
+                    onSelect={this.handleSecondaryDirectorySelected}
+                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                    >
+                    {this.getSecondaryDirectoryTreeOptions()}
+                  </Select>
+                  <Input value={this.state.selectSecondaryDirectory}
+                    onChange={this.handleSecondaryDirectoryChanged}
+                    placeholder="手动填写"
+                    style={{width:'48%',display:'inline-block',marginLeft:'10px'}}/>
+                </FormItem>
+              </Col>
+              <Col span={24}>
+                <FormItem {...formItemLayout} label="三级目录">
+                  <Select showSearch style={{ width: '50%' }}
+                    placeholder="请选择三级目录"
+                    optionFilterProp="children"
+                    value={this.state.selectLevel3Catalog}
+                    onSelect={this.handleLevel3CatalogSelected}
+                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                    >
+                    {this.getLevel3CatalogTreeOptions()}
+                  </Select>
+                  <Input value={this.state.selectLevel3Catalog}
+                    onChange={this.handleLevel3CatalogChanged}
+                    placeholder="手动填写"
+                    style={{width:'48%',display:'inline-block',marginLeft:'10px'}}/>
+                </FormItem>
+              </Col>
+
               <Col span={24}>
                 <FormItem {...formItemLayout} label="电话">
                   {getFieldDecorator('telephoneNumber', {
                     initialValue:contactInfo.telephoneNumber,
+                    rules: [{
+                      required: true, message: '电话号码为必填项！', whitespace: true
+                    }],
                   })(
                     <Input/>
                   )}
@@ -282,19 +353,6 @@ class AddEditContactDialog extends React.Component {
   }
 }
 
-// <Col span={24}>
-//   <FormItem
-//     {...formItemLayout}
-//     label="用户是否有效"
-//   >
-//     {getFieldDecorator('effective', {
-//       initialValue:contactInfo.effective,
-//       valuePropName: 'checked'
-//     })(
-//       <Switch />
-//     )}
-//   </FormItem>
-// </Col>
 
 AddEditContactDialog.defaultProps = {
 };

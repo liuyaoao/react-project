@@ -100,17 +100,17 @@ class SearchFormPC extends React.Component {
         </a>
       );
       action_url = MyWebClient.getjudicialexamInfoImportUrl();
-    } else if ( this.props.currentFileSubType == '基层法律工作者' ){
+    } else if ( this.props.currentDepartment == '基层法律工作者' ){
       downloadTemplateLink = (
         <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
-          href={window.serverUrl+"/modle/基层法律工作者档案模板.xlsx"}><Icon type="download" /> 下载模板(基层法律工作者)
+          href={window.serverUrl+"/modle/legal_workers_template.xls"}><Icon type="download" /> 下载模板(基层法律工作者)
         </a>
       );
       action_url = MyWebClient.getLegalWorkerImportUrl();
     } else if ( this.props.currentFileSubType == '司法所长' ){
       downloadTemplateLink = (
         <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
-          href={window.serverUrl+"/modle/司法所长档案模板.xlsx"}><Icon type="download" /> 下载模板(司法所长)
+          href={window.serverUrl+"/modle/sifa_director_template.xlsx"}><Icon type="download" /> 下载模板(司法所长)
         </a>
       );
       action_url = MyWebClient.getSifa_DirectorImportUrl();

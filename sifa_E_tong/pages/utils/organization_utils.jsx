@@ -104,13 +104,13 @@ export function getDirectoryFlatDataArr(objArr,parentId){ //得到平级的组�
   let flatArr = [];
   $.each(objArr, (index, obj)=>{
     obj.parentId = parentId;
-    obj.id = obj.name;
+    obj.id = (obj.name || "123456")+"_"+parentId;
     if(!obj.subtrees || obj.subtrees.length<=0){ //已经是子节点了。
-      flatArr.push({id:obj.name || "123456",parentId:parentId, name:obj.name || "123456",subtreeNum:0});
+      flatArr.push({id:(obj.name || "123456")+"_"+parentId,parentId:parentId, name:obj.name || "123456",subtreeNum:0});
     }else{ //表示还有孩子节点存在。
-      flatArr.push({id:obj.name || "123456",parentId:parentId, name:obj.name || "123456",subtreeNum:obj.subtrees.length});
+      flatArr.push({id:(obj.name || "123456")+"_"+parentId,parentId:parentId, name:obj.name || "123456",subtreeNum:obj.subtrees.length});
       let childConfig = obj.subtrees;
-      let childrens = getDirectoryFlatDataArr(childConfig,obj.name);
+      let childrens = getDirectoryFlatDataArr(childConfig,obj.id);
       flatArr.push(...childrens); //递归调用
     }
   });

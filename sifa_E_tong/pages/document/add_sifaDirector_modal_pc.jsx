@@ -20,8 +20,6 @@ import EditableFamilyTable from './family_table.jsx';
 class DocumentAddSifaDirectorModalPC extends React.Component {
   state = {
     loading: false,
-    familyData: [],
-    member: {},
     visible: false,
     isMobile: Utils.isMobile(),
   }
@@ -39,52 +37,30 @@ class DocumentAddSifaDirectorModalPC extends React.Component {
     const {memberInfo} = this.props;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
-        values['lawyerFirstPracticeTime'] =  values['lawyerFirstPracticeTime'] ? values['lawyerFirstPracticeTime'].format('YYYY-MM-DD') : '';
-        values['lawyerPracticeTime'] = values['lawyerPracticeTime'] ? values['lawyerPracticeTime'].format('YYYY-MM-DD') : '';
-        values['lawyerPunishTime'] = values['lawyerPunishTime'] ? values['lawyerPunishTime'].format('YYYY-MM-DD') : '';
-        const info = {
+        values['joinWorkerTime'] =  values['joinWorkerTime'] ? values['joinWorkerTime'].format('YYYY-MM-DD') : '';
+        values['birthDay'] =  values['birthDay'] ? values['birthDay'].format('YYYY-MM-DD') : '';
+        const param = {
           ...values,
-          // id: memberInfo.id,
-          familyMember: []
         }
-        const {familyData} = this.state;
-        const fdata = familyData.map((item) => {
-          const obj = {};
-          Object.keys(item).forEach((key) => {
-            if (key !== 'key') {
-              obj[key] = item[key].value;
-            }
-          });
-          return obj;
-        });
-        info.familyMember = fdata;
-        this.handleAddDocument(info);
+        this.handleAddDocument(param);
       }
     });
-  }
-  getDefaultDepartment = (fileInfoSubType)=>{
-    let lawyerDepartment = '';
-    for(let i=0;i<this.props.departmentData.length;i++){
-      let deparDt = this.props.departmentData[i];
-      if(deparDt.resourceName == fileInfoSubType){
-        lawyerDepartment = deparDt.sub[0].name;
-      }
-    }
-    return lawyerDepartment;
   }
   handleAddDocument(param) {
     let _this = this;
     param.fileInfoType = this.props.currentFileType;
     param.fileInfoSubType = this.props.currentFileSubType;
-    let lawyerDepartment = '';
+    param.fileInfoSubType = this.props.currentFileSubType;
     if(this.props.currentDepartment){
-      lawyerDepartment = this.props.currentDepartment;
+      param.department = this.props.currentDepartment;
     }else{
-      lawyerDepartment = this.getDefaultDepartment(this.props.currentFileSubType);
+      this.props.departmentData.map((parent) => {
+        if(parent.resourceName == param.fileInfoSubType){
+          param.department = parent.sub[0]["resourceName"];
+        }
+      });
     }
-    param.lawyerDepartment = lawyerDepartment;
-    // console.log(param);
+
     MyWebClient.createFileInfo(param,
       (data, res) => {
         if (res && res.ok) {
@@ -104,34 +80,6 @@ class DocumentAddSifaDirectorModalPC extends React.Component {
         console.log('get error:', res ? res.text : '');
         _this.setState({ loading: false});
         _this.handleCancel();
-      }
-    );
-  }
-  handleGetFamilyMembers(id) {
-    let _this = this;
-    MyWebClient.getSearchFileFamilyMember(id,
-      (data, res) => {
-        if (res && res.ok) {
-          const data = JSON.parse(res.text);
-         //  console.log(data);
-          const familyData = []
-          for (var i = 0; i < data.length; i++) {
-            const member = data[i];
-            const memberObj = {};
-            memberObj.key = member.id;
-            Object.keys(member).forEach((key) => {
-              memberObj[key] = {
-                editable: false,
-                value: member[key],
-              }
-            });
-            familyData.push(memberObj);
-          }
-          _this.setState({ familyData });
-        }
-      },
-      (e, err, res) => {
-        console.log('get error:', res ? res.text : '');
       }
     );
   }
@@ -250,23 +198,26 @@ class DocumentAddSifaDirectorModalPC extends React.Component {
                   </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="政治面貌">
-                      {getFieldDecorator('proposeOffice', {initialValue: memberInfo.proposeOffice||''})(
+                      {getFieldDecorator('proposedOffice', {initialValue: memberInfo.proposedOffice||''})(
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={24}>
+                  <Col span={24} id="addjoinWorkerTime">
                     <FormItem {...formItemLayout} label="何时开始从事司法行政工作">
-                      {getFieldDecorator('joinWorkerTime', {initialValue: memberInfo.joinWorkerTime||''})(
-                        <Input type="text" placeholder="" />
+                      {getFieldDecorator('joinWorkerTime',
+                        {
+                          initialValue: (memberInfo.joinWorkerTime && memberInfo.joinWorkerTime!='null') ? moment(memberInfo.joinWorkerTime, 'YYYY-MM-DD') : null
+                        })(
+                        <DatePicker getCalendarContainer={() => document.getElementById('addjoinWorkerTime')} />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24} id="addBirthdayTime">
                     <FormItem {...formItemLayout} label="出生年月">
-                      {getFieldDecorator('birthday',
+                      {getFieldDecorator('birthDay',
                         {
-                          initialValue: (memberInfo.birthday && memberInfo.birthday!='null') ? moment(memberInfo.birthday, 'YYYY-MM-DD') : null
+                          initialValue: (memberInfo.birthDay && memberInfo.birthDay!='null') ? moment(memberInfo.birthDay, 'YYYY-MM-DD') : null
                         })(
                         <DatePicker getCalendarContainer={() => document.getElementById('addBirthdayTime')} />
                       )}
@@ -296,13 +247,6 @@ class DocumentAddSifaDirectorModalPC extends React.Component {
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="联系电话">
                       {getFieldDecorator('inServiceEducation', {initialValue: memberInfo.inServiceEducation||''})(
-                        <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="所属区域">
-                      {getFieldDecorator('Department', {initialValue: memberInfo.Department||''})(
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>

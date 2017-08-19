@@ -13,20 +13,17 @@ import head_boy from 'images/head_boy.png';
 import head_girl from 'images/head_girl.png';
 
 import MyWebClient from 'client/my_web_client.jsx';
-import EditableFamilyTable from './family_table.jsx';
 //基层法律工作者 编辑窗口
 class DocumentEditLegalWorkerModalPC extends React.Component {
   state = {
     loading: false,
-    familyData: [],
     member: {},
     isMobile: Utils.isMobile(),
   }
   componentWillReceiveProps(nextProps) {
     const {memberInfo} = this.props;
     if (nextProps.memberInfo.id !== memberInfo.id) {
-      console.log(nextProps.memberInfo.id, nextProps.memberInfo.userName);
-      this.handleGetFamilyMembers(nextProps.memberInfo.id);
+      // console.log(nextProps.memberInfo.id, nextProps.memberInfo.userName);
     }
   }
   showModal = () => {
@@ -39,17 +36,13 @@ class DocumentEditLegalWorkerModalPC extends React.Component {
     const {memberInfo} = this.props;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        values['lawyerFirstPracticeTime'] =  values['lawyerFirstPracticeTime'] ? values['lawyerFirstPracticeTime'].format('YYYY-MM-DD') : '';
-        values['lawyerPracticeTime'] = values['lawyerPracticeTime'] ? values['lawyerPracticeTime'].format('YYYY-MM-DD') : '';
-        values['lawyerPunishTime'] = values['lawyerPunishTime'] ? values['lawyerPunishTime'].format('YYYY-MM-DD') : '';
         console.log('Received values of form: ', values);
         values.id = memberInfo.id;
         // console.log(values);
-        const info = Object.assign({}, memberInfo, values);
-        delete info['key'];
-        info['familyMember']=[];
-        // console.log(info);
-        this.handleEditDocument(info);
+        const param = Object.assign({}, memberInfo, values);
+        delete param['key'];
+        // console.log(param);
+        this.handleEditDocument(param);
       }
     });
   }
@@ -60,7 +53,6 @@ class DocumentEditLegalWorkerModalPC extends React.Component {
   handleEditDocument(param) {
     let _this = this;
     param.fileInfoType = this.props.currentFileType;
-    param.lawyerDepartment = param.lawyerDepartment ? param.lawyerDepartment : this.getDefaultDepartment(param.fileInfoSubType);
     MyWebClient.updateFileInfo(param,
       (data, res) => {
         if (res && res.ok) {
@@ -79,42 +71,6 @@ class DocumentEditLegalWorkerModalPC extends React.Component {
         console.log('get error:', res ? res.text : '');
         _this.setState({ loading: false});
         _this.handleCancel();
-      }
-    );
-  }
-  getDefaultDepartment = (fileInfoSubType)=>{
-    let lawyerDepartment = '';
-    for(let i=0;i<this.props.departmentData.length;i++){
-      let deparDt = this.props.departmentData[i];
-      if(deparDt.resourceName == fileInfoSubType){
-        lawyerDepartment = deparDt.sub[0].name;
-      }
-    }
-    return lawyerDepartment;
-  }
-  handleGetFamilyMembers(id) {
-    let _this = this;
-    MyWebClient.getSearchFileFamilyMember(id.toUpperCase(),
-      (data, res) => {
-        if (res && res.ok) {
-          const data = JSON.parse(res.text);
-         //  console.log(data);
-          const familyData = data.map((item) => {
-            const obj = {};
-            obj.key = item.id;
-            Object.keys(item).forEach((key) => {
-              obj[key] = {
-                editable: false,
-                value: item[key]
-              }
-            });
-            return obj;
-          });
-          _this.setState({ familyData });
-        }
-      },
-      (e, err, res) => {
-        console.log('get error:', res ? res.text : '');
       }
     );
   }
@@ -139,21 +95,6 @@ class DocumentEditLegalWorkerModalPC extends React.Component {
         sm: { span: 14 },
       },
     };
-    const formItemLayout1 = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 14 },
-      },
-    };
-    const formTailLayout = {
-      labelCol: { span: 4 },
-      wrapperCol: { span: 8, offset: 4 },
-    };
-    // let familyMembersTable = this.getFamilyMembers();
     const { memberInfo, departmentTypes } = this.props;
     // console.log(memberInfo);
     let defaultGender = null, head_img = null;
@@ -205,13 +146,15 @@ class DocumentEditLegalWorkerModalPC extends React.Component {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={24}>
+
+                  {/*<Col span={24}>
                     <FormItem {...formItemLayout} label="律所名称">
                       {getFieldDecorator('lawOfficeName', {initialValue: memberInfo.lawOfficeName || ''})(
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
-                  </Col>
+                  </Col>*/}
+
                   {/*<Col span={24}>
                     <FormItem {...formItemLayout} label="律所负责人">
                       {getFieldDecorator('lawOfficePrincipal', {initialValue: memberInfo.lawOfficePrincipal || ''})(

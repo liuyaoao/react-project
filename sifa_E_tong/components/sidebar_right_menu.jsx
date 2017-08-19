@@ -335,23 +335,23 @@ export default class SidebarRightMenu extends React.Component {
         }
 
         let helpLink = null;
-        if (global.window.mm_config.HelpLink) {
-            helpLink = (
-                <li>
-                    <Link
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        to={global.window.mm_config.HelpLink}
-                    >
-                        <i className='icon fa fa-question'/>
-                        <FormattedMessage
-                            id='sidebar_right_menu.help'
-                            defaultMessage='Help'
-                        />
-                    </Link>
-                </li>
-            );
-        }
+        // if (global.window.mm_config.HelpLink) {
+        //     helpLink = (
+        //         <li>
+        //             <Link
+        //                 target='_blank'
+        //                 rel='noopener noreferrer'
+        //                 to={global.window.mm_config.HelpLink}
+        //             >
+        //                 <i className='icon fa fa-question'/>
+        //                 <FormattedMessage
+        //                     id='sidebar_right_menu.help'
+        //                     defaultMessage='Help'
+        //                 />
+        //             </Link>
+        //         </li>
+        //     );
+        // }
 
         let reportLink = null;
         // if (global.window.mm_config.ReportAProblemLink) {

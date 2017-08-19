@@ -68,6 +68,11 @@ class DocumentListPC extends React.Component {
       {title:"性别", dataIndex:"gender", key:"gender", width:"15%"},
       {title:"律所名称", dataIndex:"lawOfficeName", key:"lawOfficeName"},
     ];
+    let legal_worker_columns = [ //基层法律工作者的表头。
+      {title:"姓名", dataIndex:"userName", key:"userName", width:"15%"},
+      {title:"性别", dataIndex:"gender", key:"gender", width:"15%"},
+      {title:"执业机构", dataIndex:"lawOfficeAddress", key:"lawOfficeAddress"},
+    ];
 
     let LegalWorker_columns = [ //基层法律工作者档案的表头。
       {title:"姓名", dataIndex:"userName", key:"userName", width:"15%"},
@@ -98,8 +103,8 @@ class DocumentListPC extends React.Component {
       columns = [...lawfim_columns, last_col];
     }else if(currentFileSubType == "律师"){
       columns = [...lawer_columns, last_col];
-    }else if(currentFileSubType == "基层法律工作者"){
-      columns = [...lawer_columns, last_col];
+    }else if(currentDepartment == "基层法律工作者"){
+      columns = [...legal_worker_columns, last_col];
     }else if(currentFileSubType == "司法所长"){
       columns = [...director_columns, last_col];
     }else{
@@ -138,7 +143,7 @@ class DocumentListPC extends React.Component {
       add_ele = <DocumentAddLawyerModalPC {...addModalField}>
         <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
       </DocumentAddLawyerModalPC>
-    }else if(currentFileSubType == '基层法律工作者') {
+    }else if(currentDepartment == '基层法律工作者') {
       // console.log('添加：',currentFileSubType);
       add_ele = <DocumentAddLegalWorkerModalPC {...addModalField}>
         <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>

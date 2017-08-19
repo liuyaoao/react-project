@@ -14,14 +14,11 @@ import head_boy from 'images/head_boy.png';
 import head_girl from 'images/head_girl.png';
 
 import MyWebClient from 'client/my_web_client.jsx';
-import EditableFamilyTable from './family_table.jsx';
 
 //基层法律工作者 新增窗口
 class DocumentAddLegalWorkerModalPC extends React.Component {
   state = {
     loading: false,
-    familyData: [],
-    member: {},
     visible: false,
     isMobile: Utils.isMobile(),
   }
@@ -39,52 +36,26 @@ class DocumentAddLegalWorkerModalPC extends React.Component {
     const {memberInfo} = this.props;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
-        values['lawyerFirstPracticeTime'] =  values['lawyerFirstPracticeTime'] ? values['lawyerFirstPracticeTime'].format('YYYY-MM-DD') : '';
-        values['lawyerPracticeTime'] = values['lawyerPracticeTime'] ? values['lawyerPracticeTime'].format('YYYY-MM-DD') : '';
-        values['lawyerPunishTime'] = values['lawyerPunishTime'] ? values['lawyerPunishTime'].format('YYYY-MM-DD') : '';
-        const info = {
+        const param = {
           ...values,
-          // id: memberInfo.id,
-          familyMember: []
         }
-        const {familyData} = this.state;
-        const fdata = familyData.map((item) => {
-          const obj = {};
-          Object.keys(item).forEach((key) => {
-            if (key !== 'key') {
-              obj[key] = item[key].value;
-            }
-          });
-          return obj;
-        });
-        info.familyMember = fdata;
-        this.handleAddDocument(info);
+        this.handleAddDocument(param);
       }
     });
-  }
-  getDefaultDepartment = (fileInfoSubType)=>{
-    let lawyerDepartment = '';
-    for(let i=0;i<this.props.departmentData.length;i++){
-      let deparDt = this.props.departmentData[i];
-      if(deparDt.resourceName == fileInfoSubType){
-        lawyerDepartment = deparDt.sub[0].name;
-      }
-    }
-    return lawyerDepartment;
   }
   handleAddDocument(param) {
     let _this = this;
     param.fileInfoType = this.props.currentFileType;
     param.fileInfoSubType = this.props.currentFileSubType;
-    let lawyerDepartment = '';
     if(this.props.currentDepartment){
-      lawyerDepartment = this.props.currentDepartment;
+      param.department = this.props.currentDepartment;
     }else{
-      lawyerDepartment = this.getDefaultDepartment(this.props.currentFileSubType);
+      this.props.departmentData.map((parent) => {
+        if(parent.resourceName == param.fileInfoSubType){
+          param.department = parent.sub[0]["resourceName"];
+        }
+      });
     }
-    param.lawyerDepartment = lawyerDepartment;
-    // console.log(param);
     MyWebClient.createFileInfo(param,
       (data, res) => {
         if (res && res.ok) {
@@ -104,34 +75,6 @@ class DocumentAddLegalWorkerModalPC extends React.Component {
         console.log('get error:', res ? res.text : '');
         _this.setState({ loading: false});
         _this.handleCancel();
-      }
-    );
-  }
-  handleGetFamilyMembers(id) {
-    let _this = this;
-    MyWebClient.getSearchFileFamilyMember(id,
-      (data, res) => {
-        if (res && res.ok) {
-          const data = JSON.parse(res.text);
-         //  console.log(data);
-          const familyData = []
-          for (var i = 0; i < data.length; i++) {
-            const member = data[i];
-            const memberObj = {};
-            memberObj.key = member.id;
-            Object.keys(member).forEach((key) => {
-              memberObj[key] = {
-                editable: false,
-                value: member[key],
-              }
-            });
-            familyData.push(memberObj);
-          }
-          _this.setState({ familyData });
-        }
-      },
-      (e, err, res) => {
-        console.log('get error:', res ? res.text : '');
       }
     );
   }
