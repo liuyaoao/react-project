@@ -41,6 +41,32 @@ class DocumentListMobile extends React.Component {
   handleShowEditModal = (item)=>{
     this.props.handleShowEditModal(item);
   }
+  getListItemBreifEle = (item)=>{
+    let {currentFileSubType, currentDepartment} = this.props;
+    let listItemBreif = '';
+    if(currentDepartment=="律所"){
+      listItemBreif = (<List.Item.Brief>
+        律所负责人: {item.lawOfficePrincipal}, 律所地址:  {item.lawOfficeAddress}
+      </List.Item.Brief>);
+    }else if(currentFileSubType == "律师"){
+      listItemBreif = (<List.Item.Brief>
+        性别: {item.gender}, 律所名称: {item.lawOfficeName}
+      </List.Item.Brief>);
+    }else if(currentDepartment == "基层法律工作者"){
+      listItemBreif = (<List.Item.Brief>
+        性别: {item.gender}, 执业机构: {item.lawOfficeAddress}
+      </List.Item.Brief>);
+    }else if(currentFileSubType == "司法所长"){
+      listItemBreif = (<List.Item.Brief>
+        性别: {item.gender}, 单位: {item.reportingUnit}
+      </List.Item.Brief>);
+    }else{
+      listItemBreif = (<List.Item.Brief>
+        性别: {item.gender}, 地址: {item.createParty}
+      </List.Item.Brief>);
+    }
+    return listItemBreif;
+  }
   render() {
     const { hasOperaPermission,currentPage } = this.state;
     const { data, currentFileType,  currentFileSubType, currentDepartment,showDeleteConfirm } = this.props;
@@ -53,7 +79,7 @@ class DocumentListMobile extends React.Component {
         {(!data || data.length<=0) ? (<div style={{textAlign:'center',color:'gray'}}>暂无数据</div>) : null}
         <List style={{ margin: '0.1rem 0', backgroundColor: 'white' }}>
           {curPageData.map((item, index) => (
-            <SwipeAction style={{ backgroundColor: '#f3f3f3' }}
+            <SwipeAction key={index} style={{ backgroundColor: '#f3f3f3' }}
                 autoClose
                 disabled={hasOperaPermission ? false : true}
                 right={[
@@ -79,15 +105,7 @@ class DocumentListMobile extends React.Component {
                     <div>律所名称：{item.lawOfficeName}</div>:
                     <div>姓名：{item.userName}</div>
                 }
-                {
-                  currentDepartment == '律所'?
-                  <List.Item.Brief>
-                    律所负责人: {item.lawOfficePrincipal}, 地址:  {item.lawOfficeAddress}
-                  </List.Item.Brief>:
-                  <List.Item.Brief>
-                    性别: {item.gender}, 地址: {currentFileSubType=="律师" ? item.lawOfficeAddress : item.createParty}
-                  </List.Item.Brief>
-                }
+                {this.getListItemBreifEle(item)}
               </List.Item>
 
           </SwipeAction>

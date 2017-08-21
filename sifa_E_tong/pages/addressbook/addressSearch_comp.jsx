@@ -7,7 +7,7 @@ import myWebClient from 'client/my_web_client.jsx';
 import superagent from 'superagent';
 
 import {InputItem,List} from 'antd-mobile';
-import { Row, Col, Form, Icon, Input, Button as ButtonPc,Upload,message,notification } from 'antd';
+import { Row, Col, Form, Icon, Input, Button as ButtonPc,Upload,message,notification,Spin, Alert } from 'antd';
 const FormItem = Form.Item;
 notification.config({
   top: 68,
@@ -35,7 +35,8 @@ class AddressSearchComp extends React.Component {
       this.state = {
         permissionData:permissionData,
         hasOperaPermission:hasOperaPermission, //是否有操作权限。
-        isMobile: Utils.isMobile()
+        isMobile: Utils.isMobile(),
+        uploading:false,
       };
   }
   handleAddressSearch(e){
@@ -61,12 +62,25 @@ class AddressSearchComp extends React.Component {
       notification.error({message: '你只能上传excel文档'});
       return false;
     }
+    this.setState({
+      uploading:true,
+    });
     return true;
   }
   fileUploadChange(obj) {
-    console.log('file upload change:',obj);
+    // console.log('file upload change:',obj);
     if(obj.file.status=="done" && obj.file.response == "success"){
-        this.props.onSubmitSearchCall('');
+      this.setState({
+        uploading:false,
+      });
+      notification.success({message: '通讯录上传成功！'});
+      this.props.updateContactsDirectory(); //更新通讯录的目录结构
+      this.props.onSubmitSearchCall('');
+    }else if(obj.file.status == "error"){
+      this.setState({
+        uploading:false,
+      });
+      notification.error({message: '通讯录上传失败！'});
     }
   }
 
@@ -122,6 +136,15 @@ class AddressSearchComp extends React.Component {
 
               </Row>
               </Form>
+              <div className={this.state.uploading?'visibleCls':'notVisibleCls'}>
+                <Spin spinning={this.state.uploading} tip="Loading...">
+                  <Alert style={{textAlign:'center',lineHeight: '40px'}}
+                    message={"正在导入通讯录档案!"}
+                    description=""
+                    type="info"
+                    />
+                </Spin>
+              </div>
       </div>
     )
     let searchMobileForm = (

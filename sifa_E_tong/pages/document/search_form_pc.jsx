@@ -1,7 +1,7 @@
 import React from 'react';
 import UserStore from 'stores/user_store.jsx';
 
-import { Form, Icon, Input, Button, Radio, Upload, message } from 'antd';
+import { Form, Icon, Input, Button, Radio, Upload, message, Spin, Alert } from 'antd';
 const FormItem = Form.Item;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -27,6 +27,7 @@ class SearchFormPC extends React.Component {
       let hasOperaPermission = permissionData['sys_config'].indexOf('action') != -1;
       this.state = {
         isMobile: Utils.isMobile(),
+        uploading:false,
         hasOperaPermission:hasOperaPermission, //是否有操作权限。
       };
   }
@@ -64,16 +65,25 @@ class SearchFormPC extends React.Component {
       this.props.openNotification('info', '只能上传excel文档');
       return false;
     }
+    this.setState({
+      uploading:true,
+    });
     return true;
   }
   fileUploadChange(obj) {
     // console.log('file upload change', obj);
     if(obj.file.status == "done" && obj.file.response == "success"){
+      this.setState({
+        uploading:false,
+      });
       console.log('success');
       this.props.openNotification('success', '档案导入成功');
       this.props.handleSearch();
     } else if (obj.file.status == "error") {
       console.log('faiel');
+      this.setState({
+        uploading:false,
+      });
       this.props.openNotification('error', '档案导入失败');
     }
   }
@@ -134,65 +144,81 @@ class SearchFormPC extends React.Component {
     }
     // console.log('搜索栏',this.props.currentFileSubType);
     // "/static/template/" + (this.props.currentFileSubType == '律师' ? '律师人事档案模板' : '其他人事档案模板') + ".xlsx"
-
+    let uploadDocName = '';
+    if((["律所","司法考试处","基层法律工作者"]).indexOf(this.props.currentDepartment) != -1){
+      uploadDocName = this.props.currentDepartment;
+    }else{
+      uploadDocName = this.props.currentFileSubType;
+    }
 
     return (
-      <Form layout="inline"
-        className="ant-advanced-search-form"
-        onSubmit={this.handleSubmit}
-        >
-        {/*<FormItem label="部门" className="p-r-10">
-          {getFieldDecorator('department')(
-            <Input placeholder="" />
-          )}
-        </FormItem>*/}
-        {
-          this.props.currentDepartment == '律所'?
-          <FormItem label="律所名称" className="p-r-10">
-            {
-              getFieldDecorator('lawOfficeName')(
-                <Input placeholder="" />
-              )
-            }
-          </FormItem>:
-          <FormItem label="姓名" className="p-r-10">
-            {
-              getFieldDecorator('userName')(
-                <Input placeholder="" />
-              )
-            }
-          </FormItem>
-        }
-
-        {
-          this.props.currentDepartment == '律所'?
-          <FormItem label="律所责任人" className="p-r-10">
-            {
-              getFieldDecorator('lawOfficePrincipal')(
-                <Input placeholder="" />
-              )
-            }
-          </FormItem>:
-          <FormItem label="性别">
-            {getFieldDecorator('gender')(
-              <RadioGroup>
-                <RadioButton value="男" onClick={this.handleGenderChange.bind(this)}>男</RadioButton>
-                <RadioButton value="女" onClick={this.handleGenderChange.bind(this)}>女</RadioButton>
-              </RadioGroup>
+      <div>
+        <Form layout="inline"
+          className="ant-advanced-search-form"
+          onSubmit={this.handleSubmit}
+          >
+          {/*<FormItem label="部门" className="p-r-10">
+            {getFieldDecorator('department')(
+              <Input placeholder="" />
             )}
-          </FormItem>
-        }
+          </FormItem>*/}
+          {
+            this.props.currentDepartment == '律所'?
+            <FormItem label="律所名称" className="p-r-10">
+              {
+                getFieldDecorator('lawOfficeName')(
+                  <Input placeholder="" />
+                )
+              }
+            </FormItem>:
+            <FormItem label="姓名" className="p-r-10">
+              {
+                getFieldDecorator('userName')(
+                  <Input placeholder="" />
+                )
+              }
+            </FormItem>
+          }
 
-        <FormItem label="">
-          <button type="submit" className="btn btn-primary comment-btn"><Icon type="search" /> 搜索</button>
-        </FormItem>
-        {this.state.hasOperaPermission ? (<FormItem label="" className="" style={{marginRight: 0}}>
-          <Upload {...uploadField}>
-            <button type="button" className="btn btn-default"><Icon type="upload" /> 导入</button>
-          </Upload>
-          { downloadTemplateLink }
-        </FormItem>) : null}
-      </Form>
+          {
+            this.props.currentDepartment == '律所'?
+            <FormItem label="律所责任人" className="p-r-10">
+              {
+                getFieldDecorator('lawOfficePrincipal')(
+                  <Input placeholder="" />
+                )
+              }
+            </FormItem>:
+            <FormItem label="性别">
+              {getFieldDecorator('gender')(
+                <RadioGroup>
+                  <RadioButton value="男" onClick={this.handleGenderChange.bind(this)}>男</RadioButton>
+                  <RadioButton value="女" onClick={this.handleGenderChange.bind(this)}>女</RadioButton>
+                </RadioGroup>
+              )}
+            </FormItem>
+          }
+
+          <FormItem label="">
+            <button type="submit" className="btn btn-primary comment-btn"><Icon type="search" /> 搜索</button>
+          </FormItem>
+          {this.state.hasOperaPermission ? (<FormItem label="" className="" style={{marginRight: 0}}>
+            <Upload {...uploadField}>
+              <button type="button" className="btn btn-default"><Icon type="upload" /> 导入</button>
+            </Upload>
+            { downloadTemplateLink }
+          </FormItem>) : null}
+        </Form>
+        <div className={this.state.uploading?'visibleCls':'notVisibleCls'}>
+          <Spin spinning={this.state.uploading} tip="Loading...">
+            <Alert style={{textAlign:'center',lineHeight: '40px'}}
+              message={"正在导入"+uploadDocName+"档案!"}
+              description=""
+              type="info"
+              />
+          </Spin>
+        </div>
+      </div>
     );
   }
 }

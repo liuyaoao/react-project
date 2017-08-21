@@ -1,11 +1,9 @@
 import $ from 'jquery';
 import React from 'react';
 import * as Utils from 'utils/utils.jsx';
-// import myWebClient from 'client/my_web_client.jsx';
 import {Link} from 'react-router/es6';
 import {  Icon, Table,notification } from 'antd';
 import {Toast} from 'antd-mobile';
-const urlPrefix = 'http://211.138.238.83:9000/CS_JrlService/';
 
 notification.config({
   top: 68,
@@ -18,36 +16,9 @@ class NoticeComp extends React.Component {
       this.getBodyPages = this.getBodyPages.bind(this);
       this.state = {
         isMobile: Utils.isMobile(),
-        currentIndex:1, //当前页的页码。
-        listData:[]
       };
   }
   componentWillMount(){
-      const data = [{
-        key: '1',
-        STitle:'年度报表上报',
-        pubUnit: '长沙市司法局',
-        pubTime:'2017-05-03 15:44:33'
-      },
-      {
-        key: '2',
-        STitle:'年度报表上报',
-        pubUnit: '长沙市司法局',
-        pubTime:'2017-05-03 15:44:33'
-      },
-      {
-        key: '3',
-        STitle:'年度报表上报',
-        pubUnit: '长沙市司法局',
-        pubTime:'2017-05-03 15:44:33'
-      },
-      {
-        key: '4',
-        STitle:'年度报表上报',
-        pubUnit: '长沙市司法局',
-        pubTime:'2017-05-03 15:44:33'
-      }
-    ];
   }
   componentWillReceiveProps(nextProps){
   }

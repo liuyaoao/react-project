@@ -3,6 +3,7 @@ import React from 'react';
 import OrganizationStore from 'pages/stores/organization_store.jsx';
 import myWebClient from 'client/my_web_client.jsx';
 import * as Utils from 'utils/utils.jsx';
+import * as commonUtils from '../utils/common_utils.jsx';
 import * as organizationUtils from '../utils/organization_utils.jsx';
 
 import { Row, Col, Form, Icon, Input, Button as ButtonPc ,notification,
@@ -76,6 +77,8 @@ class ModifyUserPasswordDialog extends React.Component {
       delete params[val];
       return '';
     });
+    params.password ? (params.password = commonUtils.Base64Encode(params.password)) : null;
+    // params.confirmPassword ? (params.confirmPassword = commonUtils.Base64Encode(params.confirmPassword)) : null;
     console.log("新增or修改 密码的参数--：",params);
     return params;
   }
@@ -146,7 +149,7 @@ class ModifyUserPasswordDialog extends React.Component {
     const { menberInfo } = this.state;
     return (
       <div>
-      <Modal className=""
+      <Modal className="pc_edit_dialog"
         visible={this.props.visible}
         title='修改密码'
         onOk={this.handleModifyPassword}

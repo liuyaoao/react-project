@@ -52,8 +52,9 @@ export default class AddressSidebarMenuComp extends React.Component {
     this.setState({ current: e.key });
     let tempArr = e.keyPath;
     (tempArr[0]||'').indexOf('menu-item_')!=-1 ? (tempArr[0] = "") : null;
-    e.key && this.updateAddressBookList(tempArr[2], tempArr[1]||'', tempArr[0]||'');
-    this.updateAddressBookBreadcrumb(Utils.cloneArraySimple(tempArr).reverse());
+    let reverseArr = Utils.cloneArraySimple(tempArr).reverse()
+    e.key && this.updateAddressBookList(reverseArr[0], reverseArr[1]||'', reverseArr[2]||'');
+    this.updateAddressBookBreadcrumb(reverseArr);
     this.props.onClickMenuItem();
   }
   onMenuOpenChange = (openKeys) => {

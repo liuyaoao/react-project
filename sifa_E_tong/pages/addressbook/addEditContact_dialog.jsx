@@ -74,7 +74,7 @@ class AddEditContactDialog extends React.Component {
 
     if(!nextProps.visible){
       this.props.form.resetFields();
-      this.setState({contactInfo:{},selectOrganization:'',selectSecondaryDirectory:'',selectLevel3Catalog:''});
+      this.setState({isAdd:true,contactInfo:{},selectOrganization:'',selectSecondaryDirectory:'',selectLevel3Catalog:''});
     }
   }
   showModal = () => {
@@ -123,9 +123,9 @@ class AddEditContactDialog extends React.Component {
     // let organiSelectValues= this.state.treeSelectValue.map((item) => {
     //   return item.value;
     // });
-    params['organization'] = this.state.selectOrganization;
-    params['secondaryDirectory'] = this.state.selectSecondaryDirectory;
-    params['level3Catalog'] = this.state.selectLevel3Catalog;
+    params['organization'] = this.state.selectOrganization.split("_")[0];
+    params['secondaryDirectory'] = this.state.selectSecondaryDirectory.split("_")[0];
+    params['level3Catalog'] = this.state.selectLevel3Catalog.split("_")[0];
     // console.log("新增or修改用户信息的参数--：",params);
     return params;
   }
@@ -148,7 +148,7 @@ class AddEditContactDialog extends React.Component {
     let optionsArr = [];
     let {selectOrganization} = this.state;
     $.each(this.props.organizationsData, (k, obj)=>{
-      if(obj.name == selectOrganization){
+      if(obj.name == selectOrganization.split("_")[0]){
         $.each(obj.subtrees||[], (index,item)=>{
           optionsArr.push(<Option key={index} value={item.id}>{item.name}</Option>);
         });
@@ -161,9 +161,9 @@ class AddEditContactDialog extends React.Component {
     let {selectOrganization} = this.state;
     let {selectSecondaryDirectory} = this.state;
     $.each(this.props.organizationsData, (k, obj)=>{
-      if(obj.name == selectOrganization){
+      if(obj.name == selectOrganization.split("_")[0]){
         $.each(obj.subtrees||[], (i,temp)=>{
-          if(temp.name == selectSecondaryDirectory){
+          if(temp.name == selectSecondaryDirectory.split("_")[0]){
             $.each(temp.subtrees||[], (index,item)=>{
               optionsArr.push(<Option key={index} value={item.id}>{item.name}</Option>);
             });
@@ -221,7 +221,7 @@ class AddEditContactDialog extends React.Component {
     const { contactInfo } = this.state;
 
     return (
-      <Modal className="sys-edit-form"
+      <Modal className="sys-edit-form pc_edit_dialog"
         visible={this.props.visible}
         title={this.state.isAdd?'新增用户':'编辑用户'}
         onOk={this.handleAddOrEdit}
@@ -291,7 +291,7 @@ class AddEditContactDialog extends React.Component {
                     >
                     {this.getOrganiTreeOptions()}
                   </Select>
-                  <Input value={this.state.selectOrganization}
+                  <Input value={this.state.selectOrganization.split("_")[0]}
                     onChange={this.handleOrganiChanged}
                     placeholder="手动填写"
                     style={{width:'48%',display:'inline-block',marginLeft:'10px'}}/>
@@ -308,7 +308,7 @@ class AddEditContactDialog extends React.Component {
                     >
                     {this.getSecondaryDirectoryTreeOptions()}
                   </Select>
-                  <Input value={this.state.selectSecondaryDirectory}
+                  <Input value={this.state.selectSecondaryDirectory.split("_")[0]}
                     onChange={this.handleSecondaryDirectoryChanged}
                     placeholder="手动填写"
                     style={{width:'48%',display:'inline-block',marginLeft:'10px'}}/>
@@ -325,7 +325,7 @@ class AddEditContactDialog extends React.Component {
                     >
                     {this.getLevel3CatalogTreeOptions()}
                   </Select>
-                  <Input value={this.state.selectLevel3Catalog}
+                  <Input value={this.state.selectLevel3Catalog.split("_")[0]}
                     onChange={this.handleLevel3CatalogChanged}
                     placeholder="手动填写"
                     style={{width:'48%',display:'inline-block',marginLeft:'10px'}}/>

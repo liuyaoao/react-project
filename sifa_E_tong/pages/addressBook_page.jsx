@@ -56,14 +56,14 @@ class AddressBookPage extends React.Component {
       browserHistory.push('/');
     }
     onOpenChange = (...args) => { //drawer open changed call.
-      console.log(args);
+      // console.log(args);
       this.setState({ open: !this.state.open });
     }
 
     componentWillMount() {
       let _this = this;
       var me = UserStore.getCurrentUser() || {};
-      console.log("me info:",me);
+      // console.log("me info:",me);
       this.setState({loginUserName:me.username||''});
       this.getServerDirectoryData();
       this.getAddressBookCnt({
@@ -73,7 +73,7 @@ class AddressBookPage extends React.Component {
 
     getServerDirectoryData(){
       organizationUtils.getServerContactDirectory((objArr, flatDataArr, flatDataMap)=>{
-        console.log("getContactDirectoryData-获取通讯录的目录结构数据-:",objArr,flatDataArr);
+        // console.log("getContactDirectoryData-获取通讯录的目录结构数据-:",objArr,flatDataArr);
         this.setState({
           "organizationsData":objArr||[],
           "organizationsFlatData":flatDataArr||[],
@@ -83,8 +83,8 @@ class AddressBookPage extends React.Component {
     }
 
     getAddressBookCnt(params){
-      !params.secondaryDirectory ? delete params.secondaryDirectory :null;
-      !params.level3Catalog ? delete params.level3Catalog :null;
+      (!params.secondaryDirectory || params.secondaryDirectory=="-1") ? delete params.secondaryDirectory :null;
+      (!params.level3Catalog || params.level3Catalog=="-1") ? delete params.level3Catalog :null;
       if(params.organization){
         params.organization = params.organization.split('_')[0];
       }
@@ -110,6 +110,9 @@ class AddressBookPage extends React.Component {
     }
     onClickBackToModules(){
       browserHistory.push('/modules');
+    }
+    updateContactsDirectory = ()=>{ //跟新目录结构
+      this.getServerDirectoryData();
     }
     onSubmitSearch(value){
       console.log("onSubmitSearch:",value);
@@ -211,6 +214,7 @@ class AddressBookPage extends React.Component {
                   <Layout style={{ padding: '0' }}>
                     <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280,overflow: 'initial' }}>
                       <AddressSearchComp
+                        updateContactsDirectory={this.updateContactsDirectory}
                         onSubmitSearchCall={(val)=>this.onSubmitSearch(val)}
                       />
                       {content}

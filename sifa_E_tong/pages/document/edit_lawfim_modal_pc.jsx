@@ -221,7 +221,7 @@ class DocumentEditLawfirmModalPC extends React.Component {
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayout} label="律所住所">
+                    <FormItem {...formItemLayout} label="律所地址">
                       {getFieldDecorator('lawOfficeAddress', {initialValue: memberInfo.lawOfficeAddress || ''})(
                         <Input type="text" placeholder="" />
                       )}

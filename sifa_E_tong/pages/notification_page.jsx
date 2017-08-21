@@ -7,6 +7,7 @@ import UserStore from 'stores/user_store.jsx';
 import * as Utils from 'utils/utils.jsx';
 import request from 'superagent';
 import LogOutComp from './components/log_out_comp.jsx';
+import * as commonUtils from 'pages/utils/common_utils.jsx';
 
 import { Drawer, List, NavBar,Button,Toast } from 'antd-mobile';
 import { Layout, Menu, Breadcrumb, Icon,notification} from 'antd';
@@ -75,8 +76,9 @@ class NotificationPage extends React.Component {
       //登录矫正系统的接口。
       let params = {
         loginName:`${me.redressUserName || 'csjz05'}`,
-        loginPwd:`${me.redressPassword || '2016'}`
+        loginPwd:`${me.redressPassword || commonUtils.Base64Encode('2016')}`
       };
+      params.loginPwd = commonUtils.Base64Decode(params.loginPwd);
       // let params = {'param':encodeURIComponent(JSON.stringify(params))};
       $.post(`${urlPrefix}/android/datb/login.action`,params,
           (data,state)=>{

@@ -21,6 +21,10 @@ import settings_icon from 'images/modules_img/settings_icon.png';
 import signin_icon from 'images/modules_img/signin_icon.png';
 import logOut_icon from 'images/modules_img/logOut_icon.png';
 
+notification.config({
+  top: 68,
+  duration: 3
+});
 class ModulesPcComp extends React.Component {
     constructor(props) {
         super(props);
@@ -72,6 +76,10 @@ class ModulesPcComp extends React.Component {
           if(item.canSetPrivilege && !this.state.permissionData[item.linkTo] ){
             canLinkTo = false;
             backColor = '#6f736e'; //如果该模块可设置权限，但是该用户现在没有进入这个模块的权限时，
+          }else if(item.name == "OA系统" && !(UserStore.getCurrentUser() || {}).oaUserName){
+            canLinkTo = false;
+          }else if(item.name == "矫正系统" && !(UserStore.getCurrentUser() || {}).redressUserName){
+            canLinkTo = false;
           }
           if( canLinkTo && item.tagName == "Link" ){
             return (<span key={index}
@@ -144,10 +152,23 @@ class ModulesPcComp extends React.Component {
       let moduleName = $(curtarget).data("module");
       if(!canLinkTo){
         e.stopPropagation();
-        notification.warning({
-          message: '你还没有该模块的权限',
-          description: '你当前所在的组织没有进入这个模块功能的权限，如有需要请联系管理员！',
-        });
+        let me = UserStore.getCurrentUser() || {};
+        if(moduleName == "OA系统" && !me.oaUserName){
+          notification.error({
+            message:'你还没有进入OA系统的帐号！',
+            description: '可以使用管理员帐号登录进系统设置页面添加相应的OA系统的用户名和密码！',
+          });
+        }else if(moduleName == "矫正系统" && !me.redressUserName){
+          notification.error({
+            message:'你还没有进入矫正系统的帐号！',
+            description: '可以使用管理员帐号登录进系统设置页面添加相应的矫正系统的用户名和密码！',
+          });
+        }else{
+          notification.warning({
+            message: '你还没有该模块的权限',
+            description: '你当前所在的组织没有进入这个模块功能的权限，如有需要请联系管理员！',
+          });
+        }
         return false;
       }
       if(moduleName == "群聊"){

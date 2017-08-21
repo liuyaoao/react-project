@@ -4,6 +4,7 @@ import React from 'react';
 import OrganizationStore from 'pages/stores/organization_store.jsx';
 import myWebClient from 'client/my_web_client.jsx';
 import * as Utils from 'utils/utils.jsx';
+import * as commonUtils from '../utils/common_utils.jsx';
 import * as organizationUtils from '../utils/organization_utils.jsx';
 
 import { Row, Col, Form, Icon, Input, Button as ButtonPc ,notification,
@@ -160,6 +161,7 @@ class AddEditSysConfigDialog extends React.Component {
 
     let actionName = this.props.menberInfo.id ? "update" : "create"; //获取接口名字
     let desc = this.props.menberInfo.id ? "修改" : "新增"; //
+    params = this.encryptAllPassword(params, (!!this.props.menberInfo.id ? false : true));
     myWebClient.addOrEditUser(actionName,params,
       (data,res)=>{
         this.handleAfterAddEditSucc();
@@ -192,6 +194,16 @@ class AddEditSysConfigDialog extends React.Component {
     console.log("新增or修改用户信息的参数--：",params);
     return params;
   }
+  encryptAllPassword(params,isAdd){ //加密所有密码
+    if(isAdd){
+      params.password ? (params.password = commonUtils.Base64Encode(params.password)) : null;
+      params.confirmPassword ? (params.confirmPassword = commonUtils.Base64Encode(params.confirmPassword)) : null;
+    }
+    params.oaPassword ? (params.oaPassword = commonUtils.Base64Encode(params.oaPassword)) : null;
+    params.redressPassword ? (params.redressPassword = commonUtils.Base64Encode(params.redressPassword)) : null;
+    return params;
+  }
+
   handleAfterAddEditSucc = ()=>{
     this.setState({ confirmDirty: false });
     this.props.afterAddEditUserCall();
@@ -329,9 +341,12 @@ class AddEditSysConfigDialog extends React.Component {
         width: '100%',
       },
     };
+    let oaPassword = commonUtils.Base64Decode(menberInfo.oaPassword || "");
+    let redressPassword = commonUtils.Base64Decode(menberInfo.redressPassword || "");
+    // console.log("base64--oaPassword--:",oaPassword);
     return (
       <div>
-      <Modal className="sys-edit-form"
+      <Modal className="sys-edit-form pc_edit_dialog"
         visible={this.props.visible}
         title={this.state.isAdd?'新增用户':'编辑用户'}
         onOk={this.handleAddOrEdit}
@@ -439,7 +454,7 @@ class AddEditSysConfigDialog extends React.Component {
               <Col span={24}>
                 <FormItem {...formItemLayout} label="OA系统密码">
                   {getFieldDecorator('oaPassword', {
-                    initialValue:menberInfo.oaPassword,
+                    initialValue:menberInfo.oaPassword?oaPassword:'',
                   })(
                     <Input type="password" />
                   )}
@@ -457,7 +472,7 @@ class AddEditSysConfigDialog extends React.Component {
               <Col span={24}>
                 <FormItem {...formItemLayout} label="矫正系统密码">
                   {getFieldDecorator('redressPassword', {
-                    initialValue:menberInfo.redressPassword,
+                    initialValue:menberInfo.redressPassword?redressPassword:'',
                   })(
                     <Input type="password" />
                   )}

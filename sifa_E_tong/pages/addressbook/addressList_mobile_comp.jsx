@@ -38,6 +38,14 @@ class AddressListMobileComp extends React.Component {
   }
   onClickDeleteContact = (text,record)=>{
   }
+  onClickEditItem = (evt,record,index)=>{
+    // console.log("点击编辑通讯录的事件--evt-：",evt,$(evt.target));
+    if($(evt.target).closest(".addressbook_right").length>0){
+      evt.stopPropagation();
+      return false;
+    }
+    this.showAddEditDialog('',record,index);
+  }
   showAddEditDialog(text,record,index){
     // console.log("text:"+text+"index:"+index);
     let data = record || {};
@@ -66,23 +74,23 @@ class AddressListMobileComp extends React.Component {
     );
   }
 
-  onClickDeleteAll = ()=>{
-    alert('删除', '确定全部删除吗?', [
-      { text: '取消', onPress: () => console.log('cancel') },
-      { text: '确定', onPress: () => this.confirmDeleteAllContacts() },
-    ]);
-  }
-  confirmDeleteAllContacts(){ //删除所有用户
-    myWebClient.deleteAllContacts(
-      (data,res)=>{
-        notification.success({message: '全部联系人删除成功！'});
-        console.log("联系人删除成功：",data);
-        this.props.afterDeleteContactsCall();
-      },(e,err,res)=>{
-        notification.error({message: '全部联系人删除失败！'});
-      }
-    );
-  }
+  // onClickDeleteAll = ()=>{
+  //   alert('删除', '确定全部删除吗?', [
+  //     { text: '取消', onPress: () => console.log('cancel') },
+  //     { text: '确定', onPress: () => this.confirmDeleteAllContacts() },
+  //   ]);
+  // }
+  // confirmDeleteAllContacts(){ //删除所有用户
+  //   myWebClient.deleteAllContacts(
+  //     (data,res)=>{
+  //       notification.success({message: '全部联系人删除成功！'});
+  //       console.log("联系人删除成功：",data);
+  //       this.props.afterDeleteContactsCall();
+  //     },(e,err,res)=>{
+  //       notification.error({message: '全部联系人删除失败！'});
+  //     }
+  //   );
+  // }
   onClickPrePage = ()=>{ //上一页
     let currentPage = this.state.currentPage;
     if(currentPage > 1){
@@ -114,12 +122,6 @@ class AddressListMobileComp extends React.Component {
         <div style={{ marginBottom: 12 }}>
           {this.state.hasOperaPermission ? (
             <div>
-              <button type="button"
-                  className="btn btn-danger pull-right"
-                  style={{marginRight: '1em'}}
-                  onClick={()=>{this.onClickDeleteAll()}}>
-                  <Icon type="delete" />全部删除
-                </button>
                 <button type="button"
                   className="btn btn-primary pull-left"
                   style={{marginLeft: '1em'}}
@@ -151,7 +153,7 @@ class AddressListMobileComp extends React.Component {
                 onClose={() => console.log('global close')}
                 >
                 <List.Item key={index} multipleLine
-                  onClick={ ()=>{this.state.hasOperaPermission ? this.showAddEditDialog('',record,index) : ''} }>
+                  onClick={ (evt)=>{this.state.hasOperaPermission ? this.onClickEditItem(evt,record,index) : ''} }>
                   <div className="addressbook_row">
                     <span className="addressbook_avator">
                       <img className="member_icon" width="54" height="54" src={this.props.iconArr[index]}/>
@@ -162,6 +164,11 @@ class AddressListMobileComp extends React.Component {
                         </div>
                         <div className="member_email"><span>电话短号：</span>{record.groupShortCode}</div>
                         <div className="member_phone"><span>电话号码：</span>{record.telephoneNumber}</div>
+                      </div>
+                      <div className="addressbook_right">
+                        <a href={"tel:"+record.telephoneNumber}>
+                          <Icon type="phone" style={{fontSize:'0.6rem',fontWeight:'bold',color:'#189A09'}}/>
+                        </a>
                       </div>
                     </div>
                 </List.Item>

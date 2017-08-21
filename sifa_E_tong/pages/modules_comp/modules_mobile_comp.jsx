@@ -93,6 +93,10 @@ class ModulesMobileComp extends React.Component {
           if(item.canSetPrivilege && !this.state.permissionData[item.linkTo] ){
             canLinkTo = false;
             backColor = '#6f736e'; //如果该模块可设置权限，但是该用户现在没有进入这个模块的权限时，
+          }else if(item.name == "OA系统" && !(UserStore.getCurrentUser() || {}).oaUserName){
+            canLinkTo = false;
+          }else if(item.name == "矫正系统" && !(UserStore.getCurrentUser() || {}).redressUserName){
+            canLinkTo = false;
           }
           if(canLinkTo && item.tagName == "Link"){
             return (
@@ -182,7 +186,14 @@ class ModulesMobileComp extends React.Component {
       let moduleName = $(curtarget).data("module");
       if(!canLinkTo){
         e.stopPropagation();
-        Toast.info('你还没有该模块的权限', 2, null, false);
+        let me = UserStore.getCurrentUser() || {};
+        if(moduleName == "OA系统" && !me.oaUserName){
+          Toast.info('你还没有OA系统的帐号', 2, null, false);
+        }else if(moduleName == "矫正系统" && !me.redressUserName){
+          Toast.info('你还没有矫正系统的帐号', 2, null, false);
+        }else{
+          Toast.info('你还没有该模块的权限', 2, null, false);
+        }
         return false;
       }
       if(moduleName == "群聊"){

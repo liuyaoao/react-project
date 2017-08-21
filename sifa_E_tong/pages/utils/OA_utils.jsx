@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import AppDispatcher from 'dispatcher/app_dispatcher.jsx';
+import * as commonUtils from 'pages/utils/common_utils.jsx';
 
 export function loginOASystem(loginOAUser, successCall){ //登录OA系统
   const loginUrl = 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.ValidatePerson';
@@ -7,7 +8,7 @@ export function loginOASystem(loginOAUser, successCall){ //登录OA系统
     "ver" : "2",
     "params" : {
       "username" : loginOAUser.oaUserName || 'whq',
-      "password" : loginOAUser.oaPassword || '123'
+      "password" : commonUtils.Base64Decode(loginOAUser.oaPassword || commonUtils.Base64Encode('123'))
     }
   }));
   $.ajax({

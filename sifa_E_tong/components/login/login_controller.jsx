@@ -16,6 +16,7 @@ import * as AsyncClient from 'utils/async_client.jsx';
 import * as TextFormatting from 'utils/text_formatting.jsx';
 
 import * as Utils from 'utils/utils.jsx';
+import * as commonUtils from 'pages/utils/common_utils.jsx';
 import Constants from 'utils/constants.jsx';
 
 import {FormattedMessage} from 'react-intl';
@@ -174,7 +175,7 @@ export default class LoginController extends React.Component {
 
         webLogin(
             loginId,
-            password,
+            commonUtils.Base64Encode(password),
             token,
             () => {
                 // check for query params brought over from signup_user_complete

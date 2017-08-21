@@ -12,6 +12,13 @@
 .ml_20{
     margin-left: 20px;
 }
+.notVisibleCls{
+  display: none;
+
+}
+.visibleCls{
+  display: block;
+}
 /*加在Header组件上*/
 .custom_ant_header{
   width:100%;
@@ -154,6 +161,9 @@
 }
 .doc-edit-form-mobile .ant-form .ant-row label{
   font-size:0.34rem;
+}
+.pc_edit_dialog .ant-modal-content label, .sys-edit-form .ant-modal-content label{
+  font-size:15px;
 }
 //手机端的分页
 .mobile_page_cnt{

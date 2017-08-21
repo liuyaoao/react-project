@@ -44,10 +44,12 @@ class ChooseModulesPage extends React.Component {
     }
     componentDidMount(){
       let me = UserStore.getCurrentUser() || {};
-      OAUtils.loginOASystem({oaUserName:me.oaUserName,oaPassword:me.oaPassword}, (res)=>{ //登录OA系统获取认证id。
-        this.setState({tokenunid:res.values.tockenunid});
-        this.getServerListData(res.values.tockenunid);
-      });
+      if(me.oaUserName){
+        OAUtils.loginOASystem({oaUserName:me.oaUserName,oaPassword:me.oaPassword}, (res)=>{ //登录OA系统获取认证id。
+          this.setState({tokenunid:res.values.tockenunid});
+          this.getServerListData(res.values.tockenunid);
+        });
+      }
     }
     getAllModulesData(){
       let modulesData = [

@@ -53,9 +53,9 @@ class SearchFormMobile extends React.Component {
     });
     Popup.hide();
   }
-  onClickDeleteAll = ()=>{ //全部删除
-    this.props.showDeleteAllConfirm();
-  }
+  // onClickDeleteAll = ()=>{ //全部删除
+  //   this.props.showDeleteAllConfirm();
+  // }
   render() {
     const { getFieldProps } = this.props.form;
     // <InputItem clear autoFocus value="123" placeholder="请输入部门" {...getFieldProps('department')}>部门</InputItem>
@@ -80,11 +80,6 @@ class SearchFormMobile extends React.Component {
             this.state.hasOperaPermission ?
             (<Button type="primary" onClick={this.onClickSubmit}><Icon type="search" /> 搜索</Button>):
             (<span style={{textAlign:'center'}}>没有权限</span>)
-          }
-          {
-            this.state.hasOperaPermission ?
-            (<Button type="warning" onClick={this.onClickDeleteAll} style={{marginTop:'10px'}}><Icon type="delete" />全部删除</Button>):
-            (null)
           }
         </div>
       </div>
