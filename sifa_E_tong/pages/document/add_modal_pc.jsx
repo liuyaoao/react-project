@@ -160,7 +160,7 @@ class DocumentAddModalPC extends React.Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 4 },
+        sm: { span: 8 },
       },
       wrapperCol: {
         xs: { span: 24 },

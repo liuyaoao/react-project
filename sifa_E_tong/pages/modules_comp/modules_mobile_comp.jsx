@@ -5,12 +5,13 @@ import {Link} from 'react-router/es6';
 import UserStore from 'stores/user_store.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import {Popup, Toast, List, NavBar, Button,Badge}  from 'antd-mobile';
-import {Icon,Row, Col,Button as ButtonPc, Checkbox} from 'antd';
+import {Icon,Row, Col,Button as ButtonPc, Checkbox,Spin} from 'antd';
 
 import * as commonUtils from '../utils/common_utils.jsx';
 import LogOutComp from '../components/log_out_comp.jsx'
 
 import signup_logo from 'images/signup_logo.png';
+import notice_icon from 'images/modules_img/notice_icon.png';
 
 const isIPhone = new RegExp('\\biPhone\\b|\\biPod\\b', 'i').test(window.navigator.userAgent);
 let maskProps;
@@ -36,6 +37,7 @@ class ModulesMobileComp extends React.Component {
           showItemSum:0, //可显示的模块数。
           itemRowSum:1,
           permissionData:UserStore.getPermissionData(),
+          loadingModuleName:"", //正在加载的模块名
           todoTotalItemCount:0, //OA待办事项的总条数。
         };
     }
@@ -54,7 +56,7 @@ class ModulesMobileComp extends React.Component {
         urlparam:{ key:'dbsx',type:3 },
         viewcolumntitles:'标题,模块',
         successCall: (data)=>{
-          console.log("待办事项的list,为了获取待办事项数目--:",data);
+          // console.log("待办事项的list,为了获取待办事项数目--:",data);
           localStorage.setItem("sifa_e_tong_todoItemCount",data.itemcount);
           this.setState({
             todoTotalItemCount:data.itemcount,
@@ -67,7 +69,7 @@ class ModulesMobileComp extends React.Component {
       delModules = commonUtils.removeNullValueOfArr(delModules);
       // console.log("refreshModules--delModules--:",delModules);
       let showItemSum = this.props.allModulesData.length - delModules.length;
-      console.log("showItemSum:",showItemSum);
+      // console.log("showItemSum:",showItemSum);
       let itemRowSum = Math.ceil((showItemSum+1)/this.state.colNumPerRow);
       if(showItemSum%this.state.colNumPerRow == 0){
         itemRowSum+=1;
@@ -101,13 +103,16 @@ class ModulesMobileComp extends React.Component {
           if(canLinkTo && item.tagName == "Link"){
             return (
               <Col span={6} key={index} className='modules_item_mobile'>
+                <div data-module={item.name} data-canlinkto={canLinkTo} onClick={this.handleModuleClick}>
                 <Link to={item.linkTo}
                       data-module={item.name}
                       data-canlinkto={canLinkTo}
                       className={item.singleclassName}
                       style={{background:backColor}}>
                   <img className='' src={item.iconName} style={{}}/>
+                  {this.state.loadingModuleName==item.name?<Spin size="large" className="loading_spin_cnt"/>:null}
                 </Link>
+                </div>
                 <span>
                   {item.name}
                   {item.name=="OA系统"?<Badge style={{width:'26px'}} text={this.state.todoTotalItemCount} overflowCount={99} />:null}
@@ -133,6 +138,7 @@ class ModulesMobileComp extends React.Component {
                     className={item.singleclassName}
                     style={{background:backColor}}>
                   <img className='' src={item.iconName} style={{}}/>
+                  {this.state.loadingModuleName==item.name?<Spin size="large" className="loading_spin_cnt"/>:null}
                 </a>
                 <span>{item.name}</span>
                 {this.state.showDelIcon?(<ButtonPc shape="circle"
@@ -152,10 +158,9 @@ class ModulesMobileComp extends React.Component {
       // 添加模块按钮
       modulesItem.push(
         (<Col span={6} key={666} className='modules_item_mobile'>
-          <div onClick={this.handleModuleClick} data-module={'添加'} data-canlinkto={true}>
-            <ButtonPc className="add_more_btn"  icon="plus" />
+          <div onClick={this.handleModuleClick} className="add_more_btn_cnt" data-module={'添加'} data-canlinkto={true}>
+            <ButtonPc className="add_more_btn"  icon="plus" style={{fontSize:'0.5rem'}} />
           </div>
-          <span>添加更多</span>
         </Col>)
       );
        //表示最后一行的item不是刚好是colNumPerRow这个数,需要补足空的Col列。
@@ -184,6 +189,13 @@ class ModulesMobileComp extends React.Component {
       let canLinkTo = $(curtarget).data("canlinkto");
       // console.log("click module name:",$(curtarget).data("module"),canLinkTo);
       let moduleName = $(curtarget).data("module");
+      if(this.state.loadingModuleName!=""){
+        e.stopPropagation();
+        return false;
+      }
+      this.setState({
+        loadingModuleName:moduleName
+      });
       if(!canLinkTo){
         e.stopPropagation();
         let me = UserStore.getCurrentUser() || {};
@@ -204,7 +216,7 @@ class ModulesMobileComp extends React.Component {
       }
     }
     onNavBarLeftClick = (e)=>{
-      console.log("onNavBarLeftClick:",e);
+      // console.log("onNavBarLeftClick:",e);
       this.setState({
         showDelIcon:!this.state.showDelIcon,
       });
@@ -212,7 +224,7 @@ class ModulesMobileComp extends React.Component {
 
     onCheckboxChange = (e)=>{
       let moduleId = e.target["data-moduleid"];
-      console.log("onCheckboxChange --e:",e);
+      // console.log("onCheckboxChange --e:",e);
       let curDelModuleIds = [...this.state.curDelModuleIds];
       if(e.target.checked){
       curDelModuleIds = commonUtils.removeValueFromArr(curDelModuleIds,moduleId);
@@ -239,7 +251,7 @@ class ModulesMobileComp extends React.Component {
             <Col span={24} className={'checkbox_'+item.id}>
               <Checkbox
                 onChange={this.onCheckboxChange}
-                style={{fontSize:'1em',padding:'0.6rem 1rem 0'}}
+                style={{fontSize:'1em',padding:'0.3rem 1em 0'}}
                 checked={isChecked}
                 data-moduleid={item.id}>
                 {item.name}
@@ -256,10 +268,10 @@ class ModulesMobileComp extends React.Component {
       let moduleItems = this.getModulesItemList();
       Popup.show(<div>
         <List renderHeader={() => (
-          <div style={{ position: 'relative',height:'1.5em' }}>
+          <div style={{ position: 'relative',height:'1.5em',fontSize:'1.5em',color:'black' }}>
             添加模块
             <span
-              style={{position: 'absolute', right: '0.5rem', top: '0.7px'}}
+              style={{position: 'absolute', right: '0', top: '0'}}
               onClick={() => this.onClosePopup()} >
               <Icon type="close" />
             </span>
@@ -286,7 +298,7 @@ class ModulesMobileComp extends React.Component {
         moduleName:"信息发布",
         docunid:docunid,
         successCall: (data)=>{
-          console.log("get 通知公告的自定义附件列表 data:",data);
+          // console.log("get 通知公告的自定义附件列表 data:",data);
           if(data.values.filelist.length>0){
             let attachItem = data.values.filelist[0];
             let downloadUrl = OAUtils.getCustomAttachmentUrl({
@@ -305,44 +317,46 @@ class ModulesMobileComp extends React.Component {
       listItem.push(
           objsArr.map((obj,index)=>{
             return (
-              <div key={index} style={{height:'35px'}} data-unid={obj.unid} onClick={this.onClickNoticeItem}>
-                <a className="lf" data-unid={obj.unid}>{obj.fileTitle}</a>
+              <div key={index} className="notice_row" data-unid={obj.unid} onClick={this.onClickNoticeItem}>
+                <i className="dot"></i>
+                <a className="lf" data-unid={obj.unid}><Icon type="download"/>{obj.fileTitle}</a>
                 <a className="rt">{obj.publishTime}</a>
               </div>)
           })
         );
         let modulesItem = this.getCurModulesItem(this.props.allModulesData);
         return (
-            <div className='modules_page_container'>
+            <div className='modules_page_container modules_page_container_mobile'>
               <NavBar
                 style={{position:'fixed',height:'60px',zIndex:'99999',width:'100%',top:0}}
                 className="mobile_navbar_custom"
                 iconName = {false}
-                leftContent={[ <Icon type="edit" className="back_arrow_icon" key={19475609}/>,
-                               <span style={{fontSize:'1em'}} key={91234353}>{this.state.showDelIcon?('取消'):('编辑')}</span>
+                leftContent={[ <Icon type="appstore-o" style={{ fontSize: '25px' }} className="back_arrow_icon" key={19475609}/>,
+              <span style={{fontSize:'1em'}} key={91234353}>{this.state.showDelIcon?('取消'):null}</span>
                              ]}
                 onLeftClick={this.onNavBarLeftClick}
-                rightContent={[ <LogOutComp key={'logoutcomp_123456'}><Icon type="logout" className="" key={30909090909}/></LogOutComp>]} >
+                rightContent={[ <LogOutComp key={'logoutcomp_123456'}><Icon type="close" style={{fontSize:'25px'}} key={909}/></LogOutComp>]} >
                 <img width="35" height="35" src={signup_logo}/>司法E通
               </NavBar>
               <div className='modules_content modules_content_mobile' style={{}}>
                 {modulesItem}
 
               </div>
-
-                <div style={{background:'#dedbdb',width:'100%',height:'2em'}}></div>
-                <div className="row modules_bottom_mobile" style={{background:'#fff',height:'220px',width:'98%',margin:'0 auto'}}>
+                <div className="row modules_bottom_mobile" style={{height:'220px',width:'98%',margin:'0 auto'}}>
                   <div className="inner">
-                    <div className="title_mobile"><span className="square"></span><span>内部通知</span></div>
+                    <div className="title_mobile">
+                      <span className=""><img src={notice_icon}/></span>
+                      <span>内部通知</span>
+                    </div>
                       <div className="line"></div>
                       {listItem}
                   </div>
                 </div>
-                <div className="modules_footer row">
+                {/*<div className="modules_footer row">
                   <span>版权所有@长沙市司法局</span>
                   <span>ICP备案10200870号</span>
                   <span>技术支持：湖南必和必拓科技发展公司</span>
-                </div>
+                </div>*/}
             </div>
         );
     }

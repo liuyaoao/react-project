@@ -148,11 +148,21 @@ class DocumentEditModalPC extends React.Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 4 },
+        sm: { span: 8 },
       },
       wrapperCol: {
         xs: { span: 24 },
         sm: { span: 14 },
+      },
+    };
+    const formItemLayoutOneRow = {
+      labelCol: {
+        xs: { span: 8 },
+        sm: { span: 8 },
+      },
+      wrapperCol: {
+        xs: { span: 16 },
+        sm: { span: 16 },
       },
     };
     const formItemLayout1 = {
@@ -205,7 +215,7 @@ class DocumentEditModalPC extends React.Component {
                     )}
                   </FormItem>
                   <Col span={24}>
-                    <FormItem {...formItemLayout} label="姓名">
+                    <FormItem {...formItemLayoutOneRow} label="姓名">
                       {getFieldDecorator('userName', {
                         initialValue: memberInfo.userName || '',
                         rules: [{
@@ -217,7 +227,7 @@ class DocumentEditModalPC extends React.Component {
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayout} label="性别">
+                    <FormItem {...formItemLayoutOneRow} label="性别">
                       {getFieldDecorator('gender', {initialValue: memberInfo.gender || ''})(
                         <RadioGroup>
                           <RadioButton value="男">男</RadioButton>
@@ -227,21 +237,21 @@ class DocumentEditModalPC extends React.Component {
                     </FormItem>
                   </Col>
                   <Col span={24} id="editBirthDay">
-                    <FormItem {...formItemLayout} label="出生年月">
+                    <FormItem {...formItemLayoutOneRow} label="出生年月">
                       {getFieldDecorator('birthDay', {initialValue: memberInfo.birthDay ? moment(memberInfo.birthDay, 'YYYY-MM-DD') : null})(
                         <DatePicker getCalendarContainer={() => document.getElementById('editBirthDay')} />
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={12}>
-                    <FormItem {...formItemLayout1} label="民族">
+                  <Col span={24}>
+                    <FormItem {...formItemLayoutOneRow} label="民族">
                       {getFieldDecorator('famousFamily', {initialValue: memberInfo.famousFamily || ''})(
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={12}>
-                    <FormItem {...formItemLayout1} label="籍贯">
+                  <Col span={24}>
+                    <FormItem {...formItemLayoutOneRow} label="籍贯">
                       {getFieldDecorator('nativePlace', {initialValue: memberInfo.nativePlace || ''})(
                         <Input type="text" placeholder="" />
                       )}
@@ -264,28 +274,28 @@ class DocumentEditModalPC extends React.Component {
                     </FormItem>
                   </Col>*/}
                   <Col span={24}>
-                    <FormItem {...formItemLayout} label="出生地">
+                    <FormItem {...formItemLayoutOneRow} label="出生地">
                       {getFieldDecorator('createParty', {initialValue: memberInfo.createParty || ''})(
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayout} label="健康状况">
+                    <FormItem {...formItemLayoutOneRow} label="健康状况">
                       {getFieldDecorator('healthStatus', {initialValue: memberInfo.healthStatus || ''})(
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={12} id="editJoinPartyTime">
-                    <FormItem {...formItemLayout1} label="入党时间">
+                    <FormItem {...formItemLayout1} label="入党时间:">
                       {getFieldDecorator('joinPartyTime', {initialValue: memberInfo.joinPartyTime ? moment(memberInfo.joinPartyTime, 'YYYY-MM-DD') : null})(
                         <DatePicker getCalendarContainer={() => document.getElementById('editJoinPartyTime')} />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={12}  id="editJoinWorkerTime">
-                    <FormItem {...formItemLayout1} label="参加工作时间">
+                    <FormItem {...formItemLayout1} label="参加工作时间:">
                       {getFieldDecorator('joinWorkerTime', {initialValue: memberInfo.joinWorkerTime ? moment(memberInfo.joinWorkerTime, 'YYYY-MM-DD') : null})(
                         <DatePicker getCalendarContainer={() => document.getElementById('editJoinWorkerTime')} />
                       )}

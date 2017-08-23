@@ -212,7 +212,7 @@ class DispatchList extends React.Component {
         dataSource = this.state.dataSource.cloneWithRows([]);
       }
       return (<TabPane tab={tabName} key={tabName} >
-        <Button className="btn" type="primary" style={{margin:"0.16rem"}} onClick={()=>this.onClickAddEdit()}><Icon type="plus" /> 新建</Button>
+        <Button className="btn" type="primary" style={{margin:"0.16rem"}} onClick={()=>this.onClickAddEdit()}><Icon type="plus" />发文拟稿</Button>
         {this.state.isLoading?<div style={{textAlign:'center'}}><Icon type="loading"/></div>:null}
         {(!this.state.isLoading && this.state.listData.length<=0)?
           <div style={{textAlign:'center'}}>暂无数据</div>:null}

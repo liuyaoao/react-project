@@ -68,11 +68,11 @@ class DocumentListPC extends React.Component {
       {title:"性别", dataIndex:"gender", key:"gender", width:"15%"},
       {title:"律所名称", dataIndex:"lawOfficeName", key:"lawOfficeName"},
     ];
-    let legal_worker_columns = [ //基层法律工作者的表头。
-      {title:"姓名", dataIndex:"userName", key:"userName", width:"15%"},
-      {title:"性别", dataIndex:"gender", key:"gender", width:"15%"},
-      {title:"执业机构", dataIndex:"lawOfficeAddress", key:"lawOfficeAddress"},
-    ];
+    // let legal_worker_columns = [ //基层法律工作者的表头。
+    //   {title:"姓名", dataIndex:"userName", key:"userName", width:"15%"},
+    //   {title:"性别", dataIndex:"gender", key:"gender", width:"15%"},
+    //   {title:"执业机构", dataIndex:"lawOfficeAddress", key:"lawOfficeAddress"},
+    // ];
 
     let LegalWorker_columns = [ //基层法律工作者档案的表头。
       {title:"姓名", dataIndex:"userName", key:"userName", width:"15%"},
@@ -104,7 +104,7 @@ class DocumentListPC extends React.Component {
     }else if(currentFileSubType == "律师"){
       columns = [...lawer_columns, last_col];
     }else if(currentDepartment == "基层法律工作者"){
-      columns = [...legal_worker_columns, last_col];
+      columns = [...LegalWorker_columns, last_col];
     }else if(currentFileSubType == "司法所长"){
       columns = [...director_columns, last_col];
     }else{

@@ -121,6 +121,7 @@ class AddressListComp extends React.Component {
       (data,res)=>{
         notification.success({message: '全部联系人删除成功！'});
         console.log("联系人删除成功：",data);
+        this.props.afterDeleteAllContactsCall();
         this.props.afterDeleteContactsCall();
       },(e,err,res)=>{
         notification.error({message: '全部联系人删除失败！'});

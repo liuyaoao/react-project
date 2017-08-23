@@ -88,11 +88,11 @@ class DocumentEditLegalWorkerModalPC extends React.Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 4 },
+        sm: { span: 6 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 14 },
+        sm: { span: 18 },
       },
     };
     const { memberInfo, departmentTypes } = this.props;
@@ -120,8 +120,8 @@ class DocumentEditLegalWorkerModalPC extends React.Component {
         ]}
       >
         <div className="doc-edit">
-          {this.state.isMobile?null:(<div className="head-img"><img src={head_img} style={{width: "108px", paddingTop: "2px"}} /></div>)}
-          <Form className={this.state.isMobile?"":"edit-form"}>
+          {/*this.state.isMobile?null:(<div className="head-img"><img src={head_img} style={{width: "108px", paddingTop: "2px"}} /></div>)*/}
+          <Form className={this.state.isMobile?"":""}>
             <Row>
               <Col span={24} className="tag-list">
                 <p className="info-title">
@@ -168,7 +168,7 @@ class DocumentEditLegalWorkerModalPC extends React.Component {
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
-                  </Col>*/}
+                  </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="性别">
                       {getFieldDecorator('gender', {initialValue: memberInfo.gender || ''})(
@@ -178,7 +178,7 @@ class DocumentEditLegalWorkerModalPC extends React.Component {
                         </RadioGroup>
                       )}
                     </FormItem>
-                  </Col>
+                  </Col>*/}
                   {/*<Col span={24} id="editDepartmentSelect">
                     <FormItem {...formItemLayout} label="部门">
                       {getFieldDecorator('department', {initialValue: memberInfo.department || ''})(

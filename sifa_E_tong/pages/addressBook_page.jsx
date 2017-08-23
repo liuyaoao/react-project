@@ -138,8 +138,11 @@ class AddressBookPage extends React.Component {
       this.getServerDirectoryData();
       this.onSubmitSearch();
     }
-    afterDeleteContactsCall = ()=>{
+    afterDeleteContactsCall = ()=>{ // 删除某几个通讯录后的回调。
       this.onSubmitSearch();
+    }
+    afterDeleteAllContactsCall = ()=>{ //删除全部通讯录后的回调。
+      this.getServerDirectoryData();
     }
     updateDirectoryData = (organization,secondaryDirectory,level3Catalog)=>{
       let params = {
@@ -241,6 +244,7 @@ class AddressBookPage extends React.Component {
         (<AddressListComp
           addressListData={addressbookData}
           showAddEditDialog={this.showAddEditDialog}
+          afterDeleteAllContactsCall={this.afterDeleteAllContactsCall}
           afterDeleteContactsCall={this.afterDeleteContactsCall}
         />);
     }

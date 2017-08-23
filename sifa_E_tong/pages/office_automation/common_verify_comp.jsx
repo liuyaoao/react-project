@@ -17,7 +17,8 @@ class CommonVerifyCompRaw extends React.Component {
         verifyCnt:'',//审核意见的内容。
         notionTypes:[], //意见类型
         organizationTypes:[], //组织机构类型
-        personList:[], // 人员信息
+        allPersonListMap:{}, //所有人员的map.
+        personList:[], // 当前部门下人员信息
       };
   }
   componentWillMount(){
@@ -33,6 +34,7 @@ class CommonVerifyCompRaw extends React.Component {
           this.setState({
             organizationMap:data.values || {},
             organizationTypes:organizationTypes,
+            allPersonListMap:data.values['sortpersonlist'] ||{},
             personList:personList,
           });
         }
@@ -43,7 +45,7 @@ class CommonVerifyCompRaw extends React.Component {
     return organizationList.map((item)=>{
       return {
         label:item.commonname,
-        value:item.commonname
+        value:item.unid,
       }
     });
   }
@@ -51,11 +53,21 @@ class CommonVerifyCompRaw extends React.Component {
     let personList = [];
     for(let key in personMap){
       personList.push({
-        label:personMap[key]['commonname'],
-        value:personMap[key]['commonname']
+        label:personMap[key]['commonname']||'',
+        value:personMap[key]['commonname']||''
       });
     }
     return personList;
+  }
+  updatePersonList = (orgaId)=>{ //获取特定部门下的人员列表。
+    let personListStr = this.state.organizationMap[orgaId].personlist || "";
+    let personMap = {};
+    (personListStr.split(",")||[]).map((personId,index)=>{
+      personMap[personId] = this.state.allPersonListMap[personId]||{};
+    });
+    this.setState({
+      personList:this.parsePersonList(personMap),
+    });
   }
   //获取阅文意见类型
   getServerNotionType = ()=>{
@@ -95,7 +107,8 @@ class CommonVerifyCompRaw extends React.Component {
     this.setVerifyCnt2Arr(0,val);
   }
   onPickerOkDepartment = (val)=>{ //选择好部门
-    this.setVerifyCnt2Arr(1,val);
+    this.setVerifyCnt2Arr(1,this.state.organizationMap[val].commonname);
+    this.updatePersonList(val);
   }
   onPickerOkMembers = (val)=>{ //选择好人员
     this.setVerifyCnt2Arr(2,val);

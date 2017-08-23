@@ -31,7 +31,7 @@ class PersonalTodoList extends React.Component {
   }
   componentDidMount(){
     //从服务端获取数据。
-    this.getServerListData();
+    this.getServerListData(this.state.currentpage);
   }
   //获取服务器端的待办事项数据。
   getServerListData = (currentpage)=>{
@@ -131,16 +131,21 @@ class PersonalTodoList extends React.Component {
                 onClick={()=>this.onClickLoadMore()}>加载更多</Button>
             </div>);
       }
-      return (<div style={{ padding: 10, textAlign: 'center' }}>没有更多了！</div>);
+      return !this.state.isLoading?(<div style={{ padding: 10, textAlign: 'center' }}>没有更多了！</div>):null;
     };
     let {showDetail, detailInfo} = this.state;
     detailInfo = Object.assign({}, detailInfo , {unid:detailInfo.frmunid || ''});
     return (
       <div>
+        <WhiteSpace />
+        {this.state.isLoading?<div style={{textAlign:'center'}}><Icon type="loading"/></div>:null}
+        {(!this.state.isLoading && this.state.listData.length<=0)?
+          <div style={{textAlign:'center'}}>暂无数据</div>:null}
         {(!showDetail)?(<ListView
           dataSource={this.state.dataSource}
           renderRow={listRow}
           renderSeparator={separator}
+          renderFooter={listViewRenderFooter}
           initialListSize={this.state.currentpage*10}
           pageSize={this.state.currentpage*10}
           scrollRenderAheadDistance={200}

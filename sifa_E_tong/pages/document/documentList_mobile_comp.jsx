@@ -54,7 +54,7 @@ class DocumentListMobile extends React.Component {
       </List.Item.Brief>);
     }else if(currentDepartment == "基层法律工作者"){
       listItemBreif = (<List.Item.Brief>
-        性别: {item.gender}, 执业机构: {item.lawOfficeAddress}
+        执业状态: {item.lawyerStatus}, 执业机构: {item.lawOfficeAddress}
       </List.Item.Brief>);
     }else if(currentFileSubType == "司法所长"){
       listItemBreif = (<List.Item.Brief>

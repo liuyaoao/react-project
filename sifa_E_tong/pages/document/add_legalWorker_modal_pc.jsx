@@ -92,21 +92,21 @@ class DocumentAddLegalWorkerModalPC extends React.Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 4 },
+        sm: { span: 8 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 14 },
+        sm: { span: 16 },
       },
     };
     const formItemLayout1 = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 8 },
+        sm: { span: 6 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 14 },
+        sm: { span: 18 },
       },
     };
     const { memberInfo } = this.props;
@@ -139,8 +139,8 @@ class DocumentAddLegalWorkerModalPC extends React.Component {
         ]}
       >
         <div className="doc-edit">
-          <div className="head-img"><img src={head_img} style={{width: "108px", paddingTop: "2px"}} /></div>
-          <Form className="edit-form">
+          {/*<div className="head-img"><img src={head_img} style={{width: "108px", paddingTop: "2px"}} /></div>*/}
+          <Form className="">
             <Row>
               <Col span={24} className="tag-list">
                 <p className="info-title">
@@ -198,7 +198,7 @@ class DocumentAddLegalWorkerModalPC extends React.Component {
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
-                  </Col>*/}
+                  </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="性别">
                       {getFieldDecorator('gender', {initialValue: memberInfo.gender||''})(
@@ -208,7 +208,7 @@ class DocumentAddLegalWorkerModalPC extends React.Component {
                         </RadioGroup>
                       )}
                     </FormItem>
-                  </Col>
+                  </Col>*/}
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="执业机构">
                       {getFieldDecorator('lawOfficeAddress', {initialValue: memberInfo.lawOfficeAddress||''})(

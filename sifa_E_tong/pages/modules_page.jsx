@@ -140,7 +140,7 @@ class ChooseModulesPage extends React.Component {
         successCall: (data)=>{
           let {colsNameEn} = this.state;
           let parseData = OAUtils.formatServerListData(colsNameEn, data.values);
-          console.log("get 通知公告的list data:",data,parseData);
+          // console.log("get 通知公告的list data:",data,parseData);
           this.setState({
             noticeListData:parseData,
           });
@@ -169,7 +169,7 @@ class ChooseModulesPage extends React.Component {
               noticeListData={this.state.noticeListData}
               handleGoMatter={this.handleGoMatter}/>);
         return (
-          <div className=''>
+          <div className='' style={{height:'100%'}}>
             {finalEle}
           </div>
         );

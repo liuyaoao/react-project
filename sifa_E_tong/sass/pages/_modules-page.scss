@@ -1,42 +1,105 @@
 @charset 'UTF-8';
 
+.modules_page_container_mobile{
+  background: rgba(226, 219, 211, 0.45);
+  height:100%;
+}
 .modules_page_container{
-    // font-size:18px;
     a{
       font-size:15px;
     }
     .back_arrow_icon{
-      // position: relative;
-      // left:0;
     }
     .modules_content_mobile{
       margin-top:60px;
       .moduleDelIcon{
         position: absolute;
-        background: gray;
-        top: -0.2rem;
-        left: 3.8em;
+        background: #efeaea;
+        top: 5px;
+        left: 75%;
       }
+      .modules_item_mobile{
+        width:33%;
+        height:2.6rem;
+        position: relative;
+        margin:0;
+        box-sizing: content-box;
+        border-right: 1px solid #d4d4d4;
+        border-bottom: 1px solid #d4d4d4;
+        a{
+          display:inline-block;
+          width:50%;
+          height: auto;
+          margin-top: 12.5%;
+          border-radius: 50%;
+          text-align:center;
+          padding: 0.22rem;
+          transform: translate(50%, 0);
+          img{
+            display: block;
+            margin-left:auto;
+            margin-right:auto;
+          }
+        }
+        span{
+          text-align: center;
+          display: block;
+          font-size: 1em;
+          width: 100%;
+          font-weight: 600;
+          padding-top:0.1rem;
+          position: relative;
+          font-family: '微软雅黑';
+          // transform: translate(25%, 0);
+        }
+        .add_more_btn_cnt{
+          width:100%;
+          height:100%;
+          .add_more_btn{
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            background: none;
+            border: 0;
+            // transform: translate(50%, 0);
+          }
+        }
+        .am-badge.am-badge-not-a-wrapper{
+          width: 26px;
+          position: absolute;
+          right: 0.24rem;
+          top: 2px;
+        }
+        .loading_spin_cnt{
+          position: absolute;
+          top:24%;
+
+          .ant-spin-dot i{
+            background-color:#000;
+          }
+        }
+      }
+
       .OAModule{
-        background: #ED1B24;
+        background: #f96262;
       }
       .modifyModule{
-        background: #e29b1a;
+        background: #ea7c06;
       }
       .documentModule{
-        background: #3dd218;
+        background: #17bd1d;
       }
       .mailListModule{
-        background: #1fe6c1;
+        background: #08ad8e;
       }
       .chatModule{
-        background: #2ad0d8;
+        background: #09afb7;
       }
       .settingsModule{
         background: #7979E0;
       }
       .signinModule{
-        background: #F15858;
+        background: #6075e2;
       }
 
     }
@@ -113,7 +176,7 @@
 }
 
 .modules_content{
-  width:85%;
+  width:100%;
   margin:10% auto;
   .modules-header{
     a.hover_font:hover{
@@ -154,18 +217,32 @@
 
 .modules_bottom_mobile{
   .line{
-    border:1px solid #7f7f7f;
+    border-bottom:1px solid #d4d4d4;
     margin-bottom:20px;
   }
   .inner{
-    margin: 0 15px;
+    margin: 0;
+    .notice_row{
+      height:35px;
+      margin:0 0.2rem;
+    }
+    .dot{
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 5px;
+      background: #3da2ea;
+      float: left;
+      margin-top: 8px;
+      margin-right: 10px;
+    }
     .lf,.rt{
       color:black;
     }
   }
   .title_mobile{
-    font-weight: bold;
-    padding: 6px 0;
+    color:black;
+    padding: 6px 10px;
   }
   .title_mobile span:last-child{
     font-size: 18px;
@@ -176,12 +253,6 @@
   }
 }
 
-span.square{
-  background:#ED1B24;
-  width: 5px;
-  height:16px;
-  display: inline-block;
-}
 a.modules_font:hover{
   color:#fff;
   text-decoration:none;
@@ -214,89 +285,50 @@ a.modules_font:hover{
 
 // mobile styles
 .modules_content_row{
-  // margin-left: 0.5rem;
   padding-top:20px;
 }
-.modules_item_mobile{
-  position: relative;
-  // height:5rem;
-  a{
-    display:block;
-    text-align:center;
-    width: 1.2rem;
-    height: 1.2rem;
-    padding: 0.1rem;
-    border-radius: 5px;
-    transform: translate(25%, 0);
-    img{
-      display: block;
-      margin-left:auto;
-      margin-right:auto;
-    }
-  }
-  span{
-    text-align: center;
-    display: block;
-    font-size: 0.8em;
-    width: 1.2rem;
-    font-weight: 600;
-    padding-top:0.2rem;
-    transform: translate(25%, 0);
-  }
-  .add_more_btn{
-    width: 1.2rem;
-    height: 1.2rem;
-    transform: translate(25%, 0);
-  }
-  .am-badge.am-badge-not-a-wrapper{
-    width: 26px;
-    position: absolute;
-    right: -12px;
-    top: 0;
-  }
+.modules_content_mobile .modules_content_row{
+  padding-top:0;
+  padding-bottom:0;
 }
 
-@media screen and (max-width: 768px) {
-  .modules_item_mobile{
-    a,span,.add_more_btn{
-      transform: translate(75%, 0);
-    }
-  }
-}
-
+// @media screen and (max-width: 768px) {
+//   .modules_item_mobile{
+//     a,span,.add_more_btn{
+//       transform: translate(75%, 0);
+//     }
+//   }
+// }
+//
 @media screen and (max-width: 640px) {
-  .modules_item_mobile{
-    a,span,.add_more_btn{
-      transform: translate(50%, 0);
-    }
+  .modules_page_container .modules_content_mobile .modules_item_mobile{
+    height:2.8rem;
   }
 }
 @media screen and (max-width: 414px) {
-  .modules_item_mobile{
-    a,span,.add_more_btn{
-      transform: translate(26%, 0);
-    }
+  .modules_page_container .modules_content_mobile .modules_item_mobile{
+    height:2.6rem;
   }
 }
 @media screen and (max-width: 375px) {
-  .modules_item_mobile{
-    a,span,.add_more_btn{
-      transform: translate(22%, 0);
-    }
+  .modules_page_container .modules_content_mobile .modules_item_mobile{
+    height:2.45rem;
   }
 }
 @media screen and (max-width: 360px) {
-  .modules_item_mobile{
-    a,span,.add_more_btn{
-      transform: translate(18%, 0);
-    }
+  .modules_page_container .modules_content_mobile .modules_item_mobile{
+    height:2.35rem;
+  }
+  .modules_page_container .modules_content_mobile .modules_item_mobile span.am-badge.am-badge-not-a-wrapper{
+    right: 0.15rem;
   }
 }
 @media screen and (max-width: 320px) {
-  .modules_item_mobile{
-    a,span,.add_more_btn{
-      transform: translate(11%, 0);
-    }
+  .modules_page_container .modules_content_mobile .modules_item_mobile{
+    height:2.1rem;
+  }
+  .modules_page_container .modules_content_mobile .modules_item_mobile span.am-badge.am-badge-not-a-wrapper{
+    right: 0.05rem;
   }
 }
 

@@ -144,11 +144,11 @@ class DocumentEditLawyerModalPC extends React.Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 4 },
+        sm: { span: 6 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 14 },
+        sm: { span: 16 },
       },
     };
     const formItemLayout1 = {
@@ -158,7 +158,7 @@ class DocumentEditLawyerModalPC extends React.Component {
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 14 },
+        sm: { span: 16 },
       },
     };
     const formTailLayout = {
@@ -313,7 +313,7 @@ class DocumentEditLawyerModalPC extends React.Component {
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayout} label="是否受过行政处罚或行业处分">
+                    <FormItem {...formItemLayout1} label="是否受过行政处罚或行业处分">
                       {getFieldDecorator('lawyerIsPunish', {initialValue: memberInfo.lawyerIsPunish || ''})(
                         <Input />
                       )}

@@ -121,13 +121,8 @@ class AddressListMobileComp extends React.Component {
       <div className={cls_name}>
         <div style={{ marginBottom: 12 }}>
           {this.state.hasOperaPermission ? (
-            <div>
-                <button type="button"
-                  className="btn btn-primary pull-left"
-                  style={{marginLeft: '1em'}}
-                  onClick={()=>{this.showAddEditDialog('',null,null)}}>
-                  <Icon type="plus" />新增
-                  </button>
+            <div style={{margin:'0.16rem'}}>
+                <Button type="primary" onClick={()=>{this.showAddEditDialog('',null,null)}}><Icon type="plus" /> 新增</Button>
             </div>
           ):null}
         </div>
