@@ -189,13 +189,6 @@ class ModulesMobileComp extends React.Component {
       let canLinkTo = $(curtarget).data("canlinkto");
       // console.log("click module name:",$(curtarget).data("module"),canLinkTo);
       let moduleName = $(curtarget).data("module");
-      if(this.state.loadingModuleName!=""){
-        e.stopPropagation();
-        return false;
-      }
-      this.setState({
-        loadingModuleName:moduleName
-      });
       if(!canLinkTo){
         e.stopPropagation();
         let me = UserStore.getCurrentUser() || {};
@@ -214,6 +207,12 @@ class ModulesMobileComp extends React.Component {
         // message.success("你点击了添加模块按钮了！");
         this.showPopup();
       }
+      //显示loading信息
+      if(this.state.loadingModuleName!=""){
+        e.stopPropagation();
+        return false;
+      }
+      moduleName == "添加"?null:this.setState({loadingModuleName:moduleName});
     }
     onNavBarLeftClick = (e)=>{
       // console.log("onNavBarLeftClick:",e);
@@ -342,7 +341,7 @@ class ModulesMobileComp extends React.Component {
                 {modulesItem}
 
               </div>
-                <div className="row modules_bottom_mobile" style={{height:'220px',width:'98%',margin:'0 auto'}}>
+                <div className="row modules_bottom_mobile" style={{height:'220px',margin:'0 auto'}}>
                   <div className="inner">
                     <div className="title_mobile">
                       <span className=""><img src={notice_icon}/></span>

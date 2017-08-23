@@ -97,11 +97,11 @@ class DocumentAddSifaDirectorModalPC extends React.Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 6 },
+        sm: { span: 8 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 },
+        sm: { span: 14 },
       },
     };
     const formItemLayout1 = {
@@ -204,7 +204,7 @@ class DocumentAddSifaDirectorModalPC extends React.Component {
                     </FormItem>
                   </Col>
                   <Col span={24} id="addjoinWorkerTime">
-                    <FormItem {...formItemLayout1} label="何时开始从事司法行政工作">
+                    <FormItem {...formItemLayout} label="何时开始从事司法行政工作">
                       {getFieldDecorator('joinWorkerTime',
                         {
                           initialValue: (memberInfo.joinWorkerTime && memberInfo.joinWorkerTime!='null') ? moment(memberInfo.joinWorkerTime, 'YYYY-MM-DD') : null
@@ -238,7 +238,7 @@ class DocumentAddSifaDirectorModalPC extends React.Component {
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayout1} label="是否落实司法员岗位补贴">
+                    <FormItem {...formItemLayout} label="是否落实司法员岗位补贴">
                       {getFieldDecorator('healthStatus', {initialValue: memberInfo.healthStatus||''})(
                         <Input type="text" placeholder="" />
                       )}

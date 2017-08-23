@@ -1,7 +1,7 @@
 @charset 'UTF-8';
 
 .modules_page_container_mobile{
-  background: rgba(226, 219, 211, 0.45);
+  background: #f5f1eb;
   height:100%;
 }
 .modules_page_container{
@@ -222,6 +222,7 @@
   }
   .inner{
     margin: 0;
+    background: #f5f1eb;
     .notice_row{
       height:35px;
       margin:0 0.2rem;
