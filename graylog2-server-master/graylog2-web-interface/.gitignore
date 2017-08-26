@@ -1,0 +1,13 @@
+tmp
+dist
+.DS_Store
+bower_components
+.node_cache
+node_modules
+bower_components/*
+sandbox.js
+npm-debug.log
+build
+node
+manifests/*-manifest.json
+plugin
