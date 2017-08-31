@@ -49,7 +49,7 @@ class DocumentListPC extends React.Component {
 
   render() {
     const { loading, selectedRowKeys } = this.state;
-    const { data, currentFileType, currentFileSubType, departmentTypes, currentDepartment } = this.props;
+    const { data, currentFileId, currentFileSubId, curDepartmentId } = this.props;
 
     let others_columns = [ //普通其他档案的表头。
       {title:"姓名", dataIndex:"userName", key:"userName", width:"15%"},
@@ -99,13 +99,13 @@ class DocumentListPC extends React.Component {
       }
     };
     let columns = [];
-    if(currentDepartment=="律所"){
+    if(curDepartmentId=="律所"){
       columns = [...lawfim_columns, last_col];
-    }else if(currentFileSubType == "律师"){
+    }else if(currentFileSubId == "律师"){
       columns = [...lawer_columns, last_col];
-    }else if(currentDepartment == "基层法律工作者"){
+    }else if(curDepartmentId == "基层法律工作者"){
       columns = [...LegalWorker_columns, last_col];
-    }else if(currentFileSubType == "司法所长"){
+    }else if(currentFileSubId == "司法所长"){
       columns = [...director_columns, last_col];
     }else{
       columns = [...others_columns, last_col];
@@ -118,43 +118,42 @@ class DocumentListPC extends React.Component {
     const hasSelected = selectedRowKeys.length > 0;
     const addModalField = { //新增档案的弹窗。
       memberInfo: {},
-      currentFileType: currentFileType,
-      currentFileSubType: currentFileSubType,
+      currentFileId: currentFileId,
+      currentFileSubId: currentFileSubId,
       departmentData:this.props.departmentData,
-      currentDepartment: currentDepartment,
-      // departmentTypes: departmentTypes,
+      curDepartmentId: curDepartmentId,
       handleSearch: this.props.handleSearch.bind(this)
     }
 
     let add_ele = '';
 
-    if(currentDepartment == '律所'){
-        // console.log('添加：',currentDepartment);
+    if(curDepartmentId == '律所'){
+        // console.log('添加：',curDepartmentId);
         add_ele = <DocumentAddLawfirmModalPC {...addModalField}>
           <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
         </DocumentAddLawfirmModalPC>
-    }else if (currentDepartment == '司法考试处') {
-        // console.log('添加：',currentDepartment);
+    }else if (curDepartmentId == '司法考试处') {
+        // console.log('添加：',curDepartmentId);
         add_ele = <DocumentAddJudExamModalPC {...addModalField}>
           <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
         </DocumentAddJudExamModalPC>
-    }else if(currentFileSubType == '律师') {
-      // console.log('添加：',currentFileSubType);
+    }else if(currentFileSubId == '律师') {
+      // console.log('添加：',currentFileSubId);
       add_ele = <DocumentAddLawyerModalPC {...addModalField}>
         <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
       </DocumentAddLawyerModalPC>
-    }else if(currentDepartment == '基层法律工作者') {
-      // console.log('添加：',currentFileSubType);
+    }else if(curDepartmentId == '基层法律工作者') {
+      // console.log('添加：',currentFileSubId);
       add_ele = <DocumentAddLegalWorkerModalPC {...addModalField}>
         <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
       </DocumentAddLegalWorkerModalPC>
-    }else if(currentFileSubType == '司法所长') {
-      // console.log('添加：',currentFileSubType);
+    }else if(currentFileSubId == '司法所长') {
+      // console.log('添加：',currentFileSubId);
       add_ele = <DocumentAddSifaDirectorModalPC {...addModalField}>
         <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
       </DocumentAddSifaDirectorModalPC>
     }else {
-      // console.log('添加：',currentFileSubType);
+      // console.log('添加：',currentFileSubId);
       add_ele = <DocumentAddModalPC {...addModalField}>
         <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
       </DocumentAddModalPC>

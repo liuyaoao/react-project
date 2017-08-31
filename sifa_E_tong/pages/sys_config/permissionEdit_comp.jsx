@@ -95,7 +95,7 @@ class PermissionEditComp extends React.Component {
       //
       let flatArrResource = organizationUtils.getPermissionFlatDataArr(resObj.resourcePermission);
       let checkedKeysResource = flatArrResource.map((obj)=>{
-        if(obj.permissionId){
+        if(obj.permissionId && !obj.subNum){
           return obj.resourceId;
         }else{
           return '';
@@ -145,16 +145,20 @@ class PermissionEditComp extends React.Component {
    this.setState({expandedKeysResource:expandedKeys,autoExpandParentResource:false});
  }
  onPermissionCheckedResource = (checkedKeys,e) => {
-   this.setState({checkedKeysResource:checkedKeys});
+  //  console.log("onPermissionCheckedResource----:",checkedKeys,e);
+   this.setState({
+     checkedKeysResource:checkedKeys,
+   });
  }
  onSelectPermissionResource = (selectedKeys, info) => {
+   console.log("onSelectPermissionResource----:",selectedKeys,info);
    this.setState({ selectedKeysResource:selectedKeys });
  }
 
 
  onClickSave = () => {
    console.log("click save permission!");
-   let params = this.state.checkedKeys.map((val)=>{
+   let params = this.state.checkedKeys.map((val)=>{  //设置的功能权限数据
      let obj = this.state.permissionsFlatMap[val];
      obj.organization = this.props.organizationId;
      if(obj.actions){
@@ -163,16 +167,29 @@ class PermissionEditComp extends React.Component {
        return '';
      }
    });
-   let params2 = this.state.checkedKeysResource.map((val)=>{
+   let parentKeysArr = [];
+   let params2 = this.state.checkedKeysResource.map((val)=>{ //设置的资源权限数据。
      let obj = this.state.resourcePermissionsFlatMap[val];
      obj.organization = this.props.organizationId;
+     if(parentKeysArr.indexOf(obj.parentId)==-1){
+       parentKeysArr.push(obj.parentId);
+       let firstLevelObj = this.state.resourcePermissionsFlatMap[obj.parentId]||{};
+       parentKeysArr.indexOf(firstLevelObj.parentId)==-1?( parentKeysArr.push(firstLevelObj.parentId||'') ):null;
+     }
      if(obj.subNum){
        return '';
      }else{
        return organizationUtils.copyPermissionAttrData(obj);
      }
    });
-   params = params.concat(params2);
+  //  console.log("parentKeysArr----:",parentKeysArr);
+   let params3 = parentKeysArr.map((val)=>{
+     if(!val)return null;
+     let obj = this.state.resourcePermissionsFlatMap[val];
+     obj.organization = this.props.organizationId;
+     return organizationUtils.copyPermissionAttrData(obj);
+   });
+   params = params.concat(params2,params3);
    params = commonUtils.removeNullValueOfArr(params);
    console.log("params:",params);
    myWebClient.updatePermissionsDataByOrgaId(this.props.organizationId, params, (data,res)=>{

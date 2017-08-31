@@ -142,7 +142,8 @@ export function getPersonalTodoListData(opts){
 
 // Key：1表示获取获取草稿箱中的数据，10表示获取待办内容，2，表示办理中，4表示已办结，16777215表示所有。
 export function getOAServerListData(params){ //从服务端获取列表数据
-  const keyName2keyMap = {"草稿箱":1, "待办":10, "办理中":2, "已定稿":4,"已办结":4, "所有":16777215}
+  const keyName2keyMap = {"草稿箱":1, "待办":10, "已发布":8, "办理中":2,
+          "已定稿":4, "已终结":4, "已办结":4, "按时间":16777215,"按年度":16777215, "所有":16777215};
   let options = Object.assign({},{
     url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
     moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.MobileViewWork', //模块url

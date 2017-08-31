@@ -42,21 +42,21 @@ class DocumentListMobile extends React.Component {
     this.props.handleShowEditModal(item);
   }
   getListItemBreifEle = (item)=>{
-    let {currentFileSubType, currentDepartment} = this.props;
+    let {currentFileSubId, curDepartmentId} = this.props;
     let listItemBreif = '';
-    if(currentDepartment=="律所"){
+    if(curDepartmentId=="律所"){
       listItemBreif = (<List.Item.Brief>
         律所负责人: {item.lawOfficePrincipal}, 律所地址:  {item.lawOfficeAddress}
       </List.Item.Brief>);
-    }else if(currentFileSubType == "律师"){
+    }else if(currentFileSubId == "律师"){
       listItemBreif = (<List.Item.Brief>
         性别: {item.gender}, 律所名称: {item.lawOfficeName}
       </List.Item.Brief>);
-    }else if(currentDepartment == "基层法律工作者"){
+    }else if(curDepartmentId == "基层法律工作者"){
       listItemBreif = (<List.Item.Brief>
         执业状态: {item.lawyerStatus}, 执业机构: {item.lawOfficeAddress}
       </List.Item.Brief>);
-    }else if(currentFileSubType == "司法所长"){
+    }else if(currentFileSubId == "司法所长"){
       listItemBreif = (<List.Item.Brief>
         性别: {item.gender}, 单位: {item.reportingUnit}
       </List.Item.Brief>);
@@ -69,7 +69,7 @@ class DocumentListMobile extends React.Component {
   }
   render() {
     const { hasOperaPermission,currentPage } = this.state;
-    const { data, currentFileType,  currentFileSubType, currentDepartment,showDeleteConfirm } = this.props;
+    const { data, currentFileId,  currentFileSubId, curDepartmentId,showDeleteConfirm } = this.props;
     const totalCount = data.length;
     const pageCount = Math.ceil(data.length/10);
     let curPageData = data.slice(10*(currentPage-1), 10*currentPage);
@@ -101,7 +101,7 @@ class DocumentListMobile extends React.Component {
               <List.Item key={index} multipleLine
                 onClick={()=>{hasOperaPermission?this.handleShowEditModal(item):''}}>
                 {
-                  currentDepartment == '律所'?
+                  curDepartmentId == '律所'?
                     <div>律所名称：{item.lawOfficeName}</div>:
                     <div>姓名：{item.userName}</div>
                 }

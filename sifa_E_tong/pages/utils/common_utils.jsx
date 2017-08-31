@@ -4,7 +4,7 @@ export function removeNullValueOfArr(arr){
   let newArr = arr.filter((val)=>{
     if(typeof val=="string" && val != ""){
       return true;
-    }else if(typeof val=="object"){
+    }else if(typeof val=="object" && val){
       return true;
     }else if(typeof val=="array" && val.length>0){
       return true;

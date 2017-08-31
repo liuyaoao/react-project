@@ -90,47 +90,52 @@ class SearchFormPC extends React.Component {
 
   render() {
     const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
+    const {departmentFlatMap, currentFileSubId,curDepartmentId} = this.props;
 
-    let downloadTemplateLink = '',action_url = '';
-    if ( this.props.currentFileSubType == '律师' ) {
+    let downloadTemplateLink = null,action_url = '';
+    let fileSubTypeName = currentFileSubId ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
+    let departmentName = curDepartmentId ? (departmentFlatMap[curDepartmentId].resourceName||'') : '';
+    if ( (["市局机关","局属二级机构","公证员"]).indexOf(fileSubTypeName)!=-1 ) {
+      downloadTemplateLink = (
+          <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
+            href={window.serverUrl+"/modle/personnelFiles.xls"}><Icon type="download" /> 下载干部简历模板
+          </a>
+        );
+      action_url = MyWebClient.getfileInfoImportUrl();
+
+
       downloadTemplateLink = <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
-        href={window.serverUrl+"/modle/LawyerFile.xlsx"}><Icon type="download" /> 下载模板(律师)</a>;
+        href={window.serverUrl+"/modle/LawyerFile.xlsx"}><Icon type="download" /> 下载模板(律师) </a>;
       action_url = MyWebClient.getLawyerfileInfoImportUrl();
-    } else if ( this.props.currentDepartment == '律所' ) {
+
+    } else if ( this.props.curDepartmentId == '律所' ) {
       downloadTemplateLink = (
         <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
           href={window.serverUrl+"/modle/layfirm.xlsx"}><Icon type="download" /> 下载模板(律所)
         </a>
       );
       action_url = MyWebClient.getlawfirmfileInfoImportUrl();
-    } else if ( this.props.currentDepartment == '司法考试处' ){
+    } else if ( this.props.curDepartmentId == '司法考试处' ){
       downloadTemplateLink = (
         <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
           href={window.serverUrl+"/modle/judexam.xlsx"}><Icon type="download" /> 下载模板(司法考试处)
         </a>
       );
       action_url = MyWebClient.getjudicialexamInfoImportUrl();
-    } else if ( this.props.currentDepartment == '基层法律工作者' ){
+    } else if ( this.props.curDepartmentId == '基层法律工作者' ){
       downloadTemplateLink = (
         <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
           href={window.serverUrl+"/modle/legal_workers_template.xls"}><Icon type="download" /> 下载模板(基层法律工作者)
         </a>
       );
       action_url = MyWebClient.getLegalWorkerImportUrl();
-    } else if ( this.props.currentFileSubType == '司法所长' ){
+    } else if ( this.props.currentFileSubId == '司法所长' ){
       downloadTemplateLink = (
         <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
           href={window.serverUrl+"/modle/sifa_director_template.xlsx"}><Icon type="download" /> 下载模板(司法所长)
         </a>
       );
       action_url = MyWebClient.getSifa_DirectorImportUrl();
-    } else {
-      downloadTemplateLink = (
-          <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
-            href={window.serverUrl+"/modle/personnelFiles.xlsx"}><Icon type="download" /> 下载模板(人事)
-          </a>
-        );
-      action_url = MyWebClient.getfileInfoImportUrl();
     }
 
     const uploadField = {
@@ -142,13 +147,13 @@ class SearchFormPC extends React.Component {
       beforeUpload: this.beforeUploadCall,
       onChange: this.fileUploadChange
     }
-    // console.log('搜索栏',this.props.currentFileSubType);
-    // "/static/template/" + (this.props.currentFileSubType == '律师' ? '律师人事档案模板' : '其他人事档案模板') + ".xlsx"
+    // console.log('搜索栏',this.props.currentFileSubId);
+    // "/static/template/" + (this.props.currentFileSubId == '律师' ? '律师人事档案模板' : '其他人事档案模板') + ".xlsx"
     let uploadDocName = '';
-    if((["律所","司法考试处","基层法律工作者"]).indexOf(this.props.currentDepartment) != -1){
-      uploadDocName = this.props.currentDepartment;
+    if((["律所","司法考试处","基层法律工作者"]).indexOf(this.props.curDepartmentId) != -1){
+      uploadDocName = this.props.curDepartmentId;
     }else{
-      uploadDocName = this.props.currentFileSubType;
+      uploadDocName = this.props.currentFileSubId;
     }
 
     return (
@@ -163,7 +168,7 @@ class SearchFormPC extends React.Component {
             )}
           </FormItem>*/}
           {
-            this.props.currentDepartment == '律所'?
+            this.props.curDepartmentId == '律所'?
             <FormItem label="律所名称" className="p-r-10">
               {
                 getFieldDecorator('lawOfficeName')(
@@ -181,7 +186,7 @@ class SearchFormPC extends React.Component {
           }
 
           {
-            this.props.currentDepartment == '律所'?
+            this.props.curDepartmentId == '律所'?
             <FormItem label="律所责任人" className="p-r-10">
               {
                 getFieldDecorator('lawOfficePrincipal')(

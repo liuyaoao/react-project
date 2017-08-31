@@ -14,7 +14,7 @@ import head_boy from 'images/head_boy.png';
 import head_girl from 'images/head_girl.png';
 
 import MyWebClient from 'client/my_web_client.jsx';
-import EditableFamilyTable from './family_table.jsx';
+// import EditableFamilyTable from './family_table.jsx';
 
 class DocumentEditModalPC extends React.Component {
   state = {
@@ -59,12 +59,12 @@ class DocumentEditModalPC extends React.Component {
     this.props.form.resetFields();
     this.props.handleCancelModal();
   }
-  getFamilyMembers() {
-    const { familyData } = this.state;
-    const {memberInfo} = this.props;
-    // console.log(familyData);
-    return <EditableFamilyTable operate="edit" data={familyData} memberInfo={memberInfo} setFamilyData={this.setFamilyData.bind(this)} handleGetFamilyMembers={this.handleGetFamilyMembers.bind(this)}></EditableFamilyTable>
-  }
+  // getFamilyMembers() {
+  //   const { familyData } = this.state;
+  //   const {memberInfo} = this.props;
+  //   // console.log(familyData);
+  //   return <EditableFamilyTable operate="edit" data={familyData} memberInfo={memberInfo} setFamilyData={this.setFamilyData.bind(this)} handleGetFamilyMembers={this.handleGetFamilyMembers.bind(this)}></EditableFamilyTable>
+  // }
   setFamilyData(familyData) {
     this.setState({ familyData });
   }
@@ -175,7 +175,7 @@ class DocumentEditModalPC extends React.Component {
         sm: { span: 14 },
       },
     };
-    let familyMembersTable = this.getFamilyMembers();
+    // let familyMembersTable = this.getFamilyMembers();
     const { memberInfo, departmentTypes } = this.props;
     // console.log(memberInfo);
     let defaultGender = null, head_img = null;
@@ -287,14 +287,14 @@ class DocumentEditModalPC extends React.Component {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={12} id="editJoinPartyTime">
+                  <Col span={24} id="editJoinPartyTime">
                     <FormItem {...formItemLayout1} label="入党时间:">
                       {getFieldDecorator('joinPartyTime', {initialValue: memberInfo.joinPartyTime ? moment(memberInfo.joinPartyTime, 'YYYY-MM-DD') : null})(
                         <DatePicker getCalendarContainer={() => document.getElementById('editJoinPartyTime')} />
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={12}  id="editJoinWorkerTime">
+                  <Col span={24}  id="editJoinWorkerTime">
                     <FormItem {...formItemLayout1} label="参加工作时间:">
                       {getFieldDecorator('joinWorkerTime', {initialValue: memberInfo.joinWorkerTime ? moment(memberInfo.joinWorkerTime, 'YYYY-MM-DD') : null})(
                         <DatePicker getCalendarContainer={() => document.getElementById('editJoinWorkerTime')} />
@@ -322,7 +322,7 @@ class DocumentEditModalPC extends React.Component {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={24}>
+                  {/*<Col span={24}>
                     <FormItem {...formItemLayout} label="拟任职务">
                       {getFieldDecorator('proposedOffice', {initialValue: memberInfo.proposedOffice || ''})(
                         <Input type="text" placeholder="" />
@@ -335,7 +335,7 @@ class DocumentEditModalPC extends React.Component {
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
-                  </Col>
+                  </Col>*/}
                 </Row>
               </Col>
               <Col span={24} className="tag-list">
@@ -387,7 +387,7 @@ class DocumentEditModalPC extends React.Component {
                   </FormItem>
                 </div>
               </Col>
-              <Col span={24} className="tag-list">
+              {/*<Col span={24} className="tag-list">
                 <p className="info-title">
                   <label>家庭主要成员及重要社会关系</label>
                   <a href="javascript:;" className="pull-right p-r-10" onClick={this.handleToggleTag}><Icon type="up" /></a>
@@ -395,7 +395,7 @@ class DocumentEditModalPC extends React.Component {
                 <div className="info-body">
                   {familyMembersTable}
                 </div>
-              </Col>
+              </Col>*/}
               <Col span={24} className="tag-list">
                 <p className="info-title">
                   <label>其他信息</label>
@@ -407,16 +407,17 @@ class DocumentEditModalPC extends React.Component {
                       <Input type="textarea" placeholder="" rows={4} />
                     )}
                   </FormItem>
-                  <FormItem label="年度考核结果">
+                  <FormItem label="近三年年底考核结果">
                     {getFieldDecorator('annualAssessment', {initialValue: memberInfo.annualAssessment || ''})(
                       <Input type="textarea" placeholder="" rows={4} />
                     )}
                   </FormItem>
-                  <FormItem label="任免理由">
+                  <FormItem label="任免日期">
                     {getFieldDecorator('reasonsForDismissal', {initialValue: memberInfo.reasonsForDismissal || ''})(
                       <Input type="textarea" placeholder="" rows={4} />
                     )}
                   </FormItem>
+                  {/*
                   <div className="form-item" id="editReportingUnit">
                     <div className="item-label"><label>呈报单位:</label></div>
                     {getFieldDecorator('reportingTime', {initialValue: memberInfo.reportingTime ? moment(memberInfo.reportingTime, 'YYYY-MM-DD') : null})(
@@ -444,6 +445,7 @@ class DocumentEditModalPC extends React.Component {
                       <Input type="textarea" placeholder="" rows={4} />
                     )}
                   </div>
+                  */}
                 </div>
               </Col>
             </Row>

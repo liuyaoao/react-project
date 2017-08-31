@@ -14,7 +14,7 @@ import head_boy from 'images/head_boy.png';
 import head_girl from 'images/head_girl.png';
 
 import MyWebClient from 'client/my_web_client.jsx';
-import EditableFamilyTable from './family_table.jsx';
+// import EditableFamilyTable from './family_table.jsx';
 
 class DocumentAddModalPC extends React.Component {
   state = {
@@ -67,11 +67,11 @@ class DocumentAddModalPC extends React.Component {
       }
     });
   }
-  getFamilyMembers() {
-    const { familyData } = this.state;
-    // console.log(familyData);
-    return <EditableFamilyTable operate="add" data={familyData} setFamilyData={this.setFamilyData.bind(this)}></EditableFamilyTable>
-  }
+  // getFamilyMembers() {
+  //   const { familyData } = this.state;
+  //   // console.log(familyData);
+  //   return <EditableFamilyTable operate="add" data={familyData} setFamilyData={this.setFamilyData.bind(this)}></EditableFamilyTable>
+  // }
   setFamilyData(familyData) {
     this.setState({ familyData });
     // console.log(familyData);
@@ -88,13 +88,13 @@ class DocumentAddModalPC extends React.Component {
   }
   handleAddDocument(param) {
     let _this = this;
-    param.fileInfoType = this.props.currentFileType;
-    param.fileInfoSubType = this.props.currentFileSubType;
+    param.fileInfoType = this.props.currentFileId;
+    param.fileInfoSubType = this.props.currentFileSubId;
     let department = '';
-    if(this.props.currentDepartment){
-      department = this.props.currentDepartment;
+    if(this.props.curDepartmentId){
+      department = this.props.curDepartmentId;
     }else{
-      department = this.getDefaultDepartment(this.props.currentFileSubType);
+      department = this.getDefaultDepartment(this.props.currentFileSubId);
     }
     param.department = department;
     // console.log(param);
@@ -177,7 +177,7 @@ class DocumentAddModalPC extends React.Component {
         sm: { span: 14 },
       },
     };
-    let familyMembersTable = this.getFamilyMembers();
+    // let familyMembersTable = this.getFamilyMembers();
     const { memberInfo } = this.props;
     // console.log(memberInfo);
     let defaultGender = null, head_img = head_boy;
@@ -251,14 +251,14 @@ class DocumentAddModalPC extends React.Component {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={12}>
+                  <Col span={24}>
                     <FormItem {...formItemLayout1} label="民族">
                       {getFieldDecorator('famousFamily', {initialValue: ''})(
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={12}>
+                  <Col span={24}>
                     <FormItem {...formItemLayout1} label="籍贯">
                       {getFieldDecorator('nativePlace', {initialValue: ''})(
                         <Input type="text" placeholder="" />
@@ -295,14 +295,14 @@ class DocumentAddModalPC extends React.Component {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={12} id="addJoinPartyTime">
+                  <Col span={24} id="addJoinPartyTime">
                     <FormItem {...formItemLayout1} label="入党时间">
                       {getFieldDecorator('joinPartyTime', {initialValue: memberInfo.joinPartyTime ? moment(memberInfo.joinPartyTime, 'YYYY-MM-DD') : null})(
                         <DatePicker getCalendarContainer={() => document.getElementById('addJoinPartyTime')} />
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={12} id="addJoinWorkerTime">
+                  <Col span={24} id="addJoinWorkerTime">
                     <FormItem {...formItemLayout1} label="参加工作时间">
                       {getFieldDecorator('joinWorkerTime', {initialValue: memberInfo.joinWorkerTime ? moment(memberInfo.joinWorkerTime, 'YYYY-MM-DD') : null})(
                         <DatePicker getCalendarContainer={() => document.getElementById('addJoinWorkerTime')} />
@@ -330,7 +330,7 @@ class DocumentAddModalPC extends React.Component {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={24}>
+                  {/*<Col span={24}>
                     <FormItem {...formItemLayout} label="拟任职务">
                       {getFieldDecorator('proposedOffice', {initialValue: ''})(
                         <Input type="text" placeholder="" />
@@ -343,7 +343,7 @@ class DocumentAddModalPC extends React.Component {
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
-                  </Col>
+                  </Col>*/}
                 </Row>
               </Col>
               <Col span={24} className="tag-list">
@@ -395,7 +395,7 @@ class DocumentAddModalPC extends React.Component {
                   </FormItem>
                 </div>
               </Col>
-              <Col span={24} className="tag-list">
+              {/*<Col span={24} className="tag-list">
                 <p className="info-title">
                   <label>家庭主要成员及重要社会关系</label>
                   <a href="javascript:;" className="pull-right p-r-10" onClick={this.handleToggleTag}><Icon type="up" /></a>
@@ -403,7 +403,7 @@ class DocumentAddModalPC extends React.Component {
                 <div className="info-body">
                   {familyMembersTable}
                 </div>
-              </Col>
+              </Col>*/}
               <Col span={24} className="tag-list">
                 <p className="info-title">
                   <label>其他信息</label>
@@ -415,16 +415,17 @@ class DocumentAddModalPC extends React.Component {
                       <Input type="textarea" placeholder="" rows={4} />
                     )}
                   </FormItem>
-                  <FormItem label="年度考核结果">
+                  <FormItem label="近三年年底考核结果">
                     {getFieldDecorator('annualAssessment', {initialValue: ''})(
                       <Input type="textarea" placeholder="" rows={4} />
                     )}
                   </FormItem>
-                  <FormItem label="任免理由">
+                  <FormItem label="任免日期">
                     {getFieldDecorator('reasonsForDismissal', {initialValue: ''})(
                       <Input type="textarea" placeholder="" rows={4} />
                     )}
                   </FormItem>
+                  {/*
                   <div className="form-item" id="addReportingUnit">
                     <div className="item-label"><label>呈报单位:</label></div>
                     {getFieldDecorator('reportingTime', {initialValue: null})(
@@ -452,6 +453,7 @@ class DocumentAddModalPC extends React.Component {
                       <Input type="textarea" placeholder="" rows={4} />
                     )}
                   </div>
+                  */}
                 </div>
               </Col>
             </Row>

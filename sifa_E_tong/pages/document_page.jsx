@@ -56,12 +56,14 @@ class DocumentPage extends React.Component {
           loginUserName:'',
           memberInfo: {},
           searchParam: {},
-          currentFileType: '人事档案',
-          currentFileSubType: '机关人员',
-          currentDepartment: '',
-          departmentTypes: [],
+          currentFileId: '',  //当前展开的第一级 id.
+          currentFileSubId: '', //当前展开的第二级的 id.
+          curDepartmentId: '', //当前点击的第三级部门 id。
+          // departmentTypes: [],
           hasOperaPermission:hasOperaPermission, //是否有操作权限。
-          departmentData: []
+          departmentData: [],
+          departmentFlatData:[],  //平行数组结构
+          departmentFlatMap:{},
       };
   }
   onOpenChange = (...args) => {
@@ -78,133 +80,135 @@ class DocumentPage extends React.Component {
     let _this = this;
     var me = UserStore.getCurrentUser() || {};
     this.setState({loginUserName:me.username || ''});
-    this.getFileDepartment(me.organizations,(firstDepart,departmentData)=>{
+    this.getFileDepartment(me.organizations,(departmentData)=>{
+      var firstObj = departmentData[0];
       this.setState({
-        currentFileSubType:firstDepart
+        currentFileId:firstObj.resourceId,
       });
-      let params = {
-        fileInfoType:this.state.currentFileType,
-        fileInfoSubType:firstDepart
-      }
-      let department = [];
-      departmentData.map((parent) => {
-        if(parent.resourceName == firstDepart){
-          parent.sub.map((item) => {
-            department.push(item.resourceName);
-          });
-        }
-      });
-      department.length >0 ? params.department = department.join(',') : null;
-      this.handleSearch(params);
+      this.handleSearch({ currentFileId:firstObj.resourceId });
     });
   }
   componentWillUnmount() {
-  }
-  handleSearch(param) {
-    let _param = {};
-    if (param) {
-      _param = param;
-      this.setState({searchParam: param});
-      // console.log('属性1',_param);
-      if(_param.department == '律所' || _param.department == '司法考试处' || _param.department == '基层法律工作者'){
-        _param.fileInfoSubType = _param.department;
-        delete  _param.department;
-      }
-    } else {
-      _param = this.state.searchParam;
-      if(_param.department == '律所' || _param.department == '司法考试处' || _param.department == '基层法律工作者'){
-        _param.fileInfoSubType = _param.department;
-        delete  _param.department;
-      }
-    }
-    const {currentFileType, currentFileSubType, currentDepartment} = this.state;
-    if (!param || !param.fileInfoType) {
-      _param.fileInfoType = currentFileType;
-      if(currentFileSubType) _param.fileInfoSubType = currentFileSubType;
-      if(currentDepartment){
-        if(currentDepartment == '律所' || currentDepartment == '司法考试处' || currentDepartment == '基层法律工作者'){
-          _param.fileInfoSubType = currentDepartment;
-        }else{
-          _param.department = currentDepartment;
-        }
-      }else{
-        let department = [];
-        this.state.departmentData.map((parent) => {
-          if(parent.resourceName == currentFileSubType){
-            parent.sub.map((item) => {
-              department.push(item.resourceName);
-            });
-          }
-        });
-        department.length >0 ? _param.department = department.join(',') : null;
-      }
-    }
-    MyWebClient.getSearchFileInfo(_param,
-      (data, res) => {
-        if (res && res.ok) {
-          let documentsData = JSON.parse(res.text);
-          //  console.log("documentsData---:",documentsData);
-          // console.log(documentsData);
-          this.setState({ documentsData });
-          if (!this.state.departmentTypes.length) {
-            const departArr = [];
-            for (var i = 0; i < documentsData.length; i++) {
-              if (departArr.indexOf(documentsData[i].department) === -1) {
-                departArr.push(documentsData[i].department);
-              }
-            }
-            this.setState({ departmentTypes: departArr });
-          }
-        }
-      },
-      (e, err, res) => {
-        console.log('get error:', res ? res.text : '');
-      }
-    );
-  }
-  convertSiderData(rows) { //把平行结构的带权限的部门数据转换成分层结构形式。
-    var parnts = [], nodes = [];
-    function getChild(row) {
-      for (var j = 0; j < nodes.length; j++) {
-        if (nodes[j].resourceName == row.parntName) {
-          nodes[j].sub.push(row);
-        }
-      }
-    }
-    for (var i = 0; i < rows.length; i++) {
-      var row = rows[i];
-      row.resourceId = row.id, row.resourceName = row.name;
-      if (parnts.indexOf(row.parntName) > -1) {
-        getChild(row);
-      } else { //这里需要特殊处理，对于下一级只有一层的，前端处理去掉下一级。
-        if(row.parntName == "律所" || row.parntName == '司法考试处' || row.parntName == '基层法律工作者'){
-          nodes.push(row);
-        }else {
-          parnts.push(row.parntName);
-          nodes.push( { resourceId: row.parntName, resourceName: row.parntName, sub: []});
-          getChild(row);
-        }
-      }
-    }
-    return nodes;
   }
   getFileDepartment(organizations,callback) { //权限部门数据
     let _this = this;
     MyWebClient.getFileDepartment(organizations,
       (data, res) => {
         if (res && res.ok) {
-          const result = JSON.parse(res.text);
-          const resource = this.convertSiderData(result);
-          // console.log('her name',resource);
-          // console.log("departmentData-档案管理-权限部门数据-:",resource);
-          this.setState({departmentData: resource});
-          callback && callback(resource[0]['resourceName'],resource);
+          let departmentData = JSON.parse(res.text);
+          let departmentFlatData = this.parseFileDepartmentResource(departmentData,1);
+          let departmentFlatMap = this.getPermissionFlatMap(departmentFlatData);
+          // console.log("departmentData-档案管理-权限部门数据-:",departmentData,departmentFlatMap);
+          this.setState({
+            departmentData: departmentData,
+            departmentFlatData:departmentFlatData,
+            departmentFlatMap:departmentFlatMap,
+          });
+          callback && callback(departmentData);
         }
       },
       (e, err, res) => {
         console.log('get error:', res ? res.text : '');
       }
     );
+  }
+  handleSearch(paramsIdArr) { //paramsId :{currentFileId, currentFileSubId, curDepartmentId}
+    let params = { //查询参数。
+      fileInfoType:'',
+      fileInfoSubType:'',
+      department:''
+    };
+    if(!paramsIdArr){
+      paramsIdArr = {
+        currentFileId:this.state.currentFileId,
+        currentFileSubId:this.state.currentFileSubId,
+        curDepartmentId:this.state.curDepartmentId,
+      }
+    }
+    params.fileInfoType = this.state.departmentFlatMap[paramsIdArr.currentFileId].resourceName;
+    params.fileInfoSubType = paramsIdArr.currentFileSubId?this.state.departmentFlatMap[paramsIdArr.currentFileSubId].resourceName:"";
+    if(!paramsIdArr.currentFileSubId){
+      let currentFileSubIdArr = [];
+      let fileInfoSubTypeArr = this.state.departmentFlatMap[paramsIdArr.currentFileId].sub.map((item)=>{
+        currentFileSubIdArr.push(item.resourceId);
+        return item.resourceName;
+      });
+      params.fileInfoSubType = fileInfoSubTypeArr.join(',');
+      paramsIdArr.currentFileSubId = currentFileSubIdArr.join(',');
+    }
+
+    params.department = paramsIdArr.curDepartmentId?this.state.departmentFlatMap[paramsIdArr.curDepartmentId].resourceName:"";
+    if(!paramsIdArr.curDepartmentId){
+      let departmentArr = [];
+      paramsIdArr.currentFileSubId.split(',').map((fileSubId)=>{
+        if(this.state.departmentFlatMap[fileSubId].sub && this.state.departmentFlatMap[fileSubId].sub.length>0){
+          this.state.departmentFlatMap[fileSubId].sub.map((item)=>{
+            departmentArr.push( item.resourceName );
+          });
+        }
+      });
+      departmentArr.length>0?params.department = departmentArr.join(','):null;
+    }
+    MyWebClient.getSearchFileInfo(params,
+      (data, res) => {
+        if (res && res.ok) {
+          let documentsData = JSON.parse(res.text);
+           console.log("documentsData-list-结果列表-:",documentsData);
+          this.setState({ documentsData });
+          // if (!this.state.departmentTypes.length) {
+          //   const departArr = [];
+          //   for (var i = 0; i < documentsData.length; i++) {
+          //     if (departArr.indexOf(documentsData[i].department) === -1) {
+          //       departArr.push(documentsData[i].department);
+          //     }
+          //   }
+          //   this.setState({ departmentTypes: departArr });
+          // }
+        }
+      },
+      (e, err, res) => {
+        console.log('get error:', res ? res.text : '');
+      }
+    );
+  }
+
+  parseFileDepartmentResource(objArr,level) { //得到平级的权限部门数据。
+    let flatArr = [];
+    $.each(objArr, (index, obj)=>{
+      obj.resourceId = obj.id;
+      obj.resourceName = obj.name;
+      obj.level = level;
+      if(!obj.sub || obj.sub.length<=0){ //已经是子节点了。
+        flatArr.push(this.copyPermissionAttrData(obj));
+      }else{ //表示还有孩子节点存在。
+        let tempObj = this.copyPermissionAttrData(obj);
+        tempObj['subNum'] = obj.sub.length;
+        tempObj["sub"] = obj.sub;
+        flatArr.push(tempObj);
+        let childConfig = obj.sub;
+        let childrens = this.parseFileDepartmentResource(childConfig,level+1);
+        flatArr.push(...childrens); //递归调用
+      }
+    });
+    return flatArr;
+  }
+  copyPermissionAttrData(obj){
+    return {
+      parntName:obj.parntName,
+      id:obj.id,
+      name:obj.name,
+      resourceId:obj.resourceId,
+      resourceName:obj.resourceName,
+      level:obj.level,
+      subNum:0
+    }
+  }
+  getPermissionFlatMap(flatDataArr) {
+    let flatDataMap = {};
+    $.each(flatDataArr,(index,obj)=>{  //平行的键值对的map结构。
+      flatDataMap[obj.resourceId] = obj;
+    });
+    return flatDataMap;
   }
   handleShowEditModal(record) {
     const {documentsData} = this.state;
@@ -293,8 +297,8 @@ class DocumentPage extends React.Component {
   handleDeleteAllDocument(){
     let _this = this;
     MyWebClient.deleteFileInfoAll({
-      fileInfoType:this.state.currentFileType,
-      fileInfoSubType:this.state.currentFileSubType,
+      fileInfoType:this.state.currentFileId,
+      fileInfoSubType:this.state.currentFileSubId,
     },
       (data, res) => {
         if (res && res.ok) {
@@ -320,11 +324,14 @@ class DocumentPage extends React.Component {
       message: message
     });
   }
-  setCurrentFileSubType(currentFileSubType) {
-    this.setState({currentFileSubType});
+  setcurrentFileId(currentFileId){
+    this.setState({ currentFileId});
   }
-  setCurrentDepartment(currentDepartment, callback) {
-    this.setState({currentDepartment});
+  setcurrentFileSubId(currentFileSubId) {
+    this.setState({currentFileSubId});
+  }
+  setcurDepartmentId(curDepartmentId, callback) {
+    this.setState({curDepartmentId});
   }
   getMobileElements(sidebar){
     const drawerProps = {
@@ -358,6 +365,10 @@ class DocumentPage extends React.Component {
       );
   }
   getPCElements(sidebar){
+    const {currentFileId, currentFileSubId, curDepartmentId} = this.state;
+    let currentFileName = currentFileId?this.state.departmentFlatMap[currentFileId].resourceName:'';
+    let currentFileSubName = currentFileSubId?this.state.departmentFlatMap[currentFileSubId].resourceName:'';
+    let curDepartmentName = curDepartmentId?this.state.departmentFlatMap[curDepartmentId].resourceName:'';
     let content = this.getListContentElements();
     return ( <Layout style={{ height: '100vh' }}>
               <Header className="header custom_ant_header addressbook_header" style={{position:'fixed',width:'100%',zIndex:'13'}}>
@@ -368,9 +379,9 @@ class DocumentPage extends React.Component {
                     </div>
                 </div>
                 <Breadcrumb className="bread_content" style={{ margin: '0 10px',float:'left' }}>
-                  <Breadcrumb.Item className="bread_item">档案管理</Breadcrumb.Item>
-                  <Breadcrumb.Item className="bread_item">{this.state.currentFileSubType}</Breadcrumb.Item>
-                  <Breadcrumb.Item className="bread_item">{this.state.currentDepartment}</Breadcrumb.Item>
+                  <Breadcrumb.Item className="bread_item">{currentFileName}</Breadcrumb.Item>
+                  <Breadcrumb.Item className="bread_item">{currentFileSubName}</Breadcrumb.Item>
+                  <Breadcrumb.Item className="bread_item">{curDepartmentName}</Breadcrumb.Item>
                 </Breadcrumb>
                 <div className="" style={{position:'absolute',right:'32px',top:'0'}}><LogOutComp className="" addGoBackBtn/></div>
               </Header>
@@ -385,29 +396,31 @@ class DocumentPage extends React.Component {
         </Layout>);
   }
   getSearchForm() {
-    const {currentFileType, currentFileSubType, departmentData,currentDepartment} = this.state;
+    const {currentFileId, currentFileSubId, departmentData,curDepartmentId,departmentFlatMap} = this.state;
     return this.state.isMobile ?
             (
               <WrappedSearchFormMobile
                 departmentData={departmentData}
-                currentFileType={currentFileType}
-                currentFileSubType={currentFileSubType}
-                currentDepartment={currentDepartment}
+                departmentFlatMap={departmentFlatMap}
+                currentFileId={currentFileId}
+                currentFileSubId={currentFileSubId}
+                curDepartmentId={curDepartmentId}
                 showDeleteAllConfirm={this.showDeleteAllConfirm}
                 handleSearch={this.handleSearch} />
             ) :(
               <WrappedSearchFormPC
                 ref="searchFormPC"
                 departmentData={departmentData}
-                currentFileType={currentFileType}
-                currentFileSubType={currentFileSubType}
+                departmentFlatMap={departmentFlatMap}
+                currentFileId={currentFileId}
+                currentFileSubId={currentFileSubId}
                 handleSearch={this.handleSearch}
-                currentDepartment={currentDepartment}
+                curDepartmentId={curDepartmentId}
                 openNotification={this.openNotification}/>
           );
   }
   getSearchResultTable() {
-    const {documentsData,departmentData, currentFileType, currentFileSubType, departmentTypes, currentDepartment} = this.state;
+    const {documentsData,departmentData, currentFileId, currentFileSubId, curDepartmentId} = this.state;
     // console.log("documentsData---:",documentsData);
     for (let i = 0; i < documentsData.length; i++) {
       documentsData[i]['key'] = documentsData[i].id;
@@ -415,10 +428,9 @@ class DocumentPage extends React.Component {
     const data = documentsData;
     let docSearchPCList = (
       <DocumentListPC data={data}
-        currentFileType={currentFileType}
-        currentFileSubType={currentFileSubType}
-        currentDepartment={currentDepartment}
-        departmentTypes={departmentTypes}
+        currentFileId={currentFileId}
+        currentFileSubId={currentFileSubId}
+        curDepartmentId={curDepartmentId}
         departmentData={departmentData}
         showDeleteConfirm={this.showDeleteConfirm}
         showDeleteAllConfirm={this.showDeleteAllConfirm}
@@ -428,15 +440,13 @@ class DocumentPage extends React.Component {
 
     let docSearchMobileList = (//构造手机端的列表视图
       <DocumentListMobile data={data}
-        currentFileType={currentFileType}
-        currentFileSubType={currentFileSubType}
-        currentDepartment={currentDepartment}
+        currentFileId={currentFileId}
+        currentFileSubId={currentFileSubId}
+        curDepartmentId={curDepartmentId}
         showDeleteConfirm={this.showDeleteConfirm}
         handleShowEditModal={this.handleShowEditModal}
         ></DocumentListMobile>
-
     )
-
     return this.state.isMobile ? docSearchMobileList : docSearchPCList;
   }
   getListContentElements(){
@@ -450,17 +460,19 @@ class DocumentPage extends React.Component {
   }
 
   render() {
-    const {visibleEditModel, memberInfo, currentFileType, currentFileSubType, departmentTypes, departmentData, currentDepartment} = this.state;
-    // console.log('departmentData--:',departmentData);
+    const {visibleEditModel, memberInfo, currentFileId, currentFileSubId} = this.state;
+    const { departmentData, departmentFlatData, departmentFlatMap, curDepartmentId} = this.state;
     let sidebarMenuMarTop = this.state.isMobile ? '60px' : '0';
-
     const sidebar = (
       <Sider width={240} className="custom_ant_sidebar addressSidebar"
         style={{ background: '#2071a7',color:'#fff',marginTop:sidebarMenuMarTop,overflow: 'auto', zIndex:'9999'}}>
-        <DocumentSidebar currentFileType={currentFileType} currentFileSubType={currentFileSubType} departmentData={departmentData}
+        <DocumentSidebar currentFileId={currentFileId} currentFileSubId={currentFileSubId}
+          departmentData={departmentData}
+          departmentFlatMap={departmentFlatMap}
           searchFormPC={this.refs.searchFormPC}
-          setCurrentFileSubType={this.setCurrentFileSubType.bind(this)}
-          setCurrentDepartment={this.setCurrentDepartment.bind(this)}
+          setcurrentFileId={this.setcurrentFileId.bind(this)}
+          setcurrentFileSubId={this.setcurrentFileSubId.bind(this)}
+          setcurDepartmentId={this.setcurDepartmentId.bind(this)}
           onClickMenuItem={()=>{this.setState( {open:!this.state.open} ); }}
           handleSearch={this.handleSearch} />
       </Sider>
@@ -471,22 +483,23 @@ class DocumentPage extends React.Component {
       visible: visibleEditModel,
       memberInfo: memberInfo,
       departmentData:departmentData,
-      currentFileType: currentFileType,
-      currentFileSubType: currentFileSubType,
-      // currentDepartment: currentDepartment,
+      departmentFlatMap:departmentFlatMap,
+      currentFileId: currentFileId,
+      currentFileSubId: currentFileSubId,
+      // curDepartmentId: curDepartmentId,
       handleSearch: this.handleSearch,
       handleCancelModal: this.handleCancelModal
     }
     let edit_ele = '';
-    if(currentDepartment == '律所'){
+    if(curDepartmentId == '律所'){
       edit_ele = <DocumentEditLawfirmModalPC {...editModalField}></DocumentEditLawfirmModalPC>
-    }else if(currentDepartment == '司法考试处') {
+    }else if(curDepartmentId == '司法考试处') {
       edit_ele = <DocumentEditJudExamModalPC {...editModalField}></DocumentEditJudExamModalPC>
-    }else if(currentFileSubType == '律师' ){
+    }else if(currentFileSubId == '律师' ){
       edit_ele = <DocumentEditLawyerModalPC {...editModalField}></DocumentEditLawyerModalPC>
-    }else if(currentDepartment == '基层法律工作者' ){
+    }else if(curDepartmentId == '基层法律工作者' ){
       edit_ele = <DocumentEditLegalWorkerModalPC {...editModalField}></DocumentEditLegalWorkerModalPC>
-    }else if(currentFileSubType == '司法所长' ){
+    }else if(currentFileSubId == '司法所长' ){
       edit_ele = <DocumentEditSifaDirectorModalPC {...editModalField}></DocumentEditSifaDirectorModalPC>
     }else {
       edit_ele = <DocumentEditModalPC {...editModalField}></DocumentEditModalPC>

@@ -63,12 +63,12 @@ class SearchFormMobile extends React.Component {
       <div className="am-doc-list">
         <List>
           {
-            this.props.currentDepartment == '律所'?
+            this.props.curDepartmentId == '律所'?
             <InputItem clear autoFocus placeholder="请输入律所名称" {...getFieldProps('lawOfficeName')}>律所名称</InputItem>:
             <InputItem clear autoFocus placeholder="请输入姓名" {...getFieldProps('userName')}>姓名</InputItem>
           }
           {
-            this.props.currentDepartment == '律所'?
+            this.props.curDepartmentId == '律所'?
             <InputItem clear autoFocus placeholder="请输入律所责任人" {...getFieldProps('lawOfficePrincipal')}>律所负责人</InputItem>:
             <InputItem clear onClick={this.showSelectGender} placeholder="请选择" {...getFieldProps('gender')}>
               性别 <Icon type="down" />

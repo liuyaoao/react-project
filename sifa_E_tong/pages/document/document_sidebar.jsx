@@ -10,7 +10,8 @@ const { SubMenu } = Menu;
 export default class DocumentSidebar extends React.Component {
   static get propTypes() {
       return {
-        departmentData: React.PropTypes.array
+        departmentData: React.PropTypes.array,
+        departmentFlatMap: React.PropTypes.object
       };
   }
   constructor(props) {
@@ -23,42 +24,38 @@ export default class DocumentSidebar extends React.Component {
       };
   }
   componentDidMount() {
-    if(this.props.departmentData && this.props.departmentData.length ){
-      let openKey = this.props.departmentData[0].resourceId || '';
-      this.setState({openKeys: [openKey]});
-    }
   }
 
   componentWillReceiveProps(nextProps){
     if(this.props.departmentData !== nextProps.departmentData && nextProps.departmentData.length ){
-      let openKey = nextProps.departmentData[0].resourceId || '';
-      this.setState({openKeys: [this.props.currentFileType]});
     }
   }
   // menu item click handler
    handleClick = (e) => { //仅表示点击了菜单的叶子节点响应。
-    //  console.log('click tree',e);
     this.setState({ current: e.key });
-    // console.log("e.item.props.children--:",e.item.props.children);
-    console.log("e.keyPath--:",e.keyPath,e.item.props.children);
+    console.log("点击了菜单的叶子节点响应:e.key,e.keyPath,e.item.props.children:", e.key,e.keyPath,e.item.props.children);
     if (e.item.props.children) {
-      const {currentFileType} = this.props;
-      const currentDepartment = e.item.props.children;
+      let level = this.props.departmentFlatMap[e.key].level;
       this.props.searchFormPC && this.props.searchFormPC.setFieldsValue({
         userName: '', gender: ''
       });
-      let currentFileSubType = e.keyPath[1];
-      if(currentDepartment == "律所"||currentDepartment == "司法考试处"||currentDepartment == "基层法律工作者" ){
-        currentFileSubType = currentDepartment;
+      let currentFileSubId='',curDepartmentId='';
+      if(level==2){ //第二级就是叶子节点了。
+        currentFileSubId = e.key;
+      }else if(level == 3){
+        curDepartmentId = e.key;
       }
-      this.props.setCurrentFileSubType(currentFileSubType);
-      this.props.setCurrentDepartment(currentDepartment);
+      curDepartmentId?currentFileSubId = this.props.departmentFlatMap[curDepartmentId].parntName:null;
+      let currentFileId = this.props.departmentFlatMap[currentFileSubId].parntName;
+      this.props.setcurDepartmentId(curDepartmentId);
+      this.props.setcurrentFileSubId(currentFileSubId);
+      this.props.setcurrentFileId(currentFileId);
       const searchParam = {
-        fileInfoType: currentFileType,
-        fileInfoSubType: currentFileSubType,
-        department: currentDepartment
+        currentFileId: currentFileId,
+        currentFileSubId: currentFileSubId,
+        curDepartmentId: curDepartmentId
       }
-      // console.log('menu item Clicked, searchParam: ', searchParam);
+      console.log('menu item Clicked, searchParam: ', searchParam);
       this.props.handleSearch(searchParam);
       this.props.onClickMenuItem();
     }
@@ -66,6 +63,7 @@ export default class DocumentSidebar extends React.Component {
 
   onMenuOpenChange = (openKeys) => {
     const state = this.state;
+    // console.log('menu onMenuOpenChange: ', openKeys);
     const latestOpenKey = openKeys.find(key => !(state.openKeys.indexOf(key) > -1));
     const latestCloseKey = state.openKeys.find(key => !(openKeys.indexOf(key) > -1));
 
@@ -75,28 +73,24 @@ export default class DocumentSidebar extends React.Component {
       this.updateDocumentList(latestOpenKey);
     }
   }
-
   updateDocumentList(key){
-    if(!key || key== this.props.currentFileType){
-      key = '机关人员';
+    let fileObj = this.props.departmentFlatMap[key]||{}; //当前点击的菜单
+    let currentFileSubId = fileObj.resourceId; //先默认看作点击的是第二级菜单。
+
+    let parentObj = fileObj; //从当前往上找它的父级。
+    let currentFileId = currentFileSubId;
+    while(parentObj.parntName && parentObj.parntName!='-1'){
+      parentObj = this.props.departmentFlatMap[parentObj.parntName];
+      currentFileId = parentObj.resourceId;
     }
-    let department = [];
-    this.props.departmentData.map((parent) => {
-      if(parent.resourceName == key){
-        parent.sub.map((item) => {
-          department.push(item.resourceName);
-        });
-      }
-    });
-    const param = {
-      fileInfoType: this.props.currentFileType,
-      fileInfoSubType: key,
-      department:department.join(',')
+    if(currentFileId == currentFileSubId){ //表示是当前就是第一级了。
+      currentFileSubId = '';
     }
-    // console.log(param);
-    this.props.setCurrentFileSubType(key);
-    this.props.setCurrentDepartment('');
-    this.props.handleSearch(param);
+    console.log('menu onMenuOpenChange: currentFileId, currentFileSubId: ', currentFileId,currentFileSubId);
+    this.props.setcurrentFileId(currentFileId);
+    this.props.setcurrentFileSubId( currentFileSubId );
+    this.props.setcurDepartmentId('');
+    this.props.handleSearch({ currentFileId,currentFileSubId });
   }
 
   getMenuItemList(sidebarConfig){
@@ -115,22 +109,19 @@ export default class DocumentSidebar extends React.Component {
     return ele;
   }
   render() {
-    const { departmentData, currentFileType } = this.props;
+    const { departmentData, currentFileId } = this.props;
     const sidebarMenuList =  this.getMenuItemList(departmentData);
     // console.log(this.state.openKeys);
     return (
           <Menu
             theme="dark"
             mode="inline"
-            defaultOpenKeys={[currentFileType]}
             openKeys={this.state.openKeys}
             selectedKeys={[this.state.current]}
             style={{ width: 240 }}
             onOpenChange={this.onMenuOpenChange}
             onClick={this.handleClick} >
-            <SubMenu key={currentFileType} title={<span><Icon type="mail" /><span>人事档案</span></span>}>
-              {sidebarMenuList}
-            </SubMenu>
+            {sidebarMenuList}
           </Menu>
 
     );

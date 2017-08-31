@@ -2,9 +2,7 @@
 import * as Utils from 'utils/utils.jsx';
 
 import React from 'react';
-// import {message} from 'antd';
 import LogOutComp from './components/log_out_comp.jsx'
-// import {browserHistory} from 'react-router/es6';
 import * as GlobalActions from 'actions/global_actions.jsx';
 import UserStore from 'stores/user_store.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
@@ -20,9 +18,14 @@ import signin_icon from 'images/modules_img/signin_icon.png';
 import ModulesMobileComp  from './modules_comp/modules_mobile_comp.jsx';
 import ModulesPcComp  from './modules_comp/modules_pc_comp.jsx';
 
+import {Toast} from 'antd-mobile';
+import {Icon} from 'antd';
+import myWebClient from 'client/my_web_client.jsx';
+
 const notShow_moduleId_inMobile = "1006";
 const notShow_moduleId_inPC = "";
 // const notShow_moduleId_inPC = "1001"; //真正上线时用这个。
+
 
 class ChooseModulesPage extends React.Component {
     constructor(props) {
@@ -50,7 +53,30 @@ class ChooseModulesPage extends React.Component {
           this.getServerListData(res.values.tockenunid);
         });
       }
+      window.handleClickBackBtn = function (e) {
+        console.log("我监听到了浏览器的返回按钮事件啦");
+      }
+      if (window.history && window.history.pushState) {
+        console.log('增加了监听器了！！！！',window.handleClickBackBtn);
+        window.addEventListener("popstate", window.handleClickBackBtn,true);
+      }
     }
+    componentWillUnmount(){
+      if (window.history && window.history.pushState) {
+        console.log('注销监听器了！！！！');
+        window.removeEventListener("popstate",window.handleClickBackBtn,false);
+        window.removeEventListener("popstate",window.handleClickBackBtn,true);
+      }
+    }
+
+    handleLogOut = ()=>{ //处理推出。
+      // console.log("我监听到了浏览器的返回按钮事件啦");
+      Toast.info(<div><Icon type={'loading'} /><span>  正在退出...</span></div>, 5, null, true);
+      myWebClient.removeToken();
+      // browserHistory.push('/login');
+      GlobalActions.emitUserLoggedOutEvent('/login');
+    }
+
     getAllModulesData(){
       let modulesData = [
         {

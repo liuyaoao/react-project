@@ -116,7 +116,6 @@ export function getDirectoryFlatDataArr(objArr,parentId){ //得到平级的组�
   });
   return flatArr;
 }
-
 export function getDirectoryFlatMap(flatDataArr) {
   let flatDataMap = {};
   $.each(flatDataArr,(index,obj)=>{  //平行的键值对的map结构。

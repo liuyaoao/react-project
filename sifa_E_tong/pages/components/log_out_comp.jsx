@@ -2,7 +2,8 @@
 import $ from 'jquery';
 
 import React from 'react';
-import {Button} from 'antd';
+import {Button,Icon} from 'antd';
+import {Toast} from 'antd-mobile';
 import {browserHistory} from 'react-router/es6';
 import myWebClient from 'client/my_web_client.jsx';
 import * as GlobalActions from 'actions/global_actions.jsx';
@@ -30,18 +31,10 @@ export default class LogOutComp extends React.Component {
     }
     onClickExitBtn(e){
       console.log("click 退出按钮：",e);
+      Toast.info(<div><Icon type={'loading'} /><span>  正在退出...</span></div>, 5, null, true);
       myWebClient.removeToken();
       // browserHistory.push('/login');
       GlobalActions.emitUserLoggedOutEvent('/login');
-      // myWebClient.logout((data,res)=>{
-      //     console.log("logout success: ",data,res);
-      //     myWebClient.removeToken();
-      //     browserHistory.push('/');
-      //   },(err)=>{
-      //     myWebClient.removeToken();
-      //     browserHistory.push('/');
-      //     console.log("logout error: ",err);
-      //   });
     }
     render() {
         const content = [];

@@ -5,7 +5,7 @@ import UserStore from 'stores/user_store.jsx';
 import * as Utils from 'utils/utils.jsx';
 import myWebClient from 'client/my_web_client.jsx';
 
-import { Modal,SwipeAction,List,Button } from 'antd-mobile';
+import { Modal,SwipeAction,List,Button,Popup } from 'antd-mobile';
 import { Row, Col, Icon,notification, Input, Tooltip,message } from 'antd';
 const alert = Modal.alert;
 import avatorIcon_man from 'images/avator_icon/avator_man.png';
@@ -25,7 +25,6 @@ class AddressListMobileComp extends React.Component {
       let hasOperaPermission = permissionData['address_book'].indexOf('action') != -1;
       this.state = {
         isModalOpen:false,
-        selectedIds:[],
         permissionData:permissionData,
         hasOperaPermission:hasOperaPermission, //是否有操作权限。
         currentPage:1, //当前页。
@@ -35,6 +34,11 @@ class AddressListMobileComp extends React.Component {
   componentWillMount(){
   }
   componentDidMount(){
+  }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.addressListData.length != this.props.addressListData.length){
+      this.setState({currentPage:1});
+    }
   }
   onClickDeleteContact = (text,record)=>{
   }
@@ -108,6 +112,35 @@ class AddressListMobileComp extends React.Component {
       });
     }
   }
+  getTelephoneDialEles= (telephoneNumber)=>{ //构造可直接拨号的视图。
+    if(!telephoneNumber){ return; }
+    let teleArr = (telephoneNumber||'').split(",");
+    if(teleArr.length==1){
+      return (<a href={"tel:"+telephoneNumber}>
+                <Icon type="phone" style={{fontSize:'0.6rem',fontWeight:'bold',color:'#189A09'}}/>
+              </a>);
+    }else if(teleArr.length>1){
+      return (<a href="#" onClick={()=>{this.showPopupDialTele(teleArr)}}>
+                <Icon type="phone" style={{fontSize:'0.6rem',fontWeight:'bold',color:'#189A09'}}/>
+              </a>);
+    }
+    return null;
+  }
+  showPopupDialTele = (teleArr)=>{
+    Popup.show(<div>
+      <List className="popup-modules_mobile-list">
+        {teleArr.map((telenum, index) => (
+          <List.Item key={index} style={{margin:'0.6em 0'}}>
+            <a href={"tel:"+telenum} style={{textAlign:'center',display:'block'}}>{telenum}</a>
+          </List.Item>
+        ))}
+      </List>
+    </div>, { animationType: 'slide-up', maskClosable: true });
+  }
+
+  handleDialTeleMenuClick = (item,key,keyPath)=>{
+
+  }
 
   render() {
     const { currentPage } = this.state;
@@ -155,15 +188,13 @@ class AddressListMobileComp extends React.Component {
                     </span>
                     <div className="addressbook_detail">
                       <div className="member_name">
-                        <span>({record.userName}) &nbsp;</span>
+                        <span>{record.userName}</span>
                         </div>
                         <div className="member_email"><span>电话短号：</span>{record.groupShortCode}</div>
                         <div className="member_phone"><span>电话号码：</span>{record.telephoneNumber}</div>
                       </div>
                       <div className="addressbook_right">
-                        <a href={"tel:"+record.telephoneNumber}>
-                          <Icon type="phone" style={{fontSize:'0.6rem',fontWeight:'bold',color:'#189A09'}}/>
-                        </a>
+                        {this.getTelephoneDialEles(record.telephoneNumber)}
                       </div>
                     </div>
                 </List.Item>

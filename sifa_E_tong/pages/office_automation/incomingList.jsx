@@ -17,7 +17,7 @@ class IncomingList extends React.Component {
         rowHasChanged: (row1, row2) => row1 !== row2,
       });
       this.state = {
-        tabsArr:["待办", "办理中", "已终结", "已发布", "所有"],
+        tabsArr:["待办", "办理中", "已终结", "已发布","按时间", "所有"],
         activeTabkey:'待办',
         colsNameCn:["收文日期","收文号","来文单位","来文文号","文件标题","主办部门", "当前办理人","办理时限"],
         colsNameEn:["acceptDate", "acceptNum", "sendUnit", "sendNum", "fileTitle","department","curUsers","handleTime"],
@@ -106,7 +106,7 @@ class IncomingList extends React.Component {
           borderTop: '1px solid #ECECED',
           borderBottom: '1px solid #ECECED',
         }}
-      />
+      ></div>
     );
     const listRow = (rowData, sectionID, rowID) => {
       return (
@@ -186,8 +186,7 @@ class IncomingList extends React.Component {
             scrollRenderAheadDistance={200}
             scrollEventThrottle={20}
             useBodyScroll={true}
-            scrollerOptions={{ scrollbars: true }}
-          />
+            scrollerOptions={{ scrollbars: true }}/>
         ):null}
       </TabPane>);
     });

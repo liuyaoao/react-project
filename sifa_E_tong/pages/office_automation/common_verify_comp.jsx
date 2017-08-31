@@ -16,6 +16,7 @@ class CommonVerifyCompRaw extends React.Component {
         selectNotionType:'部门意见',
         verifyCnt:'',//审核意见的内容。
         notionTypes:[], //意见类型
+        organizationMap:{},
         organizationTypes:[], //组织机构类型
         allPersonListMap:{}, //所有人员的map.
         personList:[], // 当前部门下人员信息

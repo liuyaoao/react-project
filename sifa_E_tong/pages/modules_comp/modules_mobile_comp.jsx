@@ -330,11 +330,12 @@ class ModulesMobileComp extends React.Component {
                 style={{position:'fixed',height:'60px',zIndex:'99999',width:'100%',top:0}}
                 className="mobile_navbar_custom"
                 iconName = {false}
-                leftContent={[ <Icon type="appstore-o" style={{ fontSize: '25px' }} className="back_arrow_icon" key={19475609}/>,
-              <span style={{fontSize:'1em'}} key={91234353}>{this.state.showDelIcon?('取消'):null}</span>
-                             ]}
+                leftContent={[
+                  <Icon type="appstore-o" style={{ fontSize: '25px' }} className="back_arrow_icon" key={19475609}/>,
+                  <span style={{fontSize:'1.2em',margin:'0 0 5px 6px'}} key={93}>{this.state.showDelIcon?('取消'):null}</span>
+                ]}
                 onLeftClick={this.onNavBarLeftClick}
-                rightContent={[ <LogOutComp key={'logoutcomp_123456'}><Icon type="close" style={{fontSize:'25px'}} key={909}/></LogOutComp>]} >
+                rightContent={[ <LogOutComp key={'logoutcomp_123456'}><span style={{fontSize:'1.2em'}} key={909}>退出</span></LogOutComp>]} >
                 <img width="35" height="35" src={signup_logo}/>司法E通
               </NavBar>
               <div className='modules_content modules_content_mobile' style={{}}>

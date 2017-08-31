@@ -268,8 +268,7 @@ class NoticeList extends React.Component {
             scrollRenderAheadDistance={400}
             scrollEventThrottle={20}
             useBodyScroll={true}
-            scrollerOptions={{ scrollbars: false }}
-          />):null}
+            scrollerOptions={{ scrollbars: false }}/>):null}
         </TabPane>);
     });
     return (

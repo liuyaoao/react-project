@@ -19,7 +19,7 @@ class DispatchList extends React.Component {
         rowHasChanged: (row1, row2) => row1 !== row2,
       });
       this.state = {
-        tabsArr:["草稿箱", "待办", "办理中", "已发布", "所有"],
+        tabsArr:["草稿箱", "待办", "办理中", "已定稿", "已发布","按时间","按年度","按主办部门","按承办部门", "所有"],
         activeTabkey:'待办',
         colsNameCn:["拟稿日期","拟稿单位", "拟稿人", "文件标题", "发文类型", "发文文号", "当前办理人", "办理状态"],
         colsNameEn:["draftDate", "draftUnit", "draftPerson", "fileTitle", "fileType", "fileNum", "curUsers", "status"],
