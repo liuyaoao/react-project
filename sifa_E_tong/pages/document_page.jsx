@@ -420,7 +420,7 @@ class DocumentPage extends React.Component {
           );
   }
   getSearchResultTable() {
-    const {documentsData,departmentData, currentFileId, currentFileSubId, curDepartmentId} = this.state;
+    const {documentsData,departmentData,departmentFlatMap, currentFileId, currentFileSubId, curDepartmentId} = this.state;
     // console.log("documentsData---:",documentsData);
     for (let i = 0; i < documentsData.length; i++) {
       documentsData[i]['key'] = documentsData[i].id;
@@ -428,10 +428,11 @@ class DocumentPage extends React.Component {
     const data = documentsData;
     let docSearchPCList = (
       <DocumentListPC data={data}
+        departmentData={departmentData}
+        departmentFlatMap={departmentFlatMap}
         currentFileId={currentFileId}
         currentFileSubId={currentFileSubId}
         curDepartmentId={curDepartmentId}
-        departmentData={departmentData}
         showDeleteConfirm={this.showDeleteConfirm}
         showDeleteAllConfirm={this.showDeleteAllConfirm}
         handleShowEditModal={this.handleShowEditModal}
@@ -440,6 +441,8 @@ class DocumentPage extends React.Component {
 
     let docSearchMobileList = (//构造手机端的列表视图
       <DocumentListMobile data={data}
+        departmentData={departmentData}
+        departmentFlatMap={departmentFlatMap}
         currentFileId={currentFileId}
         currentFileSubId={currentFileSubId}
         curDepartmentId={curDepartmentId}

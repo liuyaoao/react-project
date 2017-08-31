@@ -102,13 +102,12 @@ class SearchFormPC extends React.Component {
           </a>
         );
       action_url = MyWebClient.getfileInfoImportUrl();
-
-
+    } else if ( fileSubTypeName == '律师' ){
       downloadTemplateLink = <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
-        href={window.serverUrl+"/modle/LawyerFile.xlsx"}><Icon type="download" /> 下载模板(律师) </a>;
+      href={window.serverUrl+"/modle/LawyerFile.xlsx"}><Icon type="download" /> 下载模板(律师) </a>;
       action_url = MyWebClient.getLawyerfileInfoImportUrl();
 
-    } else if ( this.props.curDepartmentId == '律所' ) {
+    }else if ( fileSubTypeName == '律所' ) {
       downloadTemplateLink = (
         <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
           href={window.serverUrl+"/modle/layfirm.xlsx"}><Icon type="download" /> 下载模板(律所)
