@@ -23,12 +23,8 @@ import signup_logo from 'images/signup_logo.png';
 
 import WrappedSearchFormPC from './document/search_form_pc.jsx';
 import WrappedSearchFormMobile from './document/search_form_mobile.jsx';
-import DocumentEditModalPC from './document/edit_modal_pc.jsx';
-import DocumentEditLawyerModalPC from './document/edit_lawyer_modal_pc.jsx';
-import DocumentEditLawfirmModalPC from './document/edit_lawfim_modal_pc.jsx';
-import DocumentEditJudExamModalPC from './document/edit_judicialexam_modal_pc.jsx'
-import DocumentEditLegalWorkerModalPC from './document/edit_legalWorker_modal_pc.jsx';
-import DocumentEditSifaDirectorModalPC from './document/edit_sifaDirector_modal_pc.jsx';
+import DocumentAllEditModal from './document/edit_all_modal.jsx';
+
 
 import DocumentSidebar from './document/document_sidebar.jsx';
 import DocumentListPC from './document/documentList_pc_comp.jsx';
@@ -51,7 +47,7 @@ class DocumentPage extends React.Component {
           open: false,
           position: 'left',
           isMobile: Utils.isMobile(),
-          visibleEditModel: false,
+          visibleEditModel: false, //编辑弹窗是否可见
           documentsData: [],
           loginUserName:'',
           memberInfo: {},
@@ -81,6 +77,9 @@ class DocumentPage extends React.Component {
     var me = UserStore.getCurrentUser() || {};
     this.setState({loginUserName:me.username || ''});
     this.getFileDepartment(me.organizations,(departmentData)=>{
+      if(!departmentData||departmentData.length<=0){
+        return;
+      }
       var firstObj = departmentData[0];
       this.setState({
         currentFileId:firstObj.resourceId,
@@ -128,11 +127,14 @@ class DocumentPage extends React.Component {
     params.fileInfoType = this.state.departmentFlatMap[paramsIdArr.currentFileId].resourceName;
     params.fileInfoSubType = paramsIdArr.currentFileSubId?this.state.departmentFlatMap[paramsIdArr.currentFileSubId].resourceName:"";
     if(!paramsIdArr.currentFileSubId){
-      let currentFileSubIdArr = [];
-      let fileInfoSubTypeArr = this.state.departmentFlatMap[paramsIdArr.currentFileId].sub.map((item)=>{
-        currentFileSubIdArr.push(item.resourceId);
-        return item.resourceName;
-      });
+      let currentFileSubIdArr = [], fileInfoSubTypeArr = [];
+      let subArr = this.state.departmentFlatMap[paramsIdArr.currentFileId].sub;
+      if(subArr && subArr.length>0){
+        subArr.map((item)=>{
+          currentFileSubIdArr.push(item.resourceId);
+          fileInfoSubTypeArr.push(item.resourceName);
+        });
+      }
       params.fileInfoSubType = fileInfoSubTypeArr.join(',');
       paramsIdArr.currentFileSubId = currentFileSubIdArr.join(',');
     }
@@ -141,8 +143,9 @@ class DocumentPage extends React.Component {
     if(!paramsIdArr.curDepartmentId){
       let departmentArr = [];
       paramsIdArr.currentFileSubId.split(',').map((fileSubId)=>{
-        if(this.state.departmentFlatMap[fileSubId].sub && this.state.departmentFlatMap[fileSubId].sub.length>0){
-          this.state.departmentFlatMap[fileSubId].sub.map((item)=>{
+        let subArr = fileSubId?this.state.departmentFlatMap[fileSubId].sub:null;
+        if(subArr && subArr.length>0){
+          subArr.map((item)=>{
             departmentArr.push( item.resourceName );
           });
         }
@@ -210,7 +213,7 @@ class DocumentPage extends React.Component {
     });
     return flatDataMap;
   }
-  handleShowEditModal(record) {
+  handleShowEditModal(record) { //编辑修改弹窗
     const {documentsData} = this.state;
     let docObj = {};
     for (let i = 0; i < documentsData.length; i++) {
@@ -218,14 +221,17 @@ class DocumentPage extends React.Component {
         record = documentsData[i], docObj = documentsData[i];
       }
     }
-    this.setState({ memberInfo: record });
-    this.setState({ visibleEditModel: true });
+    this.setState({
+      memberInfo: record,
+      visibleEditModel: true,
+     });
     Object.keys(docObj).forEach((key) => {
       if (key == 'birthDay' || key == 'joinPartyTime' || key == 'joinWorkerTime'
         || key == 'reportingTime' || key == 'approvalTime' || key == 'appointAndRemoveTime' ) {
         docObj[key] = docObj[key] ? moment(docObj[key], 'YYYY-MM-DD') : null;
       }
     });
+    console.log("编辑弹窗！！！");
   }
   handleCancelModal() {
     this.setState({ visibleEditModel: false });
@@ -463,7 +469,7 @@ class DocumentPage extends React.Component {
   }
 
   render() {
-    const {visibleEditModel, memberInfo, currentFileId, currentFileSubId} = this.state;
+    const { memberInfo, currentFileId, currentFileSubId} = this.state;
     const { departmentData, departmentFlatData, departmentFlatMap, curDepartmentId} = this.state;
     let sidebarMenuMarTop = this.state.isMobile ? '60px' : '0';
     const sidebar = (
@@ -481,37 +487,17 @@ class DocumentPage extends React.Component {
       </Sider>
     );
     let finalEle = this.state.isMobile ? this.getMobileElements(sidebar) : this.getPCElements(sidebar);
-    const editModalField = {
-      ref: "editDocForm",
-      visible: visibleEditModel,
-      memberInfo: memberInfo,
-      departmentData:departmentData,
-      departmentFlatMap:departmentFlatMap,
-      currentFileId: currentFileId,
-      currentFileSubId: currentFileSubId,
-      // curDepartmentId: curDepartmentId,
-      handleSearch: this.handleSearch,
-      handleCancelModal: this.handleCancelModal
-    }
-    let edit_ele = '';
-    if(curDepartmentId == '律所'){
-      edit_ele = <DocumentEditLawfirmModalPC {...editModalField}></DocumentEditLawfirmModalPC>
-    }else if(curDepartmentId == '司法考试处') {
-      edit_ele = <DocumentEditJudExamModalPC {...editModalField}></DocumentEditJudExamModalPC>
-    }else if(currentFileSubId == '律师' ){
-      edit_ele = <DocumentEditLawyerModalPC {...editModalField}></DocumentEditLawyerModalPC>
-    }else if(curDepartmentId == '基层法律工作者' ){
-      edit_ele = <DocumentEditLegalWorkerModalPC {...editModalField}></DocumentEditLegalWorkerModalPC>
-    }else if(currentFileSubId == '司法所长' ){
-      edit_ele = <DocumentEditSifaDirectorModalPC {...editModalField}></DocumentEditSifaDirectorModalPC>
-    }else {
-      edit_ele = <DocumentEditModalPC {...editModalField}></DocumentEditModalPC>
-    }
-
     return (
       <div className="document_container">
         {finalEle}
-        {edit_ele}
+        <DocumentAllEditModal
+          departmentData={departmentData}
+          departmentFlatMap={departmentFlatMap}
+          memberInfo={memberInfo}
+          currentFileId={currentFileId}
+          handleSearch={this.handleSearch}
+          handleCancelModal={this.handleCancelModal}
+          visibleEditModel={this.state.visibleEditModel} />
       </div>
     );
   }

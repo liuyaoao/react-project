@@ -7,10 +7,11 @@ import * as Utils from 'utils/utils.jsx';
 import myWebClient from 'client/my_web_client.jsx';
 
 import { Icon,notification,Table, Pagination} from 'antd';
+
 import DocumentAddModalPC from './add_modal_pc.jsx';
 import DocumentAddLawyerModalPC from './add_lawyer_modal_pc.jsx';
 import DocumentAddLawfirmModalPC from './add_lawfim_modal_pc.jsx';
-import DocumentAddJudExamModalPC from './add_judicialexam_modal_pc.jsx'
+import DocumentAddJudExamModalPC from './add_judicialexam_modal_pc.jsx';
 import DocumentAddLegalWorkerModalPC from './add_legalWorker_modal_pc.jsx';
 import DocumentAddSifaDirectorModalPC from './add_sifaDirector_modal_pc.jsx';
 
@@ -49,7 +50,10 @@ class DocumentListPC extends React.Component {
 
   render() {
     const { loading, selectedRowKeys } = this.state;
-    const { data,departmentFlatMap, currentFileId, currentFileSubId, curDepartmentId } = this.props;
+    const { data,departmentData, departmentFlatMap, currentFileId, currentFileSubId, curDepartmentId } = this.props;
+    let fileTypeName = currentFileId ? (departmentFlatMap[currentFileId].resourceName||'') : '';
+    let fileSubTypeName = currentFileSubId ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
+    let departmentName = curDepartmentId ? (departmentFlatMap[curDepartmentId].resourceName||'') : '';
 
     let others_columns = [ //普通其他档案的表头。
       {title:"姓名", dataIndex:"userName", key:"userName", width:"15%"},
@@ -98,26 +102,7 @@ class DocumentListPC extends React.Component {
         </span>):(<span>没有权限</span>);
       }
     };
-    let columns = [];
-    let fileSubTypeName = currentFileSubId ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
-    let departmentName = curDepartmentId ? (departmentFlatMap[curDepartmentId].resourceName||'') : '';
-    if( (["市局机关","局属二级机构","公证员"]).indexOf(fileSubTypeName)!=-1 ){
-      columns = [...others_columns, last_col];
-    }else if(fileSubTypeName=="律所"){
-      columns = [...lawfim_columns, last_col];
-    }else if(fileSubTypeName == "律师"){
-      columns = [...lawer_columns, last_col];
-    }else if(fileSubTypeName == "基层法律工作者"){
-      columns = [...LegalWorker_columns, last_col];
-    }else if(fileSubTypeName == "司法所长"){
-      columns = [...director_columns, last_col];
-    }
-
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange,
-    };
-    const hasSelected = selectedRowKeys.length > 0;
+    let columns = [], add_ele = null;
     const addModalField = { //新增档案的弹窗。
       memberInfo: {},
       departmentData:this.props.departmentData,
@@ -126,35 +111,58 @@ class DocumentListPC extends React.Component {
       currentFileSubId: currentFileSubId,
       curDepartmentId: curDepartmentId,
       handleSearch: this.props.handleSearch.bind(this)
-    }
-    let add_ele = '';
-
+    };
     if( (["市局机关","局属二级机构","公证员"]).indexOf(fileSubTypeName)!=-1 ){
-      add_ele = <DocumentAddModalPC {...addModalField}>
-        <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
-      </DocumentAddModalPC>
-    }else if(fileSubTypeName == '律所'){
-        // console.log('添加：',fileSubTypeName);
-        add_ele = <DocumentAddLawfirmModalPC {...addModalField}>
-          <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
-        </DocumentAddLawfirmModalPC>
-    }else if (fileSubTypeName == '司法考试处') {
-        add_ele = <DocumentAddJudExamModalPC {...addModalField}>
-          <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
-        </DocumentAddJudExamModalPC>
-    }else if(fileSubTypeName == '律师') {
-      add_ele = <DocumentAddLawyerModalPC {...addModalField}>
-        <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
-      </DocumentAddLawyerModalPC>
-    }else if(fileSubTypeName == '基层法律工作者') {
-      add_ele = <DocumentAddLegalWorkerModalPC {...addModalField}>
-        <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
-      </DocumentAddLegalWorkerModalPC>
-    }else if(fileSubTypeName == '司法所长') {
-      add_ele = <DocumentAddSifaDirectorModalPC {...addModalField}>
-        <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
-      </DocumentAddSifaDirectorModalPC>
+      add_ele = (<DocumentAddModalPC {...addModalField}>
+                  <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
+                </DocumentAddModalPC>);
+      columns = [...others_columns, last_col];
+    }else if(fileSubTypeName=="区县司法局"){
+
+    }else if(fileSubTypeName=="司法所"){
+      add_ele = (<DocumentAddSifaDirectorModalPC {...addModalField}>
+                  <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
+                </DocumentAddSifaDirectorModalPC>);
+      columns = [...director_columns, last_col];
+    }else if(fileSubTypeName == '法律援助中心'){
+
+    }else if(fileSubTypeName == '法律援助律师'){
+
+    }else if(fileSubTypeName == '公证处'){
+
+    }else if(fileSubTypeName=="律师事务所"){
+      add_ele = (<DocumentAddLawfirmModalPC {...addModalField}>
+                  <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
+                </DocumentAddLawfirmModalPC>);
+      columns = [...lawfim_columns, last_col];
+    }else if(fileSubTypeName == "律师"){
+      add_ele = (<DocumentAddLawyerModalPC {...addModalField}>
+                  <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
+                </DocumentAddLawyerModalPC>);
+      columns = [...lawer_columns, last_col];
+    }else if ( fileSubTypeName == '基层法律服务所' ){
+
+    }else if(fileSubTypeName == "基层法律工作者"){
+      add_ele = (<DocumentAddLegalWorkerModalPC {...addModalField}>
+                  <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
+                </DocumentAddLegalWorkerModalPC>);
+      columns = [...LegalWorker_columns, last_col];
+    }else if(fileSubTypeName == '司法鉴定所'){
+
+    }else if(fileSubTypeName == '司法鉴定人员'){
+
+    }else if(fileTypeName == '司考通过人员'){
+      add_ele = (<DocumentAddJudExamModalPC {...addModalField}>
+                  <button type="button" className="btn btn-primary pull-right m-r-10"><Icon type="plus" /> 添加</button>
+                </DocumentAddJudExamModalPC>);
+      columns = [...others_columns, last_col];
     }
+
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.onSelectChange,
+    };
+    const hasSelected = selectedRowKeys.length > 0;
 
     return (
       <div className="doc-search-list">

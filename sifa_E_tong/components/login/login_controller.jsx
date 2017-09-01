@@ -479,6 +479,7 @@ export default class LoginController extends React.Component {
                               name='verifyCode'
                               value={this.state.verifyCode}
                               onChange={this.handleVerifyCodeChange}
+                              autoComplete="off"
                               placeholder='验证码'
                           />
                           <span className='verifyCodeContainer'>{this.state.createdVerifyCode}</span>

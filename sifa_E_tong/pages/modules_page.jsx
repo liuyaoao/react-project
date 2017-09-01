@@ -25,6 +25,7 @@ import myWebClient from 'client/my_web_client.jsx';
 const notShow_moduleId_inMobile = "1006";
 const notShow_moduleId_inPC = "";
 // const notShow_moduleId_inPC = "1001"; //真正上线时用这个。
+window.timeCount = (new Date()).getTime();
 
 
 class ChooseModulesPage extends React.Component {
@@ -38,6 +39,8 @@ class ChooseModulesPage extends React.Component {
             colsNameEn:["fileTitle", "publishTime", "type" ,"unit"],
             tokenunid:'', //登录OA系统获取认证id。
             noticeListData:[],
+            randomStr:'',
+            oaLoginErrorText: '',
             isMobile: Utils.isMobile()
         };
     }
@@ -49,23 +52,39 @@ class ChooseModulesPage extends React.Component {
       let me = UserStore.getCurrentUser() || {};
       if(me.oaUserName){
         OAUtils.loginOASystem({oaUserName:me.oaUserName,oaPassword:me.oaPassword}, (res)=>{ //登录OA系统获取认证id。
+          console.log("successCall:"+res);
           this.setState({tokenunid:res.values.tockenunid});
           this.getServerListData(res.values.tockenunid);
+        },(res)=>{
+          console.log("errorCall:"+res);
+          this.setState({oaLoginErrorText: res.ErrorText});
         });
       }
-      window.handleClickBackBtn = function (e) {
-        console.log("我监听到了浏览器的返回按钮事件啦");
+      let randomStr = Math.random().toString().split('.')[1];
+      this.setState({randomStr});
+      let _this = this;
+      window['handleClickBackBtn'+randomStr] = function (e) {
+        // console.log("我监听到了浏览器的返回按钮事件啦");
+        if((new Date()).getTime()-window.timeCount>1500){
+          window.timeCount = (new Date()).getTime();
+          Toast.info("再按一次退出司法E通登录.");
+        }else{
+          _this.handleLogOut();
+        }
       }
       if (window.history && window.history.pushState) {
-        console.log('增加了监听器了！！！！',window.handleClickBackBtn);
-        window.addEventListener("popstate", window.handleClickBackBtn,true);
+        setTimeout(()=>{
+          // console.log('增加了监听器了！！！！',window['handleClickBackBtn'+randomStr]);
+          window.addEventListener("popstate", window['handleClickBackBtn'+randomStr],false);
+        },100);
       }
     }
     componentWillUnmount(){
       if (window.history && window.history.pushState) {
-        console.log('注销监听器了！！！！');
-        window.removeEventListener("popstate",window.handleClickBackBtn,false);
-        window.removeEventListener("popstate",window.handleClickBackBtn,true);
+        setTimeout(()=>{
+          // console.log('注销监听器了！！！！',window['handleClickBackBtn'+this.state.randomStr]);
+          window.removeEventListener("popstate",window['handleClickBackBtn'+this.state.randomStr],false);
+        },100);
       }
     }
 
@@ -181,6 +200,7 @@ class ChooseModulesPage extends React.Component {
         let finalEle = this.state.isMobile ?
             (<ModulesMobileComp
               tokenunid={this.state.tokenunid}
+              oaLoginErrorText={this.state.oaLoginErrorText}
               localStoreKey4Modules={localStoreKey4Modules}
               allModulesData={allModulesData}
               notShowModuleIdInMobile={notShow_moduleId_inMobile}
@@ -188,6 +208,7 @@ class ChooseModulesPage extends React.Component {
               handleGoMatter={this.handleGoMatter} />) :
             (<ModulesPcComp
               tokenunid={this.state.tokenunid}
+              oaLoginErrorText={this.state.oaLoginErrorText}
               localStoreKey4Modules={localStoreKey4Modules}
               allModulesData={allModulesData}
               notShowModuleIdInMobile={notShow_moduleId_inMobile}

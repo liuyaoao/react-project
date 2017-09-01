@@ -61,35 +61,25 @@ class DocumentAddLawfirmModalPC extends React.Component {
       }
     });
   }
-  getDefaultDepartment = (fileInfoSubType)=>{
-    let lawyerDepartment = '';
-    for(let i=0;i<this.props.departmentData.length;i++){
-      let deparDt = this.props.departmentData[i];
-      if(deparDt.resourceName == fileInfoSubType){
-        lawyerDepartment = deparDt.sub[0].name;
-      }
+  getDefaultDepartment = (currentFileSubId)=>{
+    let departmentName = '',departmentFlatMap=this.props.departmentFlatMap;
+    if(departmentFlatMap[currentFileSubId].sub && departmentFlatMap[currentFileSubId].sub.length>0){
+      departmentName = departmentFlatMap[currentFileSubId].sub[0].resourceName;
     }
-    return lawyerDepartment;
+    return departmentName;
   }
   handleAddDocument(param) {
     let _this = this;
-    param.fileInfoType = this.props.currentFileType;
-    param.fileInfoSubType = this.props.currentFileSubType;
-    let lawyerDepartment = '';
-
-
-    if(this.props.currentDepartment){
-      lawyerDepartment = this.props.currentDepartment;
-
+    const {departmentFlatMap, currentFileId,currentFileSubId, curDepartmentId} = this.props;
+    let fileTypeName = currentFileId ? (departmentFlatMap[currentFileId].resourceName||'') : '';
+    let fileSubTypeName = currentFileSubId ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
+    let departmentName = curDepartmentId ? (departmentFlatMap[curDepartmentId].resourceName||'') : '';
+    param.fileInfoType = fileTypeName;
+    param.fileInfoSubType = fileSubTypeName;
+    if(departmentName){
+      param.lawyerDepartment = departmentName;
     }else{
-      lawyerDepartment = this.getDefaultDepartment(this.props.currentFileSubType);
-    }
-    param.lawyerDepartment = lawyerDepartment;
-
-    if (lawyerDepartment == '律所' || lawyerDepartment == '司法考试处') {
-
-      param.fileInfoSubType = lawyerDepartment;
-      delete param.lawyerDepartment
+      param.lawyerDepartment = this.getDefaultDepartment(currentFileSubId);
     }
 
     // console.log(param);

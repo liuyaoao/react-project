@@ -42,34 +42,61 @@ class DocumentListMobile extends React.Component {
     this.props.handleShowEditModal(item);
   }
   getListItemBreifEle = (item)=>{
-    let {currentFileSubId, curDepartmentId} = this.props;
+    let {departmentData,departmentFlatMap, currentFileId, currentFileSubId, curDepartmentId} = this.props;
+    let fileTypeName = currentFileId ? (departmentFlatMap[currentFileId].resourceName||'') : '';
+    let fileSubTypeName = currentFileSubId ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
+    let departmentName = curDepartmentId ? (departmentFlatMap[curDepartmentId].resourceName||'') : '';
+
     let listItemBreif = '';
-    if(curDepartmentId=="律所"){
+    if( (["市局机关","局属二级机构","公证员"]).indexOf(fileSubTypeName)!=-1 ){
       listItemBreif = (<List.Item.Brief>
-        律所负责人: {item.lawOfficePrincipal}, 律所地址:  {item.lawOfficeAddress}
-      </List.Item.Brief>);
+                        性别: {item.gender}, 地址: {item.createParty}
+                      </List.Item.Brief>);
+    }else if(fileSubTypeName=="区县司法局"){
+
+    }else if(fileSubTypeName=="司法所"){
+      listItemBreif = (<List.Item.Brief>
+                        性别: {item.gender}, 单位: {item.reportingUnit}
+                      </List.Item.Brief>);
+    }else if(fileSubTypeName == '法律援助中心'){
+
+    }else if(fileSubTypeName == '法律援助律师'){
+
+    }else if(fileSubTypeName == '公证处'){
+
+    }else if(fileSubTypeName=="律师事务所"){
+      listItemBreif = (<List.Item.Brief>
+                        律所负责人: {item.lawOfficePrincipal}, 律所地址:  {item.lawOfficeAddress}
+                      </List.Item.Brief>);
     }else if(currentFileSubId == "律师"){
       listItemBreif = (<List.Item.Brief>
-        性别: {item.gender}, 律所名称: {item.lawOfficeName}
-      </List.Item.Brief>);
-    }else if(curDepartmentId == "基层法律工作者"){
+                        性别: {item.gender}, 律所名称: {item.lawOfficeName}
+                      </List.Item.Brief>);
+    }else if ( fileSubTypeName == '基层法律服务所' ){
+
+    }else if( fileSubTypeName == "基层法律工作者" ){
       listItemBreif = (<List.Item.Brief>
-        执业状态: {item.lawyerStatus}, 执业机构: {item.lawOfficeAddress}
-      </List.Item.Brief>);
-    }else if(currentFileSubId == "司法所长"){
+                        执业状态: {item.lawyerStatus}, 执业机构: {item.lawOfficeAddress}
+                      </List.Item.Brief>);
+    }else if(fileSubTypeName == '司法鉴定所'){
+
+    }else if(fileSubTypeName == '司法鉴定人员'){
+
+    }else if(fileTypeName == '司考通过人员'){
       listItemBreif = (<List.Item.Brief>
-        性别: {item.gender}, 单位: {item.reportingUnit}
-      </List.Item.Brief>);
-    }else{
-      listItemBreif = (<List.Item.Brief>
-        性别: {item.gender}, 地址: {item.createParty}
-      </List.Item.Brief>);
+                        性别: {item.gender}, 通讯地址: {item.createParty}
+                      </List.Item.Brief>);
     }
     return listItemBreif;
   }
+
   render() {
     const { hasOperaPermission,currentPage } = this.state;
-    const { data, currentFileId,  currentFileSubId, curDepartmentId,showDeleteConfirm } = this.props;
+    const { data,departmentFlatMap, currentFileId,  currentFileSubId, curDepartmentId,showDeleteConfirm } = this.props;
+    let fileTypeName = currentFileId ? (departmentFlatMap[currentFileId].resourceName||'') : '';
+    let fileSubTypeName = currentFileSubId ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
+    let departmentName = curDepartmentId ? (departmentFlatMap[curDepartmentId].resourceName||'') : '';
+
     const totalCount = data.length;
     const pageCount = Math.ceil(data.length/10);
     let curPageData = data.slice(10*(currentPage-1), 10*currentPage);
@@ -101,7 +128,7 @@ class DocumentListMobile extends React.Component {
               <List.Item key={index} multipleLine
                 onClick={()=>{hasOperaPermission?this.handleShowEditModal(item):''}}>
                 {
-                  curDepartmentId == '律所'?
+                  fileSubTypeName == '律师事务所'?
                     <div>律所名称：{item.lawOfficeName}</div>:
                     <div>姓名：{item.userName}</div>
                 }

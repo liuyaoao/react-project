@@ -43,18 +43,25 @@ class DocumentAddLegalWorkerModalPC extends React.Component {
       }
     });
   }
+  getDefaultDepartment = (currentFileSubId)=>{
+    let departmentName = '',departmentFlatMap=this.props.departmentFlatMap;
+    if(departmentFlatMap[currentFileSubId].sub && departmentFlatMap[currentFileSubId].sub.length>0){
+      departmentName = departmentFlatMap[currentFileSubId].sub[0].resourceName;
+    }
+    return departmentName;
+  }
   handleAddDocument(param) {
     let _this = this;
-    param.fileInfoType = this.props.currentFileType;
-    param.fileInfoSubType = this.props.currentFileSubType;
-    if(this.props.currentDepartment){
-      param.department = this.props.currentDepartment;
+    const {departmentFlatMap, currentFileId,currentFileSubId, curDepartmentId} = this.props;
+    let fileTypeName = currentFileId ? (departmentFlatMap[currentFileId].resourceName||'') : '';
+    let fileSubTypeName = currentFileSubId ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
+    let departmentName = curDepartmentId ? (departmentFlatMap[curDepartmentId].resourceName||'') : '';
+    param.fileInfoType = fileTypeName;
+    param.fileInfoSubType = fileSubTypeName;
+    if(departmentName){
+      param.department = departmentName;
     }else{
-      this.props.departmentData.map((parent) => {
-        if(parent.resourceName == param.fileInfoSubType){
-          param.department = parent.sub[0]["resourceName"];
-        }
-      });
+      param.department = this.getDefaultDepartment(currentFileSubId);
     }
     MyWebClient.createFileInfo(param,
       (data, res) => {

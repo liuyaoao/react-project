@@ -28,6 +28,7 @@ class SysUsersListComp extends React.Component {
       this.updateOrganizationData = this.updateOrganizationData.bind(this);
       let permissionData = UserStore.getPermissionData();
       let hasOperaPermission = permissionData['sys_config'].indexOf('action') != -1;
+      var me = UserStore.getCurrentUser() || {};
       this.state = {
         selectedRowKeys: [],  // Check here to configure the default column
         columns:[],
@@ -36,6 +37,7 @@ class SysUsersListComp extends React.Component {
         organizationsFlatData:[],
         organizationsFlatDataMap:{},
         permissionData:permissionData,
+        myInfo:me,
         hasOperaPermission:hasOperaPermission, //是否有操作权限。
         sortedInfo: {
           order: 'ascend',
@@ -82,7 +84,8 @@ class SysUsersListComp extends React.Component {
     });
   }
   componentDidMount(){
-    let {hasOperaPermission} = this.state;
+    let { hasOperaPermission, myInfo, record } = this.state;
+    console.log("我的信息是",myInfo);
     const columns = [{
       title: '用户名',
       dataIndex: 'username'
@@ -121,6 +124,8 @@ class SysUsersListComp extends React.Component {
       dataIndex: 'operation',
       width: '15%',
       render: (text, record, index) => {
+        console.log(record);
+        let hasOpr = myInfo.id === record.id ? true : false;
         return hasOperaPermission?
           (<div>
               <a href="javascript:;" onClick={()=>{this.showAddEditDialog(text,record,index)}}><Icon type="edit" />编辑</a>
@@ -133,7 +138,7 @@ class SysUsersListComp extends React.Component {
               <span className="ant-divider" />
               <a href="javascript:;" onClick={()=>{this.showModifyPasswordDialog(text,record,index)}}><Icon type="setting" />修改密码</a>
             </div>):
-          (<span>没有权限</span>);
+          (hasOpr? (<a href="javascript:;" onClick={()=>{this.showModifyPasswordDialog(text,record,index)}}><Icon type="setting" />修改密码</a>) : (<span>没有权限</span>));
       }
     }];
     this.setState({columns:columns});

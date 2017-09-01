@@ -76,27 +76,28 @@ class DocumentAddModalPC extends React.Component {
     this.setState({ familyData });
     // console.log(familyData);
   }
-  getDefaultDepartment = (fileInfoSubType)=>{
-    let department = '';
-    for(let i=0;i<this.props.departmentData.length;i++){
-      let deparDt = this.props.departmentData[i];
-      if(deparDt.resourceName == fileInfoSubType){
-        department = deparDt.sub[0].name;
-      }
+  getDefaultDepartment = (currentFileSubId)=>{
+    let departmentName = '',departmentFlatMap=this.props.departmentFlatMap;
+    if(departmentFlatMap[currentFileSubId].sub && departmentFlatMap[currentFileSubId].sub.length>0){
+      departmentName = departmentFlatMap[currentFileSubId].sub[0].resourceName;
     }
-    return department;
+    return departmentName;
   }
   handleAddDocument(param) {
     let _this = this;
-    param.fileInfoType = this.props.currentFileId;
-    param.fileInfoSubType = this.props.currentFileSubId;
-    let department = '';
-    if(this.props.curDepartmentId){
-      department = this.props.curDepartmentId;
+    const {departmentFlatMap, currentFileId,currentFileSubId, curDepartmentId} = this.props;
+    let fileTypeName = currentFileId ? (departmentFlatMap[currentFileId].resourceName||'') : '';
+    let fileSubTypeName = currentFileSubId ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
+    let departmentName = curDepartmentId ? (departmentFlatMap[curDepartmentId].resourceName||'') : '';
+
+    param.fileInfoType = fileTypeName;
+    param.fileInfoSubType = fileSubTypeName;
+    if(departmentName){
+      param.department = departmentName;
     }else{
-      department = this.getDefaultDepartment(this.props.currentFileSubId);
+      param.department = this.getDefaultDepartment(currentFileSubId);
     }
-    param.department = department;
+
     // console.log(param);
     MyWebClient.createFileInfo(param,
       (data, res) => {
@@ -118,34 +119,34 @@ class DocumentAddModalPC extends React.Component {
       }
     );
   }
-  handleGetFamilyMembers(id) {
-    let _this = this;
-    MyWebClient.getSearchFileFamilyMember(id,
-      (data, res) => {
-        if (res && res.ok) {
-          const data = JSON.parse(res.text);
-         //  console.log(data);
-          const familyData = []
-          for (var i = 0; i < data.length; i++) {
-            const member = data[i];
-            const memberObj = {};
-            memberObj.key = member.id;
-            Object.keys(member).forEach((key) => {
-              memberObj[key] = {
-                editable: false,
-                value: member[key],
-              }
-            });
-            familyData.push(memberObj);
-          }
-          _this.setState({ familyData });
-        }
-      },
-      (e, err, res) => {
-        console.log('get error:', res ? res.text : '');
-      }
-    );
-  }
+  // handleGetFamilyMembers(id) {
+  //   let _this = this;
+  //   MyWebClient.getSearchFileFamilyMember(id,
+  //     (data, res) => {
+  //       if (res && res.ok) {
+  //         const data = JSON.parse(res.text);
+  //        //  console.log(data);
+  //         const familyData = []
+  //         for (var i = 0; i < data.length; i++) {
+  //           const member = data[i];
+  //           const memberObj = {};
+  //           memberObj.key = member.id;
+  //           Object.keys(member).forEach((key) => {
+  //             memberObj[key] = {
+  //               editable: false,
+  //               value: member[key],
+  //             }
+  //           });
+  //           familyData.push(memberObj);
+  //         }
+  //         _this.setState({ familyData });
+  //       }
+  //     },
+  //     (e, err, res) => {
+  //       console.log('get error:', res ? res.text : '');
+  //     }
+  //   );
+  // }
   openNotification(type, message) {
     notification.config({
       top: 68,

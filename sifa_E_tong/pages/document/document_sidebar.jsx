@@ -39,14 +39,16 @@ export default class DocumentSidebar extends React.Component {
       this.props.searchFormPC && this.props.searchFormPC.setFieldsValue({
         userName: '', gender: ''
       });
-      let currentFileSubId='',curDepartmentId='';
-      if(level==2){ //第二级就是叶子节点了。
+      let currentFileId='', currentFileSubId='',curDepartmentId='';
+      if(level == 1){ //第一级就是子节点了。
+        currentFileId = e.key;
+      }else if(level==2){ //第二级就是叶子节点了。
         currentFileSubId = e.key;
       }else if(level == 3){
         curDepartmentId = e.key;
       }
       curDepartmentId?currentFileSubId = this.props.departmentFlatMap[curDepartmentId].parntName:null;
-      let currentFileId = this.props.departmentFlatMap[currentFileSubId].parntName;
+      !currentFileId?currentFileId = this.props.departmentFlatMap[currentFileSubId].parntName:null;
       this.props.setcurDepartmentId(curDepartmentId);
       this.props.setcurrentFileSubId(currentFileSubId);
       this.props.setcurrentFileId(currentFileId);

@@ -43,51 +43,19 @@ class DocumentAddJudExamModalPC extends React.Component {
         values['lawyerPunishTime'] = values['lawyerPunishTime'] ? values['lawyerPunishTime'].format('YYYY-MM-DD') : '';
         const info = {
           ...values,
-          // id: memberInfo.id,
-          familyMember: []
         }
-        const {familyData} = this.state;
-        const fdata = familyData.map((item) => {
-          const obj = {};
-          Object.keys(item).forEach((key) => {
-            if (key !== 'key') {
-              obj[key] = item[key].value;
-            }
-          });
-          return obj;
-        });
-        info.familyMember = fdata;
+        info.familyMember = [];
         this.handleAddDocument(info);
       }
     });
   }
-  getDefaultDepartment = (fileInfoSubType)=>{
-    let lawyerDepartment = '';
-    for(let i=0;i<this.props.departmentData.length;i++){
-      let deparDt = this.props.departmentData[i];
-      if(deparDt.resourceName == fileInfoSubType){
-        lawyerDepartment = deparDt.sub[0].name;
-      }
-    }
-    return lawyerDepartment;
-  }
   handleAddDocument(param) {
     let _this = this;
-    param.fileInfoType = this.props.currentFileType;
-    param.fileInfoSubType = this.props.currentFileSubType;
-    let lawyerDepartment = '';
-    if(this.props.currentDepartment){
-      lawyerDepartment = this.props.currentDepartment;
-    }else{
-      lawyerDepartment = this.getDefaultDepartment(this.props.currentFileSubType);
-    }
-    param.lawyerDepartment = lawyerDepartment;
-
-    if (lawyerDepartment == '律所' || lawyerDepartment == '司法考试处') {
-
-      param.fileInfoSubType = lawyerDepartment;
-      delete param.lawyerDepartment
-    }
+    const {departmentFlatMap, currentFileId,currentFileSubId, curDepartmentId} = this.props;
+    let fileTypeName = currentFileId ? (departmentFlatMap[currentFileId].resourceName||'') : '';
+    let fileSubTypeName = currentFileSubId ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
+    param.fileInfoType = fileTypeName;
+    param.fileInfoSubType = fileSubTypeName;
     // console.log(param);
     MyWebClient.createFileInfo(param,
       (data, res) => {
@@ -205,7 +173,7 @@ class DocumentAddJudExamModalPC extends React.Component {
             <Row>
               <Col span={24} className="tag-list">
                 <p className="info-title">
-                  <label>基本资料司法</label>
+                  <label>基本资料司考通过</label>
                   <a href="javascript:;" className="pull-right p-r-10" onClick={this.handleToggleTag}><Icon type="up" /></a>
                 </p>
                 <Row className="info-body">
@@ -248,11 +216,6 @@ class DocumentAddJudExamModalPC extends React.Component {
                       )}
                     </FormItem>
                   </Col>
-
-
-
-
-
 
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="学历">

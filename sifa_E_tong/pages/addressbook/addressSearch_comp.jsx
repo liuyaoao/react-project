@@ -83,9 +83,10 @@ class AddressSearchComp extends React.Component {
       notification.error({message: '通讯录上传失败！'});
     }
   }
-
+  
   getContactsSearchForm() {
     const { getFieldDecorator, getFieldsError, getFieldError } = this.props.form;
+    const { organization,secondaryDirectory,level3Catalog } = this.props;
     const uploadField = {
       name: 'file',
       // action: 'http://192.168.9.39:10086/import/contacts',
@@ -130,10 +131,11 @@ class AddressSearchComp extends React.Component {
                     </Upload>
                     <a type="button" className="btn btn-info"
                       style={{ marginLeft: '20px' }}
-                       href={window.serverUrl+"/modle/contacts.xlsx"}>下载模板</a></span>):null}
+                       href={window.serverUrl+"/modle/contacts.xlsx"}>下载模板</a>
+                     <a href={myWebClient.getBaseRoute() + "/export/contacts?organization="+ organization + "&secondaryDirectory=" + secondaryDirectory + "&level3Catalog=" + level3Catalog} className="btn btn-default" target="_blank">导出</a>
+                    </span>):null}
                   </FormItem>
                 </Col>
-
               </Row>
               </Form>
               <div className={this.state.uploading?'visibleCls':'notVisibleCls'}>

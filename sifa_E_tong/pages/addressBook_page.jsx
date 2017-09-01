@@ -194,6 +194,7 @@ class AddressBookPage extends React.Component {
     }
 
     getPCElements(sidebar){
+      let { organization,secondaryDirectory,level3Catalog } = this.state;
       let content = this.getListContentElements();
       let breadcrumbEles = this.getBreadcrumbItem();
       return ( <Layout style={{ height: '100vh' }}>
@@ -217,6 +218,9 @@ class AddressBookPage extends React.Component {
                   <Layout style={{ padding: '0' }}>
                     <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280,overflow: 'initial' }}>
                       <AddressSearchComp
+                        organization={organization}
+                        secondaryDirectory={secondaryDirectory}
+                        level3Catalog={level3Catalog}
                         updateContactsDirectory={this.updateContactsDirectory}
                         onSubmitSearchCall={(val)=>this.onSubmitSearch(val)}
                       />

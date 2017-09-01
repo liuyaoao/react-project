@@ -90,11 +90,13 @@ class SearchFormPC extends React.Component {
 
   render() {
     const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
-    const {departmentFlatMap, currentFileSubId,curDepartmentId} = this.props;
+    const {departmentFlatMap,currentFileId, currentFileSubId,curDepartmentId} = this.props;
 
-    let downloadTemplateLink = null,action_url = '';
+    let downloadTemplateLink = null, action_url = '', uploadDocName = ''; //导入时的提示信息。
+    let fileTypeName = currentFileId ? (departmentFlatMap[currentFileId].resourceName||'') : '';
     let fileSubTypeName = currentFileSubId ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
     let departmentName = curDepartmentId ? (departmentFlatMap[curDepartmentId].resourceName||'') : '';
+
     if ( (["市局机关","局属二级机构","公证员"]).indexOf(fileSubTypeName)!=-1 ) {
       downloadTemplateLink = (
           <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
@@ -102,39 +104,65 @@ class SearchFormPC extends React.Component {
           </a>
         );
       action_url = MyWebClient.getfileInfoImportUrl();
-    } else if ( fileSubTypeName == '律师' ){
-      downloadTemplateLink = <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
-      href={window.serverUrl+"/modle/LawyerFile.xlsx"}><Icon type="download" /> 下载模板(律师) </a>;
-      action_url = MyWebClient.getLawyerfileInfoImportUrl();
+      uploadDocName = fileSubTypeName+"人员";
+    }else if(fileSubTypeName == '区县司法局'){
 
-    }else if ( fileSubTypeName == '律所' ) {
-      downloadTemplateLink = (
-        <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
-          href={window.serverUrl+"/modle/layfirm.xlsx"}><Icon type="download" /> 下载模板(律所)
-        </a>
-      );
-      action_url = MyWebClient.getlawfirmfileInfoImportUrl();
-    } else if ( this.props.curDepartmentId == '司法考试处' ){
-      downloadTemplateLink = (
-        <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
-          href={window.serverUrl+"/modle/judexam.xlsx"}><Icon type="download" /> 下载模板(司法考试处)
-        </a>
-      );
-      action_url = MyWebClient.getjudicialexamInfoImportUrl();
-    } else if ( this.props.curDepartmentId == '基层法律工作者' ){
-      downloadTemplateLink = (
-        <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
-          href={window.serverUrl+"/modle/legal_workers_template.xls"}><Icon type="download" /> 下载模板(基层法律工作者)
-        </a>
-      );
-      action_url = MyWebClient.getLegalWorkerImportUrl();
-    } else if ( this.props.currentFileSubId == '司法所长' ){
+      uploadDocName = "区县司法局人员";
+    }else if(fileSubTypeName == '司法所'){
       downloadTemplateLink = (
         <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
           href={window.serverUrl+"/modle/sifa_director_template.xlsx"}><Icon type="download" /> 下载模板(司法所长)
         </a>
       );
       action_url = MyWebClient.getSifa_DirectorImportUrl();
+      uploadDocName = "司法所人员";
+    }else if(fileSubTypeName == '法律援助中心'){
+
+      uploadDocName = "法律援助中心人员";
+    }else if(fileSubTypeName == '法律援助律师'){
+
+      uploadDocName = "法律援助律师人员";
+    }else if(fileSubTypeName == '公证处'){
+
+      uploadDocName = "公证处人员";
+    }else if ( fileSubTypeName == '律师事务所' ) {
+      downloadTemplateLink = (
+        <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
+          href={window.serverUrl+"/modle/layfirm.xlsx"}><Icon type="download" /> 下载模板(律所)
+        </a>
+      );
+      action_url = MyWebClient.getlawfirmfileInfoImportUrl();
+      uploadDocName = "律师事务所人员";
+    }else if ( fileSubTypeName == '律师' ){
+      downloadTemplateLink = <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
+      href={window.serverUrl+"/modle/LawyerFile.xlsx"}><Icon type="download" /> 下载模板(律师) </a>;
+      action_url = MyWebClient.getLawyerfileInfoImportUrl();
+      uploadDocName = "律师人员";
+    }else if ( fileSubTypeName == '基层法律服务所' ){
+
+      uploadDocName = "基层法律服务所人员";
+    }else if ( fileSubTypeName == '基层法律工作者' ){
+      downloadTemplateLink = (
+        <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
+          href={window.serverUrl+"/modle/legal_workers_template.xls"}><Icon type="download" /> 下载模板(基层法律工作者)
+        </a>
+      );
+      action_url = MyWebClient.getLegalWorkerImportUrl();
+      uploadDocName = "基层法律工作者";
+    }else if(fileSubTypeName == '司法鉴定所'){
+
+      uploadDocName = "司法鉴定所人员";
+    }else if(fileSubTypeName == '司法鉴定人员'){
+
+      uploadDocName = "司法鉴定人员";
+    }else if ( fileTypeName == '司考通过人员' ){
+      downloadTemplateLink = (
+        <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
+          href={window.serverUrl+"/modle/judexam.xlsx"}><Icon type="download" /> 下载模板(司法考试处)
+        </a>
+      );
+      action_url = MyWebClient.getjudicialexamInfoImportUrl();
+      uploadDocName = "司考通过人员";
     }
 
     const uploadField = {
@@ -145,14 +173,6 @@ class SearchFormPC extends React.Component {
       accept: 'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       beforeUpload: this.beforeUploadCall,
       onChange: this.fileUploadChange
-    }
-    // console.log('搜索栏',this.props.currentFileSubId);
-    // "/static/template/" + (this.props.currentFileSubId == '律师' ? '律师人事档案模板' : '其他人事档案模板') + ".xlsx"
-    let uploadDocName = '';
-    if((["律所","司法考试处","基层法律工作者"]).indexOf(this.props.curDepartmentId) != -1){
-      uploadDocName = this.props.curDepartmentId;
-    }else{
-      uploadDocName = this.props.currentFileSubId;
     }
 
     return (

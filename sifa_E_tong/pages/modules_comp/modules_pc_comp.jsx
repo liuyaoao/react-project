@@ -76,7 +76,7 @@ class ModulesPcComp extends React.Component {
           if(item.canSetPrivilege && !this.state.permissionData[item.linkTo] ){
             canLinkTo = false;
             backColor = '#6f736e'; //如果该模块可设置权限，但是该用户现在没有进入这个模块的权限时，
-          }else if(item.name == "OA系统" && !(UserStore.getCurrentUser() || {}).oaUserName){
+          }else if(item.name == "OA系统" && (!(UserStore.getCurrentUser() || {}).oaUserName || this.props.oaLoginErrorText) ){
             canLinkTo = false;
           }else if(item.name == "矫正系统" && !(UserStore.getCurrentUser() || {}).redressUserName){
             canLinkTo = false;
@@ -145,6 +145,7 @@ class ModulesPcComp extends React.Component {
       }
       return itemRowEles;
     }
+
     handleModuleClick = (e)=>{  //点击模块的处理
       let curtarget = e.currentTarget;
       let canLinkTo = $(curtarget).data("canlinkto");
@@ -157,6 +158,11 @@ class ModulesPcComp extends React.Component {
           notification.error({
             message:'你还没有进入OA系统的帐号！',
             description: '可以使用管理员帐号登录进系统设置页面添加相应的OA系统的用户名和密码！',
+          });
+        }else if(moduleName == "OA系统" && this.props.oaLoginErrorText){
+          notification.error({
+            message:'登录失败!',
+            description: this.props.oaLoginErrorText,
           });
         }else if(moduleName == "矫正系统" && !me.redressUserName){
           notification.error({
@@ -173,6 +179,8 @@ class ModulesPcComp extends React.Component {
       }
       if(moduleName == "群聊"){
         this.props.handleGoMatter();
+      }else if(moduleName == "OA系统"){
+
       }else if(moduleName == "添加"){
         this.setState({showAddDialog:true});
       }
