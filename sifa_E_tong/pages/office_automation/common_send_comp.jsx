@@ -73,6 +73,7 @@ class CommonSendComp extends React.Component {
   }
   saveFlowSendInfo = (personunids)=>{ //保存发送的信息
     OAUtils.saveFlowSendInfo({
+      tokenunid:this.props.tokenunid,
       docunid: this.props.docunid,
       gwlcunid:this.props.gwlcunid,
       modulename:this.props.modulename,

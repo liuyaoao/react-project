@@ -1,6 +1,5 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See License.txt for license information.
-
 import ReactDOM from 'react-dom';
 import MsgTyping from './msg_typing.jsx';
 import Textbox from './textbox.jsx';
@@ -392,6 +391,7 @@ export default class CreatePost extends React.Component {
 
         this.focusTextbox();
         document.addEventListener('keydown', this.showShortcuts);
+
     }
 
     componentDidUpdate(prevProps, prevState) {

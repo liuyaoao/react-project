@@ -28,7 +28,7 @@ class SearchFormMobile extends React.Component {
       !params.userName ? delete params.userName : null;
       !params.gender ? delete params.gender : null;
       // console.log("document search form validateFields", error, params);
-      this.props.handleSearch(params||{});
+      this.props.handleSearch(null,params||{});
     });
   }
 
@@ -62,7 +62,7 @@ class SearchFormMobile extends React.Component {
     let fileTypeName = currentFileId ? (departmentFlatMap[currentFileId].resourceName||'') : '';
     let fileSubTypeName = currentFileSubId ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
     let departmentName = curDepartmentId ? (departmentFlatMap[curDepartmentId].resourceName||'') : '';
-    // <InputItem clear autoFocus value="123" placeholder="请输入部门" {...getFieldProps('department')}>部门</InputItem>
+
     return (
       <div className="am-doc-list">
         <List>

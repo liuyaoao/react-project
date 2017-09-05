@@ -4,6 +4,7 @@ import moment from 'moment';
 import * as Utils from 'utils/utils.jsx';
 
 import { Row, Col, Form, Icon, Input, Button, Radio, Table, Modal, DatePicker, notification, Select, Checkbox } from 'antd';
+const { MonthPicker } = DatePicker;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -39,9 +40,8 @@ class DocumentEditLawyerModalPC extends React.Component {
     const {memberInfo} = this.props;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        values['lawyerFirstPracticeTime'] =  values['lawyerFirstPracticeTime'] ? values['lawyerFirstPracticeTime'].format('YYYY-MM-DD') : '';
-        values['lawyerPracticeTime'] = values['lawyerPracticeTime'] ? values['lawyerPracticeTime'].format('YYYY-MM-DD') : '';
-        values['lawyerPunishTime'] = values['lawyerPunishTime'] ? values['lawyerPunishTime'].format('YYYY-MM-DD') : '';
+        values['lawyerFirstPracticeTime'] =  values['lawyerFirstPracticeTime'] ? values['lawyerFirstPracticeTime'].format('YYYY/MM') : '';
+        values['lawyerPunishTime'] = values['lawyerPunishTime'] ? values['lawyerPunishTime'].format('YYYY/MM') : '';
         console.log('Received values of form: ', values);
         values.id = memberInfo.id;
         // console.log(values);
@@ -57,21 +57,25 @@ class DocumentEditLawyerModalPC extends React.Component {
     this.props.form.resetFields();
     this.props.handleCancelModal();
   }
-  // getFamilyMembers() {
-  //   const { familyData } = this.state;
-  //   const {memberInfo} = this.props;
-  //   // console.log(familyData);
-  //   return <EditableFamilyTable operate="edit" data={familyData} memberInfo={memberInfo} setFamilyData={this.setFamilyData.bind(this)} handleGetFamilyMembers={this.handleGetFamilyMembers.bind(this)}></EditableFamilyTable>
-  // }
-  // setFamilyData(familyData) {
-  //   this.setState({ familyData });
-  // }
+  getDefaultDepartment = (fileInfoSubType)=>{
+    let department = '';
+    for(let i=0;i<this.props.departmentData.length;i++){
+      let deparDt = this.props.departmentData[i];
+      if(deparDt.resourceName == fileInfoSubType && deparDt.sub.length>0){
+        department = deparDt.sub[0].resourceName;
+      }
+    }
+    return department;
+  }
   handleEditDocument(param) {
     let _this = this;
-    param.fileInfoType = this.props.currentFileType;
-    // param.fileInfoSubType = this.props.currentFileSubType;
-    // param.department = this.props.currentDepartment;
+    let {memberInfo} = this.props;
+    param.fileInfoType = memberInfo.fileInfoType;
+    memberInfo.fileInfoSubType?param.fileInfoSubType = memberInfo.fileInfoSubType:null;
+
+    param.lawyerDepartment = memberInfo.lawyerDepartment||'';
     param.lawyerDepartment = param.lawyerDepartment ? param.lawyerDepartment : this.getDefaultDepartment(param.fileInfoSubType);
+    !param.lawyerDepartment? delete param.lawyerDepartment:null;
     // console.log(param);
     MyWebClient.updateFileInfo(param,
       (data, res) => {
@@ -93,16 +97,6 @@ class DocumentEditLawyerModalPC extends React.Component {
         _this.handleCancel();
       }
     );
-  }
-  getDefaultDepartment = (fileInfoSubType)=>{
-    let lawyerDepartment = '';
-    for(let i=0;i<this.props.departmentData.length;i++){
-      let deparDt = this.props.departmentData[i];
-      if(deparDt.resourceName == fileInfoSubType){
-        lawyerDepartment = deparDt.sub[0].name;
-      }
-    }
-    return lawyerDepartment;
   }
   handleGetFamilyMembers(id) {
     let _this = this;
@@ -296,19 +290,16 @@ class DocumentEditLawyerModalPC extends React.Component {
                     <FormItem {...formItemLayout} label="首次执业时间">
                       {getFieldDecorator('lawyerFirstPracticeTime',
                         {
-                          initialValue: (memberInfo.lawyerFirstPracticeTime && memberInfo.lawyerFirstPracticeTime!='null') ? moment(memberInfo.lawyerFirstPracticeTime, 'YYYY-MM-DD') : null
+                          initialValue: (memberInfo.lawyerFirstPracticeTime && memberInfo.lawyerFirstPracticeTime!='null') ? moment(memberInfo.lawyerFirstPracticeTime, 'YYYY/MM') : null
                         })(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addFirstPracticeTime')} />
+                        <MonthPicker getCalendarContainer={() => document.getElementById('addFirstPracticeTime')} />
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={24} id="addLawyerPracticeTime">
-                    <FormItem {...formItemLayout} label="执业时间">
-                      {getFieldDecorator('lawyerPracticeTime',
-                        {
-                          initialValue: (memberInfo.lawyerPracticeTime && memberInfo.lawyerPracticeTime!='null') ? moment(memberInfo.lawyerPracticeTime, 'YYYY-MM-DD') : null
-                        })(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addLawyerPracticeTime')} />
+                  <Col span={24}>
+                    <FormItem {...formItemLayout} label="执业时间（单位：年）">
+                      {getFieldDecorator('lawyerPracticeTime', {initialValue: memberInfo.lawyerPracticeTime || ''})(
+                        <Input />
                       )}
                     </FormItem>
                   </Col>
@@ -331,9 +322,9 @@ class DocumentEditLawyerModalPC extends React.Component {
                     <FormItem {...formItemLayout} label="惩罚日期">
                       {getFieldDecorator('lawyerPunishTime',
                         {
-                          initialValue: (memberInfo.lawyerPunishTime && memberInfo.lawyerPunishTime!='null')  ? moment(memberInfo.lawyerPunishTime, 'YYYY-MM-DD') : null
+                          initialValue: (memberInfo.lawyerPunishTime && memberInfo.lawyerPunishTime!='null')  ? moment(memberInfo.lawyerPunishTime, 'YYYY/MM') : null
                         })(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addLawyerPunishTime')} />
+                        <MonthPicker getCalendarContainer={() => document.getElementById('addLawyerPunishTime')} />
                       )}
                     </FormItem>
                   </Col> */}

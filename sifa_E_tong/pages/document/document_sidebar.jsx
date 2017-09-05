@@ -33,7 +33,7 @@ export default class DocumentSidebar extends React.Component {
   // menu item click handler
    handleClick = (e) => { //仅表示点击了菜单的叶子节点响应。
     this.setState({ current: e.key });
-    console.log("点击了菜单的叶子节点响应:e.key,e.keyPath,e.item.props.children:", e.key,e.keyPath,e.item.props.children);
+    // console.log("点击了菜单的叶子节点响应:e.key,e.keyPath,e.item.props.children:", e.key,e.keyPath,e.item.props.children);
     if (e.item.props.children) {
       let level = this.props.departmentFlatMap[e.key].level;
       this.props.searchFormPC && this.props.searchFormPC.setFieldsValue({

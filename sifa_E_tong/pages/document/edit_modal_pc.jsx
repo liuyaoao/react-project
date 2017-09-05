@@ -5,6 +5,7 @@ import * as Utils from 'utils/utils.jsx';
 import superagent from 'superagent';
 
 import { Row, Col, Form, Icon, Input, Button, Radio, Table, Modal, DatePicker, notification, Select } from 'antd';
+const { MonthPicker } = DatePicker;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -44,7 +45,7 @@ class DocumentEditModalPC extends React.Component {
         Object.keys(values).forEach((key) => {
           if (key == 'birthDay' || key == 'joinPartyTime' || key == 'joinWorkerTime'
             || key == 'reportingTime' || key == 'approvalTime' || key == 'appointAndRemoveTime' ) {
-            values[key] = values[key] ? moment(values[key]).format('YYYY-MM-DD') : '';
+            values[key] = values[key] ? moment(values[key]).format('YYYY/MM') : '';
           }
         });
         // console.log(values);
@@ -73,8 +74,11 @@ class DocumentEditModalPC extends React.Component {
     let {memberInfo} = this.props;
     param.fileInfoType = memberInfo.fileInfoType;
     param.fileInfoSubType = memberInfo.fileInfoSubType;
+
     param.department = memberInfo.department;
     param.department = param.department ? param.department : this.getDefaultDepartment(param.fileInfoSubType);
+    !param.department? delete param.department:null;
+
     // console.log("编辑档案--param:",param);
     delete param['key']; delete param['familyMember'];
     MyWebClient.updateFileInfo(param,
@@ -102,8 +106,8 @@ class DocumentEditModalPC extends React.Component {
     let department = '';
     for(let i=0;i<this.props.departmentData.length;i++){
       let deparDt = this.props.departmentData[i];
-      if(deparDt.resourceName == fileInfoSubType){
-        department = deparDt.sub[0].name;
+      if(deparDt.resourceName == fileInfoSubType && deparDt.sub.length>0){
+        department = deparDt.sub[0].resourceName;
       }
     }
     return department;
@@ -238,8 +242,8 @@ class DocumentEditModalPC extends React.Component {
                   </Col>
                   <Col span={24} id="editBirthDay">
                     <FormItem {...formItemLayoutOneRow} label="出生年月">
-                      {getFieldDecorator('birthDay', {initialValue: memberInfo.birthDay ? moment(memberInfo.birthDay, 'YYYY-MM-DD') : null})(
-                        <DatePicker getCalendarContainer={() => document.getElementById('editBirthDay')} />
+                      {getFieldDecorator('birthDay', {initialValue: memberInfo.birthDay ? moment(memberInfo.birthDay, 'YYYY/MM') : null})(
+                        <MonthPicker getCalendarContainer={() => document.getElementById('editBirthDay')} />
                       )}
                     </FormItem>
                   </Col>
@@ -289,15 +293,15 @@ class DocumentEditModalPC extends React.Component {
                   </Col>
                   <Col span={24} id="editJoinPartyTime">
                     <FormItem {...formItemLayout1} label="入党时间:">
-                      {getFieldDecorator('joinPartyTime', {initialValue: memberInfo.joinPartyTime ? moment(memberInfo.joinPartyTime, 'YYYY-MM-DD') : null})(
-                        <DatePicker getCalendarContainer={() => document.getElementById('editJoinPartyTime')} />
+                      {getFieldDecorator('joinPartyTime', {initialValue: memberInfo.joinPartyTime ? moment(memberInfo.joinPartyTime, 'YYYY/MM') : null})(
+                        <MonthPicker getCalendarContainer={() => document.getElementById('editJoinPartyTime')} />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}  id="editJoinWorkerTime">
                     <FormItem {...formItemLayout1} label="参加工作时间:">
-                      {getFieldDecorator('joinWorkerTime', {initialValue: memberInfo.joinWorkerTime ? moment(memberInfo.joinWorkerTime, 'YYYY-MM-DD') : null})(
-                        <DatePicker getCalendarContainer={() => document.getElementById('editJoinWorkerTime')} />
+                      {getFieldDecorator('joinWorkerTime', {initialValue: memberInfo.joinWorkerTime ? moment(memberInfo.joinWorkerTime, 'YYYY/MM') : null})(
+                        <MonthPicker getCalendarContainer={() => document.getElementById('editJoinWorkerTime')} />
                       )}
                     </FormItem>
                   </Col>
@@ -412,7 +416,7 @@ class DocumentEditModalPC extends React.Component {
                       <Input type="textarea" placeholder="" rows={4} />
                     )}
                   </FormItem>
-                  <FormItem label="任免日期">
+                  <FormItem label="任职日期">
                     {getFieldDecorator('reasonsForDismissal', {initialValue: memberInfo.reasonsForDismissal || ''})(
                       <Input type="textarea" placeholder="" rows={4} />
                     )}
@@ -420,8 +424,8 @@ class DocumentEditModalPC extends React.Component {
                   {/*
                   <div className="form-item" id="editReportingUnit">
                     <div className="item-label"><label>呈报单位:</label></div>
-                    {getFieldDecorator('reportingTime', {initialValue: memberInfo.reportingTime ? moment(memberInfo.reportingTime, 'YYYY-MM-DD') : null})(
-                      <DatePicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('editReportingUnit')} />
+                    {getFieldDecorator('reportingTime', {initialValue: memberInfo.reportingTime ? moment(memberInfo.reportingTime, 'YYYY/MM') : null})(
+                      <MonthPicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('editReportingUnit')} />
                     )}
                     {getFieldDecorator('reportingUnit', {initialValue: memberInfo.reportingUnit || ''})(
                       <Input type="textarea" placeholder="" rows={4} />
@@ -429,8 +433,8 @@ class DocumentEditModalPC extends React.Component {
                   </div>
                   <div className="form-item" id="editApprovalOpinion">
                     <div className="item-label"><label>审批机关意见:</label></div>
-                    {getFieldDecorator('approvalTime', {initialValue: memberInfo.approvalTime ? moment(memberInfo.approvalTime, 'YYYY-MM-DD') : null})(
-                      <DatePicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('editApprovalOpinion')} />
+                    {getFieldDecorator('approvalTime', {initialValue: memberInfo.approvalTime ? moment(memberInfo.approvalTime, 'YYYY/MM') : null})(
+                      <MonthPicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('editApprovalOpinion')} />
                     )}
                     {getFieldDecorator('approvalOpinion', {initialValue: memberInfo.approvalOpinion || ''})(
                       <Input type="textarea" placeholder="" rows={4} />
@@ -438,8 +442,8 @@ class DocumentEditModalPC extends React.Component {
                   </div>
                   <div className="form-item" id="editApprovalRemovalOpinion">
                     <div className="item-label"><label>行政机关任免意见:</label></div>
-                    {getFieldDecorator('appointAndRemoveTime', {initialValue: memberInfo.appointAndRemoveTime ? moment(memberInfo.appointAndRemoveTime, 'YYYY-MM-DD') : null})(
-                      <DatePicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('editApprovalRemovalOpinion')} />
+                    {getFieldDecorator('appointAndRemoveTime', {initialValue: memberInfo.appointAndRemoveTime ? moment(memberInfo.appointAndRemoveTime, 'YYYY/MM') : null})(
+                      <MonthPicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('editApprovalRemovalOpinion')} />
                     )}
                     {getFieldDecorator('appointAndRemoveOpinion', {initialValue: memberInfo.appointAndRemoveOpinion || ''})(
                       <Input type="textarea" placeholder="" rows={4} />

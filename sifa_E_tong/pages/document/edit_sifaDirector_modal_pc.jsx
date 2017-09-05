@@ -4,6 +4,7 @@ import moment from 'moment';
 import * as Utils from 'utils/utils.jsx';
 
 import { Row, Col, Form, Icon, Input, Button, Radio, Table, Modal, DatePicker, notification, Select, Checkbox } from 'antd';
+const { MonthPicker } = DatePicker;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -38,8 +39,8 @@ class DocumentEditSifaDirectorModalPC extends React.Component {
     const {memberInfo} = this.props;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        values['joinWorkerTime'] =  values['joinWorkerTime'] ? values['joinWorkerTime'].format('YYYY-MM-DD') : '';
-        values['birthDay'] =  values['birthDay'] ? values['birthDay'].format('YYYY-MM-DD') : '';
+        values['joinWorkerTime'] =  values['joinWorkerTime'] ? values['joinWorkerTime'].format('YYYY/MM') : '';
+        values['birthDay'] =  values['birthDay'] ? values['birthDay'].format('YYYY/MM') : '';
         values.id = memberInfo.id;
         const param = Object.assign({}, memberInfo, values);
         delete param['key'];
@@ -51,11 +52,26 @@ class DocumentEditSifaDirectorModalPC extends React.Component {
     this.props.form.resetFields();
     this.props.handleCancelModal();
   }
+  getDefaultDepartment = (fileInfoSubType)=>{
+    let department = '';
+    for(let i=0;i<this.props.departmentData.length;i++){
+      let deparDt = this.props.departmentData[i];
+      if(deparDt.resourceName == fileInfoSubType && deparDt.sub.length>0){
+        department = deparDt.sub[0].resourceName;
+      }
+    }
+    return department;
+  }
   handleEditDocument(param) {
     let _this = this;
-    param.fileInfoType = this.props.currentFileType;
-    // param.fileInfoSubType = this.props.currentFileSubType;
-    // param.department = this.props.currentDepartment;
+    let {memberInfo} = this.props;
+    param.fileInfoType = memberInfo.fileInfoType;
+    param.fileInfoSubType = memberInfo.fileInfoSubType;
+
+    param.department = memberInfo.department;
+    param.department = param.department ? param.department : this.getDefaultDepartment(param.fileInfoSubType);
+    !param.department? delete param.department:null;
+
     MyWebClient.updateFileInfo(param,
       (data, res) => {
         if (res && res.ok) {
@@ -236,9 +252,9 @@ class DocumentEditSifaDirectorModalPC extends React.Component {
                     <FormItem {...formItemLayout} label="何时开始从事司法行政工作">
                       {getFieldDecorator('joinWorkerTime',
                         {
-                          initialValue: (memberInfo.joinWorkerTime && memberInfo.joinWorkerTime!='null') ? moment(memberInfo.joinWorkerTime, 'YYYY-MM-DD') : null
+                          initialValue: (memberInfo.joinWorkerTime && memberInfo.joinWorkerTime!='null') ? moment(memberInfo.joinWorkerTime, 'YYYY/MM') : null
                         })(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addjoinWorkerTime')} />
+                        <MonthPicker getCalendarContainer={() => document.getElementById('addjoinWorkerTime')} />
                       )}
                     </FormItem>
                   </Col>
@@ -246,9 +262,9 @@ class DocumentEditSifaDirectorModalPC extends React.Component {
                     <FormItem {...formItemLayout} label="出生年月">
                       {getFieldDecorator('birthDay',
                         {
-                          initialValue: (memberInfo.birthDay && memberInfo.birthDay!='null') ? moment(memberInfo.birthDay, 'YYYY-MM-DD') : null
+                          initialValue: (memberInfo.birthDay && memberInfo.birthDay!='null') ? moment(memberInfo.birthDay, 'YYYY/MM') : null
                         })(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addbirthDayTime')} />
+                        <MonthPicker getCalendarContainer={() => document.getElementById('addbirthDayTime')} />
                       )}
                     </FormItem>
                   </Col>

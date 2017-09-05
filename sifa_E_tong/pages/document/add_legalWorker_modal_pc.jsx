@@ -5,6 +5,7 @@ import moment from 'moment';
 import * as Utils from 'utils/utils.jsx';
 
 import { Row, Col, Form, Icon, Input, Button, Radio, Table, Modal, DatePicker, notification, Select } from 'antd';
+const { MonthPicker } = DatePicker;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;

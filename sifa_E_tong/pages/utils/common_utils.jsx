@@ -27,6 +27,7 @@ export function removeValueFromArr(arr,val){
 }
 
 export function Base64Encode(input) {
+    if(!input){ return; }
     // private property
     let _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
     // public method for encoding
@@ -56,6 +57,7 @@ export function Base64Encode(input) {
 }
 // public method for decoding
 export function Base64Decode (input) {
+  if(!input){ return; }
   let _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
     let output = "";
     let chr1, chr2, chr3;

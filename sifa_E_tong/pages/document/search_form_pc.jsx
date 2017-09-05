@@ -34,7 +34,7 @@ class SearchFormPC extends React.Component {
   componentDidMount() {
     // this.props.form.validateFields();
   }
-  handleSubmit = (e) => {
+  handleSubmit = (e) => { //点击查询
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
@@ -46,7 +46,7 @@ class SearchFormPC extends React.Component {
           }
         });
         // console.log('Received search params: ', param);
-        this.props.handleSearch(param);
+        this.props.handleSearch(null,param);
       }
     });
   }
@@ -90,14 +90,17 @@ class SearchFormPC extends React.Component {
 
   render() {
     const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
-    const {departmentFlatMap,currentFileId, currentFileSubId,curDepartmentId} = this.props;
+    const {departmentFlatMap,currentFileId, currentFileSubId,curDepartmentId, departmentData } = this.props;
 
-    let downloadTemplateLink = null, action_url = '', uploadDocName = ''; //导入时的提示信息。
+    let downloadTemplateLink = null, formItemInput = null,formItemInput2 = null, action_url = '', uploadDocName = ''; //导入时的提示信息。
     let fileTypeName = currentFileId ? (departmentFlatMap[currentFileId].resourceName||'') : '';
     let fileSubTypeName = currentFileSubId ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
     let departmentName = curDepartmentId ? (departmentFlatMap[curDepartmentId].resourceName||'') : '';
-
+    let outputUrl = ':;';
     if ( (["市局机关","局属二级机构","公证员"]).indexOf(fileSubTypeName)!=-1 ) {
+      formItemInput=(
+        <FormItem label="姓名" className="p-r-10"> {getFieldDecorator('userName')( <Input placeholder="" /> )} </FormItem>
+      );
       downloadTemplateLink = (
           <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
             href={window.serverUrl+"/modle/personnelFiles.xls"}><Icon type="download" /> 下载干部简历模板
@@ -105,10 +108,14 @@ class SearchFormPC extends React.Component {
         );
       action_url = MyWebClient.getfileInfoImportUrl();
       uploadDocName = fileSubTypeName+"人员";
+      outputUrl = MyWebClient.getBaseRoute() + "/export/fileinformation/cadre?department="+ departmentName + "&fileInfoSubType=" + fileSubTypeName + "&fileInfoType=" + fileTypeName;
     }else if(fileSubTypeName == '区县司法局'){
 
       uploadDocName = "区县司法局人员";
     }else if(fileSubTypeName == '司法所'){
+      formItemInput=(
+        <FormItem label="姓名" className="p-r-10"> {getFieldDecorator('userName')( <Input placeholder="" /> )} </FormItem>
+      );
       downloadTemplateLink = (
         <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
           href={window.serverUrl+"/modle/sifa_director_template.xlsx"}><Icon type="download" /> 下载模板(司法所长)
@@ -116,6 +123,7 @@ class SearchFormPC extends React.Component {
       );
       action_url = MyWebClient.getSifa_DirectorImportUrl();
       uploadDocName = "司法所人员";
+      outputUrl = MyWebClient.getBaseRoute() + "/export/fileinformation/superintendent?department="+ departmentName + "&fileInfoSubType=" + fileSubTypeName + "&fileInfoType=" + fileTypeName;
     }else if(fileSubTypeName == '法律援助中心'){
 
       uploadDocName = "法律援助中心人员";
@@ -126,6 +134,12 @@ class SearchFormPC extends React.Component {
 
       uploadDocName = "公证处人员";
     }else if ( fileSubTypeName == '律师事务所' ) {
+      formItemInput=(
+        <FormItem label="律所名称" className="p-r-10"> {getFieldDecorator('lawOfficeName')( <Input placeholder="" /> )} </FormItem>
+      );
+      formItemInput2=(
+        <FormItem label="律所责任人" className="p-r-10"> {getFieldDecorator('lawOfficePrincipal')( <Input placeholder="" /> )} </FormItem>
+      );
       downloadTemplateLink = (
         <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
           href={window.serverUrl+"/modle/layfirm.xlsx"}><Icon type="download" /> 下载模板(律所)
@@ -133,13 +147,15 @@ class SearchFormPC extends React.Component {
       );
       action_url = MyWebClient.getlawfirmfileInfoImportUrl();
       uploadDocName = "律师事务所人员";
+      outputUrl = MyWebClient.getBaseRoute() + "/export/fileinformation/lawfirm?department="+ departmentName + "&fileInfoSubType=" + fileSubTypeName + "&fileInfoType=" + fileTypeName;
+
     }else if ( fileSubTypeName == '律师' ){
       downloadTemplateLink = <a type="button" className="btn btn-info" style={{ marginLeft: '10px' }}
-      href={window.serverUrl+"/modle/LawyerFile.xlsx"}><Icon type="download" /> 下载模板(律师) </a>;
+      href={window.serverUrl+"/modle/lawyerFile.xlsx"}><Icon type="download" /> 下载模板(律师) </a>;
       action_url = MyWebClient.getLawyerfileInfoImportUrl();
       uploadDocName = "律师人员";
+      outputUrl = MyWebClient.getBaseRoute() + "/export/fileinformation/lawyer?department="+ departmentName + "&fileInfoSubType=" + fileSubTypeName + "&fileInfoType=" + fileTypeName;
     }else if ( fileSubTypeName == '基层法律服务所' ){
-
       uploadDocName = "基层法律服务所人员";
     }else if ( fileSubTypeName == '基层法律工作者' ){
       downloadTemplateLink = (
@@ -149,6 +165,7 @@ class SearchFormPC extends React.Component {
       );
       action_url = MyWebClient.getLegalWorkerImportUrl();
       uploadDocName = "基层法律工作者";
+      outputUrl = MyWebClient.getBaseRoute() + "/export/fileinformation/grassroots?department="+ departmentName + "&fileInfoSubType=" + fileSubTypeName + "&fileInfoType=" + fileTypeName;
     }else if(fileSubTypeName == '司法鉴定所'){
 
       uploadDocName = "司法鉴定所人员";
@@ -163,8 +180,8 @@ class SearchFormPC extends React.Component {
       );
       action_url = MyWebClient.getjudicialexamInfoImportUrl();
       uploadDocName = "司考通过人员";
+      outputUrl = MyWebClient.getBaseRoute() + "/export/fileinformation/judicialExamination?department="+ departmentName + "&fileInfoSubType=" + fileSubTypeName + "&fileInfoType=" + fileTypeName;
     }
-
     const uploadField = {
       name: 'file',
       action: action_url,
@@ -181,38 +198,10 @@ class SearchFormPC extends React.Component {
           className="ant-advanced-search-form"
           onSubmit={this.handleSubmit}
           >
-          {/*<FormItem label="部门" className="p-r-10">
-            {getFieldDecorator('department')(
-              <Input placeholder="" />
-            )}
-          </FormItem>*/}
-          {
-            this.props.curDepartmentId == '律所'?
-            <FormItem label="律所名称" className="p-r-10">
-              {
-                getFieldDecorator('lawOfficeName')(
-                  <Input placeholder="" />
-                )
-              }
-            </FormItem>:
-            <FormItem label="姓名" className="p-r-10">
-              {
-                getFieldDecorator('userName')(
-                  <Input placeholder="" />
-                )
-              }
-            </FormItem>
-          }
-
-          {
-            this.props.curDepartmentId == '律所'?
-            <FormItem label="律所责任人" className="p-r-10">
-              {
-                getFieldDecorator('lawOfficePrincipal')(
-                  <Input placeholder="" />
-                )
-              }
-            </FormItem>:
+          {formItemInput?formItemInput:(
+            <FormItem label="姓名" className="p-r-10"> {getFieldDecorator('userName')( <Input placeholder="" /> )} </FormItem>
+          )}
+          {formItemInput2?formItemInput2:(
             <FormItem label="性别">
               {getFieldDecorator('gender')(
                 <RadioGroup>
@@ -221,8 +210,7 @@ class SearchFormPC extends React.Component {
                 </RadioGroup>
               )}
             </FormItem>
-          }
-
+          )}
           <FormItem label="">
             <button type="submit" className="btn btn-primary comment-btn"><Icon type="search" /> 搜索</button>
           </FormItem>
@@ -231,6 +219,7 @@ class SearchFormPC extends React.Component {
               <button type="button" className="btn btn-default"><Icon type="upload" /> 导入</button>
             </Upload>
             { downloadTemplateLink }
+            <a style={{ marginLeft: '10px' }} href={outputUrl} className="btn btn-default" target="_blank">导出</a>
           </FormItem>) : null}
         </Form>
         <div className={this.state.uploading?'visibleCls':'notVisibleCls'}>

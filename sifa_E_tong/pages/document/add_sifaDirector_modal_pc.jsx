@@ -5,6 +5,7 @@ import moment from 'moment';
 import * as Utils from 'utils/utils.jsx';
 
 import { Row, Col, Form, Icon, Input, Button, Radio, Table, Modal, DatePicker, notification, Select } from 'antd';
+const { MonthPicker } = DatePicker;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -37,8 +38,8 @@ class DocumentAddSifaDirectorModalPC extends React.Component {
     const {memberInfo} = this.props;
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        values['joinWorkerTime'] =  values['joinWorkerTime'] ? values['joinWorkerTime'].format('YYYY-MM-DD') : '';
-        values['birthDay'] =  values['birthDay'] ? values['birthDay'].format('YYYY-MM-DD') : '';
+        values['joinWorkerTime'] =  values['joinWorkerTime'] ? values['joinWorkerTime'].format('YYYY/MM') : '';
+        values['birthDay'] =  values['birthDay'] ? values['birthDay'].format('YYYY/MM') : '';
         const param = {
           ...values,
         }
@@ -213,9 +214,9 @@ class DocumentAddSifaDirectorModalPC extends React.Component {
                     <FormItem {...formItemLayout} label="何时开始从事司法行政工作">
                       {getFieldDecorator('joinWorkerTime',
                         {
-                          initialValue: (memberInfo.joinWorkerTime && memberInfo.joinWorkerTime!='null') ? moment(memberInfo.joinWorkerTime, 'YYYY-MM-DD') : null
+                          initialValue: (memberInfo.joinWorkerTime && memberInfo.joinWorkerTime!='null') ? moment(memberInfo.joinWorkerTime, 'YYYY/MM') : null
                         })(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addjoinWorkerTime')} />
+                        <MonthPicker getCalendarContainer={() => document.getElementById('addjoinWorkerTime')} />
                       )}
                     </FormItem>
                   </Col>
@@ -223,9 +224,9 @@ class DocumentAddSifaDirectorModalPC extends React.Component {
                     <FormItem {...formItemLayout} label="出生年月">
                       {getFieldDecorator('birthDay',
                         {
-                          initialValue: (memberInfo.birthDay && memberInfo.birthDay!='null') ? moment(memberInfo.birthDay, 'YYYY-MM-DD') : null
+                          initialValue: (memberInfo.birthDay && memberInfo.birthDay!='null') ? moment(memberInfo.birthDay, 'YYYY/MM') : null
                         })(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addBirthdayTime')} />
+                        <MonthPicker getCalendarContainer={() => document.getElementById('addBirthdayTime')} />
                       )}
                     </FormItem>
                   </Col>

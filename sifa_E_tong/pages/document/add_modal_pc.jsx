@@ -5,6 +5,7 @@ import moment from 'moment';
 import * as Utils from 'utils/utils.jsx';
 
 import { Row, Col, Form, Icon, Input, Button, Radio, Table, Modal, DatePicker, notification, Select } from 'antd';
+const { MonthPicker } = DatePicker;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -43,7 +44,7 @@ class DocumentAddModalPC extends React.Component {
         Object.keys(values).forEach((key) => {
           if (key == 'birthDay' || key == 'joinPartyTime' || key == 'joinWorkerTime'
             || key == 'reportingTime' || key == 'approvalTime' || key == 'appointAndRemoveTime' ) {
-            values[key] = values[key] ? moment(values[key]).format('YYYY-MM-DD') : '';
+            values[key] = values[key] ? moment(values[key]).format('YYYY/MM') : '';
           }
         });
         const info = {
@@ -247,8 +248,8 @@ class DocumentAddModalPC extends React.Component {
                   </Col>*/}
                   <Col span={24} id="addBirthDay">
                     <FormItem {...formItemLayout} label="出生年月">
-                      {getFieldDecorator('birthDay', {initialValue: memberInfo.birthDay ? moment(memberInfo.birthDay, 'YYYY-MM-DD') : null})(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addBirthDay')} />
+                      {getFieldDecorator('birthDay', {initialValue: memberInfo.birthDay ? moment(memberInfo.birthDay, 'YYYY/MM') : null})(
+                        <MonthPicker getCalendarContainer={() => document.getElementById('addBirthDay')} />
                       )}
                     </FormItem>
                   </Col>
@@ -298,15 +299,15 @@ class DocumentAddModalPC extends React.Component {
                   </Col>
                   <Col span={24} id="addJoinPartyTime">
                     <FormItem {...formItemLayout1} label="入党时间">
-                      {getFieldDecorator('joinPartyTime', {initialValue: memberInfo.joinPartyTime ? moment(memberInfo.joinPartyTime, 'YYYY-MM-DD') : null})(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addJoinPartyTime')} />
+                      {getFieldDecorator('joinPartyTime', {initialValue: memberInfo.joinPartyTime ? moment(memberInfo.joinPartyTime, 'YYYY/MM') : null})(
+                        <MonthPicker getCalendarContainer={() => document.getElementById('addJoinPartyTime')} />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24} id="addJoinWorkerTime">
                     <FormItem {...formItemLayout1} label="参加工作时间">
-                      {getFieldDecorator('joinWorkerTime', {initialValue: memberInfo.joinWorkerTime ? moment(memberInfo.joinWorkerTime, 'YYYY-MM-DD') : null})(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addJoinWorkerTime')} />
+                      {getFieldDecorator('joinWorkerTime', {initialValue: memberInfo.joinWorkerTime ? moment(memberInfo.joinWorkerTime, 'YYYY/MM') : null})(
+                        <MonthPicker getCalendarContainer={() => document.getElementById('addJoinWorkerTime')} />
                       )}
                     </FormItem>
                   </Col>
@@ -421,7 +422,7 @@ class DocumentAddModalPC extends React.Component {
                       <Input type="textarea" placeholder="" rows={4} />
                     )}
                   </FormItem>
-                  <FormItem label="任免日期">
+                  <FormItem label="任职日期">
                     {getFieldDecorator('reasonsForDismissal', {initialValue: ''})(
                       <Input type="textarea" placeholder="" rows={4} />
                     )}
@@ -430,7 +431,7 @@ class DocumentAddModalPC extends React.Component {
                   <div className="form-item" id="addReportingUnit">
                     <div className="item-label"><label>呈报单位:</label></div>
                     {getFieldDecorator('reportingTime', {initialValue: null})(
-                      <DatePicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('addReportingUnit')} />
+                      <MonthPicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('addReportingUnit')} />
                     )}
                     {getFieldDecorator('reportingUnit', {initialValue: ''})(
                       <Input type="textarea" placeholder="" rows={4} />
@@ -439,7 +440,7 @@ class DocumentAddModalPC extends React.Component {
                   <div className="form-item" id="addApprovalOpinion">
                     <div className="item-label"><label>审批机关意见:</label></div>
                     {getFieldDecorator('approvalTime', {initialValue: null})(
-                      <DatePicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('addApprovalOpinion')} />
+                      <MonthPicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('addApprovalOpinion')} />
                     )}
                     {getFieldDecorator('approvalOpinion', {initialValue: ''})(
                       <Input type="textarea" placeholder="" rows={4} />
@@ -448,7 +449,7 @@ class DocumentAddModalPC extends React.Component {
                   <div className="form-item" id="addApprovalRemovalOpinion">
                     <div className="item-label"><label>行政机关任免意见:</label></div>
                     {getFieldDecorator('appointAndRemoveTime', {initialValue: null})(
-                      <DatePicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('addApprovalRemovalOpinion')} />
+                      <MonthPicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('addApprovalRemovalOpinion')} />
                     )}
                     {getFieldDecorator('appointAndRemoveOpinion', {initialValue: ''})(
                       <Input type="textarea" placeholder="" rows={4} />

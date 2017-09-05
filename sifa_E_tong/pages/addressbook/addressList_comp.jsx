@@ -25,11 +25,13 @@ class AddressListComp extends React.Component {
       this.confirmDeleteContacts = this.confirmDeleteContacts.bind(this);
       let permissionData = UserStore.getPermissionData();
       let hasOperaPermission = permissionData['address_book'].indexOf('action') != -1;
+      this.onPaginationChange = this.onPaginationChange.bind(this);
       this.state = {
         selectedRowKeys: [],  // Check here to configure the default column
         columns:[],
         permissionData:permissionData,
         hasOperaPermission:hasOperaPermission, //是否有操作权限。
+        pagination:{pageSize:10,current:1,onChange:this.onPaginationChange},
       };
   }
 
@@ -60,6 +62,23 @@ class AddressListComp extends React.Component {
   componentDidMount(){
 
   }
+
+  componentWillReceiveProps(nextProps) {
+    const { organization, secondaryDirectory, level3Catalog } = this.props;
+
+    if (nextProps.organization != organization || nextProps.secondaryDirectory != secondaryDirectory|| nextProps.level3Catalog != level3Catalog) {
+      this.setState({
+        pagination:{pageSize:10,current:1},
+      });
+    }
+  }
+
+  onPaginationChange(current,pageSize){
+    this.setState({
+      pagination:{pageSize:pageSize,current:current,onChange:this.onPaginationChange},
+    });
+  }
+
   onClickDeleteContact = (text,record)=>{
 
   }
@@ -170,7 +189,7 @@ class AddressListComp extends React.Component {
             columns={columns}
             showHeader={false}
             dataSource={addressListData}
-            pagination={{ pageSize: 10 }}/>
+            pagination={this.state.pagination} />
         </div>
       </div>
     );

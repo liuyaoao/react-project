@@ -83,7 +83,7 @@ class AddressSearchComp extends React.Component {
       notification.error({message: '通讯录上传失败！'});
     }
   }
-  
+
   getContactsSearchForm() {
     const { getFieldDecorator, getFieldsError, getFieldError } = this.props.form;
     const { organization,secondaryDirectory,level3Catalog } = this.props;
@@ -132,7 +132,10 @@ class AddressSearchComp extends React.Component {
                     <a type="button" className="btn btn-info"
                       style={{ marginLeft: '20px' }}
                        href={window.serverUrl+"/modle/contacts.xlsx"}>下载模板</a>
-                     <a href={myWebClient.getBaseRoute() + "/export/contacts?organization="+ organization + "&secondaryDirectory=" + secondaryDirectory + "&level3Catalog=" + level3Catalog} className="btn btn-default" target="_blank">导出</a>
+                     <a
+                       style={{ marginLeft: '20px' }}
+                       href={myWebClient.getBaseRoute() + "/export/contacts?organization="+ organization + "&secondaryDirectory=" + secondaryDirectory + "&level3Catalog=" + level3Catalog}
+                       className="btn btn-default" target="_blank">导出</a>
                     </span>):null}
                   </FormItem>
                 </Col>

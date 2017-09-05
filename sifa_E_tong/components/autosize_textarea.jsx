@@ -1,6 +1,6 @@
 // Copyright (c) 2016-present Mattermost, Inc. All Rights Reserved.
 // See License.txt for license information.
-
+import $ from 'jquery';
 import React from 'react';
 
 export default class AutosizeTextarea extends React.Component {
@@ -52,6 +52,10 @@ export default class AutosizeTextarea extends React.Component {
         return this.refs.textarea;
     }
 
+    handleFocus(){
+      $("#post_textbox").removeAttr("readOnly");
+    }
+
     render() {
         const props = {...this.props};
 
@@ -81,6 +85,8 @@ export default class AutosizeTextarea extends React.Component {
                     id={id + '-textarea'}
                     {...heightProps}
                     {...props}
+                    readOnly="readOnly"
+                    onClick={this.handleFocus}
                 />
                 <div style={{height: 0, overflow: 'hidden'}}>
                     <textarea

@@ -231,14 +231,14 @@ class AddressBookPage extends React.Component {
               </Layout>);
     }
     getBreadcrumbItem(){
-      let {breadcrumbData} = this.state;
+      let { breadcrumbData } = this.state;
       let bread_items = breadcrumbData.map((val,index)=>{
           return <Breadcrumb.Item className="bread_item" key={index}>{val.split("_")[0]}</Breadcrumb.Item>
         });
       return bread_items;
     }
     getListContentElements(){
-      let { addressbookData } = this.state;
+      let { addressbookData,organization,secondaryDirectory,level3Catalog } = this.state;
       return this.state.isMobile?
         (<AddressListMobileComp
           addressListData={addressbookData}
@@ -250,6 +250,9 @@ class AddressBookPage extends React.Component {
           showAddEditDialog={this.showAddEditDialog}
           afterDeleteAllContactsCall={this.afterDeleteAllContactsCall}
           afterDeleteContactsCall={this.afterDeleteContactsCall}
+          organization={organization}
+          secondaryDirectory={secondaryDirectory}
+          level3Catalog={level3Catalog}
         />);
     }
 

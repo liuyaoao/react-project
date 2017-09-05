@@ -34,6 +34,7 @@ class AddressListMobileComp extends React.Component {
   componentWillMount(){
   }
   componentDidMount(){
+    window.addEventListener("popstate", this.hidePopup);
   }
   componentWillReceiveProps(nextProps){
     if(nextProps.addressListData.length != this.props.addressListData.length){
@@ -112,15 +113,39 @@ class AddressListMobileComp extends React.Component {
       });
     }
   }
-  getTelephoneDialEles= (telephoneNumber)=>{ //构造可直接拨号的视图。
-    if(!telephoneNumber){ return; }
-    let teleArr = (telephoneNumber||'').split(",");
+  getTelephoneDialEles= (groupShortCode, telephoneNumber)=>{ //构造可直接拨号的视图。
+    let teleStr = '';
+    if(!groupShortCode && !telephoneNumber){
+
+      return;
+
+    }else{
+
+      if(groupShortCode){
+        if(teleStr){
+          teleStr += ',' + groupShortCode;
+
+        }else{
+          teleStr = groupShortCode;
+        }
+      }
+
+      if(telephoneNumber){
+        if(teleStr){
+          teleStr += ',' + telephoneNumber;
+        }else{
+          teleStr = telephoneNumber;
+        }
+      }
+    }
+    let teleArr = (teleStr||'').split(",");
+
     if(teleArr.length==1){
       return (<a href={"tel:"+telephoneNumber}>
                 <Icon type="phone" style={{fontSize:'0.6rem',fontWeight:'bold',color:'#189A09'}}/>
               </a>);
     }else if(teleArr.length>1){
-      return (<a href="#" onClick={()=>{this.showPopupDialTele(teleArr)}}>
+      return (<a href="javascript:void(0);" onClick={()=>{this.showPopupDialTele(teleArr)}}>
                 <Icon type="phone" style={{fontSize:'0.6rem',fontWeight:'bold',color:'#189A09'}}/>
               </a>);
     }
@@ -136,6 +161,10 @@ class AddressListMobileComp extends React.Component {
         ))}
       </List>
     </div>, { animationType: 'slide-up', maskClosable: true });
+  }
+
+  hidePopup = ()=>{
+    Popup.hide();
   }
 
   handleDialTeleMenuClick = (item,key,keyPath)=>{
@@ -194,7 +223,7 @@ class AddressListMobileComp extends React.Component {
                         <div className="member_phone"><span>电话号码：</span>{record.telephoneNumber}</div>
                       </div>
                       <div className="addressbook_right">
-                        {this.getTelephoneDialEles(record.telephoneNumber)}
+                        {this.getTelephoneDialEles(record.groupShortCode, record.telephoneNumber)}
                       </div>
                     </div>
                 </List.Item>

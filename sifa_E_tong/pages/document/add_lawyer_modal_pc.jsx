@@ -5,6 +5,7 @@ import moment from 'moment';
 import * as Utils from 'utils/utils.jsx';
 
 import { Row, Col, Form, Icon, Input, Button, Radio, Table, Modal, DatePicker, notification, Select } from 'antd';
+const { MonthPicker } = DatePicker;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -39,9 +40,8 @@ class DocumentAddLawyerModalPC extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        values['lawyerFirstPracticeTime'] =  values['lawyerFirstPracticeTime'] ? values['lawyerFirstPracticeTime'].format('YYYY-MM-DD') : '';
-        values['lawyerPracticeTime'] = values['lawyerPracticeTime'] ? values['lawyerPracticeTime'].format('YYYY-MM-DD') : '';
-        values['lawyerPunishTime'] = values['lawyerPunishTime'] ? values['lawyerPunishTime'].format('YYYY-MM-DD') : '';
+        values['lawyerFirstPracticeTime'] =  values['lawyerFirstPracticeTime'] ? values['lawyerFirstPracticeTime'].format('YYYY/MM') : '';
+        values['lawyerPunishTime'] = values['lawyerPunishTime'] ? values['lawyerPunishTime'].format('YYYY/MM') : '';
         const info = {
           ...values,
           // id: memberInfo.id,
@@ -293,15 +293,15 @@ class DocumentAddLawyerModalPC extends React.Component {
                   </Col>
                   <Col span={24} id="addFirstPracticeTime">
                     <FormItem {...formItemLayout} label="首次执业时间">
-                      {getFieldDecorator('lawyerFirstPracticeTime', {initialValue: memberInfo.lawyerFirstPracticeTime ? moment(memberInfo.lawyerFirstPracticeTime, 'YYYY-MM-DD') : null})(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addFirstPracticeTime')} />
+                      {getFieldDecorator('lawyerFirstPracticeTime', {initialValue: memberInfo.lawyerFirstPracticeTime ? moment(memberInfo.lawyerFirstPracticeTime, 'YYYY/MM') : null})(
+                        <MonthPicker getCalendarContainer={() => document.getElementById('addFirstPracticeTime')} />
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={24} id="addPracticeTime">
-                    <FormItem {...formItemLayout} label="执业时间">
-                      {getFieldDecorator('lawyerPracticeTime', {initialValue: memberInfo.lawyerPracticeTime ? moment(memberInfo.lawyerPracticeTime, 'YYYY-MM-DD') : null})(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addPracticeTime')} />
+                  <Col span={24}>
+                    <FormItem {...formItemLayout} label="执业时间（单位：年）">
+                      {getFieldDecorator('lawyerPracticeTime', {initialValue: memberInfo.lawyerPracticeTime||''})(
+                        <Input />
                       )}
                     </FormItem>
                   </Col>
@@ -322,8 +322,8 @@ class DocumentAddLawyerModalPC extends React.Component {
                   </Col>
                   {/* <Col span={24} id="addLawyerPunishTime">
                     <FormItem {...formItemLayout} label="惩罚日期">
-                      {getFieldDecorator('lawyerPunishTime', {initialValue: memberInfo.lawyerPunishTime ? moment(memberInfo.lawyerPunishTime, 'YYYY-MM-DD') : null})(
-                        <DatePicker getCalendarContainer={() => document.getElementById('addLawyerPunishTime')} />
+                      {getFieldDecorator('lawyerPunishTime', {initialValue: memberInfo.lawyerPunishTime ? moment(memberInfo.lawyerPunishTime, 'YYYY/MM') : null})(
+                        <MonthPicker getCalendarContainer={() => document.getElementById('addLawyerPunishTime')} />
                       )}
                     </FormItem>
                   </Col> */}

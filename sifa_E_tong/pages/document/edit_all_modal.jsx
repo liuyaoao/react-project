@@ -53,7 +53,7 @@ export default class DocumentAllEditModal extends React.Component {
       handleCancelModal: this.props.handleCancelModal
     }
     let edit_ele = null;
-    console.log("编辑弹窗----：",visibleEditModel,memberInfo.fileInfoType,memberInfo.fileInfoSubType);
+    // console.log("编辑弹窗----：",visibleEditModel,memberInfo.fileInfoType,memberInfo.fileInfoSubType);
 
     if( (["市局机关","局属二级机构","公证员"]).indexOf(memberInfo.fileInfoSubType)!=-1 ){//ok
       edit_ele = <DocumentEditModalPC {...editModalField}></DocumentEditModalPC>

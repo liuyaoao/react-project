@@ -25,10 +25,12 @@ class DocumentListPC extends React.Component {
       super(props);
       let permissionData = UserStore.getPermissionData();
       let hasOperaPermission = permissionData['sys_config'].indexOf('action') != -1;
+      this.onPaginationChange = this.onPaginationChange.bind(this);
       this.state = {
         selectedRowKeys: [],  // Check here to configure the default column
         loading: false,
         hasOperaPermission:hasOperaPermission, //是否有操作权限。
+        pagination:{pageSize:10,current:1,onChange:this.onPaginationChange},
       };
   }
   onSelectChange = (selectedRowKeys) => {
@@ -46,6 +48,19 @@ class DocumentListPC extends React.Component {
   }
   handleDeleteAll = (evt)=>{ //全部删除
     this.props.showDeleteAllConfirm();
+  }
+  componentWillReceiveProps(nextProps) {
+    const {currentFileId,currentFileSubId,curDepartmentId} = this.props;
+    if (nextProps.currentFileId != currentFileId || nextProps.currentFileSubId != currentFileSubId|| nextProps.curDepartmentId != curDepartmentId) {
+      this.setState({
+        pagination:{pageSize:10,current:1},
+      });
+    }
+  }
+  onPaginationChange(current,pageSize){
+    this.setState({
+      pagination:{pageSize:pageSize,current:current,onChange:this.onPaginationChange},
+    });
   }
 
   render() {
@@ -180,7 +195,7 @@ class DocumentListPC extends React.Component {
               </span>):null
           }
         </div>
-        <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={{ pageSize: 10 }} />
+        <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={this.state.pagination} />
       </div>
     );
   }

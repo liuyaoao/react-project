@@ -111,7 +111,7 @@ class DocumentPage extends React.Component {
       }
     );
   }
-  handleSearch(paramsIdArr) { //paramsId :{currentFileId, currentFileSubId, curDepartmentId}
+  handleSearch(paramsIdArr,otherParams) { //paramsId :{currentFileId, currentFileSubId, curDepartmentId}
     let params = { //查询参数。
       fileInfoType:'',
       fileInfoSubType:'',
@@ -152,21 +152,18 @@ class DocumentPage extends React.Component {
       });
       departmentArr.length>0?params.department = departmentArr.join(','):null;
     }
+    this.setState({
+      fileInfoType: params.fileInfoType,
+      fileInfoSubType: params.fileInfoSubType,
+      department: params.department
+    });
+    params = Object.assign({},params,otherParams||{});
     MyWebClient.getSearchFileInfo(params,
       (data, res) => {
         if (res && res.ok) {
           let documentsData = JSON.parse(res.text);
-           console.log("documentsData-list-结果列表-:",documentsData);
+          //  console.log("documentsData-list-结果列表-:",documentsData);
           this.setState({ documentsData });
-          // if (!this.state.departmentTypes.length) {
-          //   const departArr = [];
-          //   for (var i = 0; i < documentsData.length; i++) {
-          //     if (departArr.indexOf(documentsData[i].department) === -1) {
-          //       departArr.push(documentsData[i].department);
-          //     }
-          //   }
-          //   this.setState({ departmentTypes: departArr });
-          // }
         }
       },
       (e, err, res) => {
@@ -228,10 +225,10 @@ class DocumentPage extends React.Component {
     Object.keys(docObj).forEach((key) => {
       if (key == 'birthDay' || key == 'joinPartyTime' || key == 'joinWorkerTime'
         || key == 'reportingTime' || key == 'approvalTime' || key == 'appointAndRemoveTime' ) {
-        docObj[key] = docObj[key] ? moment(docObj[key], 'YYYY-MM-DD') : null;
+        docObj[key] = docObj[key] ? moment(docObj[key], 'YYYY/MM') : null;
       }
     });
-    console.log("编辑弹窗！！！");
+    // console.log("编辑弹窗！！！");
   }
   handleCancelModal() {
     this.setState({ visibleEditModel: false });
@@ -302,9 +299,10 @@ class DocumentPage extends React.Component {
   }
   handleDeleteAllDocument(){
     let _this = this;
+    let {currentFileId,currentFileSubId,departmentFlatMap} = this.state;
     MyWebClient.deleteFileInfoAll({
-      fileInfoType:this.state.currentFileId,
-      fileInfoSubType:this.state.currentFileSubId,
+      fileInfoType:departmentFlatMap[currentFileId].resourceName,
+      fileInfoSubType:departmentFlatMap[currentFileSubId].resourceName,
     },
       (data, res) => {
         if (res && res.ok) {
@@ -402,7 +400,7 @@ class DocumentPage extends React.Component {
         </Layout>);
   }
   getSearchForm() {
-    const {currentFileId, currentFileSubId, departmentData,curDepartmentId,departmentFlatMap} = this.state;
+    const {currentFileId, currentFileSubId, departmentData, curDepartmentId, departmentFlatMap } = this.state;
     return this.state.isMobile ?
             (
               <WrappedSearchFormMobile
@@ -420,8 +418,8 @@ class DocumentPage extends React.Component {
                 departmentFlatMap={departmentFlatMap}
                 currentFileId={currentFileId}
                 currentFileSubId={currentFileSubId}
-                handleSearch={this.handleSearch}
                 curDepartmentId={curDepartmentId}
+                handleSearch={this.handleSearch}
                 openNotification={this.openNotification}/>
           );
   }

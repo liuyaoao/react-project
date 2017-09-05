@@ -4,6 +4,7 @@ import moment from 'moment';
 import * as Utils from 'utils/utils.jsx';
 
 import { Row, Col, Form, Icon, Input, Button, Radio, Table, Modal, DatePicker, notification, Select, Checkbox } from 'antd';
+const { MonthPicker } = DatePicker;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -50,9 +51,26 @@ class DocumentEditLegalWorkerModalPC extends React.Component {
     this.props.form.resetFields();
     this.props.handleCancelModal();
   }
+  getDefaultDepartment = (fileInfoSubType)=>{
+    let department = '';
+    for(let i=0;i<this.props.departmentData.length;i++){
+      let deparDt = this.props.departmentData[i];
+      if(deparDt.resourceName == fileInfoSubType && deparDt.sub.length>0){
+        department = deparDt.sub[0].resourceName;
+      }
+    }
+    return department;
+  }
   handleEditDocument(param) {
     let _this = this;
-    param.fileInfoType = this.props.currentFileType;
+    let {memberInfo} = this.props;
+    param.fileInfoType = memberInfo.fileInfoType;
+    memberInfo.fileInfoSubType?param.fileInfoSubType = memberInfo.fileInfoSubType:null;
+
+    param.department = memberInfo.department||'';
+    param.department = param.department ? param.department : this.getDefaultDepartment(param.fileInfoSubType);
+    !param.department? delete param.department:null;
+
     MyWebClient.updateFileInfo(param,
       (data, res) => {
         if (res && res.ok) {
