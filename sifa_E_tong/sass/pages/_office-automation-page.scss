@@ -58,8 +58,8 @@
     height: auto;
     overflow: hidden;
     margin:8px 0;
-    line-height: 22px;
-    font-size: 14px;
+    line-height: 1.5;
+    font-size: 0.4rem;
   }
   .checkbox_custom .checkbox{
     display: none;
@@ -193,6 +193,9 @@
     .textarea_custom .am-textarea-control{
       padding-top: 0;
       padding-bottom: 0;
+    }
+    .am-tabs-bar .am-tabs-tab{
+      font-size:0.26rem;
     }
 
   }

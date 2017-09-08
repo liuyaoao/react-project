@@ -31,10 +31,10 @@ class AddressBookPage extends React.Component {
         this.getStateFromStores = this.getStateFromStores.bind(this);
         this.onNavBarLeftClick = this.onNavBarLeftClick.bind(this);
         this.onSubmitSearch = this.onSubmitSearch.bind(this);
+        this.getAddressBookCn = this.getAddressBookCnt.bind(this);
         this.state = this.getStateFromStores();
     }
     getStateFromStores() {
-
         return {
             open: false,
             position: 'left',
@@ -49,7 +49,14 @@ class AddressBookPage extends React.Component {
             organizationsFlatDataMap:{},
             isShowEditDialog:false,
             contactInfo:{},
-            isMobile: Utils.isMobile()
+            isMobile: Utils.isMobile(),
+            perPageNum:10, //每页条数。
+            pageFrom:0,
+            pageTo:10,
+            pageOrderBy:'', //以哪个字段排序。
+            pageOrder:'',  //以降序还是升序方式排序。 'desc' or 'asc'
+            curPageNum:1, //当前页码。
+            totalCount:0, //总条数。
         };
     }
     onNavBarLeftClick = (e) => {  //navbar left click.
@@ -59,8 +66,7 @@ class AddressBookPage extends React.Component {
       // console.log(args);
       this.setState({ open: !this.state.open });
     }
-
-    componentWillMount() {
+    componentDidMount() {
       let _this = this;
       var me = UserStore.getCurrentUser() || {};
       // console.log("me info:",me);
@@ -82,7 +88,9 @@ class AddressBookPage extends React.Component {
       });
     }
 
-    getAddressBookCnt(params){
+    getAddressBookCnt = (params,otherParams)=>{
+      let {pageFrom,pageTo,pageOrderBy,pageOrder} = this.state;
+      otherParams = otherParams || {};
       (!params.secondaryDirectory || params.secondaryDirectory=="-1") ? delete params.secondaryDirectory :null;
       (!params.level3Catalog || params.level3Catalog=="-1") ? delete params.level3Catalog :null;
       if(params.organization){
@@ -94,12 +102,27 @@ class AddressBookPage extends React.Component {
       if(params.level3Catalog){
         params.level3Catalog = params.level3Catalog.split('_')[0];
       }
+      this.setState({
+        pageFrom: otherParams.to?otherParams.from:pageFrom,
+        pageTo: otherParams.to||pageTo,
+        pageOrderBy: otherParams.orderBy||pageOrderBy,
+        pageOrder: otherParams.order||pageOrder,
+      });
+      params["from"] = otherParams.to?otherParams.from:pageFrom;
+      params["to"] = otherParams.to||pageTo;
+      params["orderBy"] = otherParams.orderBy||pageOrderBy;
+      params["order"] = otherParams.order||pageOrder; //asc 或者desc
+      // console.log("通讯录-list-查询参数-:",params);
       myWebClient.getServerAddressBook(params,
         (data,res)=>{
-          let objArr = JSON.parse(res.text);
+          let parseData = JSON.parse(res.text);
           // console.log("request server addressbook error res text:",objArr);
-          objArr = addressBookUtils.parseContactsData(objArr);
-          this.setState({"addressbookData":objArr});
+          let objArr = addressBookUtils.parseContactsData(parseData.contacts);
+          this.setState({
+            "addressbookData":objArr,
+            totalCount:parseInt(parseData.count),
+            curPageNum:params["to"]/this.state.perPageNum,
+          });
         },(e, err, res)=>{
           console.log("request server addressbook error info:",err);
         });
@@ -242,17 +265,26 @@ class AddressBookPage extends React.Component {
       return this.state.isMobile?
         (<AddressListMobileComp
           addressListData={addressbookData}
+          totalCount={this.state.totalCount}
+          curPageNum={this.state.curPageNum}
           showAddEditDialog={this.showAddEditDialog}
           afterDeleteContactsCall={this.afterDeleteContactsCall}
+          organization={organization}
+          secondaryDirectory={secondaryDirectory}
+          level3Catalog={level3Catalog}
+          getAddressBookCnt={this.getAddressBookCnt}
         />):
         (<AddressListComp
           addressListData={addressbookData}
+          totalCount={this.state.totalCount}
+          curPageNum={this.state.curPageNum}
           showAddEditDialog={this.showAddEditDialog}
           afterDeleteAllContactsCall={this.afterDeleteAllContactsCall}
           afterDeleteContactsCall={this.afterDeleteContactsCall}
           organization={organization}
           secondaryDirectory={secondaryDirectory}
           level3Catalog={level3Catalog}
+          getAddressBookCnt={this.getAddressBookCnt}
         />);
     }
 

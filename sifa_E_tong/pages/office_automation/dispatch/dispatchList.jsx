@@ -110,8 +110,14 @@ class DispatchList extends React.Component {
     this.setState({detailInfo:rowData, showDetail:true,showAdd: false});
   }
 
-  backToTableListCall = ()=>{
-    this.setState({showDetail:false,showAdd: false});
+  backToTableListCall = (showType)=>{
+    let showAdd = false,showDetail = false;
+    if(showType == "showAdd"){
+      showAdd = true;
+    }else if(showType == "showDetail"){
+      showDetail = true;
+    }
+    this.setState({showAdd,showDetail });
   }
   onClickLoadMore = (evt)=>{
     let {currentpage,totalPageCount,hasMore} = this.state;

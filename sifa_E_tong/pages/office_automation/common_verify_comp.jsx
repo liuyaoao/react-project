@@ -9,11 +9,12 @@ import { createForm } from 'rc-form';
 class CommonVerifyCompRaw extends React.Component {
   constructor(props) {
       super(props);
+      this.onNavBarLeftClick = this.onNavBarLeftClick.bind(this);
       this.state = {
         tabName:"verify",
         isHide:false,
         belongDepart:'148中心',
-        selectNotionType:'部门意见',
+        selectNotionType:'',
         verifyCnt:'',//审核意见的内容。
         notionTypes:[], //意见类型
         organizationMap:{},
@@ -80,14 +81,17 @@ class CommonVerifyCompRaw extends React.Component {
       successCall: (data)=>{
         console.log("get 签报管理的阅文意见的意见类型数据:",data);
         let notionTypes = this.formatNotionTypes(data.values['yjlx']['items']);
+        let selectNotionType = notionTypes.length>0?notionTypes[0].value:"";
         this.setState({
           notionTypes,
+          selectNotionType
         });
       },
       errorCall: (res)=>{
         console.log("errorCall info--:",res.ErrorText);
         this.setState({
-          notionTypes:[{label:'部门意见',value:'部门意见'}]
+          notionTypes:[{label:'部门意见',value:'部门意见'}],
+          selectNotionType:'部门意见',
         });
       }
     });
@@ -102,7 +106,7 @@ class CommonVerifyCompRaw extends React.Component {
   }
   onPickerNotionType = (val)=>{ //选择意见类型
     console.log("onPickerNotionType:",val);
-    this.setState({selectNotionType:val});
+    this.setState({selectNotionType:val[0]});
   }
   onPickerOkPlease = (val)=>{ //选择请的方式
     this.setVerifyCnt2Arr(0,val);
@@ -146,7 +150,7 @@ class CommonVerifyCompRaw extends React.Component {
       notiontype:this.state.selectNotionType,
       content:this.state.verifyCnt,
       successCall: (data)=>{
-        console.log("save--签报管理的阅文意见:",data);
+        // console.log("save--签报管理的阅文意见:",data);
         Toast.info("意见签署成功！",2);
         this.props.backDetailCall();
       },
@@ -158,7 +162,7 @@ class CommonVerifyCompRaw extends React.Component {
   }
   onNavBarLeftClick = (e) => {
     // this.setState({isHide:true});
-    this.props.backDetailCall();
+    this.props.backDetailCall && this.props.backDetailCall();
     // setTimeout(()=>this.props.backDetailCall(),1000);
   }
   render() {

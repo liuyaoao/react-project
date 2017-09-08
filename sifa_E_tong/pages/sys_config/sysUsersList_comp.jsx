@@ -85,7 +85,7 @@ class SysUsersListComp extends React.Component {
   }
   componentDidMount(){
     let { hasOperaPermission, myInfo, record } = this.state;
-    console.log("我的信息是",myInfo);
+    // console.log("我的信息是",myInfo);
     const columns = [{
       title: '用户名',
       dataIndex: 'username'
@@ -124,7 +124,6 @@ class SysUsersListComp extends React.Component {
       dataIndex: 'operation',
       width: '15%',
       render: (text, record, index) => {
-        console.log(record);
         let hasOpr = myInfo.id === record.id ? true : false;
         return hasOperaPermission?
           (<div>

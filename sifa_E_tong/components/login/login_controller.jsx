@@ -102,17 +102,18 @@ export default class LoginController extends React.Component {
         if (verifyCode !== this.state.verifyCode) {
             this.setState({verifyCode});
         }
-        if(verifyCode.toLowerCase() != this.state.createdVerifyCode.toLowerCase()){ //验证码有错误。
-          this.setState({
-              serverError: (
-                  <FormattedMessage
-                      id='login.noVerifyCode'
-                      defaultMessage='验证码有误！'
-                  />
-              )
-          });
-					return;
-				}
+        // 判断验证码是否正确，暂时注释掉。
+        // if(verifyCode.toLowerCase() != this.state.createdVerifyCode.toLowerCase()){ //验证码有错误.
+        //   this.setState({
+        //       serverError: (
+        //           <FormattedMessage
+        //               id='login.noVerifyCode'
+        //               defaultMessage='验证码有误！'
+        //           />
+        //       )
+        //   });
+				// 	return;
+				// }
 
         // don't trim the password since we support spaces in passwords
         loginId = loginId.trim().toLowerCase();

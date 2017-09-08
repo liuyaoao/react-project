@@ -65,7 +65,7 @@ export default class DocumentSidebar extends React.Component {
 
   onMenuOpenChange = (openKeys) => {
     const state = this.state;
-    // console.log('menu onMenuOpenChange: ', openKeys);
+    console.log('menu onMenuOpenChange: ', openKeys);
     const latestOpenKey = openKeys.find(key => !(state.openKeys.indexOf(key) > -1));
     const latestCloseKey = state.openKeys.find(key => !(openKeys.indexOf(key) > -1));
 
@@ -92,6 +92,9 @@ export default class DocumentSidebar extends React.Component {
     this.props.setcurrentFileId(currentFileId);
     this.props.setcurrentFileSubId( currentFileSubId );
     this.props.setcurDepartmentId('');
+    if(fileObj.level && fileObj.level==1 && fileObj.sub.length>0){
+      return;
+    }
     this.props.handleSearch({ currentFileId,currentFileSubId });
   }
 
@@ -111,14 +114,19 @@ export default class DocumentSidebar extends React.Component {
     return ele;
   }
   render() {
-    const { departmentData, currentFileId } = this.props;
+    const { departmentData, currentFileId, currentFileSubId } = this.props;
     const sidebarMenuList =  this.getMenuItemList(departmentData);
     // console.log(this.state.openKeys);
+
+    let openKeys=[currentFileId,currentFileSubId];
+    if(this.state.openKeys && this.state.openKeys.length>0){
+      openKeys = this.state.openKeys;
+    }
     return (
           <Menu
             theme="dark"
             mode="inline"
-            openKeys={this.state.openKeys}
+            openKeys={openKeys}
             selectedKeys={[this.state.current]}
             style={{ width: 240 }}
             onOpenChange={this.onMenuOpenChange}

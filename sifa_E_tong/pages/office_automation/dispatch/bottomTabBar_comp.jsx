@@ -19,7 +19,7 @@ class BottomTabBarComp extends React.Component {
 
   shouldComponentUpdate(nextProps){
     if(this.props.formDataRaw !== nextProps.formDataRaw){
-      console.log("formDataRaw123456789：",nextProps.formDataRaw);
+      // console.log("formDataRaw123456789：",nextProps.formDataRaw);
     }
     return true;
   }

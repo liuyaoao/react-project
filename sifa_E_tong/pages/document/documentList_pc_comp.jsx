@@ -30,9 +30,9 @@ class DocumentListPC extends React.Component {
         selectedRowKeys: [],  // Check here to configure the default column
         loading: false,
         hasOperaPermission:hasOperaPermission, //是否有操作权限。
-        pagination:{pageSize:10,current:1,onChange:this.onPaginationChange},
       };
   }
+
   onSelectChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys });
   }
@@ -51,16 +51,18 @@ class DocumentListPC extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     const {currentFileId,currentFileSubId,curDepartmentId} = this.props;
-    if (nextProps.currentFileId != currentFileId || nextProps.currentFileSubId != currentFileSubId|| nextProps.curDepartmentId != curDepartmentId) {
-      this.setState({
-        pagination:{pageSize:10,current:1},
-      });
-    }
+    // if (nextProps.currentFileId != currentFileId || nextProps.currentFileSubId != currentFileSubId|| nextProps.curDepartmentId != curDepartmentId) {
+    //   this.setState({
+    //     pagination:{pageSize:10,current:1},
+    //   });
+    // }
   }
   onPaginationChange(current,pageSize){
-    this.setState({
-      pagination:{pageSize:pageSize,current:current,onChange:this.onPaginationChange},
-    });
+    let otherParams = {
+      "from":(current-1)*pageSize,
+      "to":current*pageSize,
+    };
+    this.props.handleSearch(null,otherParams);
   }
 
   render() {
@@ -178,6 +180,12 @@ class DocumentListPC extends React.Component {
       onChange: this.onSelectChange,
     };
     const hasSelected = selectedRowKeys.length > 0;
+    let pagination = { //分页组件参数配置。
+      pageSize:10,
+      current:this.props.curPageNum,
+      total:this.props.totalCount,
+      onChange:this.onPaginationChange,
+    };
 
     return (
       <div className="doc-search-list">
@@ -195,7 +203,7 @@ class DocumentListPC extends React.Component {
               </span>):null
           }
         </div>
-        <Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={this.state.pagination} />
+        {columns.length>0?(<Table rowSelection={rowSelection} columns={columns} dataSource={data} pagination={pagination}/>):null}
       </div>
     );
   }

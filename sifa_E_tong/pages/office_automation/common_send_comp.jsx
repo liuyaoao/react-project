@@ -44,13 +44,13 @@ class CommonSendComp extends React.Component {
         value:item.value
       }
     });
+    console.log("flowBranchList--:",flowBranchList);
+    console.log("flowBranch2PersonMap--:",flowBranch2PersonMap);
     this.setState({
       activeTabkey:flowBranchList[0]['value'],
       flowBranch2PersonMap,
       flowBranchList,
     });
-    console.log("flowBranchList--:",flowBranchList);
-    console.log("flowBranch2PersonMap--:",flowBranch2PersonMap);
   }
 
   onChange = (val) => {
@@ -81,7 +81,7 @@ class CommonSendComp extends React.Component {
       message: 1,  //提示方式，1为网络消息，2为手机短信
       personunids: [personunids],
       successCall: (data)=>{
-        console.log("发送成功:",data);
+        // console.log("发送成功:",data);
         Toast.info('发送成功!', 2);
         this.props.onBackToDetailCall();
       },
@@ -109,22 +109,22 @@ class CommonSendComp extends React.Component {
     let {flowBranch2PersonMap, flowBranchList} = this.state;
     const { getFieldProps } = this.props.form;
     return (
-      <div style={{minHeight:"5rem",padding:"0.2rem"}}>
+      <div style={{minHeight:"5rem",padding:"0.2rem",marginBottom:'1em'}}>
         {!this.state.showDepartment? (
           <Tabs
             defaultActiveKey={this.state.activeTabkey}
             activeKey={this.state.activeTabkey}
-            pageSize={5}
+            pageSize={3}
             onTabClick={this.handleTabClick}
             swipeable={false}>
             {flowBranchList.map((k,index) => (
               <TabPane tab={k.label} key={k.value}>
                   <div className="flex-container">
                     <div className="sub-title">
-                      <h5 className="pull-left">长沙市司法局</h5>
+                      <h5 className="pull-left">人员列表：</h5>
                     </div>
                     <div className="checkbox_list">
-                      {flowBranch2PersonMap[k.value].map(person => (
+                      {flowBranch2PersonMap[k.value] && flowBranch2PersonMap[k.value].map(person => (
                         <div key={person.unid} className="checkbox_custom">
                           <input type="checkbox" id={person.unid} data-unid={person.unid} className={"checkbox_"+k.value} />
                           <label htmlFor={person.unid}><span className="box"><i></i></span>{person.commonname}</label>

@@ -1,5 +1,4 @@
-// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
-// See License.txt for license information.
+
 import $ from 'jquery';
 
 import Post from './post.jsx';
@@ -142,7 +141,6 @@ export default class PostList extends React.Component {
             if (!this.refs.postlist) {
                 return;
             }
-
             this.wasAtBottom = this.isAtBottom();
             this.props.postListScrolled(this.isAtBottom());
             this.prevScrollHeight = this.refs.postlist.scrollHeight;

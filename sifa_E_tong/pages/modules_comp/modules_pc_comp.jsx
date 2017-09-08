@@ -9,6 +9,7 @@ import {Icon,message,notification, Button} from 'antd';
 import * as commonUtils from '../utils/common_utils.jsx';
 import LogOutComp from '../components/log_out_comp.jsx';
 import ModulesAddPcComp  from './modulesAdd_pc_comp.jsx';
+import EditUserInfoDialog from './editInfo_dialog.jsx';
 
 import logo_icon from 'images/modules_img/logo_icon.png';
 import edit_icon from 'images/modules_img/edit_icon.png';
@@ -20,6 +21,9 @@ import modify_icon from 'images/modules_img/modify_icon.png';
 import settings_icon from 'images/modules_img/settings_icon.png';
 import signin_icon from 'images/modules_img/signin_icon.png';
 import logOut_icon from 'images/modules_img/logOut_icon.png';
+import header_icon from 'images/head_boy.png';
+
+import myWebClient from 'client/my_web_client.jsx';
 
 notification.config({
   top: 68,
@@ -28,6 +32,8 @@ notification.config({
 class ModulesPcComp extends React.Component {
     constructor(props) {
         super(props);
+        this.hideAddEditDialog = this.hideAddEditDialog.bind(this);
+
         // this.handleSendLink = this.handleSendLink.bind(this);
         let delModules = (localStorage.getItem(props.localStoreKey4Modules) || '').split(',');
         delModules = commonUtils.removeNullValueOfArr(delModules);
@@ -41,11 +47,23 @@ class ModulesPcComp extends React.Component {
           showItemSum:0, //可显示的模块数。
           itemRowSum:1,
           permissionData:UserStore.getPermissionData(),
+          visibleEditModel: false,
+          myDetailInfo:{}, // 用户自己的详细信息
+          userId: '',
+          loginUserName:'',
+          loginUserNickname:'',
         };
     }
 
     componentWillMount(){
       this.refreshModules();
+      var me = UserStore.getCurrentUser() || {};
+      console.log("me info:",me);
+      this.setState({
+        userId:me.id,
+        loginUserName:me.username||'',
+        loginUserNickname:me.nickname||'',
+      })
     }
 
     refreshModules(){
@@ -199,6 +217,7 @@ class ModulesPcComp extends React.Component {
         showDelIcon:!this.state.showDelIcon,
       });
     }
+
     onClickNoticeItem = (evt)=>{ //点击了通知公告的某一条
       // console.log("onClickNoticeItem---:",evt,$(evt.currentTarget).data("unid"));
       let docunid = $(evt.currentTarget).data("unid");
@@ -220,7 +239,26 @@ class ModulesPcComp extends React.Component {
       });
     }
 
+    hideAddEditDialog() {   // 隐藏编辑的弹窗。
+      this.setState({ visibleEditModel: false });
+    }
+
+    onClickEditInfo = ()=>{
+      myWebClient.getUserInfo(this.state.userId,
+        (data,res)=>{
+          let parseData = JSON.parse(res.text);
+          // console.log("获取个人信息----：",parseData);
+          this.setState({
+            myDetailInfo:parseData||{},
+          });
+        },(e, err, res)=>{
+          console.log("request server userinfo error info:",err);
+        });
+      this.setState({visibleEditModel: true });
+    }
+
     render() {
+      const { visibleEditModel, menberInfo } = this.state;
       let objsArr = this.props.noticeListData.slice(0,5);
       let noticeListItem =[];
       noticeListItem.push(
@@ -248,6 +286,12 @@ class ModulesPcComp extends React.Component {
                         </div>
                     </div>
                     <div className='col-sm-6 col-xs-6'>
+                        <div style={{textAlign:'right',position:'absolute',right:'0',top:'-20px'}}>
+                          <a href='javascript:;' className='modules_font hover_font' style={{marginRight:'1.0em'}} onClick={this.onClickEditInfo}>
+                            <img className='' src={header_icon} style={{display:'inline-block',width: '30px',margin: '0'}}/>
+                            <span> {this.state.loginUserNickname}</span>
+                          </a>
+                        </div>
                         <div style={{textAlign:'right'}}>
                           <a href='javascript:;' className='modules_font hover_font' style={{marginRight:'1.8em'}} onClick={this.onClickEditModules}>
                             <img className='' src={edit_icon} style={{display:'inline-block',width: '30px',margin: '1.5em 0 2em'}}/>
@@ -285,6 +329,13 @@ class ModulesPcComp extends React.Component {
                 closeAddDialogCall={this.closeAddDialogCall}
                 notShowModuleIdInPC={this.props.notShowModuleIdInPC}
                 afterCloseAddDialog={this.afterCloseAddDialog}/>
+
+              <EditUserInfoDialog
+                visible={visibleEditModel}
+                initUserInfo={this.props.initUserInfo}
+                menberInfo={this.state.myDetailInfo}
+                closeDialogCall={this.hideAddEditDialog}
+                ></EditUserInfoDialog>
             </div>
         );
     }

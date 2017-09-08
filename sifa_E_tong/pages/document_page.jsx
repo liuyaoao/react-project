@@ -10,12 +10,9 @@ import MyWebClient from 'client/my_web_client.jsx';
 import LogOutComp from './components/log_out_comp.jsx';
 
 import moment from 'moment';
-
-import { SwipeAction } from 'antd-mobile';
-import { Drawer, List, NavBar, Popup, Modal as ModalAm } from 'antd-mobile';
+import { Drawer, NavBar, Modal as ModalAm } from 'antd-mobile';
 const ModalAmAlert = ModalAm.alert;
-import { Layout, Menu, Breadcrumb, Icon, Row, Col, Table, Modal, notification } from 'antd';
-const { SubMenu } = Menu;
+import { Layout, Breadcrumb, Icon,  Modal, notification } from 'antd';
 const { Header, Content, Sider, Footer } = Layout;
 const confirm = Modal.confirm;
 
@@ -60,6 +57,13 @@ class DocumentPage extends React.Component {
           departmentData: [],
           departmentFlatData:[],  //平行数组结构
           departmentFlatMap:{},
+          perPageNum:10, //每页条数。
+          pageFrom:0,
+          pageTo:10,
+          pageOrderBy:'', //以哪个字段排序。
+          pageOrder:'',  //以降序还是升序方式排序。 'desc' or 'asc'
+          curPageNum:1, //当前页码。
+          totalCount:0, //总条数。
       };
   }
   onOpenChange = (...args) => {
@@ -72,7 +76,7 @@ class DocumentPage extends React.Component {
   onClickBackToModules(){
     browserHistory.push('/modules');
   }
-  componentWillMount() {
+  componentDidMount() {
     let _this = this;
     var me = UserStore.getCurrentUser() || {};
     this.setState({loginUserName:me.username || ''});
@@ -83,6 +87,7 @@ class DocumentPage extends React.Component {
       var firstObj = departmentData[0];
       this.setState({
         currentFileId:firstObj.resourceId,
+        currentFileSubId:firstObj.sub[0].resourceId,
       });
       this.handleSearch({ currentFileId:firstObj.resourceId });
     });
@@ -112,6 +117,7 @@ class DocumentPage extends React.Component {
     );
   }
   handleSearch(paramsIdArr,otherParams) { //paramsId :{currentFileId, currentFileSubId, curDepartmentId}
+    otherParams = otherParams||{};
     let params = { //查询参数。
       fileInfoType:'',
       fileInfoSubType:'',
@@ -135,7 +141,7 @@ class DocumentPage extends React.Component {
           fileInfoSubTypeArr.push(item.resourceName);
         });
       }
-      params.fileInfoSubType = fileInfoSubTypeArr.join(',');
+      params.fileInfoSubType = fileInfoSubTypeArr.length>0?fileInfoSubTypeArr[0]:"";
       paramsIdArr.currentFileSubId = currentFileSubIdArr.join(',');
     }
 
@@ -155,15 +161,28 @@ class DocumentPage extends React.Component {
     this.setState({
       fileInfoType: params.fileInfoType,
       fileInfoSubType: params.fileInfoSubType,
-      department: params.department
+      department: params.department,
+      pageFrom: otherParams.to?otherParams.from:this.state.pageFrom,
+      pageTo: otherParams.to||this.state.pageTo,
+      pageOrderBy:otherParams.orderBy||this.state.pageOrderBy,
+      pageOrder:otherParams.order||this.state.pageOrder,
     });
     params = Object.assign({},params,otherParams||{});
+    params["from"] = otherParams.to?otherParams.from:this.state.pageFrom;
+    params["to"] = otherParams.to||this.state.pageTo;
+    params["orderBy"] = otherParams.orderBy||this.state.pageOrderBy;
+    params["order"] = otherParams.order||this.state.pageOrder; //asc 或者desc
+    // console.log("档案管理-list-查询参数-:",params);
     MyWebClient.getSearchFileInfo(params,
       (data, res) => {
         if (res && res.ok) {
-          let documentsData = JSON.parse(res.text);
-          //  console.log("documentsData-list-结果列表-:",documentsData);
-          this.setState({ documentsData });
+          let data = JSON.parse(res.text);
+          //  console.log("档案管理-list-结果列表-:",data);
+          this.setState({
+            totalCount:parseInt(data.count),
+            documentsData:data.fileinfo,
+            curPageNum:params["to"]/this.state.perPageNum,
+          });
         }
       },
       (e, err, res) => {
@@ -298,13 +317,11 @@ class DocumentPage extends React.Component {
     }
   }
   handleDeleteAllDocument(){
-    let _this = this;
+    let _this = this,params={};
     let {currentFileId,currentFileSubId,departmentFlatMap} = this.state;
-    MyWebClient.deleteFileInfoAll({
-      fileInfoType:departmentFlatMap[currentFileId].resourceName,
-      fileInfoSubType:departmentFlatMap[currentFileSubId].resourceName,
-    },
-      (data, res) => {
+    currentFileId? params.fileInfoType = departmentFlatMap[currentFileId].resourceName:null;
+    (currentFileSubId && departmentFlatMap[currentFileSubId])? params.fileInfoSubType = departmentFlatMap[currentFileSubId].resourceName:null;
+    MyWebClient.deleteFileInfoAll(params,(data, res) => {
         if (res && res.ok) {
           if (res.text === 'true') {
             _this.openNotification('success', '删除全部档案成功');
@@ -432,6 +449,8 @@ class DocumentPage extends React.Component {
     const data = documentsData;
     let docSearchPCList = (
       <DocumentListPC data={data}
+        totalCount={this.state.totalCount}
+        curPageNum={this.state.curPageNum}
         departmentData={departmentData}
         departmentFlatMap={departmentFlatMap}
         currentFileId={currentFileId}
@@ -440,11 +459,14 @@ class DocumentPage extends React.Component {
         showDeleteConfirm={this.showDeleteConfirm}
         showDeleteAllConfirm={this.showDeleteAllConfirm}
         handleShowEditModal={this.handleShowEditModal}
-        handleSearch={this.handleSearch}></DocumentListPC>
+        handleSearch={this.handleSearch}
+        ></DocumentListPC>
     )
 
     let docSearchMobileList = (//构造手机端的列表视图
       <DocumentListMobile data={data}
+        totalCount={this.state.totalCount}
+        curPageNum={this.state.curPageNum}
         departmentData={departmentData}
         departmentFlatMap={departmentFlatMap}
         currentFileId={currentFileId}
@@ -452,6 +474,7 @@ class DocumentPage extends React.Component {
         curDepartmentId={curDepartmentId}
         showDeleteConfirm={this.showDeleteConfirm}
         handleShowEditModal={this.handleShowEditModal}
+        handleSearch={this.handleSearch}
         ></DocumentListMobile>
     )
     return this.state.isMobile ? docSearchMobileList : docSearchPCList;

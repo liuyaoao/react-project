@@ -50,22 +50,28 @@ class DS_DetailComp extends React.Component {
       successCall: (data)=>{
         let formDataRaw = data.values;
         let formData = OAUtils.formatFormData(data.values);
+        console.log("发文管理的表单数据:",formData,formDataRaw);
+        if(!formData.unid){
+          Toast.info('该文件已被删除，不能处理了!', 2.5);
+        }
         this.setState({
           formData,
           formDataRaw
         });
-        console.log("get 发文管理的表单数据:",data,formData);
+        // console.log("get 发文管理的表单数据:",data,formData);
       }
     });
   }
   onNavBarLeftClick = (e) => {
     this.setState({isHide:true});
-    console.log("当前目录：", this.state.curSubTab);
-    if(this.state.curSubTab === "content"){
+    // console.log("当前目录：", this.state.curSubTab);
+    if(this.state.curSubTab == "content"){
       this.props.backToTableListCall();
     }else{
+      this.props.backToTableListCall("showDetail");
       this.setState({curSubTab:'content'});
     }
+    this.onBackToDetailCall();
   }
   onBackToDetailCall = () => {
     this.setState({curSubTab:'content',selectedTab:''});
@@ -109,7 +115,7 @@ class DS_DetailComp extends React.Component {
               formParams={this.state.formParams}
               editSaveSuccCall={this.editSaveSuccCall}
               backToTableListCall={()=>this.props.backToTableListCall()} />):null}
-            <div className="custom_tabBar">
+            {this.state.curSubTab == "content" && formData.unid?<div className="custom_tabBar">
               <BottomTabBarComp
                 hidden={false}
                 isAddNew={false}
@@ -127,8 +133,8 @@ class DS_DetailComp extends React.Component {
                     curSubTab:'send',
                     selectedTab: 'sendTab',
                   });
-                }} />
-            </div>
+                }}/>
+            </div>:null}
             {this.state.curSubTab == "send"?
               (<CommonSendComp
                   detailInfo={detailInfo}

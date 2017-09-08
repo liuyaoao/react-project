@@ -31,7 +31,7 @@ class NoticeList extends React.Component {
         listData:[],
         dataSource: dataSource.cloneWithRows([]),
         showDetail:false,
-        showAddEdit:false,
+        showAdd:false,
       };
   }
   componentWillMount(){
@@ -124,13 +124,19 @@ class NoticeList extends React.Component {
   }
   onClickOneRow = (rowData)=>{
     // console.log("通知公告 click rowData:",rowData);
-    this.setState({detailInfo:rowData, showDetail:true, showAddEdit:false});
+    this.setState({detailInfo:rowData, showDetail:true, showAdd:false});
   }
   onClickAddEdit = ()=>{
-    this.setState({showAddEdit:true, showDetail:false});
+    this.setState({showAdd:true, showDetail:false});
   }
-  backToTableListCall = ()=>{
-    this.setState({showDetail:false,showAddEdit:false});
+  backToTableListCall = (showType)=>{
+    let showAdd = false,showDetail = false;
+    if(showType == "showAdd"){
+      showAdd = true;
+    }else if(showType == "showDetail"){
+      showDetail = true;
+    }
+    this.setState({showAdd,showDetail });
   }
   onClickLoadMore = (evt)=>{
     let {currentpage,totalPageCount,hasMore} = this.state;
@@ -258,7 +264,7 @@ class NoticeList extends React.Component {
             (!this.state.isLoading && this.state.listData.length<=0)?
             <div style={{textAlign:'center'}}>暂无数据</div>:null
           }
-          {(!this.state.showAddEdit && !this.state.showDetail)?(<ListView
+          {(!this.state.showAdd && !this.state.showDetail)?(<ListView
             dataSource={this.state.dataSource}
             renderRow={listRow}
             renderSeparator={separator}
@@ -280,7 +286,7 @@ class NoticeList extends React.Component {
             {multiTabPanels}
           </Tabs>
           <WhiteSpace />
-          {this.state.showAddEdit?
+          {this.state.showAdd?
             (
               <Notice_AddEditComp
                 tokenunid={this.props.tokenunid}

@@ -27,7 +27,6 @@ const notShow_moduleId_inPC = "";
 // const notShow_moduleId_inPC = "1001"; //真正上线时用这个。
 window.timeCount = (new Date()).getTime();
 
-
 class ChooseModulesPage extends React.Component {
     constructor(props) {
         super(props);
@@ -41,7 +40,42 @@ class ChooseModulesPage extends React.Component {
             noticeListData:[],
             randomStr:'',
             oaLoginErrorText: '',
-            isMobile: Utils.isMobile()
+            isMobile: Utils.isMobile(),
+            initUserInfo: {
+              id:"",
+              allow_marketing:false,
+              auth_service:"",
+              create_at:0,
+              delete_at:0,
+              email:"",
+              email_verified:false,
+              failed_attempts:0,
+              first_name:"",
+              last_activity_at:0,
+              last_name:"",
+              last_password_update:0,
+              last_picture_update:0,
+              locale:"zh-CN",
+              mfa_active:false,
+              mfa_secret:"",
+              nickname:"",
+              notify_props:{channel:"true",desktop:"all",desktop_sound:"true",email:"true",first_name:"false",mention_keys:"","push":"mention"},
+              organizations:"",
+              password:"",
+              phone:"",
+              position:"",
+              restrictedUsernames:["all", "channel", "matterbot"],
+              roles:"system_user",
+              update_at:0,
+              username:"",
+              oaUserName:"",
+              oaPassword:"",
+              redressUserName:"",
+              redressPassword:"",
+              validUsernameChars:"^[a-z0-9\.\-_]+$",
+              passwordChange:false,
+              effective:true
+            }
         };
     }
     componentWillMount() {
@@ -196,9 +230,10 @@ class ChooseModulesPage extends React.Component {
       });
     }
     render() {
-        let {localStoreKey4Modules, allModulesData} = this.state;
+        let {localStoreKey4Modules, allModulesData,initUserInfo} = this.state;
         let finalEle = this.state.isMobile ?
             (<ModulesMobileComp
+              initUserInfo={initUserInfo}
               tokenunid={this.state.tokenunid}
               oaLoginErrorText={this.state.oaLoginErrorText}
               localStoreKey4Modules={localStoreKey4Modules}
@@ -207,6 +242,7 @@ class ChooseModulesPage extends React.Component {
               noticeListData={this.state.noticeListData}
               handleGoMatter={this.handleGoMatter} />) :
             (<ModulesPcComp
+              initUserInfo={initUserInfo}
               tokenunid={this.state.tokenunid}
               oaLoginErrorText={this.state.oaLoginErrorText}
               localStoreKey4Modules={localStoreKey4Modules}

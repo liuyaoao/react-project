@@ -34,7 +34,7 @@ class VehicleList extends React.Component {
         listData:[],
         dataSource: dataSource.cloneWithRows([]),
         showDetail:false,
-        showAddEdit:false,
+        showAdd:false,
       };
   }
   componentWillMount(){
@@ -99,13 +99,19 @@ class VehicleList extends React.Component {
   }
   onClickOneRow = (rowData)=>{
     // console.log("车辆管理 click rowData:",rowData);
-    this.setState({detailInfo:rowData, showDetail:true,showAddEdit:false});
+    this.setState({detailInfo:rowData, showDetail:true,showAdd:false});
   }
   onClickAddEdit = ()=>{
-    this.setState({showDetail:false, showAddEdit:true});
+    this.setState({showDetail:false, showAdd:true});
   }
-  backToTableListCall = ()=>{
-    this.setState({showDetail:false,showAddEdit:false});
+  backToTableListCall = (showType)=>{
+    let showAdd = false,showDetail = false;
+    if(showType == "showAdd"){
+      showAdd = true;
+    }else if(showType == "showDetail"){
+      showDetail = true;
+    }
+    this.setState({showAdd,showDetail });
   }
   updateListViewCall = ()=>{
     this.setState({
@@ -205,7 +211,7 @@ class VehicleList extends React.Component {
         {(!this.state.isLoading && this.state.listData.length<=0)?
           <div style={{textAlign:'center'}}>暂无数据</div>:null}
 
-        {(!this.state.showAddEdit && !this.state.showDetail)?(<ListView
+        {(!this.state.showAdd && !this.state.showDetail)?(<ListView
           dataSource={this.state.dataSource}
           renderRow={listRow}
           renderSeparator={separator}
@@ -228,7 +234,7 @@ class VehicleList extends React.Component {
             {multiTabPanels}
           </Tabs>
           <WhiteSpace />
-          {this.state.showAddEdit?
+          {this.state.showAdd?
             (
               <Vehicle_AddEditComp
                 tokenunid={this.props.tokenunid}

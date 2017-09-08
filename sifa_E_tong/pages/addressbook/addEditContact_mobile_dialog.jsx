@@ -22,7 +22,8 @@ const initContactInfo = {
   organization:'',
   secondaryDirectory:'',
   level3Catalog:'',
-  telephoneNumber:''
+  telephoneNumber:'',
+  landline:''
 }
 const donNeedParams = ['key'];
 
@@ -249,17 +250,36 @@ class AddEditContactMobileDialog extends React.Component {
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayout} label="公司电话短号：">
+                    <FormItem {...formItemLayout} label="集团短码：">
                       {getFieldDecorator('groupShortCode', {
                         initialValue:contactInfo.groupShortCode,
                         rules: [{
-                          required: true, message: '公司电话短号为必填项！', whitespace: true
+                          required: true, message: '集团短码为必填项！', whitespace: true
                         }],
                       })(
                         <Input type="text"/>
                       )}
                     </FormItem>
                   </Col>
+                  <Col span={24}>
+                    <FormItem {...formItemLayout} label="手机号码：">
+                      {getFieldDecorator('telephoneNumber', {
+                        initialValue:contactInfo.telephoneNumber,
+                      })(
+                        <Input type="text"/>
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={24}>
+                    <FormItem {...formItemLayout} label="座机号码：">
+                      {getFieldDecorator('landline', {
+                        initialValue:contactInfo.landline,
+                      })(
+                        <Input type="text"/>
+                      )}
+                    </FormItem>
+                  </Col>
+
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="一级目录：">
                       <Select showSearch style={{ width: '49%' }}
@@ -309,15 +329,6 @@ class AddEditContactMobileDialog extends React.Component {
                         onChange={this.handleLevel3CatalogChanged}
                         placeholder="手动填写"
                         style={{width:'48%',display:'inline-block',marginLeft:'1%'}}/>
-                    </FormItem>
-                  </Col>
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="电话：">
-                      {getFieldDecorator('telephoneNumber', {
-                        initialValue:contactInfo.telephoneNumber,
-                      })(
-                        <Input type="text"/>
-                      )}
                     </FormItem>
                   </Col>
                 </Row>

@@ -244,7 +244,7 @@ class DetailContentCompRaw extends React.Component {
               <Button type="default" style={{margin:'0.1rem auto',width:'90%'}}
                 onClick={()=>{
                   location.href = OAUtils.getMainDocumentUrl({ docunid:detailInfo.unid });
-                }}>下载正文附件</Button>
+                }}>下载正文</Button>
             </Flex.Item>
           </Flex>
           <Flex>

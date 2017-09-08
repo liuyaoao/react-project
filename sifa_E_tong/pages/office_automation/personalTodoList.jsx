@@ -4,6 +4,7 @@ import React from 'react';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import { WhiteSpace, WingBlank, Button, ListView} from 'antd-mobile';
 import {Icon} from 'antd';
+import moment from 'moment';
 
 import DS_DetailComp from './dispatch/ds_detail_comp.jsx';  //发文管理--详情页。
 import SignReportDetail from './signReport/signReportDetail_comp.jsx';  //签报管理--详情页。
@@ -16,7 +17,7 @@ class PersonalTodoList extends React.Component {
         rowHasChanged: (row1, row2) => row1 !== row2,
       });
       this.state = {
-        colsNameCn:["标题", "模块",  "性质",  "紧急程度","送文人", "发送时间"],
+        colsNameCn:["标题", "模块","性质","紧急程度","送文人", "发送时间"],
         colsNameEn:["fileTitle", "moduleName", "property","urgency","fileSender", "sendTime"],
         currentpage:1, //当前页码。
         totalPageCount:1, //总页数。
@@ -50,7 +51,10 @@ class PersonalTodoList extends React.Component {
         localStorage.setItem("sifa_e_tong_todoItemCount",data.itemcount);
         let parseData = OAUtils.formatServerListData(colsNameEn, data.values);
         let listData = this.state.listData.concat(parseData);
-        console.log("待办事项的format list data:",listData);
+        listData.sort((item1,item2)=>{
+          return moment(item2.sendTime).format("x")-moment(item1.sendTime).format("x");
+        });
+        // console.log("待办事项的format list data:",listData);
         this.setState({
           isLoading:false,
           isMoreLoading:false,
@@ -75,11 +79,17 @@ class PersonalTodoList extends React.Component {
     this.getServerListData(currentpage);
   }
   onClickOneRow = (rowData)=>{
-    console.log("待办事项 click rowData:",rowData);
+    // console.log("待办事项 click rowData:",rowData);
     this.setState({detailInfo:rowData, showDetail:true});
   }
-  backToTableListCall = ()=>{   //返回到列表页。
-    this.setState({ showDetail:false,detailInfo:{} });
+  backToTableListCall = (showType)=>{   //返回到列表页。
+    let showDetail = false;
+    if(showType == "showDetail"){
+      showDetail = true;
+      this.setState({ showDetail });
+    }else{
+      this.setState({ showDetail,detailInfo:{} });
+    }
   }
   render() {
     const separator = (sectionID, rowID) => (
@@ -107,7 +117,11 @@ class PersonalTodoList extends React.Component {
             <div style={{color:'black',fontSize:'0.33rem',fontWeight:'bold'}}>{rowData.fileTitle}</div>
             <div>送文人：<span>{rowData.fileSender}</span></div>
             <div>性质：<span>{rowData.property}</span></div>
-            <div>紧急程度：<span>{rowData.urgency}</span></div>
+            <div style={{"position":"relative", "minHeight": "21px"}}>
+              <span style={{"position": "absolute"}}>紧急程度：</span>
+              <div style={{"marginLeft": "70px"}} dangerouslySetInnerHTML={{ __html:rowData.urgency }}>
+              </div>
+            </div>
           </div>
           <div className={'list_item_left'}>
             <span className={'list_item_left_icon'} >

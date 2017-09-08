@@ -1,5 +1,3 @@
-// Copyright (c) 2016-present Mattermost, Inc. All Rights Reserved.
-// See License.txt for license information.
 
 import PostList from './components/post_list.jsx';
 import LoadingScreen from 'components/loading_screen.jsx';
@@ -248,6 +246,7 @@ export default class PostViewController extends React.Component {
             const lastPost = PostStore.getLatestPost(this.state.channel.id);
 
             if (lastPost && lastPost.create_at) {
+              console.log("lastPost:",lastPost);
                 lastViewedBottom = lastPost.create_at;
             } else {
                 lastViewedBottom = new Date().getTime();

@@ -25,15 +25,15 @@ if (NPM_TARGET === 'test') {
 }
 
 var config = {
-    entry: ['babel-polyfill', 'whatwg-fetch', './root.jsx', 'root.html'],
+    entry: ['babel-polyfill', 'whatwg-fetch', './root.jsx', 'root_build.html'],
     output: {
-        path: path.join(__dirname, './dist/static'),
+        path: path.join(__dirname, './dist_build/static'),
         publicPath: '/static/',
-        filename: '[name].15123.js',
-        chunkFilename: '[name].131367.js'
+        filename: '[name].[hash].js',
+        chunkFilename: '[name].[chunkhash].js'
     },
     // output: {
-    //     path: 'dist',
+    //     path: 'dist_build',
     //     publicPath: '/static/',
     //     filename: '[name].[hash].js',
     //     chunkFilename: '[name].[chunkhash].js'
@@ -235,7 +235,7 @@ if (TEST) {
             // filename: 'root.html',
             filename: '../index.html',
             inject: 'head',
-            template: 'root.html'
+            template: 'root_build.html'
         })
     );
     config.plugins.push(
@@ -245,8 +245,8 @@ if (TEST) {
             {from: 'images/circles.png', to: 'images'},
             {from: 'images/favicon', to: 'images/favicon'},
             {from: 'images/appIcons.png', to: 'images'},
-            {from: path.resolve(__dirname, './config'), to: path.resolve(__dirname, './dist/config')},
-            {from: path.resolve(__dirname, './pages/template'), to: path.resolve(__dirname, './dist/modle')}
+            {from: path.resolve(__dirname, './config'), to: path.resolve(__dirname, './dist_build/config')},
+            {from: path.resolve(__dirname, './pages/template'), to: path.resolve(__dirname, './dist_build/modle')}
         ])
     );
 }

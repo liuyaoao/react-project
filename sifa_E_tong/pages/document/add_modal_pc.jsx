@@ -417,7 +417,7 @@ class DocumentAddModalPC extends React.Component {
                       <Input type="textarea" placeholder="" rows={4} />
                     )}
                   </FormItem>
-                  <FormItem label="近三年年底考核结果">
+                  <FormItem label="近三年年度考核结果">
                     {getFieldDecorator('annualAssessment', {initialValue: ''})(
                       <Input type="textarea" placeholder="" rows={4} />
                     )}

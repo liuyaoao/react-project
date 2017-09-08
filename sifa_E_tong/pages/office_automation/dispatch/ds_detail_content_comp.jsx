@@ -32,7 +32,6 @@ class DS_DetailContentComp extends React.Component {
   }
   componentWillReceiveProps(nextProps){
     if(nextProps.formData.unid != this.props.formData.unid){
-      console.log("formData:",nextProps.formData);
       this.setState({
         gwlc_value:nextProps.formData.gwlc || "",
         mj_value:nextProps.formData.mj || "",
@@ -265,7 +264,7 @@ class DS_DetailContentComp extends React.Component {
               <Button type="default" style={{margin:'0.1rem auto',width:'90%'}}
                 onClick={()=>{
                   location.href = OAUtils.getMainDocumentUrl({ docunid:detailInfo.unid });
-                }}>下载正文附件</Button>
+                }}>下载正文</Button>
             </Flex.Item>
           </Flex>
 
@@ -291,14 +290,20 @@ class DS_DetailContentComp extends React.Component {
           </Flex>
           <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginTop:'0.1rem'}}/>
           <Flex>
-            <Flex.Item><InputItem placeholder="--" labelNumber={5}>领导签发:</InputItem></Flex.Item>
+            <Flex.Item>
+              <div className={'oaEdit_item_title detail_textarea_title'}>领导签发:</div>
+              <div className="textarea_container">
+                <CommonNotionComp
+                  notionList={this.state.historyNotionType2List['签发意见'] || []} />
+              </div>
+            </Flex.Item>
           </Flex>
           <Flex>
             <Flex.Item>
               <div className={'oaEdit_item_title detail_textarea_title'}>传批意见:</div>
               <div className="textarea_container">
                 <CommonNotionComp
-                  notionList={this.state.historyNotionType2List['传批意见'] || []} />
+                  notionList={this.state.historyNotionType2List['签批意见'] || []} />
               </div>
             </Flex.Item>
           </Flex>
@@ -308,7 +313,7 @@ class DS_DetailContentComp extends React.Component {
                 <div className={'oaEdit_item_title detail_textarea_title'}>局长审核意见:</div>
                 <div className="textarea_container">
                   <CommonNotionComp
-                    notionList={this.state.historyNotionType2List['局长审核意见'] || []} />
+                    notionList={this.state.historyNotionType2List['审核意见'] || []} />
                 </div>
               </div>
             </Flex.Item>
@@ -319,7 +324,7 @@ class DS_DetailContentComp extends React.Component {
                 <div className={'oaEdit_item_title detail_textarea_title'}>分管领导意见:</div>
                 <div className="textarea_container">
                   <CommonNotionComp
-                    notionList={this.state.historyNotionType2List['分管领导意见'] || []} />
+                    notionList={this.state.historyNotionType2List['审稿意见'] || []} />
                 </div>
               </div>
             </Flex.Item>
@@ -337,7 +342,7 @@ class DS_DetailContentComp extends React.Component {
                 <div className={'oaEdit_item_title detail_textarea_title'}>核稿:</div>
                 <div className="textarea_container">
                   <CommonNotionComp
-                    notionList={this.state.historyNotionType2List['部门意见'] || []} />
+                    notionList={this.state.historyNotionType2List['核稿意见'] || []} />
                 </div>
               </div>
             </Flex.Item>

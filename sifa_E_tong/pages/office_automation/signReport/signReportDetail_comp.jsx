@@ -64,7 +64,12 @@ class SignReportDetail extends React.Component {
   }
 
   onNavBarLeftClick = (e) => {
-    this.props.backToTableListCall();
+    if(this.state.curSubTab == "content"){
+      this.props.backToTableListCall();
+    }else{
+      this.props.backToTableListCall("showDetail");
+    }
+    this.onBackDetailCall();
   }
 
   onBackDetailCall = ()=>{

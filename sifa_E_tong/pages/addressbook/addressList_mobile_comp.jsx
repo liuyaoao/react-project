@@ -27,7 +27,6 @@ class AddressListMobileComp extends React.Component {
         isModalOpen:false,
         permissionData:permissionData,
         hasOperaPermission:hasOperaPermission, //是否有操作权限。
-        currentPage:1, //当前页。
       };
   }
 
@@ -37,9 +36,6 @@ class AddressListMobileComp extends React.Component {
     window.addEventListener("popstate", this.hidePopup);
   }
   componentWillReceiveProps(nextProps){
-    if(nextProps.addressListData.length != this.props.addressListData.length){
-      this.setState({currentPage:1});
-    }
   }
   onClickDeleteContact = (text,record)=>{
   }
@@ -97,20 +93,32 @@ class AddressListMobileComp extends React.Component {
   //   );
   // }
   onClickPrePage = ()=>{ //上一页
-    let currentPage = this.state.currentPage;
+    let currentPage = this.props.curPageNum;
     if(currentPage > 1){
-      this.setState({
-        currentPage:currentPage-1,
-      });
+      let otherParams = {
+        "from":(currentPage-2)*10,
+        "to":(currentPage-1)*10,
+      };
+      this.props.getAddressBookCnt({
+        organization:this.props.organization,
+        secondaryDirectory:this.props.secondaryDirectory,
+        level3Catalog:this.props.level3Catalog,
+      },otherParams);
     }
   }
   onClickNextPage = ()=>{ //下一页
-    let currentPage = this.state.currentPage;
-    const pageCount = Math.ceil(this.props.addressListData.length/10);
+    let currentPage = this.props.curPageNum;
+    const pageCount = Math.ceil(this.props.totalCount/10);
     if(currentPage < pageCount){
-      this.setState({
-        currentPage:currentPage+1,
-      });
+      let otherParams = {
+        "from":(currentPage)*10,
+        "to":(currentPage+1)*10,
+      };
+      this.props.getAddressBookCnt({
+        organization:this.props.organization,
+        secondaryDirectory:this.props.secondaryDirectory,
+        level3Catalog:this.props.level3Catalog,
+      },otherParams);
     }
   }
   getTelephoneDialEles= (groupShortCode, telephoneNumber)=>{ //构造可直接拨号的视图。
@@ -172,11 +180,7 @@ class AddressListMobileComp extends React.Component {
   }
 
   render() {
-    const { currentPage } = this.state;
     const { addressListData } = this.props;
-    const totalCount = addressListData.length;
-    const pageCount = Math.ceil(addressListData.length/10);
-    let curPageData = addressListData.slice(10*(currentPage-1), 10*currentPage);
 
     let cls_name = "addressTableList " + this.props.className;
     return (
@@ -190,7 +194,7 @@ class AddressListMobileComp extends React.Component {
         </div>
         <div className='addressbook_list mobile_addressbook_list' style={{width:'100%'}}>
           <List style={{ margin: '0.1rem 0', backgroundColor: 'white' }}>
-            {curPageData.map((record, index) => (
+            {addressListData.map((record, index) => (
               <SwipeAction key={index} style={{ backgroundColor: '#f3f3f3' }}
                 autoClose
                 disabled={this.state.hasOperaPermission ? false : true}
@@ -219,8 +223,9 @@ class AddressListMobileComp extends React.Component {
                       <div className="member_name">
                         <span>{record.userName}</span>
                         </div>
-                        <div className="member_email"><span>电话短号：</span>{record.groupShortCode}</div>
-                        <div className="member_phone"><span>电话号码：</span>{record.telephoneNumber}</div>
+                        <div className="member_email"><span>集团短码：</span>{record.groupShortCode}</div>
+                        <div className="member_phone"><span>手机号码：</span>{record.telephoneNumber}</div>
+                        <div className="member_phone"><span>座机号码：</span>{record.landline}</div>
                       </div>
                       <div className="addressbook_right">
                         {this.getTelephoneDialEles(record.groupShortCode, record.telephoneNumber)}
@@ -237,7 +242,7 @@ class AddressListMobileComp extends React.Component {
             <Button type="default" onClick={this.onClickPrePage}><Icon type="double-left" /> 上一页</Button>
           </div>
           <div className="page_num">
-            <span>{pageCount>0?currentPage:0}</span>/<span>{pageCount}</span>
+            <span>{this.props.totalCount>0?this.props.curPageNum:0}</span>/<span>{Math.ceil(this.props.totalCount/10)}</span>
           </div>
           <div className="next_page">
             <Button type="default" onClick={this.onClickNextPage}>下一页<Icon type="double-right" /></Button>

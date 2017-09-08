@@ -24,6 +24,7 @@ class MyWebClient {
         // this.url = 'http://220.168.30.10:10080'; //192.168.9.81:10080 , 220.168.30.10:10080
         // this.urlVersion = '';
         this.urlVersion = '/api/v3';
+        this.urlVersion4 = '/api/v4';
         this.defaultHeaders = {
             'X-Requested-With': 'XMLHttpRequest'
             // 'Access-Control-Allow-Origin':'*'
@@ -68,6 +69,9 @@ class MyWebClient {
     }
     getUserRoute() {
         return `${this.url}${this.urlVersion}/users`;
+    }
+    getUserRouteV4(){
+      return `${this.url}${this.urlVersion4}/users`;
     }
     getContactsImportUrl(){
       return `${this.url}${this.urlVersion}/import/contacts`;
@@ -596,7 +600,15 @@ class MyWebClient {
           end(this.handleResponse.bind(this, 'deleteBlacklistUser', success, error));
     }
 
-
+    // get user info
+    getUserInfo(userId, success, error) {
+        request.
+          get(`${this.getUserRouteV4()}/${userId}`).
+          set(this.defaultHeaders).
+          type('application/json').
+          accept('application/json').
+          end(this.handleResponse.bind(this, 'getUserInfo', success, error));
+    }
 }
 
 var myWebClient = new MyWebClient();

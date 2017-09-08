@@ -110,8 +110,14 @@ class SignReportList extends React.Component {
   onClickAddNew = ()=>{
     this.setState({showAdd:true,showDetail:false});
   }
-  backToTableListCall = ()=>{   //返回到列表页。
-    this.setState({showAdd:false,showDetail:false });
+  backToTableListCall = (showType)=>{   //返回到列表页。
+    let showAdd = false,showDetail = false;
+    if(showType == "showAdd"){
+      showAdd = true;
+    }else if(showType == "showDetail"){
+      showDetail = true;
+    }
+    this.setState({showAdd,showDetail });
   }
   updateListViewCall = ()=>{ //跟新列表。
     this.setState({

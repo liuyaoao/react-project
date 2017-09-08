@@ -31,7 +31,6 @@ class AddressListComp extends React.Component {
         columns:[],
         permissionData:permissionData,
         hasOperaPermission:hasOperaPermission, //是否有操作权限。
-        pagination:{pageSize:10,current:1,onChange:this.onPaginationChange},
       };
   }
 
@@ -52,8 +51,9 @@ class AddressListComp extends React.Component {
                     <a href="javascript:;" onClick={()=>{this.showDeleteConfirmDialog(record)}} style={{color:'red',marginLeft:'15px'}}><Icon type="delete" />删除</a>
                   </div>):null}
                 </div>
-                <div className="member_email"><span>电话短码：</span>{record.groupShortCode}</div>
-                <div className="member_phone"><span>电话号码：</span>{record.telephoneNumber}</div>
+                <div className="member_email"><span>集团短码：</span>{record.groupShortCode}</div>
+                <div className="member_phone"><span>手机号码：</span>{record.telephoneNumber}</div>
+                <div className="member_phone"><span>座机号码：</span>{record.landline}</div>
             </div>
           </div>)
     }];
@@ -65,22 +65,21 @@ class AddressListComp extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { organization, secondaryDirectory, level3Catalog } = this.props;
-
-    if (nextProps.organization != organization || nextProps.secondaryDirectory != secondaryDirectory|| nextProps.level3Catalog != level3Catalog) {
-      this.setState({
-        pagination:{pageSize:10,current:1},
-      });
-    }
   }
 
   onPaginationChange(current,pageSize){
-    this.setState({
-      pagination:{pageSize:pageSize,current:current,onChange:this.onPaginationChange},
-    });
+    let otherParams = {
+      "from":(current-1)*pageSize,
+      "to":current*pageSize,
+    };
+    this.props.getAddressBookCnt({
+      organization:this.props.organization,
+      secondaryDirectory:this.props.secondaryDirectory,
+      level3Catalog:this.props.level3Catalog,
+    },otherParams);
   }
 
   onClickDeleteContact = (text,record)=>{
-
   }
   onSelectChange = (selectedRowKeys) => {
     // console.log('selectedRowKeys changed: ', selectedRowKeys);
@@ -157,6 +156,12 @@ class AddressListComp extends React.Component {
     };
     const hasSelected = selectedRowKeys.length > 0;
     let cls_name = "addressTableList " + this.props.className;
+    let pagination = { //分页组件参数配置。
+      pageSize:10,
+      current:this.props.curPageNum,
+      total:this.props.totalCount,
+      onChange:this.onPaginationChange,
+    };
     return (
       <div className={cls_name}>
         <div style={{ marginBottom: 12 }}>
@@ -189,7 +194,7 @@ class AddressListComp extends React.Component {
             columns={columns}
             showHeader={false}
             dataSource={addressListData}
-            pagination={this.state.pagination} />
+            pagination={pagination} />
         </div>
       </div>
     );
@@ -197,7 +202,7 @@ class AddressListComp extends React.Component {
 }
 
 AddressListComp.defaultProps = {
-  iconArr : [avatorIcon_man,avatorIcon_woman, avatorIcon_man, avatorIcon_man,avatorIcon_man,avatorIcon_woman,avatorIcon_man,avatorIcon_man, avatorIcon_man,avatorIcon_man,avatorIcon_man,avatorIcon_man]
+  iconArr : [avatorIcon_man,avatorIcon_man,avatorIcon_man,avatorIcon_man, avatorIcon_man, avatorIcon_man,avatorIcon_man,avatorIcon_man,avatorIcon_man,avatorIcon_man, avatorIcon_man,avatorIcon_man,avatorIcon_man,avatorIcon_man]
 };
 
 AddressListComp.propTypes = {

@@ -66,7 +66,8 @@ class SuperviseDetail extends React.Component {
     });
   }
   onNavBarLeftClick = (e) => {
-    this.props.backToTableListCall();
+    this.state.curSubTab=="content"?this.props.backToTableListCall():this.props.backToTableListCall("showDetail");
+    this.onBackDetailCall();
   }
   onBackDetailCall = ()=>{
     this.setState({curSubTab:'content',selectedTab:''});

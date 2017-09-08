@@ -26,7 +26,8 @@ const initContactInfo = {
   organization:'',
   secondaryDirectory:'',
   level3Catalog:'',
-  telephoneNumber:''
+  telephoneNumber:'',
+  landline:''
 }
 const donNeedParams = ['key'];
 
@@ -256,9 +257,30 @@ class AddEditContactDialog extends React.Component {
                 </FormItem>
               </Col>
               <Col span={24}>
-                <FormItem {...formItemLayout} label="公司电话短号">
+                <FormItem {...formItemLayout} label="集团短码">
                   {getFieldDecorator('groupShortCode', {
                     initialValue:contactInfo.groupShortCode,
+                    rules: [{
+                      required: true, message: '集团短码为必填项！', whitespace: true
+                    }],
+                  })(
+                    <Input/>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={24}>
+                <FormItem {...formItemLayout} label="手机号码">
+                  {getFieldDecorator('telephoneNumber', {
+                    initialValue:contactInfo.telephoneNumber,
+                  })(
+                    <Input/>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={24}>
+                <FormItem {...formItemLayout} label="座机号码">
+                  {getFieldDecorator('landline', {
+                    initialValue:contactInfo.landline,
                   })(
                     <Input/>
                   )}
@@ -332,18 +354,6 @@ class AddEditContactDialog extends React.Component {
                 </FormItem>
               </Col>
 
-              <Col span={24}>
-                <FormItem {...formItemLayout} label="电话">
-                  {getFieldDecorator('telephoneNumber', {
-                    initialValue:contactInfo.telephoneNumber,
-                    rules: [{
-                      required: true, message: '电话号码为必填项！', whitespace: true
-                    }],
-                  })(
-                    <Input/>
-                  )}
-                </FormItem>
-              </Col>
 
             </Row>
           </Form>
