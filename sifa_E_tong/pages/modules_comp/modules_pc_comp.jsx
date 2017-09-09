@@ -58,7 +58,7 @@ class ModulesPcComp extends React.Component {
     componentWillMount(){
       this.refreshModules();
       var me = UserStore.getCurrentUser() || {};
-      console.log("me info:",me);
+      // console.log("me info:",me);
       this.setState({
         userId:me.id,
         loginUserName:me.username||'',
@@ -71,7 +71,6 @@ class ModulesPcComp extends React.Component {
       // console.log("refreshModules--delModules--:",delModules);
       delModules = commonUtils.removeNullValueOfArr(delModules);
       let showItemSum = this.props.allModulesData.length - delModules.length;
-      console.log("showItemSum1:",showItemSum);
       this.setState({
         "curDelModuleIds":delModules,
         "showItemSum":showItemSum,
@@ -226,7 +225,7 @@ class ModulesPcComp extends React.Component {
         moduleName:"信息发布",
         docunid:docunid,
         successCall: (data)=>{
-          console.log("get 通知公告的自定义附件列表 data:",data);
+          // console.log("get 通知公告的自定义附件列表 data:",data);
           if(data.values.filelist.length>0){
             let attachItem = data.values.filelist[0];
             let downloadUrl = OAUtils.getCustomAttachmentUrl({

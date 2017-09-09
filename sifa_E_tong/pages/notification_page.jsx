@@ -102,7 +102,7 @@ class NotificationPage extends React.Component {
                 });
                 this.getServerOrganData(values.organId);
               }
-              console.log("矫正系统的登录返回---：",res,state);
+              // console.log("矫正系统的登录返回---：",res,state);
           }
       );
     }
@@ -119,7 +119,7 @@ class NotificationPage extends React.Component {
              res = JSON.parse(res);
           }catch(e){
           }
-          console.log("矫正系统的获取的组织机构返回---：",res,state);
+          // console.log("矫正系统的获取的组织机构返回---：",res,state);
           if(res.respCode == "0"){
               let organList = res.values;
               this.setState({ organListData:organList });
@@ -156,7 +156,7 @@ class NotificationPage extends React.Component {
              res = JSON.parse(res);
           }catch(e){
           }
-          console.log("矫正系统的获取通知公告的返回---：",res,state);
+          // console.log("矫正系统的获取通知公告的返回---：",res,state);
           if(res.respCode != "0"){
             this.state.isMobile ?
               Toast.info(res.respMsg, 2, null, false):

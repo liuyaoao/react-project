@@ -86,11 +86,11 @@ class ChooseModulesPage extends React.Component {
       let me = UserStore.getCurrentUser() || {};
       if(me.oaUserName){
         OAUtils.loginOASystem({oaUserName:me.oaUserName,oaPassword:me.oaPassword}, (res)=>{ //登录OA系统获取认证id。
-          console.log("successCall:"+res);
+          // console.log("successCall:"+res);
           this.setState({tokenunid:res.values.tockenunid});
           this.getServerListData(res.values.tockenunid);
         },(res)=>{
-          console.log("errorCall:"+res);
+          // console.log("errorCall:"+res);
           this.setState({oaLoginErrorText: res.ErrorText});
         });
       }

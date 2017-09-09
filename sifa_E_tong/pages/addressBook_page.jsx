@@ -138,7 +138,7 @@ class AddressBookPage extends React.Component {
       this.getServerDirectoryData();
     }
     onSubmitSearch(value){
-      console.log("onSubmitSearch:",value);
+      // console.log("onSubmitSearch:",value);
       let params = {
         "organization":this.state.organization,
         "secondaryDirectory":this.state.secondaryDirectory,

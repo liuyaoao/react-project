@@ -79,25 +79,20 @@ class ModifyUserPasswordDialog extends React.Component {
     });
     params.password ? (params.password = commonUtils.Base64Encode(params.password)) : null;
     // params.confirmPassword ? (params.confirmPassword = commonUtils.Base64Encode(params.confirmPassword)) : null;
-    console.log("新增or修改 密码的参数--：",params);
+    // console.log("新增or修改 密码的参数--：",params);
     return params;
   }
-
   handleAfterModifySucc = ()=>{
     this.setState({ confirmDirty: false });
     this.props.afterModifyPasswordCall();
     this.closeDialog();
   }
-
   handleCancel = () => {
     this.setState({ visible: false,loading:false });
     this.props.closeDialogCall();
   }
-
-
   componentWillReceiveProps(nextProps){
-     console.log("componentWillReceiveProps--:",nextProps);
-
+    //  console.log("componentWillReceiveProps--:",nextProps);
     if(nextProps.visible && nextProps.menberInfo){
       this.setState({menberInfo:nextProps.menberInfo});
     }

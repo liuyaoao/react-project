@@ -17,7 +17,7 @@ notification.config({
   top: 68,
   duration: 3
 });
-const defaultUserPassword = "qdueb3r9g7n4u";
+const defaultUserPassword = "qd06ueb3r9g7n4u";
 
 class EditUserInfoDialog extends React.Component {
   constructor(props) {
@@ -69,11 +69,12 @@ class EditUserInfoDialog extends React.Component {
   }
   realSubmit(){
     let submitInfo = this.props.form.getFieldsValue();
-    console.log("修改用户自己信息的submitInfo参数--：",submitInfo);
+    // console.log("修改用户自己信息的submitInfo参数--：",submitInfo);
+    submitInfo.id=this.props.menberInfo.id;
     // submitInfo.organizations = this.getOrganizationsStr();
     let params = Object.assign({}, this.props.initUserInfo, this.props.menberInfo,submitInfo);
+    this.onlyUpdatePassword(submitInfo);
     params = this.parseSendServerParams(params);
-
     params = this.encryptOtherPassword(params);
     myWebClient.addOrEditUser("update",params,
       (data,res)=>{
@@ -86,6 +87,20 @@ class EditUserInfoDialog extends React.Component {
         console.log("addNewUser e--res--: ",e,res);
       });
   }
+  onlyUpdatePassword(params){// 仅修改密码
+    if(params.password!=params.confirmPassword || params.password==defaultUserPassword){
+      return;
+    }
+    let newPassword = {
+      password:commonUtils.Base64Encode(params.password),
+      userid:params.id
+    };
+    myWebClient.modifyUserPassword(newPassword,
+      (data,res)=>{
+      },(e,err,res)=>{
+        this.setState({ confirmDirty: false });
+      });
+  }
   handleAfterAddEditSucc = ()=>{
     this.setState({ confirmDirty: false });
     this.props.afterAddEditUserCall && this.props.afterAddEditUserCall();
@@ -93,14 +108,12 @@ class EditUserInfoDialog extends React.Component {
   }
   parseSendServerParams(params){
     let {menberInfo} = this.state;
-    if(defaultUserPassword==params.password){
-      params.password = '';
-    }
+    params.password = '';
     this.state.donNeedParams.map((val)=>{
       delete params[val];
       return '';
     });
-    console.log("新增or修改用户信息的参数--：",params);
+    // console.log("新增or修改用户信息的参数--：",params);
     return params;
   }
   encryptOtherPassword(params){ //加密所有密码

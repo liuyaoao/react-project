@@ -141,7 +141,7 @@ class AddEditSysConfigDialog extends React.Component {
   }
   realSubmit(){
     let submitInfo = this.props.form.getFieldsValue();
-    console.log("新增or修改用户信息的submitInfo参数--：",submitInfo);
+    // console.log("新增or修改用户信息的submitInfo参数--：",submitInfo);
     submitInfo.organizations = this.getOrganizationsStr();
     let params = Object.assign({},initUserInfo,this.state.menberInfo,submitInfo);
     params = this.parseSendServerParams(params);
@@ -173,8 +173,6 @@ class AddEditSysConfigDialog extends React.Component {
         this.setState({ confirmDirty: false });
         this.closeDialog();
         notification.error({message: desc+'用户失败！'});
-        console.log("addNewUser e: ",e);
-        console.log("addNewUser res: ",res);
       });
   }
 
@@ -191,7 +189,7 @@ class AddEditSysConfigDialog extends React.Component {
       return item.value;
     });
     params.organizations = organiSelectValues.join(',');
-    console.log("新增or修改用户信息的参数--：",params);
+    // console.log("新增or修改用户信息的参数--：",params);
     return params;
   }
   encryptAllPassword(params,isAdd){ //加密所有密码

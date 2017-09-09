@@ -52,7 +52,7 @@ class LoginRecordPage extends React.Component {
       var me = UserStore.getCurrentUser() || {};
       this.setState({loginUserName:me.username || ''});
       OAUtils.loginOASystem({oaUserName:me.oaUserName,oaPassword:me.oaPassword}, (res)=>{ //登录OA系统获取认证id。
-        console.log("get OA login res:",res);
+        // console.log("get OA login res:",res);
         this.setState({tokenunid:res.values.tockenunid});
       });
     }
@@ -60,7 +60,7 @@ class LoginRecordPage extends React.Component {
         browserHistory.push('/');
     }
     onOpenChange = (...args) => { //drawer open changed call.
-      console.log(args);
+      // console.log(args);
       this.setState({ open: !this.state.open });
     }
     afterChooseMenuItemCall = (key)=>{

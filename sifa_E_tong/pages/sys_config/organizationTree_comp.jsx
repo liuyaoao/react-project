@@ -44,9 +44,8 @@ class OrganizationTreeComp extends React.Component {
     });
     return ele;
   }
-
   onSelectTreeItem(val){
-    console.log("onorganization——SelectTreeItem--:",val);//val:是个数组，被选中的id.
+    // console.log("onorganization——SelectTreeItem--:",val);//val:是个数组，被选中的id.
     let orga = this.props.organizationsFlatDataMap[val[0]] || {};
     if(orga.name == "administrator" || orga.name == "Administrator"){
       notification.warning({message: "该组织不能编辑和删除！"});
@@ -54,12 +53,10 @@ class OrganizationTreeComp extends React.Component {
     }
     this.props.getSelectCurOrganization(orga);
   }
-
   onExpandTree(expandedKeys,obj,node){
     // console.log("this.state.expandedKeys--:",expandedKeys);
     this.setState({expandedKeys:expandedKeys});
   }
-
   render() {
     const { organizationsData } = this.props;
     let treeNodes = this.getOrganiTreeNodes(organizationsData || []);
