@@ -102,6 +102,7 @@ class ModulesMobileComp extends React.Component {
       this.refreshModules();
     }
     getCurModulesItem = (allModulesData)=>{
+      console.log('permissionData:',this.state.permissionData);
       let modulesItem = allModulesData.map((item,index)=>{
         if(this.state.curDelModuleIds.indexOf(item.id) == -1){ //筛选出没被删除的。
           let backColor = item.backColor;
@@ -109,9 +110,9 @@ class ModulesMobileComp extends React.Component {
           if(item.canSetPrivilege && !this.state.permissionData[item.linkTo] ){
             canLinkTo = false;
             backColor = '#6f736e'; //如果该模块可设置权限，但是该用户现在没有进入这个模块的权限时，
-          }else if(item.name == "OA系统" && !(UserStore.getCurrentUser() || {}).oaUserName || this.props.oaLoginErrorText){
+          }else if(item.name == "OA系统" && (!(UserStore.getCurrentUser()||{}).oaUserName || this.props.oaLoginErrorText)){
             canLinkTo = false;
-          }else if(item.name == "矫正系统" && !(UserStore.getCurrentUser() || {}).redressUserName){
+          }else if(item.name == "矫正系统" && !(UserStore.getCurrentUser()||{}).redressUserName){
             canLinkTo = false;
           }
           if(canLinkTo && item.tagName == "Link"){

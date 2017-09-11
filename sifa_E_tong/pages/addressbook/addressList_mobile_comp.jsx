@@ -121,18 +121,14 @@ class AddressListMobileComp extends React.Component {
       },otherParams);
     }
   }
-  getTelephoneDialEles= (groupShortCode, telephoneNumber)=>{ //构造可直接拨号的视图。
+  getTelephoneDialEles= (groupShortCode, telephoneNumber, landline)=>{ //构造可直接拨号的视图。
     let teleStr = '';
-    if(!groupShortCode && !telephoneNumber){
-
+    if(!groupShortCode && !telephoneNumber &&!landline){
       return;
-
     }else{
-
       if(groupShortCode){
         if(teleStr){
           teleStr += ',' + groupShortCode;
-
         }else{
           teleStr = groupShortCode;
         }
@@ -143,6 +139,13 @@ class AddressListMobileComp extends React.Component {
           teleStr += ',' + telephoneNumber;
         }else{
           teleStr = telephoneNumber;
+        }
+      }
+      if(landline){
+        if(teleStr){
+          teleStr += ',' + landline;
+        }else{
+          teleStr = landline;
         }
       }
     }
@@ -228,7 +231,7 @@ class AddressListMobileComp extends React.Component {
                         <div className="member_phone"><span>座机号码：</span>{record.landline}</div>
                       </div>
                       <div className="addressbook_right">
-                        {this.getTelephoneDialEles(record.groupShortCode, record.telephoneNumber)}
+                        {this.getTelephoneDialEles(record.groupShortCode, record.telephoneNumber, record.landline)}
                       </div>
                     </div>
                 </List.Item>
@@ -254,7 +257,7 @@ class AddressListMobileComp extends React.Component {
 }
 
 AddressListMobileComp.defaultProps = {
-  iconArr : [avatorIcon_man,avatorIcon_woman, avatorIcon_man, avatorIcon_man,avatorIcon_man,avatorIcon_woman,avatorIcon_man,avatorIcon_man, avatorIcon_man,avatorIcon_man,avatorIcon_man,avatorIcon_man]
+  iconArr : [avatorIcon_man,avatorIcon_man,avatorIcon_man,avatorIcon_man, avatorIcon_man, avatorIcon_man,avatorIcon_man,avatorIcon_man,avatorIcon_man,avatorIcon_man, avatorIcon_man,avatorIcon_man,avatorIcon_man,avatorIcon_man]
 };
 
 AddressListMobileComp.propTypes = {
