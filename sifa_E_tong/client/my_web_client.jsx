@@ -562,6 +562,7 @@ class MyWebClient {
 
     // blacklist
     getBlacklist(offset, limit, success, error) {
+      this.defaultHeaders[HEADER_TOKEN] = this.getToken();
         request.
           post(`${this.getBlacklistRoute()}/${offset}/${limit}`).
           set(this.defaultHeaders).
@@ -572,6 +573,7 @@ class MyWebClient {
 
     // not in blacklist
     getNotInBlacklist(offset, limit, success, error) {
+      this.defaultHeaders[HEADER_TOKEN] = this.getToken();
         request.
           post(`${this.getBlacklistRoute()}/not_in/${offset}/${limit}`).
           set(this.defaultHeaders).
@@ -582,6 +584,7 @@ class MyWebClient {
 
     // add blacklist user
     addBlacklistUser(userId, success, error) {
+      this.defaultHeaders[HEADER_TOKEN] = this.getToken();
         request.
           get(`${this.getBlacklistRoute()}/${userId}/add`).
           set(this.defaultHeaders).
@@ -592,6 +595,7 @@ class MyWebClient {
 
     // delete blacklist user
     deleteBlacklistUser(userId, success, error) {
+      this.defaultHeaders[HEADER_TOKEN] = this.getToken();
         request.
           get(`${this.getBlacklistRoute()}/${userId}/delete`).
           set(this.defaultHeaders).
@@ -602,6 +606,7 @@ class MyWebClient {
 
     // get user info
     getUserInfo(userId, success, error) {
+      this.defaultHeaders[HEADER_TOKEN] = this.getToken();
         request.
           get(`${this.getUserRouteV4()}/${userId}`).
           set(this.defaultHeaders).

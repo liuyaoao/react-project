@@ -10,11 +10,9 @@ import {Icon,Row, Col,Button as ButtonPc, Checkbox,Spin} from 'antd';
 
 import * as commonUtils from '../utils/common_utils.jsx';
 import LogOutComp from '../components/log_out_comp.jsx'
-import EditUserInfoDialog from './editInfo_dialog.jsx';
 
 import signup_logo from 'images/signup_logo.png';
 import notice_icon from 'images/modules_img/notice_icon.png';
-import header_icon from 'images/head_boy.png';
 
 const isIPhone = new RegExp('\\biPhone\\b|\\biPod\\b', 'i').test(window.navigator.userAgent);
 let maskProps;
@@ -28,9 +26,6 @@ if (isIPhone) {
 class ModulesMobileComp extends React.Component {
     constructor(props) {
         super(props);
-        this.hideAddEditDialog = this.hideAddEditDialog.bind(this);
-
-        // this.handleSendLink = this.handleSendLink.bind(this);
         let delModules = (localStorage.getItem(props.localStoreKey4Modules) || '').split(',');
         delModules = commonUtils.removeNullValueOfArr(delModules);
         (delModules.indexOf(props.notShowModuleIdInMobile) == -1)?
@@ -44,8 +39,6 @@ class ModulesMobileComp extends React.Component {
           permissionData:UserStore.getPermissionData(),
           loadingModuleName:"", //正在加载的模块名
           todoTotalItemCount:0, //OA待办事项的总条数。
-          visibleEditModel: false,
-          myDetailInfo:{},
           loginUserName:'',
           loginUserNickname:'',
           userId:'',
@@ -102,7 +95,7 @@ class ModulesMobileComp extends React.Component {
       this.refreshModules();
     }
     getCurModulesItem = (allModulesData)=>{
-      console.log('permissionData:',this.state.permissionData);
+      // console.log('permissionData:',this.state.permissionData);
       let modulesItem = allModulesData.map((item,index)=>{
         if(this.state.curDelModuleIds.indexOf(item.id) == -1){ //筛选出没被删除的。
           let backColor = item.backColor;
@@ -155,7 +148,10 @@ class ModulesMobileComp extends React.Component {
                   <img className='' src={item.iconName} style={{}}/>
                   {this.state.loadingModuleName==item.name?<Spin size="large" className="loading_spin_cnt"/>:null}
                 </a>
-                <span>{item.name}</span>
+                <span>
+                  {item.name}
+                  {item.name=="群聊"?<Badge style={{width:'26px'}} text={this.props.unViewedCount} overflowCount={99} />:null}
+                </span>
                 {this.state.showDelIcon?(<ButtonPc shape="circle"
                   className={'moduleDelIcon'}
                   type={'default'}
@@ -225,10 +221,10 @@ class ModulesMobileComp extends React.Component {
         this.showPopup();
       }
       //显示loading信息
-      if(this.state.loadingModuleName!=""){
-        e.stopPropagation();
-        return false;
-      }
+      // if(this.state.loadingModuleName!=""){
+      //   e.stopPropagation();
+      //   return false;
+      // }
       moduleName == "添加"?null:this.setState({loadingModuleName:moduleName});
     }
     onNavBarLeftClick = (e)=>{
@@ -327,24 +323,6 @@ class ModulesMobileComp extends React.Component {
       });
     }
 
-    hideAddEditDialog() {   // 隐藏编辑的弹窗。
-      this.setState({ visibleEditModel: false });
-    }
-
-    onClickEditInfo = ()=>{
-      myWebClient.getUserInfo(this.state.userId,
-        (data,res)=>{
-          let parseData = JSON.parse(res.text);
-          // console.log("获取个人信息----：",parseData);
-          this.setState({
-            myDetailInfo:parseData||{},
-          });
-        },(e, err, res)=>{
-          console.log("request server userinfo error info:",err);
-        });
-      this.setState({visibleEditModel: true });
-    }
-
     render() {
       const { visibleEditModel, menberInfo } = this.state;
       let objsArr = this.props.noticeListData.slice(0,5);
@@ -372,18 +350,12 @@ class ModulesMobileComp extends React.Component {
                 ]}
                 onLeftClick={this.onNavBarLeftClick}
                 rightContent={[
-                  <div key={'modify_user_info99'}
-                    onClick={this.onClickEditInfo}
-                    style={{textAlign:'right',cursor:"pointer"}}>
-                    <img className='' src={header_icon} style={{display:'inline-block',width: '30px',margin: '0'}}/>
-                  </div>,
                   <LogOutComp key={'logoutcomp_123456'}><span style={{fontSize:'1em'}} key={909}>退出</span></LogOutComp>
                 ]} >
                 <img width="35" height="35" src={signup_logo}/>司法E通
               </NavBar>
               <div className='modules_content modules_content_mobile' style={{}}>
                 {modulesItem}
-
               </div>
                 <div className="row modules_bottom_mobile" style={{height:'220px',margin:'0 auto'}}>
                   <div className="inner">
@@ -400,13 +372,6 @@ class ModulesMobileComp extends React.Component {
                   <span>ICP备案10200870号</span>
                   <span>技术支持：湖南必和必拓科技发展公司</span>
                 </div>*/}
-
-                <EditUserInfoDialog
-                  visible={visibleEditModel}
-                  initUserInfo={this.props.initUserInfo}
-                  menberInfo={this.state.myDetailInfo}
-                  closeDialogCall={this.hideAddEditDialog}
-                  ></EditUserInfoDialog>
             </div>
         );
     }

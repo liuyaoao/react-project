@@ -46,7 +46,7 @@ class SearchFormPC extends React.Component {
           }
         });
         // console.log('Received search params: ', param);
-        this.props.handleSearch(null,param);
+        this.props.handleSearch(null,Object.assign({},{"from":0,"to":10},param));
       }
     });
   }

@@ -159,16 +159,6 @@ class DocumentEditModalPC extends React.Component {
         sm: { span: 14 },
       },
     };
-    const formItemLayoutOneRow = {
-      labelCol: {
-        xs: { span: 8 },
-        sm: { span: 8 },
-      },
-      wrapperCol: {
-        xs: { span: 16 },
-        sm: { span: 16 },
-      },
-    };
     const formItemLayout1 = {
       labelCol: {
         xs: { span: 24 },
@@ -219,7 +209,7 @@ class DocumentEditModalPC extends React.Component {
                     )}
                   </FormItem>
                   <Col span={24}>
-                    <FormItem {...formItemLayoutOneRow} label="姓名">
+                    <FormItem {...formItemLayout} label="姓名">
                       {getFieldDecorator('userName', {
                         initialValue: memberInfo.userName || '',
                         rules: [{
@@ -231,7 +221,7 @@ class DocumentEditModalPC extends React.Component {
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayoutOneRow} label="性别">
+                    <FormItem {...formItemLayout} label="性别">
                       {getFieldDecorator('gender', {initialValue: memberInfo.gender || ''})(
                         <RadioGroup>
                           <RadioButton value="男">男</RadioButton>
@@ -241,21 +231,21 @@ class DocumentEditModalPC extends React.Component {
                     </FormItem>
                   </Col>
                   <Col span={24} id="editBirthDay">
-                    <FormItem {...formItemLayoutOneRow} label="出生年月">
+                    <FormItem {...formItemLayout} label="出生年月">
                       {getFieldDecorator('birthDay', {initialValue: memberInfo.birthDay ? moment(memberInfo.birthDay, 'YYYY/MM') : null})(
                         <MonthPicker getCalendarContainer={() => document.getElementById('editBirthDay')} />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayoutOneRow} label="民族">
+                    <FormItem {...formItemLayout} label="民族">
                       {getFieldDecorator('famousFamily', {initialValue: memberInfo.famousFamily || ''})(
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayoutOneRow} label="籍贯">
+                    <FormItem {...formItemLayout} label="籍贯">
                       {getFieldDecorator('nativePlace', {initialValue: memberInfo.nativePlace || ''})(
                         <Input type="text" placeholder="" />
                       )}
@@ -278,28 +268,28 @@ class DocumentEditModalPC extends React.Component {
                     </FormItem>
                   </Col>*/}
                   <Col span={24}>
-                    <FormItem {...formItemLayoutOneRow} label="出生地">
+                    <FormItem {...formItemLayout} label="出生地">
                       {getFieldDecorator('createParty', {initialValue: memberInfo.createParty || ''})(
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayoutOneRow} label="健康状况">
+                    <FormItem {...formItemLayout} label="健康状况">
                       {getFieldDecorator('healthStatus', {initialValue: memberInfo.healthStatus || ''})(
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24} id="editJoinPartyTime">
-                    <FormItem {...formItemLayout1} label="入党时间:">
+                    <FormItem {...formItemLayout} label="入党时间:">
                       {getFieldDecorator('joinPartyTime', {initialValue: memberInfo.joinPartyTime ? moment(memberInfo.joinPartyTime, 'YYYY/MM') : null})(
                         <MonthPicker getCalendarContainer={() => document.getElementById('editJoinPartyTime')} />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}  id="editJoinWorkerTime">
-                    <FormItem {...formItemLayout1} label="参加工作时间:">
+                    <FormItem {...formItemLayout} label="参加工作时间:">
                       {getFieldDecorator('joinWorkerTime', {initialValue: memberInfo.joinWorkerTime ? moment(memberInfo.joinWorkerTime, 'YYYY/MM') : null})(
                         <MonthPicker getCalendarContainer={() => document.getElementById('editJoinWorkerTime')} />
                       )}
@@ -386,7 +376,7 @@ class DocumentEditModalPC extends React.Component {
                 <div className="info-body">
                   <FormItem label="">
                     {getFieldDecorator('resume', {initialValue: memberInfo.resume || ''})(
-                      <Input type="textarea" placeholder="简历" rows={4} />
+                      <Input type="textarea" placeholder="简历" autosize={{ minRows: 2, maxRows: 10 }} />
                     )}
                   </FormItem>
                 </div>
@@ -408,17 +398,17 @@ class DocumentEditModalPC extends React.Component {
                 <div className="info-body">
                   <FormItem label="奖惩情况">
                     {getFieldDecorator('certificateOfMerit', {initialValue: memberInfo.certificateOfMerit || ''})(
-                      <Input type="textarea" placeholder="" rows={4} />
+                      <Input type="textarea" placeholder="" autosize={{ minRows: 2, maxRows: 10 }} />
                     )}
                   </FormItem>
                   <FormItem label="近三年年度考核结果">
                     {getFieldDecorator('annualAssessment', {initialValue: memberInfo.annualAssessment || ''})(
-                      <Input type="textarea" placeholder="" rows={4} />
+                      <Input type="textarea" placeholder="" autosize={{ minRows: 2, maxRows: 10 }} />
                     )}
                   </FormItem>
                   <FormItem label="任职日期">
                     {getFieldDecorator('reasonsForDismissal', {initialValue: memberInfo.reasonsForDismissal || ''})(
-                      <Input type="textarea" placeholder="" rows={4} />
+                      <Input type="textarea" placeholder="" autosize={{ minRows: 2, maxRows: 10 }} />
                     )}
                   </FormItem>
                   {/*
@@ -428,7 +418,7 @@ class DocumentEditModalPC extends React.Component {
                       <MonthPicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('editReportingUnit')} />
                     )}
                     {getFieldDecorator('reportingUnit', {initialValue: memberInfo.reportingUnit || ''})(
-                      <Input type="textarea" placeholder="" rows={4} />
+                      <Input type="textarea" placeholder="" autosize={{ minRows: 2, maxRows: 10 }} />
                     )}
                   </div>
                   <div className="form-item" id="editApprovalOpinion">
@@ -437,7 +427,7 @@ class DocumentEditModalPC extends React.Component {
                       <MonthPicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('editApprovalOpinion')} />
                     )}
                     {getFieldDecorator('approvalOpinion', {initialValue: memberInfo.approvalOpinion || ''})(
-                      <Input type="textarea" placeholder="" rows={4} />
+                      <Input type="textarea" placeholder="" autosize={{ minRows: 2, maxRows: 10 }} />
                     )}
                   </div>
                   <div className="form-item" id="editApprovalRemovalOpinion">
@@ -446,7 +436,7 @@ class DocumentEditModalPC extends React.Component {
                       <MonthPicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('editApprovalRemovalOpinion')} />
                     )}
                     {getFieldDecorator('appointAndRemoveOpinion', {initialValue: memberInfo.appointAndRemoveOpinion || ''})(
-                      <Input type="textarea" placeholder="" rows={4} />
+                      <Input type="textarea" placeholder="" autosize={{ minRows: 2, maxRows: 10 }} />
                     )}
                   </div>
                   */}

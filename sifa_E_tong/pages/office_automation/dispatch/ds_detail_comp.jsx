@@ -11,6 +11,7 @@ import BottomTabBarComp from './bottomTabBar_comp.jsx';
 // import DS_SendContentComp from './ds_send_content_comp.jsx';//发文详情页-- 发送
 import CommonSendComp from '../common_send_comp.jsx'; //发送
 import CommonVerifyComp from '../common_verify_comp.jsx';
+import SignReportFlowTraceComp from 'pages/office_automation/signReport/signReport_flowTrace_comp.jsx'; //办文跟踪视图
 
 class DS_DetailComp extends React.Component {
   constructor(props) {
@@ -133,7 +134,13 @@ class DS_DetailComp extends React.Component {
                     curSubTab:'send',
                     selectedTab: 'sendTab',
                   });
-                }}/>
+                }}
+                onClickTrackBtn={()=>{
+                  this.setState({
+                    curSubTab:'track',
+                    selectedTab: 'trackTab',
+                  });
+                }} />
             </div>:null}
             {this.state.curSubTab == "send"?
               (<CommonSendComp
@@ -154,6 +161,14 @@ class DS_DetailComp extends React.Component {
                 gwlcunid={formData["gwlc"]}
                 onBackToDetailCall={this.onBackToDetailCall}
               />):null}
+            {this.state.curSubTab == "track"?
+              (<SignReportFlowTraceComp
+                tokenunid={this.props.tokenunid}
+                backDetailCall={this.onBackToDetailCall}
+                docunid={detailInfo.unid}
+                modulename={this.state.modulename}
+                gwlcunid={formData["gwlc"]} />):
+              null}
             {/*this.state.curSubTab == "upload"?
               (<DS_UploadContentComp
                 tokenunid={this.props.tokenunid}

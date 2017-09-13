@@ -4,7 +4,7 @@
 import MultiSelect from 'components/multiselect/multiselect.jsx';
 import ProfilePicture from 'components/profile_picture.jsx';
 
-import {searchUsers} from 'actions/user_actions.jsx';
+import {searchUsers,loadProfiles} from 'actions/user_actions.jsx';
 import {openDirectChannelToUser, openGroupChannelToUsers} from 'actions/channel_actions.jsx';
 
 import UserStore from 'stores/user_store.jsx';
@@ -71,14 +71,21 @@ export default class MoreDirectChannels extends React.Component {
     }
 
     componentDidMount() {
-        UserStore.addChangeListener(this.onChange);
-        UserStore.addInTeamChangeListener(this.onChange);
-        UserStore.addStatusesChangeListener(this.onChange);
+      // console.log("all users:",UserStore.getProfileList(true));
+        // UserStore.addChangeListener(this.onChange);
+        // UserStore.addInTeamChangeListener(this.onChange);
+        // UserStore.addStatusesChangeListener(this.onChange);
 
         if (this.listType === 'any') {
-            this.props.actions.getProfiles(0, USERS_PER_PAGE * 2);
+            // this.props.actions.getProfiles(0, USERS_PER_PAGE * 2);
+            loadProfiles(0,USERS_PER_PAGE*2, (data)=>{
+              this.onChange(data);
+            });
         } else {
-            this.props.actions.getProfilesInTeam(TeamStore.getCurrentId(), 0, USERS_PER_PAGE * 2);
+          loadProfiles(0,USERS_PER_PAGE*2, (data)=>{
+            this.onChange(data);
+          });
+            // this.props.actions.getProfilesInTeam(TeamStore.getCurrentId(), 0, USERS_PER_PAGE * 2);
         }
     }
 
@@ -147,18 +154,21 @@ export default class MoreDirectChannels extends React.Component {
         this.setState({values});
     }
 
-    onChange() {
+    onChange(listData) {
         let users;
         if (this.term) {
             if (this.listType === 'any') {
-                users = Object.assign([], searchProfiles(store.getState(), this.term, true));
+              users = Object.assign([], UserStore.getProfileListByData(listData||[]) );
+                // users = Object.assign([], searchProfiles(store.getState(), this.term, true));
             } else {
-                users = Object.assign([], searchProfilesInCurrentTeam(store.getState(), this.term, true));
+              users = Object.assign([], UserStore.getProfileListByData(listData||[]) );
+                // users = Object.assign([], searchProfilesInCurrentTeam(store.getState(), this.term, true));
             }
         } else if (this.listType === 'any') {
-            users = Object.assign([], UserStore.getProfileList(true));
+            users = Object.assign([], UserStore.getProfileListByData(listData||[]) );
         } else {
-            users = Object.assign([], UserStore.getProfileListInTeam(TeamStore.getCurrentId(), true));
+          users = Object.assign([], UserStore.getProfileListByData(listData||[]) );
+            // users = Object.assign([], UserStore.getProfileListInTeam(TeamStore.getCurrentId(), true));
         }
 
         for (let i = 0; i < users.length; i++) {
@@ -176,9 +186,15 @@ export default class MoreDirectChannels extends React.Component {
     handlePageChange(page, prevPage) {
         if (page > prevPage) {
             if (this.listType === 'any') {
-                this.props.actions.getProfiles(page + 1, USERS_PER_PAGE);
+              loadProfiles(page + 1, USERS_PER_PAGE, (data)=>{
+                this.onChange(data);
+              });
+                // this.props.actions.getProfiles(page + 1, USERS_PER_PAGE);
             } else {
-                this.props.actions.getProfilesInTeam(page + 1, USERS_PER_PAGE);
+              loadProfiles(page + 1, USERS_PER_PAGE, (data)=>{
+                this.onChange(data);
+              });
+                // this.props.actions.getProfilesInTeam(page + 1, USERS_PER_PAGE);
             }
         }
     }
@@ -188,7 +204,9 @@ export default class MoreDirectChannels extends React.Component {
         this.term = term;
 
         if (term === '') {
-            this.onChange();
+            loadProfiles(0,USERS_PER_PAGE*2, (data)=>{
+              this.onChange(data);
+            });
             return;
         }
 
@@ -201,7 +219,9 @@ export default class MoreDirectChannels extends React.Component {
 
         this.searchTimeoutId = setTimeout(
             () => {
-                searchUsers(term, teamId);
+                searchUsers(term, teamId,{},(data)=>{
+                  this.onChange(data);
+                });
             },
             Constants.SEARCH_TIMEOUT_MILLISECONDS
         );

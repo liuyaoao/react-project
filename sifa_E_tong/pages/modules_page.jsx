@@ -6,6 +6,10 @@ import LogOutComp from './components/log_out_comp.jsx'
 import * as GlobalActions from 'actions/global_actions.jsx';
 import UserStore from 'stores/user_store.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
+import TeamStore from 'stores/team_store.jsx';
+import BrowserStore from 'stores/browser_store.jsx';
+import Constants from 'utils/constants.jsx';
+import {sortTeamsByDisplayName} from 'utils/team_utils.jsx';
 
 import OA_icon from 'images/modules_img/OA_icon.png';
 import chat_icon from 'images/modules_img/chat_icon.png';
@@ -14,6 +18,7 @@ import mailList_icon from 'images/modules_img/mailList_icon.png';
 import modify_icon from 'images/modules_img/modify_icon.png';
 import settings_icon from 'images/modules_img/settings_icon.png';
 import signin_icon from 'images/modules_img/signin_icon.png';
+import userSetting_icon from 'images/modules_img/userSetting_icon.png';
 
 import ModulesMobileComp  from './modules_comp/modules_mobile_comp.jsx';
 import ModulesPcComp  from './modules_comp/modules_pc_comp.jsx';
@@ -21,6 +26,7 @@ import ModulesPcComp  from './modules_comp/modules_pc_comp.jsx';
 import {Toast} from 'antd-mobile';
 import {Icon} from 'antd';
 import myWebClient from 'client/my_web_client.jsx';
+import Client from 'client/web_client.jsx';
 
 const notShow_moduleId_inMobile = "1006";
 const notShow_moduleId_inPC = "";
@@ -41,6 +47,7 @@ class ChooseModulesPage extends React.Component {
             randomStr:'',
             oaLoginErrorText: '',
             isMobile: Utils.isMobile(),
+            unViewedCount:0, //群聊里的当前频道未读消息数。
             initUserInfo: {
               id:"",
               allow_marketing:false,
@@ -112,6 +119,7 @@ class ChooseModulesPage extends React.Component {
           window.addEventListener("popstate", window['handleClickBackBtn'+randomStr],false);
         },100);
       }
+      this.getChatNewMessageNum();
     }
     componentWillUnmount(){
       if (window.history && window.history.pushState) {
@@ -202,6 +210,16 @@ class ChooseModulesPage extends React.Component {
         //   linkTo : ""
         // }
       ]
+      if(this.state.isMobile){
+        modulesData.push({
+          id:"1008",
+          name : "个人设置",
+          singleclassName:"userSettingModule",
+          iconName : userSetting_icon,
+          tagName:'Link',
+          linkTo : "user_setting"
+        });
+      }
       this.setState({"allModulesData":modulesData});
     }
     handleGoMatter() {
@@ -229,6 +247,73 @@ class ChooseModulesPage extends React.Component {
         }
       });
     }
+    getChatNewMessageNum(){ //获取群聊里当前频道的未读消息数。
+      const teams = TeamStore.getAll();
+      const teamMembers = TeamStore.getMyTeamMembers();
+      let teamId = BrowserStore.getGlobalItem('team');
+
+      if (!teams[teamId] && teamMembers.length > 0) {
+          let myTeams = [];
+          for (const index in teamMembers) {
+              if (teamMembers.hasOwnProperty(index)) {
+                  const teamMember = teamMembers[index];
+                  myTeams.push(teams[teamMember.team_id]);
+              }
+          }
+          if (myTeams.length > 0) {
+              myTeams = myTeams.sort(sortTeamsByDisplayName);
+              teamId = myTeams[0].id;
+          }
+      }
+      if (teams[teamId]) {
+          const channelId = BrowserStore.getGlobalItem(teamId);
+          Client.setTeamId(teamId);
+          if (channelId) {
+            this.countNewMessageNum(channelId);
+          } else {
+            Client.getChannels((res)=>{
+                // console.log("获取所有的频道的信息--：",res);
+                let curChannelId='';
+                for(let i=0;i<res.length;i++){
+                  if(res[i]['name'] == "town-square"){
+                    curChannelId = res[i]['id'];
+                  }
+                }
+                this.countNewMessageNum(curChannelId);
+            });
+              // Client.getChannelByName("town-square",(res)=>{
+              //   console.log("获取默认频道的信息--：",res);
+              // });
+          }
+      }
+
+    }
+    countNewMessageNum(channelId){ //
+      let me = UserStore.getCurrentUser() || {};
+      Client.getChannelMember(channelId, me.id, (res)=>{
+        // console.log("获取默认频道的最近查看时间--：",res);
+        let last_viewed_at = res.last_viewed_at;
+        Client.getPostsPage(channelId,0,100,
+          (data) => {
+            const posts = data.posts;
+            const order = data.order;
+            let unViewedCount = 0;
+            unViewedCount = order.reduce((count, orderId) => {
+              const post = posts[orderId];
+              if (post.create_at > last_viewed_at &&
+                post.user_id !== me.id &&
+                post.state !== Constants.POST_DELETED) {
+                  return count + 1;
+                }
+                return count;
+              }, 0);
+              this.setState({unViewedCount:unViewedCount});
+              // console.log("---------getPostsPage----------:", data,unViewedCount);
+            },(err) => {}
+          );
+      });
+    }
+
     render() {
         let {localStoreKey4Modules, allModulesData,initUserInfo} = this.state;
         let finalEle = this.state.isMobile ?
@@ -240,6 +325,7 @@ class ChooseModulesPage extends React.Component {
               allModulesData={allModulesData}
               notShowModuleIdInMobile={notShow_moduleId_inMobile}
               noticeListData={this.state.noticeListData}
+              unViewedCount={this.state.unViewedCount}
               handleGoMatter={this.handleGoMatter} />) :
             (<ModulesPcComp
               initUserInfo={initUserInfo}
@@ -250,6 +336,7 @@ class ChooseModulesPage extends React.Component {
               notShowModuleIdInMobile={notShow_moduleId_inMobile}
               notShowModuleIdInPC={notShow_moduleId_inPC}
               noticeListData={this.state.noticeListData}
+              unViewedCount={this.state.unViewedCount}
               handleGoMatter={this.handleGoMatter}/>);
         return (
           <div className='' style={{height:'100%'}}>

@@ -88,6 +88,12 @@ export default {
                 }
             },
             {
+                path: 'user_setting',  //矫正系统页面，就是通知公告。
+                getComponents: (location, callback) => {
+                    System.import('pages/userSetting_mobile_page.jsx').then(RouteUtils.importComponentSuccess(callback));
+                }
+            },
+            {
                 getComponents: (location, callback) => {
                     // System.import('components/header_footer_template.jsx').then(RouteUtils.importComponentSuccess(callback));
                     System.import('pages/components/pages_footer_comp.jsx').then(RouteUtils.importComponentSuccess(callback));

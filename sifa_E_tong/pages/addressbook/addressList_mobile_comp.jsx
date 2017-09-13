@@ -4,6 +4,7 @@ import React from 'react';
 import UserStore from 'stores/user_store.jsx';
 import * as Utils from 'utils/utils.jsx';
 import myWebClient from 'client/my_web_client.jsx';
+import {removeValueFromArr} from 'pages/utils/common_utils.jsx';
 
 import { Modal,SwipeAction,List,Button,Popup } from 'antd-mobile';
 import { Row, Col, Icon,notification, Input, Tooltip,message } from 'antd';
@@ -149,8 +150,7 @@ class AddressListMobileComp extends React.Component {
         }
       }
     }
-    let teleArr = (teleStr||'').split(",");
-
+    let teleArr = removeValueFromArr( (teleStr||'').split(",") );
     if(teleArr.length==1){
       return (<a href={"tel:"+telephoneNumber}>
                 <Icon type="phone" style={{fontSize:'0.6rem',fontWeight:'bold',color:'#189A09'}}/>
@@ -173,13 +173,8 @@ class AddressListMobileComp extends React.Component {
       </List>
     </div>, { animationType: 'slide-up', maskClosable: true });
   }
-
   hidePopup = ()=>{
     Popup.hide();
-  }
-
-  handleDialTeleMenuClick = (item,key,keyPath)=>{
-
   }
 
   render() {

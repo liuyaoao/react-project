@@ -41,7 +41,7 @@ class AddressSearchComp extends React.Component {
   }
   handleAddressSearch(e){
     e && e.preventDefault();
-    console.log("handleSearch,通讯录点击查询--:",this.props.form.getFieldsValue());
+    // console.log("handleSearch,通讯录点击查询--:",this.props.form.getFieldsValue());
     let val;
     if(this.state.isMobile){
       val = document.querySelector('.mobileSearchContainer input[name=filter]').value;
@@ -84,7 +84,7 @@ class AddressSearchComp extends React.Component {
     }
   }
 
-  getContactsSearchForm() {
+  render() {
     const { getFieldDecorator, getFieldsError, getFieldError } = this.props.form;
     const { organization,secondaryDirectory,level3Catalog } = this.props;
     const uploadField = {
@@ -97,79 +97,61 @@ class AddressSearchComp extends React.Component {
       beforeUpload: this.beforeUploadCall,
       onChange: this.fileUploadChange
     }
-    let searchPCForm = (
-      <div>
-              <Form
-                className="ant-advanced-search-form"
-                onSubmit={this.handleAddressSearch}
-              >
-              <Row type="flex" justify="space-around" align="middle" className=''>
-                <Col span={12} className=''>
-                  <FormItem label="关键字" {...formItemLayout4Search}>
-                    {getFieldDecorator('filter', {
-                    })(
-                      <Input placeholder="用户名/邮箱/电话" />
-                    )}
-                  </FormItem>
-                </Col>
-                <Col span={12}>
-                  <FormItem label="">
-                    <button type="submit"
-                      className="btn btn-primary"
-                      ><Icon type="search" /> 搜索</button>
-                    <button type="button"
-                      style={{marginLeft: "10px"}}
-                      onClick={this.handleClearSearch}
-                      className="btn"
-                      >清空</button>
-                    {this.state.hasOperaPermission?(<span><Upload {...uploadField}>
-                      <button type="button"
-                        className="btn btn-default"
-                        style={{ marginLeft: '20px' }}>
-                        <Icon type="upload" /> 导入
-                      </button>
-                    </Upload>
-                    <a type="button" className="btn btn-info"
-                      style={{ marginLeft: '20px' }}
-                       href={window.serverUrl+"/modle/contacts.xlsx"}>下载模板</a>
-                     <a
-                       style={{ marginLeft: '20px' }}
-                       href={myWebClient.getBaseRoute() + "/export/contacts?organization="+ organization + "&secondaryDirectory=" + secondaryDirectory + "&level3Catalog=" + level3Catalog}
-                       className="btn btn-default" target="_blank">导出</a>
-                    </span>):null}
-                  </FormItem>
-                </Col>
-              </Row>
-              </Form>
-              <div className={this.state.uploading?'visibleCls':'notVisibleCls'}>
-                <Spin spinning={this.state.uploading} tip="Loading...">
-                  <Alert style={{textAlign:'center',lineHeight: '40px'}}
-                    message={"正在导入通讯录档案!"}
-                    description=""
-                    type="info"
-                    />
-                </Spin>
-              </div>
-      </div>
-    )
-    let searchMobileForm = (
-      <div className="am-sys-list">
-        <List className="mobileSearchContainer">
-          <InputItem clear autoFocus placeholder="用户名/邮箱/电话" name='filter'>关键字</InputItem>
-        </List>
-        <div style={{ margin: '0.16rem' }}>
-          <ButtonPc type="primary"><Icon type="search" onClick={this.handleAddressSearch}/> 搜索</ButtonPc>
-        </div>
-      </div>
-    )
-
-    return this.state.isMobile ? searchMobileForm : searchPCForm;
-  }
-  render() {
-    let searchZoneEles = this.getContactsSearchForm();
     return (
       <div className={''}>
-        {searchZoneEles}
+        <div>
+          <Form
+            className="ant-advanced-search-form"
+            onSubmit={this.handleAddressSearch}
+          >
+          <Row type="flex" justify="space-around" align="middle" className=''>
+            <Col span={12} className=''>
+              <FormItem label="关键字" {...formItemLayout4Search}>
+                {getFieldDecorator('filter', {
+                })(
+                  <Input placeholder="用户名/邮箱/电话" />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem label="">
+                <button type="submit"
+                  className="btn btn-primary"
+                  ><Icon type="search" /> 搜索</button>
+                <button type="button"
+                  style={{marginLeft: "10px"}}
+                  onClick={this.handleClearSearch}
+                  className="btn"
+                  >清空</button>
+                {this.state.hasOperaPermission?(<span><Upload {...uploadField}>
+                  <button type="button"
+                    className="btn btn-default"
+                    style={{ marginLeft: '20px' }}>
+                    <Icon type="upload" /> 导入
+                  </button>
+                </Upload>
+                <a type="button" className="btn btn-info"
+                  style={{ marginLeft: '20px' }}
+                   href={window.serverUrl+"/modle/contacts.xlsx"}>下载模板</a>
+                 <a
+                   style={{ marginLeft: '20px' }}
+                   href={myWebClient.getBaseRoute() + "/export/contacts?organization="+ organization + "&secondaryDirectory=" + secondaryDirectory + "&level3Catalog=" + level3Catalog}
+                   className="btn btn-default" target="_blank">导出</a>
+                </span>):null}
+              </FormItem>
+            </Col>
+          </Row>
+          </Form>
+          <div className={this.state.uploading?'visibleCls':'notVisibleCls'}>
+            <Spin spinning={this.state.uploading} tip="Loading...">
+              <Alert style={{textAlign:'center',lineHeight: '40px'}}
+                message={"正在导入通讯录档案!"}
+                description=""
+                type="info"
+                />
+            </Spin>
+          </div>
+        </div>
       </div>
     );
   }

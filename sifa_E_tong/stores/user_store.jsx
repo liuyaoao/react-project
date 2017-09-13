@@ -321,6 +321,32 @@ class UserStoreClass extends EventEmitter {
 
         return profiles;
     }
+    getProfileListByData(listData){ //通过传入用户列表数据自定义过滤用户列表。
+      const profiles = [];
+      let skipCurrent = true, allowInactive = false;
+      const currentId = this.getCurrentId();
+      listData = listData || [];
+      for (let i=0;i < listData.length;i++) {
+        var profile = listData[i];
+        if (skipCurrent && profile.id === currentId) {
+          continue;
+        }
+        if (allowInactive || profile.delete_at === 0) {
+          profiles.push(profile);
+        }
+      }
+      profiles.sort((a, b) => {
+          if (a.username < b.username) {
+              return -1;
+          }
+          if (a.username > b.username) {
+              return 1;
+          }
+          return 0;
+      });
+
+      return profiles;
+    }
 
     saveProfile(profile) {
         store.dispatch({

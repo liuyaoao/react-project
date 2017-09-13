@@ -11,7 +11,7 @@ import * as Utils from 'utils/utils.jsx';
 import client from 'client/web_client.jsx';
 import myWebClient from 'client/my_web_client.jsx';
 
-import { SearchBar, Drawer, List, NavBar,Button } from 'antd-mobile';
+import {  Drawer, List, NavBar,Button } from 'antd-mobile';
 import { Layout, Menu, Breadcrumb, Icon, Affix as AffixPc, Input } from 'antd';
 const { SubMenu } = Menu;
 

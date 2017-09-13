@@ -28,7 +28,7 @@ class SearchFormMobile extends React.Component {
       !params.userName ? delete params.userName : null;
       !params.gender ? delete params.gender : null;
       // console.log("document search form validateFields", error, params);
-      this.props.handleSearch(null,params||{});
+      this.props.handleSearch(null,Object.assign({},{"from":0,"to":10},param||{}) );
     });
   }
 
@@ -74,9 +74,7 @@ class SearchFormMobile extends React.Component {
           {
             fileSubTypeName == '律师事务所'?
             <InputItem clear autoFocus placeholder="请输入律所责任人" {...getFieldProps('lawOfficePrincipal')}>律所负责人</InputItem>:
-            <InputItem clear onClick={this.showSelectGender} placeholder="请选择" {...getFieldProps('gender')}>
-              性别 <Icon type="down" />
-            </InputItem>
+            null
           }
         </List>
         <div style={{ margin: '0.16rem' }}>

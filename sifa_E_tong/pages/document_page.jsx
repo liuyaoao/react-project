@@ -22,7 +22,6 @@ import WrappedSearchFormPC from './document/search_form_pc.jsx';
 import WrappedSearchFormMobile from './document/search_form_mobile.jsx';
 import DocumentAllEditModal from './document/edit_all_modal.jsx';
 
-
 import DocumentSidebar from './document/document_sidebar.jsx';
 import DocumentListPC from './document/documentList_pc_comp.jsx';
 import DocumentListMobile from './document/documentList_mobile_comp.jsx';

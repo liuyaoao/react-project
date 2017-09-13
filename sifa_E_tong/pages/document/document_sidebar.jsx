@@ -58,7 +58,7 @@ export default class DocumentSidebar extends React.Component {
         curDepartmentId: curDepartmentId
       }
       console.log('menu item Clicked, searchParam: ', searchParam);
-      this.props.handleSearch(searchParam);
+      this.props.handleSearch(searchParam,{"from":0,"to":10});
       this.props.onClickMenuItem();
     }
   }
@@ -95,7 +95,7 @@ export default class DocumentSidebar extends React.Component {
     if(fileObj.level && fileObj.level==1 && fileObj.sub.length>0){
       return;
     }
-    this.props.handleSearch({ currentFileId,currentFileSubId });
+    this.props.handleSearch({ currentFileId,currentFileSubId }, {"from":0,"to":10});
   }
 
   getMenuItemList(sidebarConfig){

@@ -13,6 +13,13 @@ export function removeNullValueOfArr(arr){
   });
   return newArr;
 }
+export function copyArraySimple(arr){
+  let tempArr = [];
+  for(let i=0;i<arr.length;i++){
+    tempArr.push(arr[i]);
+  }
+  return tempArr;
+}
 
 export function removeValueFromArr(arr,val){
   arr = arr || [];

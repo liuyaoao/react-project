@@ -1,6 +1,6 @@
-// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
-// See License.txt for license information.
-
+import React from 'react';
+import {Modal} from 'react-bootstrap';
+import {FormattedMessage} from 'react-intl';
 import MemberBlacklist from './member_blacklist.jsx';
 
 import TeamStore from 'stores/team_store.jsx';
@@ -9,10 +9,6 @@ import ChannelStore from 'stores/channel_store.jsx';
 
 import {canManageMembers} from 'utils/channel_utils.jsx';
 import {Constants} from 'utils/constants.jsx';
-
-import React from 'react';
-import {Modal} from 'react-bootstrap';
-import {FormattedMessage} from 'react-intl';
 
 export default class ShowBlacklistUsers extends React.Component {
     constructor(props) {
@@ -79,4 +75,4 @@ export default class ShowBlacklistUsers extends React.Component {
 ShowBlacklistUsers.propTypes = {
     onModalDismissed: React.PropTypes.func.isRequired,
     showAddBlacklistModal: React.PropTypes.func.isRequired
-};
+}

@@ -4,7 +4,6 @@ import React from 'react';
 import {browserHistory} from 'react-router/es6';
 import OrganizationStore from 'pages/stores/organization_store.jsx';
 import UserStore from 'stores/user_store.jsx';
-
 import * as Utils from 'utils/utils.jsx';
 import myWebClient from 'client/my_web_client.jsx';
 import * as organizationUtils from './utils/organization_utils.jsx';
@@ -147,7 +146,10 @@ class AddressBookPage extends React.Component {
       if(value){
         params['filter'] = value;
       }
-      this.getAddressBookCnt(params);
+      this.getAddressBookCnt(params,{
+        "from":0,
+        "to":10,
+      });
     }
     showAddEditDialog = (data)=>{ //显示新增编辑弹窗。
       // console.log("showAddressBook--AddEditDialog--:");
@@ -174,7 +176,11 @@ class AddressBookPage extends React.Component {
         "level3Catalog":level3Catalog,
       };
       this.setState(params);
-      this.getAddressBookCnt(params);
+      this.setState({
+        "pageFrom":0,
+        "pageTo":10,
+      });
+      this.getAddressBookCnt(Object.assign({},params),{"from":0, "to":10});
     }
 
     getMobileElements(sidebar){
@@ -202,13 +208,14 @@ class AddressBookPage extends React.Component {
             rightContent={[ <Icon key="1" type="ellipsis" style={{fontSize:'0.4rem'}} onClick={this.onOpenChange}/>]} >
             <img width="35" height="35" src={signup_logo}/>司法E通
           </NavBar>
-          <div style={{marginTop:'60px'}}>
+          <div style={{marginTop:'60px'}} className={'address_book_mobile_body'}>
             <SearchBar
               placeholder="用户名/邮件/电话"
               onSubmit={this.onSubmitSearch}
               onClear={value => console.log(value, 'onClear')}
               onFocus={() => console.log('onFocus')}
-              onCancel={() => console.log('onCancel')}
+              onCancel={this.onSubmitSearch}
+              cancelText={'搜索'}
               onChange={() => {}}
             />
             {content}

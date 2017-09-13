@@ -72,10 +72,10 @@ class NotificationPage extends React.Component {
     }
     componentWillMount() {
       var me = UserStore.getCurrentUser() || {};
-      this.setState({loginUserName:me.redressUserName || 'csjz05'});
+      this.setState({loginUserName:me.redressUserName || 'csjz01'});
       //登录矫正系统的接口。
       let params = {
-        loginName:`${me.redressUserName || 'csjz05'}`,
+        loginName:`${me.redressUserName || 'csjz01'}`,
         loginPwd:`${me.redressPassword || commonUtils.Base64Encode('2016')}`
       };
       params.loginPwd = commonUtils.Base64Decode(params.loginPwd);

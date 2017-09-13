@@ -7,7 +7,6 @@ import { Toast, WingBlank, WhiteSpace, Button, InputItem,
 
 import { Icon, Upload } from 'antd';
 import { createForm } from 'rc-form';
-import CommonFlowTraceComp from '../common_flowTrace_comp.jsx'; //办文跟踪
 import CommonNotionComp from '../common/common_notion_comp.jsx';
 
 class DS_DetailContentComp extends React.Component {
@@ -175,7 +174,7 @@ class DS_DetailContentComp extends React.Component {
     });
     let gwlc_val = gwlc_value || (formDataRaw.gwlc?formDataRaw.gwlc.value:'');
     return (
-      <div style={{marginBottom: "100px"}}>
+      <div style={{marginBottom: "60px"}}>
         <div className={'oa_detail_cnt'}>
           <div className={'oa_detail_title'} style={{width:'100%',textAlign:'center'}}>{formData.wjbt}</div>
           <Flex>
@@ -356,17 +355,6 @@ class DS_DetailContentComp extends React.Component {
           <Flex>
             <Flex.Item><InputItem placeholder="--" editable="fasle" value={formData.ngrq_show} labelNumber={3}>日期:</InputItem></Flex.Item>
           </Flex>
-          <div style={{height:'0.5rem',width:'100%',margin:'1em 0',background:'#efe9e9'}}></div>
-          <div style={{height:'2.5em',lineHeight:'2.5em',marginLeft:'0.2rem',borderBottom:'1px solid #d6d1d1'}}>
-            <span style={{width:'0.1rem',height:'1em',lineHeight:'2.5em',verticalAlign: 'middle',background:'red',display:'inline-block'}}></span>
-            <span style={{marginLeft:'0.2rem',color:'black',fontWeight:'bold'}}>办公追踪-流转记录</span>
-          </div>
-          <CommonFlowTraceComp
-            tokenunid={tokenunid}
-            docunid={detailInfo.unid}
-            gwlcunid={formData.gwlc}
-            modulename={modulename}
-            />
         </div>
       </div>
     )
