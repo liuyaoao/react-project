@@ -494,7 +494,7 @@ class DocumentPage extends React.Component {
     let sidebarMenuMarTop = this.state.isMobile ? '60px' : '0';
     const sidebar = (
       <Sider width={240} className="custom_ant_sidebar addressSidebar"
-        style={{ background: '#2071a7',color:'#fff',marginTop:sidebarMenuMarTop,overflow: 'auto', zIndex:'9999'}}>
+        style={{ background: '#2071a7',color:'#fff',marginTop:sidebarMenuMarTop,overflow: 'auto', zIndex:'13'}}>
         <DocumentSidebar currentFileId={currentFileId} currentFileSubId={currentFileSubId}
           departmentData={departmentData}
           departmentFlatMap={departmentFlatMap}

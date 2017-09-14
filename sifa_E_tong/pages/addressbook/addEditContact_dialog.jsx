@@ -128,6 +128,11 @@ class AddEditContactDialog extends React.Component {
     params['secondaryDirectory'] = this.state.selectSecondaryDirectory.split("_")[0];
     params['level3Catalog'] = this.state.selectLevel3Catalog.split("_")[0];
     // console.log("新增or修改用户信息的参数--：",params);
+    for(let key in params){
+      if(typeof params[key] == "string"){
+        params[key] = $.trim(params[key]);
+      }
+    }
     return params;
   }
 
@@ -260,9 +265,6 @@ class AddEditContactDialog extends React.Component {
                 <FormItem {...formItemLayout} label="集团短码">
                   {getFieldDecorator('groupShortCode', {
                     initialValue:contactInfo.groupShortCode,
-                    rules: [{
-                      required: true, message: '集团短码为必填项！', whitespace: true
-                    }],
                   })(
                     <Input/>
                   )}

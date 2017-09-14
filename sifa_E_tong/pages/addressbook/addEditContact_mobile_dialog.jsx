@@ -223,10 +223,8 @@ class AddEditContactMobileDialog extends React.Component {
         onClose={this.handleCancel}
         width="96%"
         footer={[
-          <Button key="submit" type="primary" size="large" loading={this.state.loading} onClick={this.handleAddOrEdit}>
-            保存
-          </Button>,
-          <Button key="back" size="large" onClick={this.handleCancel}>取消</Button>,
+          // <Button key="submit" type="primary" size="large" loading={this.state.loading} onClick={this.handleAddOrEdit}>保存</Button>,
+          <Button key="back" type="primary" size="large" onClick={this.handleCancel}>关闭</Button>,
         ]}
       >
         <div className="" style={{padding:'1em 0'}}>

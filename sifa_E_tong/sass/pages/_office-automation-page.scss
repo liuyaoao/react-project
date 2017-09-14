@@ -18,6 +18,7 @@
     .checkbox_custom{
       label{
         color:black;
+        font-size: 0.33rem;
       }
     }
   }
@@ -59,7 +60,6 @@
     overflow: hidden;
     margin:8px 0;
     line-height: 1.5;
-    font-size: 0.33rem !important;
   }
   .checkbox_custom .checkbox{
     display: none;
@@ -315,5 +315,15 @@
   .ant-upload.ant-upload-select.ant-upload-select-text{
     margin: 0.1rem 5%;
     width: 90%
+  }
+}
+@media screen and (max-width: 375px) {
+  .Office_Automation_container .oa_detail_container .am-tabs-bar .am-tabs-tab{
+    font-size:0.25rem;
+  }
+}
+@media screen and (max-width: 320px) {
+  .Office_Automation_container .oa_detail_container .am-tabs-bar .am-tabs-tab{
+    font-size:0.23rem;
   }
 }

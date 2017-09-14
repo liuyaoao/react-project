@@ -177,13 +177,15 @@ class DocumentEditLawfirmModalPC extends React.Component {
         onOk={this.handleOk}
         onCancel={this.handleCancel}
         width="880px"
-        footer={[
-          <Button key="submit" type="primary" size="large" loading={this.state.loading} onClick={this.handleOk}>
-            修改
-          </Button>,
-          <Button key="back" size="large" onClick={this.handleCancel}>取消</Button>,
-        ]}
-      >
+        footer={this.state.isMobile?[
+              <Button key="back" type="primary" size="large" onClick={this.handleCancel}>关闭</Button>
+            ]:[
+              <Button key="submit" type="primary" size="large" loading={this.state.loading} onClick={this.handleOk}>
+              修改
+              </Button>,
+              <Button key="back" size="large" onClick={this.handleCancel}>取消</Button>
+            ]
+        }>
         <div className="doc-edit">
           {this.state.isMobile?null:(<div className="head-img"><img src={head_img} style={{width: "108px", paddingTop: "2px"}} /></div>)}
           <Form className={this.state.isMobile?"":"edit-form"}>

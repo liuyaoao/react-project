@@ -2,7 +2,7 @@ import $ from 'jquery';
 import React from 'react';
 import moment from 'moment';
 import * as Utils from 'utils/utils.jsx';
-import superagent from 'superagent';
+import MyWebClient from 'client/my_web_client.jsx';
 
 import { Row, Col, Form, Icon, Input, Button, Radio, Table, Modal, DatePicker, notification, Select } from 'antd';
 const { MonthPicker } = DatePicker;
@@ -14,15 +14,20 @@ const Option = Select.Option;
 import head_boy from 'images/head_boy.png';
 import head_girl from 'images/head_girl.png';
 
-import MyWebClient from 'client/my_web_client.jsx';
 // import EditableFamilyTable from './family_table.jsx';
 
 class DocumentEditModalPC extends React.Component {
   state = {
     loading: false,
     familyData: [],
-    member: {},
     isMobile: Utils.isMobile()
+  }
+  componentDidMount(){
+    // if(this.props.memberInfo.id){
+    //   MyWebClient.getDocumentInfoById(this.props.memberInfo.id,(res)=>{
+    //     console.log("getDocumentInfoById--:",res);
+    //   });
+    // }
   }
   componentWillReceiveProps(nextProps) {
     const {memberInfo} = this.props;
@@ -187,12 +192,15 @@ class DocumentEditModalPC extends React.Component {
         onOk={this.handleOk}
         onCancel={this.handleCancel}
         width="880px"
-        footer={[
-          <Button key="submit" type="primary" size="large" loading={this.state.loading} onClick={this.handleOk}>
-            修改
-          </Button>,
-          <Button key="back" size="large" onClick={this.handleCancel}>取消</Button>]}
-        >
+        footer={this.state.isMobile?[
+              <Button key="back" type="primary" size="large" onClick={this.handleCancel}>关闭</Button>
+            ]:[
+              <Button key="submit" type="primary" size="large" loading={this.state.loading} onClick={this.handleOk}>
+              修改
+              </Button>,
+              <Button key="back" size="large" onClick={this.handleCancel}>取消</Button>
+            ]
+        }>
         <div className="doc-edit">
           {this.state.isMobile?null:(<div className="head-img"><img src={head_img} style={{width: "108px", paddingTop: "2px"}} /></div>)}
           <Form className={this.state.isMobile?"":"edit-form"}>

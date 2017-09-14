@@ -452,7 +452,16 @@ class MyWebClient {
           send(params).
           end(this.handleResponse.bind(this, 'getSearchFileInfo', success, error));
     }
-
+    // 获取单个人员的档案信息
+    getDocumentInfoById(docId, success, error) {
+      this.defaultHeaders[HEADER_TOKEN] = this.getToken();
+        request.
+          get(`${this.getfileInformationUrl()}/detail/?id=${docId}`).
+          set(this.defaultHeaders).
+          type('application/json').
+          accept('application/json').
+          end(this.handleResponse.bind(this, 'getUserInfo', success, error));
+    }
     // create file info
     createFileInfo(params, success, error) {
       this.defaultHeaders[HEADER_TOKEN] = this.getToken();
@@ -614,6 +623,7 @@ class MyWebClient {
           accept('application/json').
           end(this.handleResponse.bind(this, 'getUserInfo', success, error));
     }
+
 }
 
 var myWebClient = new MyWebClient();

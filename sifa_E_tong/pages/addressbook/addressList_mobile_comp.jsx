@@ -25,7 +25,6 @@ class AddressListMobileComp extends React.Component {
       let permissionData = UserStore.getPermissionData();
       let hasOperaPermission = permissionData['address_book'].indexOf('action') != -1;
       this.state = {
-        isModalOpen:false,
         permissionData:permissionData,
         hasOperaPermission:hasOperaPermission, //是否有操作权限。
       };
@@ -127,26 +126,26 @@ class AddressListMobileComp extends React.Component {
     if(!groupShortCode && !telephoneNumber &&!landline){
       return;
     }else{
-      if(groupShortCode){
+      if($.trim(groupShortCode)){
         if(teleStr){
-          teleStr += ',' + groupShortCode;
+          teleStr += ',' + $.trim(groupShortCode);
         }else{
-          teleStr = groupShortCode;
+          teleStr = $.trim(groupShortCode);
         }
       }
 
-      if(telephoneNumber){
+      if($.trim(telephoneNumber)){
         if(teleStr){
-          teleStr += ',' + telephoneNumber;
+          teleStr += ',' + $.trim(telephoneNumber);
         }else{
-          teleStr = telephoneNumber;
+          teleStr = $.trim(telephoneNumber);
         }
       }
-      if(landline){
+      if($.trim(landline)){
         if(teleStr){
-          teleStr += ',' + landline;
+          teleStr += ',' + $.trim(landline);
         }else{
-          teleStr = landline;
+          teleStr = $.trim(landline);
         }
       }
     }
@@ -184,11 +183,11 @@ class AddressListMobileComp extends React.Component {
     return (
       <div className={cls_name}>
         <div style={{ marginBottom: 12 }}>
-          {this.state.hasOperaPermission ? (
+          {/*this.state.hasOperaPermission ? (
             <div style={{margin:'0.16rem'}}>
                 <Button type="primary" onClick={()=>{this.showAddEditDialog('',null,null)}}><Icon type="plus" /> 新增</Button>
             </div>
-          ):null}
+          ):null*/}
         </div>
         <div className='addressbook_list mobile_addressbook_list' style={{width:'100%'}}>
           <List style={{ margin: '0.1rem 0', backgroundColor: 'white' }}>

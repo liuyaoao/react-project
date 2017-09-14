@@ -136,7 +136,7 @@ handleClick = (item) => {
 
     return ( <Layout style={{ height: '100vh' }}>
               <Header className="header custom_ant_header" style={{position:'fixed',width:'100%',zIndex:'13'}}>
-                <div className="custom_ant_header_logo" onClick={this.onClickBackToModules} style={{padding:'0px'}}>
+                <div className="custom_ant_header_logo" onClick={this.onClickBackToModules}>
                   <span className="logo_icon"><img width="40" height="40" src={signup_logo}/></span>
                   <div className="logo_title">
                     <p>@{this.state.loginUserName}</p><p>司法E通</p>

@@ -301,7 +301,7 @@ class AddressBookPage extends React.Component {
       const sidebar = (
         <Sider width={240}
             className="custom_ant_sidebar addressSidebar"
-            style={{ background: '#2071a7',color:'#fff',overflow: 'auto',marginTop:sidebarMenuMarTop,zIndex:'9999' }}>
+            style={{ background: '#2071a7',color:'#fff',overflow: 'auto',marginTop:sidebarMenuMarTop,zIndex:'13' }}>
             <AddressSidebarMenuComp
               organizationsData={this.state.organizationsData}
               organizationsFlatData={this.state.organizationsFlatData}

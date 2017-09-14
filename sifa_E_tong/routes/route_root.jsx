@@ -11,22 +11,22 @@ import createTeamRoute from 'routes/route_create_team.jsx';
 import teamRoute from 'routes/route_team.jsx';
 import helpRoute from 'routes/route_help.jsx';
 
-import BrowserStore from 'stores/browser_store.jsx';
+// import BrowserStore from 'stores/browser_store.jsx';
 import ErrorStore from 'stores/error_store.jsx';
-import * as UserAgent from 'utils/user_agent.jsx';
+// import * as UserAgent from 'utils/user_agent.jsx';
 
 import {browserHistory} from 'react-router/es6';
+import * as Utils from 'utils/utils.jsx';
 
 function preLogin(nextState, replace, callback) {
     // redirect to the mobile landing page if the user hasn't seen it before
-    if (window.mm_config.IosAppDownloadLink && UserAgent.isIosWeb() && !BrowserStore.hasSeenLandingPage()) {
-        replace('/get_ios_app');
-        BrowserStore.setLandingPageSeen(true);
-    } else if (window.mm_config.AndroidAppDownloadLink && UserAgent.isAndroidWeb() && !BrowserStore.hasSeenLandingPage()) {
-        replace('/get_android_app');
-        BrowserStore.setLandingPageSeen(true);
-    }
-
+    // if (window.mm_config.IosAppDownloadLink && UserAgent.isIosWeb() && !BrowserStore.hasSeenLandingPage()) {
+    //     replace('/get_ios_app');
+    //     BrowserStore.setLandingPageSeen(true);
+    // } else if (window.mm_config.AndroidAppDownloadLink && UserAgent.isAndroidWeb() && !BrowserStore.hasSeenLandingPage()) {
+    //     replace('/get_android_app');
+    //     BrowserStore.setLandingPageSeen(true);
+    // }
     callback();
 }
 
@@ -38,6 +38,13 @@ function preLoggedIn(nextState, replace, callback) {
 
     ErrorStore.clearLastError();
     callback();
+}
+function preEnterDocument(nextState, replace, callback){
+  console.log("preEnterDocument:",nextState,Utils.isMobile());
+  if(Utils.isMobile()){
+    replace('/document_mobile');
+  }
+  callback();
 }
 
 export default {
@@ -58,7 +65,15 @@ export default {
                 }
             },
             {
-                path: 'document',  //文档管理页面
+                path: 'document',  //档案管理页面
+                onEnter: preEnterDocument,
+                getComponents: (location, callback) => {
+                    System.import('pages/document_page.jsx').then(RouteUtils.importComponentSuccess(callback));
+                }
+            },
+            {
+                path: 'document_mobile',  //档案管理页面-移动端
+                // onEnter: preEnterDocument,
                 getComponents: (location, callback) => {
                     System.import('pages/document_page.jsx').then(RouteUtils.importComponentSuccess(callback));
                 }

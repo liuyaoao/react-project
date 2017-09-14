@@ -80,7 +80,6 @@ export default class SidebarHeaderDropdown extends React.Component {
         if (e && typeof e == 'object') {
             e.preventDefault();
         }
-
         this.setState({showDropdown: !this.state.showDropdown});
     }
 
@@ -620,12 +619,12 @@ export default class SidebarHeaderDropdown extends React.Component {
                     {sysAdminLink}
                     {helpDivider}
                     {helpLink}
-                    {keyboardShortcutsLink}
+                    {/*keyboardShortcutsLink*/}
                     {reportLink}
-                    {nativeAppLink}
-                    {about}
-                    {logoutDivider}
-                    {logout}
+                    {/*nativeAppLink*/}
+                    {/*about*/}
+                    {/*logoutDivider*/}
+                    {/*logout*/}
                     <UserSettingsModal
                         show={this.state.showUserSettingsModal}
                         onModalDismissed={() => this.setState({showUserSettingsModal: false})}

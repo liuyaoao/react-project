@@ -116,3 +116,9 @@
 .contact-edit-mobile{
   // top:60px;
 }
+.popup-modules_mobile-list .am-list-body div.am-list-item{
+  border-bottom: 1px solid #ddd;
+}
+.popup-modules_mobile-list .am-list-body div.am-list-item .am-list-line:after{
+  border-bottom: 0px solid #fff;
+}
