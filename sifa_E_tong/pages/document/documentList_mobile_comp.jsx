@@ -46,9 +46,9 @@ class DocumentListMobile extends React.Component {
   }
   getListItemBreifEle = (item)=>{
     let {departmentData,departmentFlatMap, currentFileId, currentFileSubId, curDepartmentId} = this.props;
-    let fileTypeName = currentFileId ? (departmentFlatMap[currentFileId].resourceName||'') : '';
-    let fileSubTypeName = currentFileSubId ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
-    let departmentName = curDepartmentId ? (departmentFlatMap[curDepartmentId].resourceName||'') : '';
+    let fileTypeName = currentFileId&&departmentFlatMap[currentFileId] ? (departmentFlatMap[currentFileId].resourceName||'') : '';
+    let fileSubTypeName = currentFileSubId&&departmentFlatMap[currentFileSubId] ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
+    let departmentName = curDepartmentId&&departmentFlatMap[curDepartmentId] ? (departmentFlatMap[curDepartmentId].resourceName||'') : '';
 
     let listItemBreif = (<List.Item.Brief>
                       性别: {item.gender}, 地址: {item.createParty}
@@ -98,13 +98,15 @@ class DocumentListMobile extends React.Component {
   render() {
     const { hasOperaPermission } = this.state;
     const { data,departmentFlatMap, currentFileId,  currentFileSubId, curDepartmentId,showDeleteConfirm } = this.props;
-    let fileTypeName = currentFileId ? (departmentFlatMap[currentFileId].resourceName||'') : '';
-    let fileSubTypeName = currentFileSubId ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
-    let departmentName = curDepartmentId ? (departmentFlatMap[curDepartmentId].resourceName||'') : '';
+    let fileTypeName = currentFileId&&departmentFlatMap[currentFileId] ? (departmentFlatMap[currentFileId].resourceName||'') : '';
+    let fileSubTypeName = currentFileSubId&&departmentFlatMap[currentFileSubId] ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
+    let departmentName = curDepartmentId&&departmentFlatMap[curDepartmentId] ? (departmentFlatMap[curDepartmentId].resourceName||'') : '';
 
     return (
       <div className="am-doc-list doc-table">
-        {(!data || data.length<=0) ? (<div style={{textAlign:'center',color:'gray'}}>暂无数据</div>) : null}
+        {(!data || data.length<=0)?(
+          <div style={{textAlign:'center',color:'gray'}}>暂无数据</div>
+        ) : null}
         <List style={{ margin: '0.1rem 0', backgroundColor: 'white' }}>
           {data.map((item, index) => (
             <SwipeAction key={index} style={{ backgroundColor: '#f3f3f3' }}

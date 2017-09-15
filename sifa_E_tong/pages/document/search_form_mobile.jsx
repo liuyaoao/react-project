@@ -59,9 +59,9 @@ class SearchFormMobile extends React.Component {
   render() {
     const { getFieldProps } = this.props.form;
     const {departmentFlatMap,currentFileId, currentFileSubId,curDepartmentId} = this.props;
-    let fileTypeName = currentFileId ? (departmentFlatMap[currentFileId].resourceName||'') : '';
-    let fileSubTypeName = currentFileSubId ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
-    let departmentName = curDepartmentId ? (departmentFlatMap[curDepartmentId].resourceName||'') : '';
+    let fileTypeName = currentFileId&&departmentFlatMap[currentFileId] ? (departmentFlatMap[currentFileId].resourceName||'') : '';
+    let fileSubTypeName = currentFileSubId&&departmentFlatMap[currentFileSubId] ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
+    let departmentName = curDepartmentId&&departmentFlatMap[curDepartmentId] ? (departmentFlatMap[curDepartmentId].resourceName||'') : '';
 
     return (
       <div className="am-doc-list">

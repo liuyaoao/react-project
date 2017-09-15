@@ -65,7 +65,7 @@ export default {
                 }
             },
             {
-                path: 'document',  //档案管理页面
+                path: 'document',  //档案管理页面-pc端
                 onEnter: preEnterDocument,
                 getComponents: (location, callback) => {
                     System.import('pages/document_page.jsx').then(RouteUtils.importComponentSuccess(callback));
@@ -75,7 +75,14 @@ export default {
                 path: 'document_mobile',  //档案管理页面-移动端
                 // onEnter: preEnterDocument,
                 getComponents: (location, callback) => {
-                    System.import('pages/document_page.jsx').then(RouteUtils.importComponentSuccess(callback));
+                    System.import('pages/document_mobile/document_mobile_page.jsx').then(RouteUtils.importComponentSuccess(callback));
+                }
+            },
+            {
+                path: 'document_mobile/detail/:id',  //档案管理页面-移动端
+                // onEnter: preEnterDocument,
+                getComponents: (location, callback) => {
+                    System.import('pages/document_mobile/document_detail_page.jsx').then(RouteUtils.importComponentSuccess(callback));
                 }
             },
             {

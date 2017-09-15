@@ -92,7 +92,7 @@ export default class DocumentSidebar extends React.Component {
     this.props.setcurrentFileId(currentFileId);
     this.props.setcurrentFileSubId( currentFileSubId );
     this.props.setcurDepartmentId('');
-    if(fileObj.level && fileObj.level==1 && fileObj.sub.length>0){
+    if(fileObj.level && fileObj.level==1 && fileObj.sub && fileObj.sub.length>0){
       return;
     }
     this.props.handleSearch({ currentFileId,currentFileSubId }, {"from":0,"to":10});
