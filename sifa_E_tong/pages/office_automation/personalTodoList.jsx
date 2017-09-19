@@ -91,6 +91,13 @@ class PersonalTodoList extends React.Component {
       this.setState({ showDetail,detailInfo:{} });
     }
   }
+  updateListViewCall = ()=>{ //跟新列表。
+    this.setState({
+      listData:[],
+      currentpage:1
+    });
+    this.getServerListData(1);
+  }
   render() {
     const separator = (sectionID, rowID) => (
       <div
@@ -172,6 +179,7 @@ class PersonalTodoList extends React.Component {
             activeTabkey={'待办'}
             detailInfo={detailInfo}
             tokenunid={this.props.tokenunid}
+            updateListViewCall={this.updateListViewCall}
             backToTableListCall={this.backToTableListCall}
           />:null}
         {(showDetail && detailInfo.moduleName=="签报管理")?
@@ -179,6 +187,7 @@ class PersonalTodoList extends React.Component {
             activeTabkey={'待办'}
             detailInfo={detailInfo}
             tokenunid={this.props.tokenunid}
+            updateListViewCall={this.updateListViewCall}
             backToTableListCall={this.backToTableListCall}
           />:null}
         {(showDetail && detailInfo.moduleName=="督办管理")?
@@ -186,6 +195,7 @@ class PersonalTodoList extends React.Component {
             activeTabkey={'待办'}
             detailInfo={detailInfo}
             tokenunid={this.props.tokenunid}
+            updateListViewCall={this.updateListViewCall}
             backToTableListCall={this.backToTableListCall}
           />:null}
       </div>

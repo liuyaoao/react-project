@@ -51,6 +51,10 @@ export function getOrganization(params) {
         "url" : options.moduleUrl
       },
       async : true,
+      // xhrFields: {
+      //     withCredentials: true
+      // },
+      // crossDomain: true,
       success : (result)=>{
         let res  = decodeURIComponent(result);
         res = res.replace(/%20/g, " ");
@@ -692,6 +696,10 @@ export function finalRequestServer(options,param){
         "url" : options.moduleUrl
       },
       async : true,
+      // xhrFields: {
+      //     withCredentials: true
+      // },
+      // crossDomain: true,
       success : (result)=>{
         let res  = decodeURIComponent(result);
         res = res.replace(/%20/g, " ");
@@ -720,6 +728,10 @@ export function finalRequestServerWithUrlParam(options,param){
         "urlparam":options.urlparam
       },
       async : true,
+      // xhrFields: {
+      //     withCredentials: true
+      // },
+      // crossDomain: true,
       success : (result)=>{
         let res  = decodeURIComponent(result);
         res = res.replace(/%20/g, " ");

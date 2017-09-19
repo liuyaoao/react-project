@@ -53,7 +53,7 @@ class DS_DetailComp extends React.Component {
       successCall: (data)=>{
         let formDataRaw = data.values;
         let formData = OAUtils.formatFormData(data.values);
-        // console.log("发文管理的表单数据:",formDataRaw);
+        console.log("发文管理的表单数据:",formDataRaw);
         if(!formData.unid){
           Toast.info('该文件已被删除，不能处理了!', 2.5);
         }
@@ -78,7 +78,7 @@ class DS_DetailComp extends React.Component {
   }
   onBackToDetailCall = () => {
     this.setState({curSubTab:'content',selectedTab:''});
-    this.getServerFormData();
+    // this.getServerFormData();
   }
   onClickAddSave = ()=>{ //点击了保存
     let {editSaveTimes} = this.state;

@@ -19,24 +19,32 @@ class CommonRehandleComp extends React.Component {
       };
   }
   componentWillMount(){
-    if(this.props.docunid){
-      OAUtils.getCallBackList({
-        tokenunid:this.props.tokenunid,
-        fsid:this.props.fsid,
-        successCall: (data)=>{
-          console.log("获取回收重办列表数据：",data);
-          let arr = data.values.callbacklist||[];
-          let tempArr = [];
-          for(let i=0;i<arr.length;i++){
-            tempArr.push(false);
-          }
-          this.setState({
-            callbacklist:arr,
-            callbacklistCheckedArr:tempArr,
-          });
-        }
-      });
+    if(this.props.docunid && this.props.fsid){
+      this.getCallBackList();
     }
+  }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.fsid && nextProps.fsid!=this.props.fsid){
+      // console.log("获取回收重办列表数据---componentWillReceiveProps;");
+    }
+  }
+  getCallBackList(){
+    OAUtils.getCallBackList({
+      tokenunid:this.props.tokenunid,
+      fsid:this.props.fsid,
+      successCall: (data)=>{
+        console.log("获取回收重办列表数据：",data);
+        let arr = data.values.callbacklist||[];
+        let tempArr = [];
+        for(let i=0;i<arr.length;i++){
+          tempArr.push(false);
+        }
+        this.setState({
+          callbacklist:arr,
+          callbacklistCheckedArr:tempArr,
+        });
+      }
+    });
   }
 
   onClickSave = ()=>{
