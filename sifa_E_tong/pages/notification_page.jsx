@@ -23,7 +23,7 @@ import signup_logo from 'images/signup_logo.png';
 import logOut_icon from 'images/modules_img/logOut_icon.png';
 const Item = List.Item;
 const Brief = Item.Brief;
-const urlPrefix = 'http://211.138.238.83:9000/CS_JrlService/';
+const urlPrefix = 'http://211.138.238.83:9000/CS_JrlService';
 
 notification.config({
   top: 68,
@@ -80,7 +80,7 @@ class NotificationPage extends React.Component {
       };
       params.loginPwd = commonUtils.Base64Decode(params.loginPwd);
       // let params = {'param':encodeURIComponent(JSON.stringify(params))};
-      $.post(`${urlPrefix}/android/datb/login.action`,params,
+      $.get(`${urlPrefix}/android/datb/login.action`,params,
           (data,state)=>{
               //这里显示从服务器返回的数据
               let res = decodeURIComponent(data);

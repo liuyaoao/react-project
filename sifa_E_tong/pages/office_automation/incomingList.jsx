@@ -43,7 +43,7 @@ class IncomingList extends React.Component {
       keyName:keyName,
       viewcolumntitles:this.state.colsNameCn.join(','),
       successCall: (data)=>{
-        console.log("get 收文管理的-list data:",data);
+        // console.log("get 收文管理的-list data:",data);
         this.setState({isLoading:false});
         let {colsNameEn} = this.state;
         let parseData = OAUtils.formatServerListData(colsNameEn, data.values);
@@ -90,7 +90,7 @@ class IncomingList extends React.Component {
     this.getServerListData(key,1);
   }
   onClickOneRow = (rowData)=>{
-    console.log("incomingList click rowData:",rowData);
+    // console.log("incomingList click rowData:",rowData);
     this.setState({detailInfo:rowData, showDetail:true});
   }
   backToTableListCall = ()=>{   //返回到列表页。

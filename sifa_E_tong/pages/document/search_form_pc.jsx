@@ -24,7 +24,7 @@ class SearchFormPC extends React.Component {
       this.beforeUploadCall = this.beforeUploadCall.bind(this);
       this.fileUploadChange = this.fileUploadChange.bind(this);
       let permissionData = UserStore.getPermissionData();
-      let hasOperaPermission = permissionData['sys_config'].indexOf('action') != -1;
+      let hasOperaPermission = permissionData['document'] ? permissionData['document'].indexOf('action') != -1 : false;
       this.state = {
         isMobile: Utils.isMobile(),
         uploading:false,

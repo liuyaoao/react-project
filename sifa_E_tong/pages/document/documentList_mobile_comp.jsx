@@ -13,7 +13,7 @@ class DocumentListMobile extends React.Component {
   constructor(props) {
       super(props);
       let permissionData = UserStore.getPermissionData();
-      let hasOperaPermission = permissionData['sys_config'] ? permissionData['sys_config'].indexOf('action') != -1 : false;
+      let hasOperaPermission = permissionData['document'] ? permissionData['document'].indexOf('action') != -1 : false;
       this.state = {
         hasOperaPermission:hasOperaPermission, //是否有操作权限。
       };

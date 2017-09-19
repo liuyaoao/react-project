@@ -24,7 +24,7 @@ class DocumentListPC extends React.Component {
   constructor(props) {
       super(props);
       let permissionData = UserStore.getPermissionData();
-      let hasOperaPermission = permissionData['sys_config'].indexOf('action') != -1;
+      let hasOperaPermission = permissionData['document'] ? permissionData['document'].indexOf('action') != -1 : false;
       this.onPaginationChange = this.onPaginationChange.bind(this);
       this.state = {
         selectedRowKeys: [],  // Check here to configure the default column

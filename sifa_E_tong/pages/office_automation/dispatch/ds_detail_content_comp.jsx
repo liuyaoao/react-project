@@ -52,7 +52,7 @@ class DS_DetailContentComp extends React.Component {
       unid:this.props.detailInfo.unid,
       formParams:Object.assign({},this.props.formParams,this.props.formData,tempFormData), //特有的表单参数数据。
       successCall: (data)=>{
-        console.log("保存-发文管理的表单数据:",data);
+        // console.log("保存-发文管理的表单数据:",data);
         let formData = OAUtils.formatFormData(data.values);
         this.props.editSaveSuccCall(formData,data.values);
         Toast.info('修改保存成功!!', 2);
@@ -67,7 +67,7 @@ class DS_DetailContentComp extends React.Component {
       tokenunid:this.props.tokenunid,
       docunid:this.props.detailInfo.unid,
       successCall: (data)=>{
-        console.log("get 发文管理的历史阅文意见:",data.values.notions);
+        // console.log("get 发文管理的历史阅文意见:",data.values.notions);
         this.setState({
           historyNotionType2List:OAUtils.parseHistoryNotionList(data.values.notions || []),
         });
@@ -83,7 +83,7 @@ class DS_DetailContentComp extends React.Component {
       docunid:this.props.detailInfo.unid,
       moduleName:this.props.moduleNameCn,
       successCall: (data)=>{
-        console.log("get 发文管理的附件列表:",data);
+        // console.log("get 发文管理的附件列表:",data);
         this.setState({
           attachmentList:data.values.filelist || [],
         });

@@ -73,7 +73,7 @@ class DS_AddComp extends React.Component {
     return (
       <div className={'oa_detail_container ds_detail_container'}>
         <NavBar className="mobile_navbar_custom"
-          style={{position:'fixed',height:'60px',zIndex:'13',width:'100%',top:0}}
+          style={{position:'fixed',height:'60px',width:'100%',top:0}}
           iconName = {false} onLeftClick={this.onNavBarLeftClick}
           leftContent={[
             <Icon type="arrow-left" className="back_arrow_icon" key={2}/>,

@@ -47,7 +47,7 @@ class SignReportList extends React.Component {
       keyName:keyName,
       viewcolumntitles:this.state.colsNameCn.join(','),
       successCall: (data)=>{
-        console.log("get 签报管理的 list data:",data);
+        // console.log("get 签报管理的 list data:",data);
         let {colsNameEn} = this.state;
         let parseData = OAUtils.formatServerListData(colsNameEn, data.values);
         let listData = this.state.listData.concat(parseData);

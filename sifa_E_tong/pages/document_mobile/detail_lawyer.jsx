@@ -81,7 +81,7 @@ class DocDetailLawyer extends React.Component {
           ]}>
           <img width="35" height="35" src={signup_logo}/>司法E通
         </NavBar>
-        <div style={{marginTop:'60px',width:'90%',margin:'0 auto'}}>
+        <div className='doc-edit-form-mobile' style={{marginTop:'60px',width:'90%',margin:'0 auto'}}>
           <WhiteSpace size='md' />
           <Form className={'document_detail_body'}>
             <Row>

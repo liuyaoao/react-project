@@ -247,8 +247,8 @@ class UserSettingMobilePage extends React.Component {
           </NavBar>
           <div style={{marginTop:'60px',width:'90%',margin:'0 auto'}}>
             <WhiteSpace size='md' />
-            <div className="userSetting_body">
-              <Form  className={"edit-form"} style={{margin:0}}>
+            <div className="userSetting_body doc-edit-form-mobile">
+              <Form className="edit-form" style={{margin:0}}>
                 <Row>
                   <Col span={24}>
                     <FormItem

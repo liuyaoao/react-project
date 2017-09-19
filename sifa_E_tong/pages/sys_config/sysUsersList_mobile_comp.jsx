@@ -13,6 +13,7 @@ notification.config({
   top: 68,
   duration: 3
 });
+  // 移动端暂时不要了，先保留吧。
 class SysUsersListMobileComp extends React.Component {
   constructor(props) {
       super(props);

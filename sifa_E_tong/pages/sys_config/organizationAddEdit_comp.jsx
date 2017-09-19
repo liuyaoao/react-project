@@ -39,7 +39,7 @@ class OrganizationAddEditComp extends React.Component {
       this.handleDeleteOrganization = this.handleDeleteOrganization.bind(this);
       this.onTreeSelectChange = this.onTreeSelectChange.bind(this);
       let permissionData = UserStore.getPermissionData();
-      let hasOperaPermission = permissionData['sys_config'].indexOf('action') != -1;
+      let hasOperaPermission = permissionData['sys_config'] ? permissionData['sys_config'].indexOf('action') != -1 : false;
       this.state = {
         treeSelectValue:'',
         treeSelectData:[],

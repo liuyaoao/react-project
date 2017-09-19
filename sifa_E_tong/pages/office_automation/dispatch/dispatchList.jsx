@@ -48,7 +48,7 @@ class DispatchList extends React.Component {
       keyName:keyName,
       viewcolumntitles:this.state.colsNameCn.join(','),
       successCall: (data)=>{
-        console.log("get server signReport list data:",data);
+        // console.log("get server signReport list data:",data);
         let {colsNameEn} = this.state;
         let parseData = OAUtils.formatServerListData(colsNameEn, data.values);
         let listData = this.state.listData.concat(parseData);
@@ -184,7 +184,7 @@ class DispatchList extends React.Component {
           >
             <div className={'list_item_container'}>
               <div className={'list_item_middle'}>
-                <div className="item_title">{rowData.fileTitle}</div>
+                <div style={{color:'black',fontSize:'0.33rem',fontWeight:'bold'}}>{rowData.fileTitle}</div>
                 <div>当前办理人：<span>{rowData.curUsers}</span></div>
               </div>
               <div className={'list_item_left'}>

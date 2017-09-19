@@ -4,7 +4,7 @@ import * as Utils from 'utils/utils.jsx';
 import { WingBlank,Popover, WhiteSpace, Button, NavBar, TabBar} from 'antd-mobile';
 
 import {Icon } from 'antd';
-class BottomTabBarComp extends React.Component {
+class CommonBottomTabBarComp extends React.Component {
   constructor(props) {
       super(props);
       this.getTabBarItemSave = this.getTabBarItemSave.bind(this);
@@ -12,14 +12,17 @@ class BottomTabBarComp extends React.Component {
       this.getTabBarItemSend = this.getTabBarItemSend.bind(this);
       this.getTabBarItemTrack = this.getTabBarItemTrack.bind(this);
       this.getTabBarItemReHandle = this.getTabBarItemReHandle.bind(this);
+      this.getTabBarItemToEnd = this.getTabBarItemToEnd.bind(this);
       this.state = {
       };
   }
+
   componentWillMount(){
   }
+
   shouldComponentUpdate(nextProps){
     if(this.props.formDataRaw !== nextProps.formDataRaw){
-      // console.log("formDataRaw123456789：",nextProps.formDataRaw);
+      console.log("formDataRaw123456789：",nextProps.formDataRaw);
     }
     return true;
   }
@@ -153,31 +156,31 @@ class BottomTabBarComp extends React.Component {
     return null;
   }
 
-  // getTabBarItemArticle = ()=>{  //是否展示 正文 按钮
-  //   let {formDataRaw} = this.props;
-  //   let articleItem = (
-  //     <TabBar.Item
-  //       title="正文"
-  //       key="正文"
-  //       icon={ <Icon type="switcher" style={{fontSize:'0.4rem'}} /> }
-  //       selectedIcon={<Icon type="switcher" style={{color:'blue', fontSize:'0.4rem'}}/>}
-  //       selected={this.props.selectedTab === 'articleTab'}
-  //       onPress={() => this.props.onClickArticleBtn()}
-  //     >
-  //     <div></div>
-  //     </TabBar.Item>
-  //   );
-  //   if(formDataRaw){
-  //     if(this.props.isAddNew){
-  //       return articleItem;
-  //     }else if(formDataRaw['btZw'] && formDataRaw['btZw']['visible'] && formDataRaw['btZw']['enable'] ){
-  //       return articleItem;
-  //     }else{
-  //       return null;
-  //     }
-  //   }
-  //   return null;
-  // }
+  getTabBarItemToEnd = ()=>{  //是否展示 办结 按钮
+    let {formDataRaw} = this.props;
+    let articleItem = (
+      <TabBar.Item
+        title="办结"
+        key="办结"
+        icon={ <Icon type="switcher" style={{fontSize:'0.4rem'}} /> }
+        selectedIcon={<Icon type="switcher" style={{color:'blue', fontSize:'0.4rem'}}/>}
+        selected={this.props.selectedTab === 'articleTab'}
+        onPress={() => this.props.onClickToEndBtn()}
+      >
+      <div></div>
+      </TabBar.Item>
+    );
+    if(formDataRaw){
+      if(this.props.isAddNew){
+        return articleItem;
+      }else if(formDataRaw['btZj'] && formDataRaw['btZj']['visible'] && formDataRaw['btZj']['enable'] ){
+        return articleItem;
+      }else{
+        return null;
+      }
+    }
+    return null;
+  }
 
 
   render() {
@@ -186,7 +189,7 @@ class BottomTabBarComp extends React.Component {
     let itemSend = this.getTabBarItemSend();
     let itemTrack = this.getTabBarItemTrack();
     let itemReHandle = this.getTabBarItemReHandle();
-    // let itemArticle = this.getTabBarItemArticle();
+    let itemToEnd = this.getTabBarItemToEnd();
 
     let arrEles = [];
     itemSave?arrEles.push(itemSave):null;
@@ -194,7 +197,7 @@ class BottomTabBarComp extends React.Component {
     itemSend?arrEles.push(itemSend):null;
     itemTrack?arrEles.push(itemTrack):null;
     itemReHandle?arrEles.push(itemReHandle):null; //回收重办
-    // itemArticle?arrEles.push(itemArticle):null;
+    itemToEnd?arrEles.push(itemToEnd):null; //办结
 
     return (
       <div>
@@ -210,9 +213,9 @@ class BottomTabBarComp extends React.Component {
     )
   }
 }
-BottomTabBarComp.defaultProps = {
+CommonBottomTabBarComp.defaultProps = {
 };
-BottomTabBarComp.propTypes = {
+CommonBottomTabBarComp.propTypes = {
   isAddNew:React.PropTypes.bool,
 };
-export default BottomTabBarComp;
+export default CommonBottomTabBarComp;

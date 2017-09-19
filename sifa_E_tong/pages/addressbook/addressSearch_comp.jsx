@@ -31,7 +31,7 @@ class AddressSearchComp extends React.Component {
       this.beforeUploadCall = this.beforeUploadCall.bind(this);
       this.fileUploadChange = this.fileUploadChange.bind(this);
       let permissionData = UserStore.getPermissionData();
-      let hasOperaPermission = permissionData['address_book'].indexOf('action') != -1;
+      let hasOperaPermission = permissionData['address_book'] ? permissionData['address_book'].indexOf('action') != -1 : false;
       this.state = {
         permissionData:permissionData,
         hasOperaPermission:hasOperaPermission, //是否有操作权限。

@@ -278,7 +278,7 @@ export function formatFormData(values){
   return formData;
 }
 //保存模块编辑的表单数据
-export function saveModuleFormData(params) {
+export function saveModuleFormData(params,isToEnd) {
   const moduleName2FormName = {
     "签报管理":"hcit.module.qbgl.ui.FrmCld",
     "发文管理":"hcit.module.fwgl.ui.FrmFwcld",
@@ -295,7 +295,7 @@ export function saveModuleFormData(params) {
     "params" : {
       "formname" : moduleName2FormName[options.moduleName],
       "formdata" : Object.assign({},{
-        "__EVENTTARGET_S" : "M|btSave|OnClickHandler",
+        "__EVENTTARGET_S" : isToEnd?"M|btZj|OnClickHandler":"M|btSave|OnClickHandler",
 					"flowsessionid" : "",
 					"gwlc" : "",
 					"_otherssign" : "",
@@ -628,6 +628,54 @@ export function verifyNotice(params) {
     "params" : {
       "unids" : options.unids,
       "shzt" : options.shzt,
+    }
+  }));
+  finalRequestServer(options,param);
+}
+//办结，终结
+// export function toEndItem(params) {
+//   let options = Object.assign({},{
+//     url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+//     moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.DoFinishDoc', //模块url
+//   },params);
+//   let param = encodeURIComponent(JSON.stringify({
+//     "ver" : "2",
+//     "params" : {
+//       "docunid" : options.docunid,
+//       "modulename" : options.modulename,
+//       "gwlcunid" : options.gwlcunid,
+//     }
+//   }));
+//   finalRequestServer(options,param);
+// }
+export function toEndItemV2(params){
+  saveModuleFormData(params,true);
+}
+//获取回收重办列表。
+export function getCallBackList(params) {
+  let options = Object.assign({},{
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.GetCallBackList', //模块url
+  },params);
+  let param = encodeURIComponent(JSON.stringify({
+    "ver" : "2",
+    "params" : {
+      "fsid" : options.fsid,
+    }
+  }));
+  finalRequestServer(options,param);
+}
+//确定回收重办命令。
+export function doCallBack(params) {
+  let options = Object.assign({},{
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    moduleUrl: '/openagent?agent=hcit.project.moa.transform.agent.DoCallBack', //模块url
+  },params);
+  let param = encodeURIComponent(JSON.stringify({
+    "ver" : "2",
+    "params" : {
+      "nodeunids":options.nodeunids,
+      "fsid" : options.fsid,
     }
   }));
   finalRequestServer(options,param);

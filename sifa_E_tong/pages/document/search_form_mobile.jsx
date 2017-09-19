@@ -13,7 +13,7 @@ class SearchFormMobile extends React.Component {
       super(props);
       // this.beforeUploadCall = this.beforeUploadCall.bind(this);
       let permissionData = UserStore.getPermissionData();
-      let hasOperaPermission = permissionData['sys_config'].indexOf('action') != -1;
+      let hasOperaPermission = permissionData['document'] ? permissionData['document'].indexOf('action') != -1 : false;
       this.state = {
         isMobile: Utils.isMobile(),
         hasOperaPermission:hasOperaPermission, //是否有操作权限。

@@ -12,7 +12,7 @@ import LogOutComp from './components/log_out_comp.jsx';
 import client from 'client/web_client.jsx';
 import myWebClient from 'client/my_web_client.jsx';
 import SysUsersListComp from './sys_config/sysUsersList_comp.jsx';
-import SysUsersListMobileComp from './sys_config/sysUsersList_mobile_comp.jsx';
+// import SysUsersListMobileComp from './sys_config/sysUsersList_mobile_comp.jsx';
 import AddEditSysConfigDialog from './sys_config/addEdit_dialog.jsx';
 import ModifyUserPasswordDialog from './sys_config/modifyPassword_dialog.jsx';
 import UserSearchZoneComp from './sys_config/userSearchZone_comp.jsx';

@@ -27,7 +27,7 @@ class SysUsersListComp extends React.Component {
       this.showEditPrivilegeDialog = this.showEditPrivilegeDialog.bind(this);
       this.updateOrganizationData = this.updateOrganizationData.bind(this);
       let permissionData = UserStore.getPermissionData();
-      let hasOperaPermission = permissionData['sys_config'].indexOf('action') != -1;
+      let hasOperaPermission = permissionData['sys_config'] ? permissionData['sys_config'].indexOf('action') != -1 : false; 
       var me = UserStore.getCurrentUser() || {};
       this.state = {
         selectedRowKeys: [],  // Check here to configure the default column

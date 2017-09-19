@@ -171,7 +171,7 @@
     }
   }
   .ant-form .ant-row label{
-    font-size:0.34rem;
+    font-size:0.33rem;
   }
 }
 .pc_edit_dialog .ant-modal-content label, .sys-edit-form .ant-modal-content label{
@@ -200,6 +200,13 @@
     top:0;
   }
 }
+.am-modal{
+  .am-modal-content{
+    .am-modal-body{
+      font-size:0.30rem;
+    }
+  }
+}
 .am-list-item .am-list-line .am-list-content .addressbook_row img{
   width:1.5rem;
   height:1.5rem;
@@ -219,4 +226,10 @@
       padding-right:20px;
     }
   }
+}
+.am-modal-mask{
+  z-index: 1003 !important;
+}
+.am-modal-wrap{
+  z-index: 1003 !important;
 }

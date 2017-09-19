@@ -4,17 +4,18 @@ import React from 'react';
 import * as Utils from 'utils/utils.jsx';
 // import myWebClient from 'client/my_web_client.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
-import { WingBlank, WhiteSpace, Button, NavBar, TabBar} from 'antd-mobile';
-
+import { WingBlank, WhiteSpace, Button, NavBar, TabBar,Toast, Modal} from 'antd-mobile';
+const alert = Modal.alert;
 import {Icon } from 'antd';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 
 import DetailContentComp from './detail_content_comp.jsx';
-import BottomTabBarComp from './bottomTabBar_comp.jsx';
+import CommonBottomTabBarComp from '../common_bottomTabBar_comp.jsx'; //底部tab条。
 import SignReportFlowTraceComp from './signReport_flowTrace_comp.jsx'; //办文跟踪视图
 import CommonSendComp from '../common_send_comp.jsx'; //发送视图
 import CommonVerifyComp from '../common_verify_comp.jsx'; //阅文意见视图
+import CommonRehandleComp from '../common_rehandle_comp.jsx'; //回收重办视图
 
 const zhNow = moment().locale('zh-cn').utcOffset(8);
 
@@ -50,7 +51,7 @@ class SignReportDetail extends React.Component {
       unid:this.props.detailInfo.unid,
       formParams:this.state.formParams,
       successCall: (data)=>{
-        console.log("get 签报管理的表单数据:",data);
+        // console.log("get 签报管理的表单数据:",data);
         let formData = OAUtils.formatFormData(data.values);
         this.setState({
           formData,
@@ -91,6 +92,29 @@ class SignReportDetail extends React.Component {
     this.getServerFormData();
     this.props.updateListViewCall();
   }
+  onClickToEndBtn = ()=>{
+    alert('', '终结后将不能修改，其他人员也不能继续办理，是否继续？', [
+      { text: '取消', onPress: () => console.log('cancel') },
+      { text: '确定', onPress: () => this.confirmToEndHandle() },
+    ]);
+  }
+  confirmToEndHandle = ()=>{
+    OAUtils.toEndItemV2({
+      moduleName:this.state.moduleNameCn,
+      tokenunid:this.props.tokenunid,
+      unid:this.props.detailInfo.unid,
+      formParams:Object.assign({},this.state.formParams,this.state.formData), //特有的表单参数数据。
+      successCall: (data)=>{
+        // console.log("办结-签报管理:",data);
+        Toast.info('办结成功!', 2);
+        this.props.updateListViewCall();
+        this.props.backToTableListCall();
+      },
+      errorCall:(res)=>{
+        Toast.info('办结失败!!', 2);
+      }
+    });
+  }
 
   render() {
      const {detailInfo} = this.props;
@@ -102,7 +126,7 @@ class SignReportDetail extends React.Component {
     return (
       <div className={"oa_detail_container ds_detail_container"}>
         <NavBar className="mobile_navbar_custom"
-          style={{position:'fixed',height:'60px',zIndex:'13',width:'100%',top:0}}
+          style={{position:'fixed',height:'60px',width:'100%',top:0}}
           iconName = {false} onLeftClick={this.onNavBarLeftClick}
           leftContent={[
             <Icon type="arrow-left" className="back_arrow_icon" key={2}/>,
@@ -152,8 +176,18 @@ class SignReportDetail extends React.Component {
               modulename={this.state.modulename}
               gwlcunid={formData["gwlc"]} />):
             null}
+            {this.state.curSubTab == "rehandle"?
+              (<CommonRehandleComp
+                tokenunid={this.props.tokenunid}
+                backDetailCall={this.onBackDetailCall}
+                editSaveSuccCall={this.editSaveSuccCall}
+                docunid={detailInfo.unid}
+                modulename={this.state.modulename}
+                fsid={formData["flowsessionid"]}
+                gwlcunid={formData["gwlc"]} />):
+              null}
 
-          <BottomTabBarComp
+          <CommonBottomTabBarComp
             hidden={this.state.curSubTab != "content"}
             isAddNew={false}
             formDataRaw={formDataRaw}
@@ -176,6 +210,19 @@ class SignReportDetail extends React.Component {
                 curSubTab:'track',
                 selectedTab: 'trackTab',
               });
+            }}
+            onClickReHandleBtn={()=>{
+              this.setState({
+                curSubTab:'rehandle',
+                selectedTab: 'rehandleTab',
+              });
+            }}
+            onClickToEndBtn={()=>{
+              this.setState({
+                curSubTab:'content',
+                selectedTab: 'contentTab',
+              });
+              this.onClickToEndBtn();
             }} />
       </div>
     )

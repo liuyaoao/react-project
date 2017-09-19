@@ -19,11 +19,10 @@ notification.config({
 class AddressListMobileComp extends React.Component {
   constructor(props) {
       super(props);
-      this.showAddEditDialog = this.showAddEditDialog.bind(this);
       this.showDeleteConfirmDialog = this.showDeleteConfirmDialog.bind(this);
       this.confirmDeleteContacts = this.confirmDeleteContacts.bind(this);
       let permissionData = UserStore.getPermissionData();
-      let hasOperaPermission = permissionData['address_book'].indexOf('action') != -1;
+      let hasOperaPermission = permissionData['address_book'] ? permissionData['address_book'].indexOf('action') != -1 : false;
       this.state = {
         permissionData:permissionData,
         hasOperaPermission:hasOperaPermission, //是否有操作权限。
@@ -41,17 +40,17 @@ class AddressListMobileComp extends React.Component {
   }
   onClickEditItem = (evt,record,index)=>{
     // console.log("点击编辑通讯录的事件--evt-：",evt,$(evt.target));
-    if($(evt.target).closest(".addressbook_right").length>0){
-      evt.stopPropagation();
-      return false;
-    }
-    this.showAddEditDialog('',record,index);
+    // if($(evt.target).closest(".addressbook_right").length>0){
+    //   evt.stopPropagation();
+    //   return false;
+    // }
+    // this.showAddEditDialog('',record,index);
   }
-  showAddEditDialog(text,record,index){
-    // console.log("text:"+text+"index:"+index);
-    let data = record || {};
-    this.props.showAddEditDialog(data);
-  }
+  // showAddEditDialog(text,record,index){
+  //   // console.log("text:"+text+"index:"+index);
+  //   let data = record || {};
+  //   this.props.showAddEditDialog(data);
+  // }
   showDeleteConfirmDialog = (record)=>{
     let selectedIds = record.id ? [record.id] : [];
     alert('删除', '确定删除么?', [

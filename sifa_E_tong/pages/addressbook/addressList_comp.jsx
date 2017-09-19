@@ -24,7 +24,7 @@ class AddressListComp extends React.Component {
       this.onSelectChange = this.onSelectChange.bind(this);
       this.confirmDeleteContacts = this.confirmDeleteContacts.bind(this);
       let permissionData = UserStore.getPermissionData();
-      let hasOperaPermission = permissionData['address_book'].indexOf('action') != -1;
+      let hasOperaPermission = permissionData['address_book'] ? permissionData['address_book'].indexOf('action') != -1 : false;
       this.onPaginationChange = this.onPaginationChange.bind(this);
       this.state = {
         selectedRowKeys: [],  // Check here to configure the default column

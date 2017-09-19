@@ -20,7 +20,7 @@ class UserManagePage extends React.Component {
   constructor(props) {
       super(props);
       let permissionData = UserStore.getPermissionData();
-      let hasOperaPermission = permissionData['sys_config'].indexOf('action') != -1;
+      let hasOperaPermission = permissionData['sys_config'] ? permissionData['sys_config'].indexOf('action') != -1 : false;
       this.afterAddNewOrganiCall = this.afterAddNewOrganiCall.bind(this);
       this.afterDeleteOrganiCall = this.afterDeleteOrganiCall.bind(this);
       this.getSelectCurOrganization = this.getSelectCurOrganization.bind(this);

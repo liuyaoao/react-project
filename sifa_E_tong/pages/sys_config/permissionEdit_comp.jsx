@@ -17,7 +17,7 @@ class PermissionEditComp extends React.Component {
       super(props);
       this.onPermissionChecked = this.onPermissionChecked.bind(this);
       let permissionData = UserStore.getPermissionData();
-      let hasOperaPermission = permissionData['sys_config'].indexOf('action') != -1;
+      let hasOperaPermission = permissionData['sys_config'] ? permissionData['sys_config'].indexOf('action') != -1 : false;
       this.state = {
         hasOperaPermission:hasOperaPermission, //是否有操作权限。
         organizationId:'',

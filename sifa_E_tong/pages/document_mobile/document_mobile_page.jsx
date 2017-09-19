@@ -35,7 +35,7 @@ class DocumentMobilePage extends React.Component {
     }
     getStateFromStores() {
       let permissionData = UserStore.getPermissionData();
-      let hasOperaPermission = permissionData['sys_config'] ? permissionData['sys_config'].indexOf('action') != -1 : false;
+      let hasOperaPermission = permissionData['document'] ? permissionData['document'].indexOf('action') != -1 : false;
       return {
           open: false,
           position: 'left',
