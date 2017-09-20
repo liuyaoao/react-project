@@ -33,7 +33,8 @@ class DispatchList extends React.Component {
         dataSource: dataSource.cloneWithRows([]),
         refreshing: true,
         showDetail:false,
-        showAdd:false
+        showAdd:false,
+        tokenunid:'',
       };
   }
   componentWillMount(){
@@ -41,9 +42,14 @@ class DispatchList extends React.Component {
     this.getServerListData(this.state.activeTabkey,this.state.currentpage);
   }
   getServerListData = (keyName,currentpage,callback)=>{ //从服务端获取列表数据
-    this.setState({isLoading:true});
+    let loginInfo = localStorage.getItem(OAUtils.OA_LOGIN_INFO_KEY);
+    let tokenunid = JSON.parse(loginInfo)['tockenunid'];
+    this.setState({
+      tokenunid,
+      isLoading:true
+    });
     OAUtils.getDispatchListData({
-      tokenunid: this.props.tokenunid,
+      tokenunid: tokenunid,
       currentpage:currentpage,
       keyName:keyName,
       viewcolumntitles:this.state.colsNameCn.join(','),
@@ -85,7 +91,7 @@ class DispatchList extends React.Component {
   }
   confirmDelete = (selectedId)=>{ //确认删除
     OAUtils.deleteItem({
-      tokenunid: this.props.tokenunid,
+      tokenunid: this.state.tokenunid,
       successCall: (data)=>{
         console.log("删除成功:",data);
         Toast.info("删除成功",2);
@@ -251,7 +257,7 @@ class DispatchList extends React.Component {
         <WhiteSpace />
         {this.state.showAdd?
           (<DS_AddComp
-            tokenunid={this.props.tokenunid}
+            tokenunid={this.state.tokenunid}
             afterAddNewCall={this.afterAddNewCall}
             backToTableListCall={()=>this.backToTableListCall()}
             />):null
@@ -259,7 +265,7 @@ class DispatchList extends React.Component {
         {this.state.showDetail?
           (<DS_DetailComp
             detailInfo={this.state.detailInfo}
-            tokenunid={this.props.tokenunid}
+            tokenunid={this.state.tokenunid}
             updateListViewCall={this.updateListViewCall}
             backToTableListCall={()=>this.backToTableListCall()}
             />):null

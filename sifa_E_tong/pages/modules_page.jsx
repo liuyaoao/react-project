@@ -90,17 +90,7 @@ class ChooseModulesPage extends React.Component {
       // this.setState({loginUserName:me.username || ''});
     }
     componentDidMount(){
-      let me = UserStore.getCurrentUser() || {};
-      if(me.oaUserName){
-        OAUtils.loginOASystem({oaUserName:me.oaUserName,oaPassword:me.oaPassword}, (res)=>{ //登录OA系统获取认证id。
-          // console.log("successCall:"+res);
-          this.setState({tokenunid:res.values.tockenunid});
-          this.getServerListData(res.values.tockenunid);
-        },(res)=>{
-          // console.log("errorCall:"+res);
-          this.setState({oaLoginErrorText: res.ErrorText});
-        });
-      }
+      this.getOALoginInfo();
       let randomStr = Math.random().toString().split('.')[1];
       this.setState({randomStr});
       let _this = this;
@@ -120,6 +110,29 @@ class ChooseModulesPage extends React.Component {
         },100);
       }
       this.getChatNewMessageNum();
+    }
+    getOALoginInfo(){
+      let me = UserStore.getCurrentUser() || {};
+      let loginInfo = localStorage.getItem(OAUtils.OA_LOGIN_INFO_KEY);
+      if(me.oaUserName){
+        if(loginInfo && me.oaUserName == JSON.parse(loginInfo)['oaUserName']){
+          let loginInfoObj = JSON.parse(loginInfo);
+          this.setState({tokenunid:loginInfoObj['tockenunid']});
+          this.getServerNoticeListData(loginInfoObj['tockenunid']);
+          return;
+        }
+        OAUtils.loginOASystem({oaUserName:me.oaUserName,oaPassword:me.oaPassword}, (res)=>{ //登录OA系统获取认证id。
+          // console.log("successCall:"+res);
+          res.values['oaUserName'] = me.oaUserName;
+          res.values['tokenunid'] = res.values['tockenunid'];
+          localStorage.setItem(OAUtils.OA_LOGIN_INFO_KEY,JSON.stringify(res.values));
+          this.setState({tokenunid:res.values.tockenunid});
+          this.getServerNoticeListData(res.values.tockenunid);
+        },(res)=>{
+          // console.log("errorCall:"+res);
+          this.setState({oaLoginErrorText: res.ErrorText});
+        });
+      }
     }
     componentWillUnmount(){
       if (window.history && window.history.pushState) {
@@ -227,7 +240,7 @@ class ChooseModulesPage extends React.Component {
       GlobalActions.redirectUserToDefaultTeam();
       // browserHistory.push('/siteview/channels/town-square');
     }
-    getServerListData = (tokenunid)=>{ //从服务端获取列表数据
+    getServerNoticeListData = (tokenunid)=>{ //从服务端获取列表数据
       OAUtils.getNoticeListData({
         tokenunid: tokenunid,
         currentpage:1,

@@ -2,6 +2,8 @@ import $ from 'jquery';
 import AppDispatcher from 'dispatcher/app_dispatcher.jsx';
 import * as commonUtils from 'pages/utils/common_utils.jsx';
 
+export const OA_LOGIN_INFO_KEY = 'sifa_oa_login_info_key';
+
 export function loginOASystem(loginOAUser, successCall,errorCall){ //登录OA系统
   const loginUrl = 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.ValidatePerson';
   var param = encodeURIComponent(JSON.stringify({

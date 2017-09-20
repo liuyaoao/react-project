@@ -28,6 +28,7 @@ class PersonalTodoList extends React.Component {
         dataSource: dataSource.cloneWithRows([]),  //listView的源数据。
         showDetail:false,
         detailInfo:{},
+        tokenunid:'',
       };
   }
   componentDidMount(){
@@ -36,9 +37,14 @@ class PersonalTodoList extends React.Component {
   }
   //获取服务器端的待办事项数据。
   getServerListData = (currentpage)=>{
-    this.setState({isLoading:true});
+    let loginInfo = localStorage.getItem(OAUtils.OA_LOGIN_INFO_KEY);
+    let tokenunid = JSON.parse(loginInfo)['tockenunid'];
+    this.setState({
+      tokenunid,
+      isLoading:true
+    });
     OAUtils.getPersonalTodoListData({
-      tokenunid: this.props.tokenunid,
+      tokenunid: tokenunid,
       currentpage:currentpage,
       urlparam:{
         key:'dbsx',
@@ -99,6 +105,7 @@ class PersonalTodoList extends React.Component {
     this.getServerListData(1);
   }
   render() {
+    let {tokenunid} = this.state;
     const separator = (sectionID, rowID) => (
       <div
         key={`${sectionID}-${rowID}`}
@@ -178,7 +185,7 @@ class PersonalTodoList extends React.Component {
           <DS_DetailComp
             activeTabkey={'待办'}
             detailInfo={detailInfo}
-            tokenunid={this.props.tokenunid}
+            tokenunid={tokenunid}
             updateListViewCall={this.updateListViewCall}
             backToTableListCall={this.backToTableListCall}
           />:null}
@@ -186,7 +193,7 @@ class PersonalTodoList extends React.Component {
           <SignReportDetail
             activeTabkey={'待办'}
             detailInfo={detailInfo}
-            tokenunid={this.props.tokenunid}
+            tokenunid={tokenunid}
             updateListViewCall={this.updateListViewCall}
             backToTableListCall={this.backToTableListCall}
           />:null}
@@ -194,7 +201,7 @@ class PersonalTodoList extends React.Component {
           <SuperviseDetail
             activeTabkey={'待办'}
             detailInfo={detailInfo}
-            tokenunid={this.props.tokenunid}
+            tokenunid={tokenunid}
             updateListViewCall={this.updateListViewCall}
             backToTableListCall={this.backToTableListCall}
           />:null}

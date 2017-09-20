@@ -32,6 +32,7 @@ class NoticeList extends React.Component {
         dataSource: dataSource.cloneWithRows([]),
         showDetail:false,
         showAdd:false,
+        tokenunid:'',
       };
   }
   componentWillMount(){
@@ -39,9 +40,14 @@ class NoticeList extends React.Component {
     this.getServerListData(this.state.activeTabkey,this.state.currentpage);
   }
   getServerListData = (keyName,currentpage)=>{ //从服务端获取列表数据
-    this.setState({isLoading:true});
+    let loginInfo = localStorage.getItem(OAUtils.OA_LOGIN_INFO_KEY);
+    let tokenunid = JSON.parse(loginInfo)['tockenunid'];
+    this.setState({
+      tokenunid,
+      isLoading:true
+    });
     OAUtils.getNoticeListData({
-      tokenunid: this.props.tokenunid,
+      tokenunid: tokenunid,
       currentpage:currentpage,
       rootlbunid:this.state.rootlbunid,
       shbz:({"待审核":"0", "已通过":"1", "未通过":"-1"})[keyName],
@@ -86,7 +92,7 @@ class NoticeList extends React.Component {
   confirmVerify = (selectedId, toVerifyState)=>{
     console.log("待审核数据的unid:",selectedId);
     OAUtils.verifyNotice({
-      tokenunid: this.props.tokenunid,
+      tokenunid: this.state.tokenunid,
       unids:selectedId+'',
       shzt:({"审核通过":"shtg", "审核不通过":"shbtg"})[toVerifyState],
       successCall: (data)=>{
@@ -102,7 +108,7 @@ class NoticeList extends React.Component {
   }
   confirmDelete = (selectedId)=>{ //确认删除
     OAUtils.deleteItem({
-      tokenunid: this.props.tokenunid,
+      tokenunid: this.state.tokenunid,
       successCall: (data)=>{
         console.log("删除成功:",data);
         Toast.info("删除成功",2);
@@ -289,7 +295,7 @@ class NoticeList extends React.Component {
           {this.state.showAdd?
             (
               <Notice_AddEditComp
-                tokenunid={this.props.tokenunid}
+                tokenunid={this.state.tokenunid}
                 afterAddNewCall={this.afterAddNewCall}
                 backToTableListCall={()=>this.backToTableListCall()}
                 />
@@ -297,7 +303,7 @@ class NoticeList extends React.Component {
           {this.state.showDetail?
             (
               <Notice_DetailComp
-                tokenunid={this.props.tokenunid}
+                tokenunid={this.state.tokenunid}
                 detailInfo={this.state.detailInfo}
                 backToTableListCall={()=>this.backToTableListCall()}
                 />

@@ -6,6 +6,7 @@ import {Button,Icon} from 'antd';
 import {Toast} from 'antd-mobile';
 import {browserHistory} from 'react-router/es6';
 import myWebClient from 'client/my_web_client.jsx';
+import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import * as GlobalActions from 'actions/global_actions.jsx';
 
 //可以写自定义的退出按钮传进来，不传也可以用默认的。
@@ -33,6 +34,7 @@ export default class LogOutComp extends React.Component {
       console.log("click 退出按钮：",e);
       Toast.info(<div><Icon type={'loading'} /><span>  正在退出...</span></div>, 5, null, true);
       myWebClient.removeToken();
+      localStorage.removeItem(OAUtils.OA_LOGIN_INFO_KEY);
       // browserHistory.push('/login');
       GlobalActions.emitUserLoggedOutEvent('/login');
     }

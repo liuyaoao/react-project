@@ -29,6 +29,7 @@ class IncomingList extends React.Component {
         listData:[],
         isLoading:false,
         dataSource: dataSource.cloneWithRows([]),
+        tokenunid:'',
       };
   }
   componentWillMount(){
@@ -36,9 +37,14 @@ class IncomingList extends React.Component {
     this.getServerListData(this.state.activeTabkey,1);
   }
   getServerListData = (keyName,currentpage)=>{
-    this.setState({isLoading:false});
+    let loginInfo = localStorage.getItem(OAUtils.OA_LOGIN_INFO_KEY);
+    let tokenunid = JSON.parse(loginInfo)['tockenunid'];
+    this.setState({
+      tokenunid,
+      isLoading:true
+    });
     OAUtils.getIncomingListData({
-      tokenunid: this.props.tokenunid,
+      tokenunid: tokenunid,
       currentpage:currentpage,
       keyName:keyName,
       viewcolumntitles:this.state.colsNameCn.join(','),

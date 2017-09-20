@@ -52,9 +52,14 @@ class ModulesMobileComp extends React.Component {
         loginUserName:me.username || '',
         loginUserNickname:me.nickname || '',
       });
-      OAUtils.loginOASystem({oaUserName:me.oaUserName,oaPassword:me.oaPassword}, (res)=>{ //登录OA系统获取认证id。
-        this.getServerTODOListData(res.values.tockenunid);
-      });
+      if(this.props.tokenunid){
+        this.getServerTODOListData(this.props.tokenunid);
+      }
+    }
+    componentWillReceiveProps(nextProps){
+      if(nextProps.tokenunid && nextProps.tokenunid!=this.props.tokenunid){
+        this.getServerTODOListData(nextProps.tokenunid);
+      }
     }
     getServerTODOListData = (tokenunid)=>{ //获取OA系统的待办事项列表
       OAUtils.getPersonalTodoListData({

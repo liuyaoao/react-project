@@ -14,21 +14,17 @@ import { Layout, Menu, Icon} from 'antd';
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 
-import PersonalTodoList from './office_automation/personalTodoList.jsx'; //待办事项
-import NoticeList from './office_automation/notice/noticeList.jsx'; //通知公告
-import VehicleList from './office_automation/vehicle/vehicleList.jsx'; //通知公告
-import IncomingList from './office_automation/incomingList.jsx'; //收文管理
-import DispatchList from './office_automation/dispatch/dispatchList.jsx'; //发文管理
-import SignReportList from './office_automation/signReport/signReportList.jsx'; //签报管理
-import SuperviseList from './office_automation/supervision/superviseList.jsx'; //督办管理
-import NewDispatchList from './office_automation/newDispatch/newDispatchList.jsx'; //最新发文
-import AdministrativeSystemInfos from './office_automation/administrativeSystemInfos.jsx';//司法行政系统信息查询
+// import PersonalTodoList from './office_automation/personalTodoList.jsx'; //待办事项
+// import NoticeList from './office_automation/notice/noticeList.jsx'; //通知公告
+// import VehicleList from './office_automation/vehicle/vehicleList.jsx'; //通知公告
+// import IncomingList from './office_automation/incomingList.jsx'; //收文管理
+// import DispatchList from './office_automation/dispatch/dispatchList.jsx'; //发文管理
+// import SignReportList from './office_automation/signReport/signReportList.jsx'; //签报管理
+// import SuperviseList from './office_automation/supervision/superviseList.jsx'; //督办管理
+// import NewDispatchList from './office_automation/newDispatch/newDispatchList.jsx'; //最新发文
+// import AdministrativeSystemInfos from './office_automation/administrativeSystemInfos.jsx';//司法行政系统信息查询
 
 import OaSiderbarComp from './office_automation/officeAutoSiderbar_comp.jsx';//侧边栏
-
-// import DocumentSubmission from './office_automation/documentSubmission.jsx';//公文报送
-// import InternalNoticeComp from './office_automation/internalNotice_comp.jsx'; //对内宣传
-// import WorkNoticeComp from './office_automation/workNotice_comp.jsx'; //工作通知
 
 import signup_logo from 'images/signup_logo.png';
 
@@ -51,8 +47,17 @@ class LoginRecordPage extends React.Component {
     componentWillMount() {
       var me = UserStore.getCurrentUser() || {};
       this.setState({loginUserName:me.username || ''});
+      let loginInfo = localStorage.getItem(OAUtils.OA_LOGIN_INFO_KEY);
+      if(loginInfo && me.oaUserName == JSON.parse(loginInfo)['oaUserName']){
+        let loginInfoObj = JSON.parse(loginInfo);
+        this.setState({tokenunid:loginInfoObj['tockenunid']});
+        return;
+      }
       OAUtils.loginOASystem({oaUserName:me.oaUserName,oaPassword:me.oaPassword}, (res)=>{ //登录OA系统获取认证id。
         // console.log("get OA login res:",res);
+        res.values['oaUserName'] = me.oaUserName;
+        res.values['tokenunid'] = res.values['tockenunid'];
+        localStorage.setItem(OAUtils.OA_LOGIN_INFO_KEY,JSON.stringify(res.values));
         this.setState({tokenunid:res.values.tockenunid});
       });
     }
@@ -69,43 +74,50 @@ class LoginRecordPage extends React.Component {
         current:key,
         open:!drawerOpen
       });
+      this.getContentElements(key);
     }
     onClickBackToModules(){
       browserHistory.push('/modules');
     }
-    getContentElements(){
+    getContentElements(current){
       let content = null;
-      let {current,tokenunid} = this.state;
+      let {tokenunid} = this.state;
       switch(current){
         case "待办事项":
-          content = (<PersonalTodoList title={current} tokenunid={tokenunid}/>);
-        break;
-        case "通知公告":
-          content = (<NoticeList title={current} tokenunid={tokenunid}/>);
-        break;
-        case "车辆管理":
-          content = (<VehicleList title={current} tokenunid={tokenunid}/>);
+          browserHistory.push('/office_automation/todo_list');
+          // content = (<PersonalTodoList title={current} tokenunid={tokenunid}/>);
         break;
         case "收文管理":
-          content = (<IncomingList title={current} tokenunid={tokenunid}/>);
+          browserHistory.push('/office_automation/incoming_list');
+          // content = (<IncomingList title={current} tokenunid={tokenunid}/>);
         break;
         case "发文管理":
-          content = (<DispatchList title={current} tokenunid={tokenunid}/>);
+          browserHistory.push('/office_automation/dispatch');
+          // content = (<DispatchList title={current} tokenunid={tokenunid}/>);
         break;
         case "签报管理":
-          content = (<SignReportList title={current} tokenunid={tokenunid}/>);
+          browserHistory.push('/office_automation/sign_report');
+          // content = (<SignReportList title={current} tokenunid={tokenunid}/>);
         break;
         case "督办管理":
-          content = (<SuperviseList title={current} tokenunid={tokenunid}/>);
+          browserHistory.push('/office_automation/supervision');
+          // content = (<SuperviseList title={current} tokenunid={tokenunid}/>);
         break;
         case "最新发文":
-          content = (<NewDispatchList title={current} tokenunid={tokenunid}/>);
+          browserHistory.push('/office_automation/new_dispatch');
+          // content = (<NewDispatchList title={current} tokenunid={tokenunid}/>);
         break;
-        case "公文报送":
-          content = (<DocumentSubmission title={current} tokenunid={tokenunid}/>);
+        case "通知公告":
+          browserHistory.push('/office_automation/notice');
+          // content = (<NoticeList title={current} tokenunid={tokenunid}/>);
+        break;
+        case "车辆管理":
+          browserHistory.push('/office_automation/vehicle');
+          // content = (<VehicleList title={current} tokenunid={tokenunid}/>);
         break;
         case "司法行政系统信息查询":
-          content = (<AdministrativeSystemInfos title={current} tokenunid={tokenunid}/>);
+          browserHistory.push('/office_automation/administrative_system_infos');
+          // content = (<AdministrativeSystemInfos title={current} tokenunid={tokenunid}/>);
         break;
         default:
           break;
@@ -113,6 +125,7 @@ class LoginRecordPage extends React.Component {
       return content;
     }
     render() {
+      let {tokenunid} = this.state;
       const drawerProps = {
         open: this.state.open,
         position: this.state.position,
@@ -139,12 +152,13 @@ class LoginRecordPage extends React.Component {
                 <span key={1}>返回</span>
               ]}
               rightContent={[
-                <Icon key="6" type="ellipsis" onClick={this.onOpenChange}/>
+                <Icon key="6" type="ellipsis" onClick={this.onOpenChange} />
               ]}>
                 <img width="35" height="35" src={signup_logo}/>司法E通
               </NavBar>
               <div style={{marginTop:'60px'}}>
-                {this.state.tokenunid ? this.getContentElements() : null}
+                {/*this.state.tokenunid ? this.getContentElements() : null*/}
+                {tokenunid ? this.props.children: null}
               </div>
             </Drawer>
           </div>

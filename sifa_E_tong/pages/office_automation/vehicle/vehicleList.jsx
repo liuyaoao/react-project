@@ -35,6 +35,7 @@ class VehicleList extends React.Component {
         dataSource: dataSource.cloneWithRows([]),
         showDetail:false,
         showAdd:false,
+        tokenunid:'',
       };
   }
   componentWillMount(){
@@ -42,9 +43,14 @@ class VehicleList extends React.Component {
     this.getServerListData(this.state.activeTabkey,this.state.currentpage);
   }
   getServerListData = (keyName,currentpage)=>{ //从服务端获取列表数据
-    this.setState({isLoading:true});
+    let loginInfo = localStorage.getItem(OAUtils.OA_LOGIN_INFO_KEY);
+    let tokenunid = JSON.parse(loginInfo)['tockenunid'];
+    this.setState({
+      tokenunid,
+      isLoading:true
+    });
     OAUtils.getVehicleListData({
-      tokenunid: this.props.tokenunid,
+      tokenunid: tokenunid,
       currentpage:currentpage,
       keyName:keyName,
       viewcolumntitles:this.state.colsNameCn.join(','),
@@ -77,7 +83,7 @@ class VehicleList extends React.Component {
   }
   confirmDelete = (selectedId)=>{ //确认删除
     OAUtils.deleteItem({
-      tokenunid: this.props.tokenunid,
+      tokenunid: this.state.tokenunid,
       successCall: (data)=>{
         console.log("删除成功:",data);
         Toast.info("删除成功",2);
@@ -237,7 +243,7 @@ class VehicleList extends React.Component {
           {this.state.showAdd?
             (
               <Vehicle_AddEditComp
-                tokenunid={this.props.tokenunid}
+                tokenunid={this.state.tokenunid}
                 afterAddNewCall={this.afterAddNewCall}
                 backToTableListCall={()=>this.backToTableListCall()}
                 />
@@ -245,7 +251,7 @@ class VehicleList extends React.Component {
           {this.state.showDetail?
             (
               <Vehicle_DetailComp
-                tokenunid={this.props.tokenunid}
+                tokenunid={this.state.tokenunid}
                 detailInfo={this.state.detailInfo}
                 updateListViewCall={this.updateListViewCall}
                 backToTableListCall={()=>this.backToTableListCall()}
