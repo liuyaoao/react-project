@@ -3,26 +3,19 @@ import $ from 'jquery';
 import React from 'react';
 import {browserHistory} from 'react-router/es6';
 // import OrganizationStore from 'pages/stores/organization_store.jsx';
-import UserStore from 'stores/user_store.jsx';
-import * as Utils from 'utils/utils.jsx';
 import myWebClient from 'client/my_web_client.jsx';
-import * as organizationUtils from './utils/organization_utils.jsx';
+import * as organizationUtils from 'pages/utils/organization_utils.jsx';
 
 import { SearchBar, Drawer, List, NavBar } from 'antd-mobile';
-import { Layout, Menu, Breadcrumb, Icon, Button, Input } from 'antd';
-const { SubMenu } = Menu;
+import { Layout,  Icon, Button, Input } from 'antd';
 const { Header, Content, Sider } = Layout;
-const Search = Input.Search;
-import LogOutComp from './components/log_out_comp.jsx';
-import * as addressBookUtils from './utils/addressBook_utils.jsx';
-import AddressSidebarMenuComp from './addressbook/addressSidebar_comp.jsx';
-import AddressListComp from './addressbook/addressList_comp.jsx';
-import AddEditContactDialog from './addressbook/addEditContact_dialog.jsx';
-import AddressSearchComp from './addressbook/addressSearch_comp.jsx';
+import * as addressBookUtils from 'pages/utils/addressBook_utils.jsx';
+import AddressSidebarMenuComp from 'pages/addressbook/addressSidebar_comp.jsx';
+import AddressListMobileComp from 'pages/addressbook/addressList_mobile_comp.jsx';
 
 import signup_logo from 'images/signup_logo.png';
 
-class AddressBookPage extends React.Component {
+class AddressBookPageMobile extends React.Component {
     constructor(props) {
         super(props);
         this.getStateFromStores = this.getStateFromStores.bind(this);
@@ -40,13 +33,9 @@ class AddressBookPage extends React.Component {
             level3Catalog:'',  //三级目录
             addressbookData:[],
             breadcrumbData:['全部'],
-            loginUserName:'',
             organizationsData:[],
             organizationsFlatData:[],
             organizationsFlatDataMap:{},
-            isShowEditDialog:false,
-            contactInfo:{},
-            isMobile: Utils.isMobile(),
             perPageNum:10, //每页条数。
             pageFrom:0,
             pageTo:10,
@@ -65,9 +54,6 @@ class AddressBookPage extends React.Component {
     }
     componentDidMount() {
       let _this = this;
-      var me = UserStore.getCurrentUser() || {};
-      // console.log("me info:",me);
-      this.setState({loginUserName:me.username||''});
       this.getServerDirectoryData();
       this.getAddressBookCnt({
         organization:this.state.organization
@@ -149,23 +135,10 @@ class AddressBookPage extends React.Component {
         "to":10,
       });
     }
-    showAddEditDialog = (data)=>{ //显示新增编辑弹窗。
-      // console.log("showAddressBook--AddEditDialog--:");
-      let info = data || {};
-      this.setState({contactInfo:info, isShowEditDialog:true});
-    }
-    closeAddEditDialog = ()=> {   // 隐藏新增Or编辑的弹窗。
-      this.setState({ contactInfo:{}, isShowEditDialog: false });
-    }
-    afterAddEditContactsCall = ()=>{ //新增编辑成功后更新列表。
-      this.getServerDirectoryData();
-      this.onSubmitSearch();
+    showAddEditDialog = (data)=>{ //显示新增编辑弹窗。暂时不用在手机端编辑
     }
     afterDeleteContactsCall = ()=>{ // 删除某几个通讯录后的回调。
       this.onSubmitSearch();
-    }
-    afterDeleteAllContactsCall = ()=>{ //删除全部通讯录后的回调。
-      this.getServerDirectoryData();
     }
     updateDirectoryData = (organization,secondaryDirectory,level3Catalog)=>{
       let params = {
@@ -181,21 +154,17 @@ class AddressBookPage extends React.Component {
       this.getAddressBookCnt(Object.assign({},params),{"from":0, "to":10});
     }
 
-    getBreadcrumbItem(){
-      let { breadcrumbData } = this.state;
-      let bread_items = breadcrumbData.map((val,index)=>{
-          return <Breadcrumb.Item className="bread_item" key={index}>{val.split("_")[0]}</Breadcrumb.Item>
-        });
-      return bread_items;
-    }
-
     render() {
-      let {isShowEditDialog,contactInfo} = this.state;
       let { addressbookData,organization,secondaryDirectory,level3Catalog } = this.state;
+      const drawerProps = {
+        open: this.state.open,
+        position: this.state.position,
+        onOpenChange: this.onOpenChange,
+      };
       const sidebar = (
         <Sider width={240}
             className="custom_ant_sidebar addressSidebar"
-            style={{ background: '#2071a7',color:'#fff',overflow: 'auto',marginTop:'0',zIndex:'13' }}>
+            style={{ background: '#2071a7',color:'#fff',overflow: 'auto',marginTop:'60px',zIndex:'13' }}>
             <AddressSidebarMenuComp
               organizationsData={this.state.organizationsData}
               organizationsFlatData={this.state.organizationsFlatData}
@@ -205,68 +174,57 @@ class AddressBookPage extends React.Component {
               setBreadcrumbData={(arr)=>{this.setBreadcrumbData(arr)}} />
         </Sider>
       );
-      let breadcrumbEles = this.getBreadcrumbItem();
       return (<div className="address_book_container">
-                <Layout style={{ height: '100vh' }}>
-                    <Header className="header custom_ant_header addressbook_header" style={{position:'fixed',width:'100%',zIndex:'13'}}>
-                        <div className="custom_ant_header_logo addressbook_logo" onClick={this.onClickBackToModules}>
-                          <span className="logo_icon"><img width="40" height="40" src={signup_logo}/></span>
-                          <div className="logo_title">
-                            <p>@{this.state.loginUserName}</p><p>司法E通</p>
-                            </div>
-                        </div>
-                        <Breadcrumb className="bread_content" style={{ margin: '0 10px',float:'left' }}>
-                          <Breadcrumb.Item className="bread_item">电子通讯录</Breadcrumb.Item>
-                          {breadcrumbEles}
-                        </Breadcrumb>
-                        <div className="" style={{position:'absolute',right:'32px',top:'0'}}>
-                          <LogOutComp className="logout_addressbook" addGoBackBtn/>
-                        </div>
-                    </Header>
-                    <Layout style={{marginTop:'64px'}} className={'addressbook_menu_container'}>
-                      {sidebar}
-                      <Layout style={{ padding: '0' }}>
-                        <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280,overflow: 'initial' }}>
-                          <AddressSearchComp
-                            organization={organization}
-                            secondaryDirectory={secondaryDirectory}
-                            level3Catalog={level3Catalog}
-                            updateContactsDirectory={this.updateContactsDirectory}
-                            onSubmitSearchCall={(val)=>this.onSubmitSearch(val)}
-                          />
-                          <AddressListComp
-                            addressListData={addressbookData}
-                            totalCount={this.state.totalCount}
-                            curPageNum={this.state.curPageNum}
-                            showAddEditDialog={this.showAddEditDialog}
-                            afterDeleteAllContactsCall={this.afterDeleteAllContactsCall}
-                            afterDeleteContactsCall={this.afterDeleteContactsCall}
-                            organization={organization}
-                            secondaryDirectory={secondaryDirectory}
-                            level3Catalog={level3Catalog}
-                            getAddressBookCnt={this.getAddressBookCnt}
-                          />
-                        </Content>
-                      </Layout>
-                    </Layout>
-                  </Layout>
-                  <AddEditContactDialog
-                    visible={isShowEditDialog}
-                    contactInfo={contactInfo}
-                    closeAddEditDialog={this.closeAddEditDialog}
-                    afterAddEditContactsCall={this.afterAddEditContactsCall}
-                    organizationsData={this.state.organizationsData}
-                    organizationsFlatData={this.state.organizationsFlatData}
-                    organizationsFlatDataMap={this.state.organizationsFlatDataMap}
-                  />
+                <div>
+                  <Drawer
+                    className="address_book_drawer"
+                    style={{ minHeight: document.documentElement.clientHeight - 200 }}
+                    touch={true}
+                    sidebarStyle={{height:'100%',background:'#2071a7'}}
+                    contentStyle={{ color: '#A6A6A6'}}
+                    sidebar={sidebar}
+                    {...drawerProps} >
+                    <NavBar
+                      style={{position:'fixed',height:'60px',zIndex:'13',width:'100%'}}
+                      className="mobile_navbar_custom"
+                      iconName = {false}
+                      leftContent={[ <Icon type="arrow-left" className="back_arrow_icon" key={156}/>,<span style={{fontSize:'1em'}} key={13}>返回</span>]}
+                      onLeftClick={this.onNavBarLeftClick}
+                      rightContent={[ <Icon key="1" type="ellipsis" style={{fontSize:'0.4rem'}} onClick={this.onOpenChange}/>]} >
+                      <img width="35" height="35" src={signup_logo}/>司法E通
+                    </NavBar>
+                    <div style={{marginTop:'60px'}} className={'address_book_mobile_body'}>
+                      <SearchBar
+                        placeholder="用户名/邮件/电话"
+                        onSubmit={this.onSubmitSearch}
+                        onClear={value => console.log(value, 'onClear')}
+                        onFocus={() => console.log('onFocus')}
+                        onCancel={this.onSubmitSearch}
+                        cancelText={'搜索'}
+                        onChange={() => {}}
+                      />
+                      <AddressListMobileComp
+                        addressListData={addressbookData}
+                        totalCount={this.state.totalCount}
+                        curPageNum={this.state.curPageNum}
+                        showAddEditDialog={this.showAddEditDialog}
+                        afterDeleteContactsCall={this.afterDeleteContactsCall}
+                        organization={organization}
+                        secondaryDirectory={secondaryDirectory}
+                        level3Catalog={level3Catalog}
+                        getAddressBookCnt={this.getAddressBookCnt}
+                      />
+                    </div>
+                  </Drawer>
+                </div>
               </div>);
     }
 }
 
-AddressBookPage.defaultProps = {
+AddressBookPageMobile.defaultProps = {
 };
 
-AddressBookPage.propTypes = {
+AddressBookPageMobile.propTypes = {
 };
 
-export default AddressBookPage;
+export default AddressBookPageMobile;

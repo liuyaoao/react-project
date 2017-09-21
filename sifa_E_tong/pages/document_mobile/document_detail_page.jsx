@@ -32,9 +32,9 @@ export default class DocumentDetailPage extends React.Component {
     // console.log("location.pathname:",location.pathname,docId);
     myWebClient.getDocumentInfoById(docId,(res)=>{
       this.setState({documentData:res});
-      console.log("档案管理-单个档案的详情信息--:",res);
+      // console.log("档案管理-单个档案的详情信息--:",res);
     },(err)=>{
-      console.log("档案管理-获取单个档案的详情信息发生错误--:",err);
+      // console.log("档案管理-获取单个档案的详情信息发生错误--:",err);
     });
   }
   componentDidMount() {

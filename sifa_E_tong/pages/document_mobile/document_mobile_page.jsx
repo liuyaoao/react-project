@@ -4,16 +4,14 @@ import React from 'react';
 import {Link,browserHistory} from 'react-router/es6';
 import UserStore from 'stores/user_store.jsx';
 
-import * as Utils from 'utils/utils.jsx';
-import Client from 'client/web_client.jsx';
+// import * as Utils from 'utils/utils.jsx';
 import MyWebClient from 'client/my_web_client.jsx';
 
-import moment from 'moment';
-import { Drawer, NavBar, Modal as ModalAm } from 'antd-mobile';
+// import moment from 'moment';
+import { Drawer, NavBar, Modal as ModalAm,Toast } from 'antd-mobile';
 const ModalAmAlert = ModalAm.alert;
-import { Layout, Icon,  Modal, notification } from 'antd';
-const { Header, Content, Sider, Footer } = Layout;
-const confirm = Modal.confirm;
+import { Layout, Icon } from 'antd';
+const { Sider } = Layout;
 
 import signup_logo from 'images/signup_logo.png';
 
@@ -34,12 +32,11 @@ class DocumentMobilePage extends React.Component {
         this.state = this.getStateFromStores();
     }
     getStateFromStores() {
-      let permissionData = UserStore.getPermissionData();
-      let hasOperaPermission = permissionData['document'] ? permissionData['document'].indexOf('action') != -1 : false;
+      // let permissionData = UserStore.getPermissionData();
+      // let hasOperaPermission = permissionData['document'] ? permissionData['document'].indexOf('action') != -1 : false;
       return {
           open: false,
           position: 'left',
-          isMobile: Utils.isMobile(),
           visibleEditModel: false, //编辑弹窗是否可见
           documentsData: [],
           loginUserName:'',
@@ -49,7 +46,7 @@ class DocumentMobilePage extends React.Component {
           currentFileSubId: '', //当前展开的第二级的 id.
           curDepartmentId: '', //当前点击的第三级部门 id。
           // departmentTypes: [],
-          hasOperaPermission:hasOperaPermission, //是否有操作权限。
+          // hasOperaPermission:hasOperaPermission, //是否有操作权限。
           departmentData: [],
           departmentFlatData:[],  //平行数组结构
           departmentFlatMap:{},
@@ -275,27 +272,12 @@ class DocumentMobilePage extends React.Component {
   }
   showDeleteConfirm(doc, callback) {
     let _this = this;
-    if (this.state.isMobile) {
-      ModalAmAlert('删除', '确认删除吗 ?', [
-        { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
-        { text: '确认', onPress: () => {if (doc.key) {
-          _this.handleDeleteDocument(doc.key.toUpperCase(), callback);
-        }}, style: { fontWeight: 'bold' } },
-      ]);
-    } else {
-      confirm({
-        title: '确认删除吗 ?',
-        content: '',
-        onOk() {
-          if (doc.key) {
-            _this.handleDeleteDocument(doc.key.toUpperCase(), callback);
-          }
-        },
-        onCancel() {
-          console.log('Cancel');
-        },
-      });
-    }
+    ModalAmAlert('删除', '确认删除吗 ?', [
+      { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
+      { text: '确认', onPress: () => {if (doc.key) {
+        _this.handleDeleteDocument(doc.key.toUpperCase(), callback);
+      }}, style: { fontWeight: 'bold' } },
+    ]);
   }
   handleDeleteDocument(id, callback) {
     let _this = this;
@@ -303,26 +285,17 @@ class DocumentMobilePage extends React.Component {
       (data, res) => {
         if (res && res.ok) {
           if (res.text === 'true') {
-            _this.openNotification('success', '删除档案成功');
+            Toast.info("删除档案成功",2);
             _this.handleSearch();
           } else {
-            _this.openNotification('error', '删除档案失败');
+            Toast.info("删除档案失败",2);
           }
         }
       },
       (e, err, res) => {
-        _this.openNotification('error', '删除档案失败');
+        Toast.info("删除档案失败",2);
       }
     )
-  }
-  openNotification(type, message) {
-    notification.config({
-      top: 68,
-      duration: 3
-    });
-    notification[type]({
-      message: message
-    });
   }
   setcurrentFileId(currentFileId){
     this.setState({ currentFileId});
@@ -337,7 +310,6 @@ class DocumentMobilePage extends React.Component {
   render() {
     const { memberInfo, currentFileId, currentFileSubId} = this.state;
     const { documentsData, departmentData, departmentFlatData, departmentFlatMap, curDepartmentId} = this.state;
-    let sidebarMenuMarTop = this.state.isMobile ? '60px' : '0';
     const drawerProps = {
       open: this.state.open,
       position: this.state.position,
@@ -348,7 +320,7 @@ class DocumentMobilePage extends React.Component {
     }
     const sidebar = (
         <Sider width={240} className="custom_ant_sidebar addressSidebar"
-          style={{ background: '#2071a7',color:'#fff',marginTop:sidebarMenuMarTop,overflow: 'auto', zIndex:'13'}}>
+          style={{ background: '#2071a7',color:'#fff',marginTop:'60px',overflow: 'auto', zIndex:'13'}}>
           <DocumentSidebar currentFileId={currentFileId} currentFileSubId={currentFileSubId}
             departmentData={departmentData}
             departmentFlatMap={departmentFlatMap}

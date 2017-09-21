@@ -1,10 +1,9 @@
 import $ from 'jquery';
 import React from 'react';
-import * as Utils from 'utils/utils.jsx';
+// import * as Utils from 'utils/utils.jsx';
 import myWebClient from 'client/my_web_client.jsx';
 
-import { SearchBar, List,Button } from 'antd-mobile';
-import { Layout, Menu, Icon } from 'antd';
+import {  Menu, Icon } from 'antd';
 const { SubMenu } = Menu;
 
 export default class DocumentSidebar extends React.Component {
@@ -20,7 +19,6 @@ export default class DocumentSidebar extends React.Component {
       this.state = {
         current: '-1',
         openKeys: [],
-        isMobile: Utils.isMobile()
       };
   }
   componentDidMount() {

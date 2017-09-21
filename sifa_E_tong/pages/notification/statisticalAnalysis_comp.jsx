@@ -7,7 +7,6 @@ import {  notification } from 'antd';
 import {Toast} from 'antd-mobile';
 import echarts from 'echarts';
 import StatisticalAnalysisMobileComp from './statisticalAnalysis_mobile_comp.jsx';
-const urlPrefix = 'http://211.138.238.83:9000/CS_JrlService/';
 
 notification.config({
   top: 68,

@@ -1,12 +1,10 @@
 import $ from 'jquery';
 import React from 'react';
-import moment from 'moment';
-
+// import moment from 'moment';
 import UserStore from 'stores/user_store.jsx';
-import * as Utils from 'utils/utils.jsx';
-import myWebClient from 'client/my_web_client.jsx';
-import { SwipeAction } from 'antd-mobile';
-import { List,  Popup, Button } from 'antd-mobile';
+// import * as Utils from 'utils/utils.jsx';
+// import myWebClient from 'client/my_web_client.jsx';
+import { SwipeAction,List,  Popup, Button } from 'antd-mobile';
 import { Icon} from 'antd';
 
 class DocumentListMobile extends React.Component {

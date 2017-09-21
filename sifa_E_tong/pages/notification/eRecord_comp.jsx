@@ -8,7 +8,6 @@ import {Toast} from 'antd-mobile';
 import echarts from 'echarts';
 import ERecordisMobileComp from './eRecord_mobile_comp.jsx';
 import ERecordisPcComp from './eRecord_pc_comp.jsx';
-const urlPrefix = 'http://211.138.238.83:9000/CS_JrlService/';
 
 notification.config({
   top: 68,

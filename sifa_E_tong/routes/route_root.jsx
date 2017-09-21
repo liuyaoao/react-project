@@ -39,10 +39,21 @@ function preLoggedIn(nextState, replace, callback) {
     ErrorStore.clearLastError();
     callback();
 }
-function preEnterDocument(nextState, replace, callback){
-  console.log("preEnterDocument:",nextState,Utils.isMobile());
-  if(Utils.isMobile()){
+function preEnterAddressBook(nextState, replace, callback){ //进入通讯录的预处理
+  // console.log("preEnterAddressBook:",nextState,Utils.isMobile());
+  if(Utils.isMobile() && nextState.location.pathname != '/address_book_mobile'){
+    replace('/address_book_mobile');
+  }else if(!Utils.isMobile() && nextState.location.pathname == '/address_book_mobile'){
+    replace('/address_book');
+  }
+  callback();
+}
+function preEnterDocument(nextState, replace, callback){ //进入文档管理的预处理
+  // console.log("preEnterDocument:",nextState,Utils.isMobile());
+  if(Utils.isMobile() && nextState.location.pathname != '/document_mobile'){
     replace('/document_mobile');
+  }else if(!Utils.isMobile() && nextState.location.pathname == '/document_mobile'){
+    replace('/document');
   }
   callback();
 }
@@ -68,8 +79,16 @@ export default {
             },
             {
                 path: 'address_book', //电子通讯录页面
+                onEnter: preEnterAddressBook,
                 getComponents: (location, callback) => {
                     System.import('pages/addressBook_page.jsx').then(RouteUtils.importComponentSuccess(callback));
+                }
+            },
+            {
+                path: 'address_book_mobile', //电子通讯录页面
+                onEnter: preEnterAddressBook,
+                getComponents: (location, callback) => {
+                    System.import('pages/addressbook/addressBook_mobile_page.jsx').then(RouteUtils.importComponentSuccess(callback));
                 }
             },
             {
@@ -81,14 +100,13 @@ export default {
             },
             {
                 path: 'document_mobile',  //档案管理页面-移动端
-                // onEnter: preEnterDocument,
+                onEnter: preEnterDocument,
                 getComponents: (location, callback) => {
                     System.import('pages/document_mobile/document_mobile_page.jsx').then(RouteUtils.importComponentSuccess(callback));
                 }
             },
             {
                 path: 'document_mobile/detail/:id',  //档案管理页面-移动端
-                // onEnter: preEnterDocument,
                 getComponents: (location, callback) => {
                     System.import('pages/document_mobile/document_detail_page.jsx').then(RouteUtils.importComponentSuccess(callback));
                 }

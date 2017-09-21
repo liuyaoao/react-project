@@ -5,13 +5,10 @@ import {Link,browserHistory} from 'react-router/es6';
 import UserStore from 'stores/user_store.jsx';
 
 import * as Utils from 'utils/utils.jsx';
-import Client from 'client/web_client.jsx';
 import MyWebClient from 'client/my_web_client.jsx';
 import LogOutComp from './components/log_out_comp.jsx';
 
 import moment from 'moment';
-import { Drawer, NavBar, Modal as ModalAm } from 'antd-mobile';
-const ModalAmAlert = ModalAm.alert;
 import { Layout, Breadcrumb, Icon,  Modal, notification } from 'antd';
 const { Header, Content, Sider, Footer } = Layout;
 const confirm = Modal.confirm;
@@ -19,12 +16,12 @@ const confirm = Modal.confirm;
 import signup_logo from 'images/signup_logo.png';
 
 import WrappedSearchFormPC from './document/search_form_pc.jsx';
-import WrappedSearchFormMobile from './document/search_form_mobile.jsx';
+// import WrappedSearchFormMobile from './document/search_form_mobile.jsx';
 import DocumentAllEditModal from './document/edit_all_modal.jsx';
 
 import DocumentSidebar from './document/document_sidebar.jsx';
 import DocumentListPC from './document/documentList_pc_comp.jsx';
-import DocumentListMobile from './document/documentList_mobile_comp.jsx';
+// import DocumentListMobile from './document/documentList_mobile_comp.jsx';
 
 class DocumentPage extends React.Component {
     constructor(props) {
@@ -176,6 +173,9 @@ class DocumentPage extends React.Component {
       (data, res) => {
         if (res && res.ok) {
           let data = JSON.parse(res.text);
+          for (let i = 0; i < data.fileinfo.length; i++) {
+            data.fileinfo[i]['key'] = data.fileinfo[i].id;
+          }
           //  console.log("档案管理-list-结果列表-:",data);
           this.setState({
             totalCount:parseInt(data.count),
@@ -253,85 +253,62 @@ class DocumentPage extends React.Component {
   }
   showDeleteConfirm(doc, callback) {
     let _this = this;
-    if (this.state.isMobile) {
-      ModalAmAlert('删除', '确认删除吗 ?', [
-        { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
-        { text: '确认', onPress: () => {if (doc.key) {
+    confirm({
+      title: '确认删除吗 ?',
+      content: '',
+      onOk() {
+        if (doc.key) {
           _this.handleDeleteDocument(doc.key.toUpperCase(), callback);
-        }}, style: { fontWeight: 'bold' } },
-      ]);
-    } else {
-      confirm({
-        title: '确认删除吗 ?',
-        content: '',
-        onOk() {
-          if (doc.key) {
-            _this.handleDeleteDocument(doc.key.toUpperCase(), callback);
-          }
-        },
-        onCancel() {
-          console.log('Cancel');
-        },
-      });
-    }
+        }
+      },
+      onCancel() {console.log('Cancel')},
+    });
   }
   handleDeleteDocument(id, callback) {
-    let _this = this;
     MyWebClient.deleteFileInfo(id,
       (data, res) => {
         if (res && res.ok) {
           if (res.text === 'true') {
-            _this.openNotification('success', '删除档案成功');
-            _this.handleSearch();
+            this.openNotification('success', '删除档案成功');
+            this.handleSearch();
           } else {
-            _this.openNotification('error', '删除档案失败');
+            this.openNotification('error', '删除档案失败');
           }
         }
       },
       (e, err, res) => {
-        _this.openNotification('error', '删除档案失败');
+        this.openNotification('error', '删除档案失败');
       }
     )
   }
   showDeleteAllConfirm = ()=>{ //是否确认一键全部删除
     let _this = this;
-    if (this.state.isMobile) {
-      ModalAmAlert('删除', '确认一键全部删除吗 ?', [
-        { text: '取消', onPress: () => console.log('cancel'), style: 'default' },
-        { text: '确认', onPress: () => {
-          _this.handleDeleteAllDocument();
-        }, style: { fontWeight: 'bold' } },
-      ]);
-    } else {
-      confirm({
-        title: '确认删除吗 ?',
-        content: '',
-        onOk() {
-          _this.handleDeleteAllDocument();
-        },
-        onCancel() {
-          console.log('Cancel');
-        },
-      });
-    }
+    confirm({
+      title: '删除',
+      content: '确认一键全部删除吗 ?',
+      onOk() {
+        _this.handleDeleteAllDocument();
+      },
+      onCancel() {},
+    });
   }
   handleDeleteAllDocument(){
-    let _this = this,params={};
+    let params={};
     let {currentFileId,currentFileSubId,departmentFlatMap} = this.state;
     currentFileId? params.fileInfoType = departmentFlatMap[currentFileId].resourceName:null;
     (currentFileSubId && departmentFlatMap[currentFileSubId])? params.fileInfoSubType = departmentFlatMap[currentFileSubId].resourceName:null;
     MyWebClient.deleteFileInfoAll(params,(data, res) => {
         if (res && res.ok) {
           if (res.text === 'true') {
-            _this.openNotification('success', '删除全部档案成功');
-            _this.handleSearch();
+            this.openNotification('success', '删除全部档案成功');
+            this.handleSearch();
           } else {
-            _this.openNotification('error', '删除全部档案失败');
+            this.openNotification('error', '删除全部档案失败');
           }
         }
       },
       (e, err, res) => {
-        _this.openNotification('error', '删除全部档案失败');
+        this.openNotification('error', '删除全部档案失败');
       }
     )
   }
@@ -353,163 +330,75 @@ class DocumentPage extends React.Component {
   setcurDepartmentId(curDepartmentId, callback) {
     this.setState({curDepartmentId});
   }
-  getMobileElements(sidebar){
-    const drawerProps = {
-      open: this.state.open,
-      position: this.state.position,
-      onOpenChange: this.onOpenChange,
-    };
-    let content = this.getListContentElements();
-    return (
-      <div>
-        <Drawer
-          className="address_book_drawer"
-          style={{ minHeight: document.documentElement.clientHeight - 200 }}
-          touch={true}
-          sidebarStyle={{height:'100%',background:'#2071a7'}}
-          contentStyle={{ color: '#A6A6A6'}}
-          sidebar={sidebar}
-          {...drawerProps} >
-            <NavBar
-              style={{position:'fixed',height:'60px',zIndex:'13',width:'100%'}}
-              className="mobile_navbar_custom"
-              iconName = {false}
-              leftContent={[ <Icon type="arrow-left" className="back_arrow_icon" key={192384756}/>,<span style={{fontSize:'1em'}} key={13212343653}>返回</span>]}
-              onLeftClick={this.onNavBarLeftClick}
-              rightContent={[ <Icon key="1" type="ellipsis" onClick={this.onOpenChange}/>]} >
-              <img width="35" height="35" src={signup_logo}/>司法E通
-            </NavBar>
-            <div style={{marginTop:'60px'}}>{content}</div>
-          </Drawer>
-        </div>
-      );
-  }
-  getPCElements(sidebar){
-    const {currentFileId, currentFileSubId, curDepartmentId} = this.state;
+
+  render() {
+    const { documentsData, memberInfo, currentFileId, currentFileSubId,departmentData} = this.state;
+    const { departmentFlatData, departmentFlatMap, curDepartmentId} = this.state;
     let currentFileName = currentFileId?this.state.departmentFlatMap[currentFileId].resourceName:'';
     let currentFileSubName = currentFileSubId?this.state.departmentFlatMap[currentFileSubId].resourceName:'';
     let curDepartmentName = curDepartmentId?this.state.departmentFlatMap[curDepartmentId].resourceName:'';
-    let content = this.getListContentElements();
-    return ( <Layout style={{ height: '100vh' }}>
-              <Header className="header custom_ant_header addressbook_header" style={{position:'fixed',width:'100%',zIndex:'13'}}>
-                <div className="custom_ant_header_logo addressbook_logo" onClick={this.onClickBackToModules}>
-                  <span className="logo_icon"><img width="40" height="40" src={signup_logo}/></span>
-                  <div className="logo_title">
-                    <p>@{this.state.loginUserName}</p><p>司法E通</p>
-                    </div>
-                </div>
-                <Breadcrumb className="bread_content" style={{ margin: '0 10px',float:'left' }}>
-                  <Breadcrumb.Item className="bread_item">{currentFileName}</Breadcrumb.Item>
-                  <Breadcrumb.Item className="bread_item">{currentFileSubName}</Breadcrumb.Item>
-                  <Breadcrumb.Item className="bread_item">{curDepartmentName}</Breadcrumb.Item>
-                </Breadcrumb>
-                <div className="" style={{position:'absolute',right:'32px',top:'0'}}><LogOutComp className="" addGoBackBtn/></div>
-              </Header>
-              <Layout style={{marginTop:'64px'}}>
-                {sidebar}
-                <Layout style={{ padding: '0' }}>
-                  <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280,overflow: 'initial' }}>
-                    {content}
-                  </Content>
-                </Layout>
-              </Layout>
-        </Layout>);
-  }
-  getSearchForm() {
-    const {currentFileId, currentFileSubId, departmentData, curDepartmentId, departmentFlatMap } = this.state;
-    return this.state.isMobile ?
-            (
-              <WrappedSearchFormMobile
-                departmentData={departmentData}
-                departmentFlatMap={departmentFlatMap}
-                currentFileId={currentFileId}
-                currentFileSubId={currentFileSubId}
-                curDepartmentId={curDepartmentId}
-                showDeleteAllConfirm={this.showDeleteAllConfirm}
-                handleSearch={this.handleSearch} />
-            ) :(
-              <WrappedSearchFormPC
-                ref="searchFormPC"
-                departmentData={departmentData}
-                departmentFlatMap={departmentFlatMap}
-                currentFileId={currentFileId}
-                currentFileSubId={currentFileSubId}
-                curDepartmentId={curDepartmentId}
-                handleSearch={this.handleSearch}
-                openNotification={this.openNotification}/>
-          );
-  }
-  getSearchResultTable() {
-    const {documentsData,departmentData,departmentFlatMap, currentFileId, currentFileSubId, curDepartmentId} = this.state;
-    // console.log("documentsData---:",documentsData);
-    for (let i = 0; i < documentsData.length; i++) {
-      documentsData[i]['key'] = documentsData[i].id;
-    }
-    const data = documentsData;
-    let docSearchPCList = (
-      <DocumentListPC data={data}
-        totalCount={this.state.totalCount}
-        curPageNum={this.state.curPageNum}
-        departmentData={departmentData}
-        departmentFlatMap={departmentFlatMap}
-        currentFileId={currentFileId}
-        currentFileSubId={currentFileSubId}
-        curDepartmentId={curDepartmentId}
-        showDeleteConfirm={this.showDeleteConfirm}
-        showDeleteAllConfirm={this.showDeleteAllConfirm}
-        handleShowEditModal={this.handleShowEditModal}
-        handleSearch={this.handleSearch}
-        ></DocumentListPC>
-    )
-
-    let docSearchMobileList = (//构造手机端的列表视图
-      <DocumentListMobile data={data}
-        totalCount={this.state.totalCount}
-        curPageNum={this.state.curPageNum}
-        departmentData={departmentData}
-        departmentFlatMap={departmentFlatMap}
-        currentFileId={currentFileId}
-        currentFileSubId={currentFileSubId}
-        curDepartmentId={curDepartmentId}
-        showDeleteConfirm={this.showDeleteConfirm}
-        handleShowEditModal={this.handleShowEditModal}
-        handleSearch={this.handleSearch}
-        ></DocumentListMobile>
-    )
-    return this.state.isMobile ? docSearchMobileList : docSearchPCList;
-  }
-  getListContentElements(){
-    let searchForm = this.getSearchForm();
-    let docSearchList = this.getSearchResultTable();
-    let content = (<div className="addressbook_list">
-          {searchForm}
-          {docSearchList}
-        </div>);
-    return content;
-  }
-
-  render() {
-    const { memberInfo, currentFileId, currentFileSubId} = this.state;
-    const { departmentData, departmentFlatData, departmentFlatMap, curDepartmentId} = this.state;
-    let sidebarMenuMarTop = this.state.isMobile ? '60px' : '0';
-    const sidebar = (
-      <Sider width={240} className="custom_ant_sidebar addressSidebar"
-        style={{ background: '#2071a7',color:'#fff',marginTop:sidebarMenuMarTop,overflow: 'auto', zIndex:'13'}}>
-        <DocumentSidebar currentFileId={currentFileId} currentFileSubId={currentFileSubId}
-          departmentData={departmentData}
-          departmentFlatMap={departmentFlatMap}
-          searchFormPC={this.refs.searchFormPC}
-          setcurrentFileId={this.setcurrentFileId.bind(this)}
-          setcurrentFileSubId={this.setcurrentFileSubId.bind(this)}
-          setcurDepartmentId={this.setcurDepartmentId.bind(this)}
-          onClickMenuItem={()=>{this.setState( {open:!this.state.open} ); }}
-          handleSearch={this.handleSearch} />
-      </Sider>
-    );
-    let finalEle = this.state.isMobile ? this.getMobileElements(sidebar) : this.getPCElements(sidebar);
     return (
       <div className="document_container">
-        {finalEle}
+        <Layout style={{ height: '100vh' }}>
+          <Header className="header custom_ant_header addressbook_header" style={{position:'fixed',width:'100%',zIndex:'13'}}>
+            <div className="custom_ant_header_logo addressbook_logo" onClick={this.onClickBackToModules}>
+              <span className="logo_icon"><img width="40" height="40" src={signup_logo}/></span>
+              <div className="logo_title">
+                <p>@{this.state.loginUserName}</p><p>司法E通</p>
+                </div>
+            </div>
+            <Breadcrumb className="bread_content" style={{ margin: '0 10px',float:'left' }}>
+              <Breadcrumb.Item className="bread_item">{currentFileName}</Breadcrumb.Item>
+              <Breadcrumb.Item className="bread_item">{currentFileSubName}</Breadcrumb.Item>
+              <Breadcrumb.Item className="bread_item">{curDepartmentName}</Breadcrumb.Item>
+            </Breadcrumb>
+            <div className="" style={{position:'absolute',right:'32px',top:'0'}}><LogOutComp className="" addGoBackBtn/></div>
+          </Header>
+          <Layout style={{marginTop:'64px'}}>
+            <Sider width={240} className="custom_ant_sidebar addressSidebar"
+              style={{ background: '#2071a7',color:'#fff',marginTop:'0',overflow: 'auto', zIndex:'13'}}>
+              <DocumentSidebar currentFileId={currentFileId} currentFileSubId={currentFileSubId}
+                departmentData={departmentData}
+                departmentFlatMap={departmentFlatMap}
+                searchFormPC={this.refs.searchFormPC}
+                setcurrentFileId={this.setcurrentFileId.bind(this)}
+                setcurrentFileSubId={this.setcurrentFileSubId.bind(this)}
+                setcurDepartmentId={this.setcurDepartmentId.bind(this)}
+                onClickMenuItem={()=>{this.setState( {open:!this.state.open} ); }}
+                handleSearch={this.handleSearch}
+              />
+            </Sider>
+            <Layout style={{ padding: '0' }}>
+              <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280,overflow: 'initial' }}>
+                <div className="addressbook_list">
+                  <WrappedSearchFormPC
+                    ref="searchFormPC"
+                    departmentData={departmentData}
+                    departmentFlatMap={departmentFlatMap}
+                    currentFileId={currentFileId}
+                    currentFileSubId={currentFileSubId}
+                    curDepartmentId={curDepartmentId}
+                    handleSearch={this.handleSearch}
+                    openNotification={this.openNotification}
+                  />
+                  <DocumentListPC data={documentsData}
+                    totalCount={this.state.totalCount}
+                    curPageNum={this.state.curPageNum}
+                    departmentData={departmentData}
+                    departmentFlatMap={departmentFlatMap}
+                    currentFileId={currentFileId}
+                    currentFileSubId={currentFileSubId}
+                    curDepartmentId={curDepartmentId}
+                    showDeleteConfirm={this.showDeleteConfirm}
+                    showDeleteAllConfirm={this.showDeleteAllConfirm}
+                    handleShowEditModal={this.handleShowEditModal}
+                    handleSearch={this.handleSearch}
+                  />
+                </div>
+              </Content>
+            </Layout>
+          </Layout>
+        </Layout>
         <DocumentAllEditModal
           departmentData={departmentData}
           departmentFlatMap={departmentFlatMap}

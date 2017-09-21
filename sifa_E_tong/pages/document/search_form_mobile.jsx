@@ -1,22 +1,19 @@
 import React from 'react';
-import UserStore from 'stores/user_store.jsx';
+// import UserStore from 'stores/user_store.jsx';
 
 import { Icon } from 'antd';
 import {Popup, List, InputItem, Button} from 'antd-mobile';
 import { createForm } from 'rc-form';
-import * as Utils from 'utils/utils.jsx';
 import MyWebClient from 'client/my_web_client.jsx';
 
 
 class SearchFormMobile extends React.Component {
   constructor(props) {
       super(props);
-      // this.beforeUploadCall = this.beforeUploadCall.bind(this);
-      let permissionData = UserStore.getPermissionData();
-      let hasOperaPermission = permissionData['document'] ? permissionData['document'].indexOf('action') != -1 : false;
+      // let permissionData = UserStore.getPermissionData();
+      // let hasOperaPermission = permissionData['document'] ? permissionData['document'].indexOf('action') != -1 : false;
       this.state = {
-        isMobile: Utils.isMobile(),
-        hasOperaPermission:hasOperaPermission, //是否有操作权限。
+        hasOperaPermission:true//hasOperaPermission, //是否有操作权限。查询权限应该总是有的
       };
   }
   componentDidMount() {
