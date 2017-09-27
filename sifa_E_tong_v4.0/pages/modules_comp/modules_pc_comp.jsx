@@ -6,20 +6,13 @@ import UserStore from 'stores/user_store.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 
 import {Icon,message,notification, Button} from 'antd';
-import * as commonUtils from '../utils/common_utils.jsx';
-import LogOutComp from '../components/log_out_comp.jsx';
+import * as commonUtils from 'pages/utils/common_utils.jsx';
+import LogOutComp from 'pages/components/log_out_comp.jsx';
 import ModulesAddPcComp  from './modulesAdd_pc_comp.jsx';
 import EditUserInfoDialog from './editInfo_dialog.jsx';
 
 import logo_icon from 'images/modules_img/logo_icon.png';
 import edit_icon from 'images/modules_img/edit_icon.png';
-import OA_icon from 'images/modules_img/OA_icon.png';
-import chat_icon from 'images/modules_img/chat_icon.png';
-import document_icon from 'images/modules_img/document_icon.png';
-import mailList_icon from 'images/modules_img/mailList_icon.png';
-import modify_icon from 'images/modules_img/modify_icon.png';
-import settings_icon from 'images/modules_img/settings_icon.png';
-import signin_icon from 'images/modules_img/signin_icon.png';
 import logOut_icon from 'images/modules_img/logOut_icon.png';
 import header_icon from 'images/head_boy.png';
 
@@ -122,7 +115,7 @@ class ModulesPcComp extends React.Component {
                         data-canlinkto={canLinkTo}
                         onClick={this.handleModuleClick}
                         style={{background:backColor}}>
-                        <a href="javascript:;">
+                        <p>
                           <img className='' src={item.iconName} style={{}}/>
                           <span>{item.name}</span>
                           {this.state.showDelIcon?(<Button shape="circle"
@@ -130,7 +123,7 @@ class ModulesPcComp extends React.Component {
                               icon="close"
                               onClick={this.onClickDeleteModule}
                               data-moduleid={item.id} />):null}
-                        </a>
+                        </p>
                     </span>);
           }
           return '';
@@ -194,10 +187,8 @@ class ModulesPcComp extends React.Component {
         }
         return false;
       }
-      if(moduleName == "群聊"){
-        this.props.handleGoMatter();
-      }else if(moduleName == "OA系统"){
-
+      if(moduleName == "个人设置"){
+        this.onClickEditInfo();
       }else if(moduleName == "添加"){
         this.setState({showAddDialog:true});
       }
@@ -281,15 +272,15 @@ class ModulesPcComp extends React.Component {
                     <div className='col-sm-6 col-xs-6'>
                         <div style={{marginTop:'5px'}}>
                           <img className='' src={logo_icon} style={{width: '54px',marginRight: '15px'}}/>
-                          <span style={{display:'inline-block',fontWeight:'bold',color:'#fff',lineHeight:'45px',fontSize:'40px',verticalAlign:'middle'}}>司法e通</span>
+                          <span style={{display:'inline-block',fontWeight:'bold',color:'#fff',lineHeight:'45px',fontSize:'40px',verticalAlign:'middle'}}>司法E通</span>
                         </div>
                     </div>
                     <div className='col-sm-6 col-xs-6'>
                         <div style={{textAlign:'right',position:'absolute',right:'0',top:'-20px'}}>
-                          <a href='javascript:;' className='modules_font hover_font' style={{marginRight:'1.0em'}} onClick={this.onClickEditInfo}>
+                          <p className='modules_font hover_font' style={{marginRight:'1.0em'}} >
                             <img className='' src={header_icon} style={{display:'inline-block',width: '30px',margin: '0'}}/>
                             <span> {this.state.loginUserNickname}</span>
-                          </a>
+                          </p>
                         </div>
                         <div style={{textAlign:'right'}}>
                           <a href='javascript:;' className='modules_font hover_font' style={{marginRight:'1.8em'}} onClick={this.onClickEditModules}>
@@ -309,9 +300,12 @@ class ModulesPcComp extends React.Component {
 
                 <div className="row" style={{background:'#fff',height:'205px',width:'98%',marginTop:'20px'}}>
                   <div className="inner">
-                    <div className="title" style={{marginLeft:'20px'}}><span className="square" style={{marginRight:'5px'}}></span><span style={{verticalAlign:'text-bottom'}}>内部通知</span></div>
-                      <div className="line"></div>
-                        <div style={{marginTop:10}}>{noticeListItem}</div>
+                    <div className="title" style={{marginLeft:'20px'}}>
+                      <span className="square" style={{marginRight:'5px'}}></span>
+                      <span style={{verticalAlign:'text-bottom',fontSize:'17px'}}>内部通知</span>
+                    </div>
+                    <div className="line"></div>
+                    <div style={{marginTop:10}}>{noticeListItem}</div>
                   </div>
                 </div>
                 <div className="modules_footer">

@@ -7,6 +7,7 @@ import {Toast} from 'antd-mobile';
 import {browserHistory} from 'react-router/es6';
 import myWebClient from 'client/my_web_client.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
+import UserStore from 'stores/user_store.jsx';
 // import * as GlobalActions from 'actions/global_actions.jsx';
 
 //可以写自定义的退出按钮传进来，不传也可以用默认的。
@@ -19,25 +20,22 @@ export default class LogOutComp extends React.Component {
         };
     }
     componentDidMount() {
-        // $('body').addClass('sticky');
-        // $('#root').addClass('container-fluid');
     }
     componentWillUnmount() {
-        // $('body').removeClass('sticky');
-        // $('#root').removeClass('container-fluid');
     }
     onClickGoBack(){
-      // browserHistory.go(-1);
-      browserHistory.push('/modules');
+      browserHistory.goBack();
     }
     onClickExitBtn(e){
       console.log("click 退出按钮：",e);
-      Toast.info(<div><Icon type={'loading'} /><span>  正在退出...</span></div>, 3, null, true);
+      Toast.info(<div><Icon type={'loading'} /><span>  正在退出...</span></div>, 2, null, true);
       myWebClient.removeToken();
       localStorage.removeItem(OAUtils.OA_LOGIN_INFO_KEY);
+      sessionStorage.clear();
       myWebClient.logout(
           () => {
             Toast.hide();
+            UserStore.clear();
             browserHistory.push('/login');
           },
           () => {

@@ -17,8 +17,31 @@ export default {
                     path: 'todo_list', //待办事项
                     // onEnter: onChannelEnter,
                     getComponents: (location, callback) => {
-                        System.import('pages/office_automation/personalTodoList.jsx').then(RouteUtils.importComponentSuccess(callback));
-                    }
+                      System.import('pages/office_automation/personalTodoList.jsx').then(RouteUtils.importComponentSuccess(callback));
+                    },
+                    childRoutes:[
+                      {
+                        path: 'dispatch_detail', //发文管理的详情页
+                        // onEnter: onChannelEnter,
+                        getComponents: (location, callback) => {
+                          System.import('pages/office_automation/dispatch/ds_detail_comp.jsx').then(RouteUtils.importComponentSuccess(callback));
+                        }
+                      },
+                      {
+                        path: 'signReport_detail', //签报管理的详情页
+                        // onEnter: onChannelEnter,
+                        getComponents: (location, callback) => {
+                          System.import('pages/office_automation/signReport/signReportDetail_comp.jsx').then(RouteUtils.importComponentSuccess(callback));
+                        }
+                      },
+                      {
+                        path: 'supervision_detail', //督办管理的详情页
+                        // onEnter: onChannelEnter,
+                        getComponents: (location, callback) => {
+                          System.import('pages/office_automation/supervision/superviseDetail_comp.jsx').then(RouteUtils.importComponentSuccess(callback));
+                        }
+                      }
+                    ]
                 },
                 {
                     path: 'incoming_list', //收文管理
@@ -31,22 +54,49 @@ export default {
                     path: 'dispatch', // 发文管理
                     // onEnter: onPermalinkEnter,
                     getComponents: (location, callback) => {
-                        System.import('pages/office_automation/dispatch/dispatchList.jsx').then(RouteUtils.importComponentSuccess(callback));
-                    }
+                      System.import('pages/office_automation/dispatch/dispatchList.jsx').then(RouteUtils.importComponentSuccess(callback));
+                    },
+                    childRoutes:[
+                      {
+                        path: 'detail', //发文管理的详情页
+                        // onEnter: onChannelEnter,
+                        getComponents: (location, callback) => {
+                          System.import('pages/office_automation/dispatch/ds_detail_comp.jsx').then(RouteUtils.importComponentSuccess(callback));
+                        }
+                      }
+                    ]
                 },
                 {
                   path: 'sign_report',  //签报管理
                   // onEnter: onPermalinkEnter,
                   getComponents: (location, callback) => {
                     System.import('pages/office_automation/signReport/signReportList.jsx').then(RouteUtils.importComponentSuccess(callback));
-                  }
+                  },
+                  childRoutes:[
+                    {
+                      path: 'detail', //签报管理的详情页
+                      // onEnter: onChannelEnter,
+                      getComponents: (location, callback) => {
+                        System.import('pages/office_automation/signReport/signReportDetail_comp.jsx').then(RouteUtils.importComponentSuccess(callback));
+                      }
+                    }
+                  ]
                 },
                 {
                     path: 'supervision', //督办管理
                     // onEnter: onPermalinkEnter,
                     getComponents: (location, callback) => {
                         System.import('pages/office_automation/supervision/superviseList.jsx').then(RouteUtils.importComponentSuccess(callback));
-                    }
+                    },
+                    childRoutes:[
+                      {
+                        path: 'detail', //督办管理的详情页
+                        // onEnter: onChannelEnter,
+                        getComponents: (location, callback) => {
+                          System.import('pages/office_automation/supervision/superviseDetail_comp.jsx').then(RouteUtils.importComponentSuccess(callback));
+                        }
+                      }
+                    ]
                 },
                 {
                     path: 'new_dispatch', //最新发文

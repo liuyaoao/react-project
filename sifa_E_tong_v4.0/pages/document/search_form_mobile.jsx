@@ -25,7 +25,7 @@ class SearchFormMobile extends React.Component {
       !params.userName ? delete params.userName : null;
       !params.gender ? delete params.gender : null;
       // console.log("document search form validateFields", error, params);
-      this.props.handleSearch(null,Object.assign({},{"from":0,"to":10},param||{}) );
+      this.props.handleSearch(null,Object.assign({},{"from":0,"to":10},params||{}) );
     });
   }
 

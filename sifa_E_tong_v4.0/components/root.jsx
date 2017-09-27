@@ -16,7 +16,6 @@ import {browserHistory} from 'react-router/es6';
 import UserStore from 'stores/user_store.jsx';
 import BrowserStore from 'stores/browser_store.jsx';
 import Constants from 'utils/constants.jsx';
-const localStoreTokenName = 'sameview_login_token_key'; //记录是否已经登录的token的名字。
 
 export default class Root extends React.Component {
     constructor(props) {
@@ -93,7 +92,7 @@ export default class Root extends React.Component {
         if (props.location.pathname === '/') {
             if (UserStore.getNoAccounts()) {
                 browserHistory.push('/signup_user_complete');
-            } else if (localStorage.getItem(localStoreTokenName)) {
+            } else if (localStorage.getItem(window.localStoreTokenName)) {
                 browserHistory.push('/modules');
                 // GlobalActions.redirectUserToDefaultTeam();
                 // browserHistory.push('/login');

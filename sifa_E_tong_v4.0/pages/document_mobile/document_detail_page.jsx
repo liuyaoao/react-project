@@ -41,31 +41,31 @@ export default class DocumentDetailPage extends React.Component {
     let randomStr = Math.random().toString().split('.')[1];
     this.setState({randomStr});
     let _this = this;
-    window['handleClickBackBtn'+randomStr] = function (e) {
-      // console.log("我监听到了浏览器的返回按钮事件啦");
-      _this.backToListPageCall();
-    }
-    if (window.history && window.history.pushState) {
-      setTimeout(()=>{
-        // console.log('增加了监听器了！！！！',window['handleClickBackBtn'+randomStr]);
-        window.addEventListener("popstate", window['handleClickBackBtn'+randomStr],false);
-      },100);
-    }
+    // window['handleClickBackBtn'+randomStr] = function (e) {
+    //   // console.log("我监听到了浏览器的返回按钮事件啦");
+    //   _this.backToListPageCall();
+    // }
+    // if (window.history && window.history.pushState) {
+    //   setTimeout(()=>{
+    //     // console.log('增加了监听器了！！！！',window['handleClickBackBtn'+randomStr]);
+    //     window.addEventListener("popstate", window['handleClickBackBtn'+randomStr],false);
+    //   },100);
+    // }
   }
-  componentWillUnmount(){
-    if (window.history && window.history.pushState) {
-      setTimeout(()=>{
-        // console.log('注销监听器了！！！！',window['handleClickBackBtn'+this.state.randomStr]);
-        window.removeEventListener("popstate",window['handleClickBackBtn'+this.state.randomStr],false);
-      },100);
-    }
-  }
+  // componentWillUnmount(){
+  //   if (window.history && window.history.pushState) {
+  //     setTimeout(()=>{
+  //       // console.log('注销监听器了！！！！',window['handleClickBackBtn'+this.state.randomStr]);
+  //       window.removeEventListener("popstate",window['handleClickBackBtn'+this.state.randomStr],false);
+  //     },100);
+  //   }
+  // }
   backToListPageCall = ()=>{ //点击返回按钮返回。
-    browserHistory.push('/document_mobile');
+    browserHistory.goBack();
   }
   render() {
     let {documentData} = this.state;
-    const editModalField = {
+    const docDetailProps = {
       ref: "docDetailInfo",
       memberInfo: documentData,
       backToListPageCall:this.backToListPageCall,
@@ -74,17 +74,17 @@ export default class DocumentDetailPage extends React.Component {
     let detailContent = <p style={{width:'100%',textAlign:'center'}}>正在加载数据...</p>;
 
     if( (["市局机关","局属二级机构","公证员"]).indexOf(documentData.fileInfoSubType)!=-1 ){ //ok
-      detailContent = <DocDetailDefault {...editModalField} />
+      detailContent = <DocDetailDefault {...docDetailProps} />
     }else if(documentData.fileInfoSubType == '律师事务所'){ //ok
-      detailContent = <DocDetailLawfirm {...editModalField}/>
+      detailContent = <DocDetailLawfirm {...docDetailProps}/>
     }else if(documentData.fileInfoType == '司考通过人员') {  //ok
-      detailContent = <DocDetailJudicialExam {...editModalField}/>
+      detailContent = <DocDetailJudicialExam {...docDetailProps}/>
     }else if(documentData.fileInfoSubType == '律师' ){ //ok
-      detailContent = <DocDetailLawyer {...editModalField}/>
+      detailContent = <DocDetailLawyer {...docDetailProps}/>
     }else if(documentData.fileInfoSubType == '基层法律工作者' ){ //ok
-      detailContent = <DocDetailLegalWorker {...editModalField}/>
+      detailContent = <DocDetailLegalWorker {...docDetailProps}/>
     }else if(documentData.fileInfoSubType == '司法所' ){ //ok
-      detailContent = <DocDetailSifaDirector {...editModalField}/>
+      detailContent = <DocDetailSifaDirector {...docDetailProps}/>
     }else if(documentData.fileInfoSubType == '区县司法局'){
       detailContent = <div></div>;
     }else if(documentData.fileInfoSubType == '法律援助中心'){

@@ -1,4 +1,4 @@
-// 档案管理的页面
+// 档案管理的页面-pc端
 import $ from 'jquery';
 import React from 'react';
 import {Link,browserHistory} from 'react-router/es6';
@@ -66,11 +66,8 @@ class DocumentPage extends React.Component {
     // console.log(args);
     this.setState({ open: !this.state.open });
   }
-  onNavBarLeftClick = (e) => {  //navbar left click.
-    browserHistory.push('/');
-  }
   onClickBackToModules(){
-    browserHistory.push('/modules');
+    browserHistory.goBack();
   }
   componentDidMount() {
     let _this = this;

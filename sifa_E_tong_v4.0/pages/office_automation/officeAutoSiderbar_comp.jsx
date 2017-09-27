@@ -15,7 +15,11 @@ class OaSiderbarComp extends React.Component {
       };
   }
   componentWillMount(){
+    let routeName2TabMap={'todo_list':'待办事项', 'incoming_list':'收文管理', 'dispatch':'发文管理', 'sign_report':'签报管理'
+      , 'supervision':'督办管理', 'new_dispatch':'最新发文', 'notice':'通知公告', 'vehicle':'车辆管理', 'administrative_system_infos':'司法行政系统信息查询' };
+    let routeName = location.pathname.split('/')[2]||'';
     this.setState({
+      current:routeName2TabMap[routeName],
       todoTotalItemCount:localStorage.getItem("sifa_e_tong_todoItemCount"),
     });
   }

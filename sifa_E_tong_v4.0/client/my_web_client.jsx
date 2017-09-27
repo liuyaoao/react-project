@@ -1,14 +1,15 @@
 // Copyright (c) 2016-present Mattermost, Inc. All Rights Reserved.
 // See License.txt for license information.
 
+import $ from 'jquery';
 import request from 'superagent';
+import nocache from 'superagent-no-cache';
 
 const HEADER_X_VERSION_ID = 'x-version-id';
 const HEADER_X_CLUSTER_ID = 'x-cluster-id';
 const HEADER_TOKEN = 'token';
 const HEADER_BEARER = 'BEARER';
 const HEADER_AUTH = 'Authorization';
-const localStoreTokenName = 'sameview_login_token_key'; //记录是否已经登录的token的名字。
 
 class MyWebClient {
     constructor() {
@@ -17,7 +18,7 @@ class MyWebClient {
         this.logToConsole = false;
         this.useToken = false;
         this.token = '';
-        this.tokenName = localStoreTokenName;
+        this.tokenName = window.localStoreTokenName;
         this.url = window.serverUrl;
         // this.url = 'http://192.168.9.39:10080'; //192.168.9.81:10080 , 220.168.30.10:10080
         // this.url = 'http://matt.siteview.com'; //192.168.9.81:10080 , 220.168.30.10:10080
@@ -164,7 +165,7 @@ class MyWebClient {
             }
         }
 
-        if (err) {
+        if (err && res.status!=200) {
             // test to make sure it looks like a server JSON error response
             var e = null;
             if (res && res.body && res.body.id) {
@@ -243,11 +244,27 @@ class MyWebClient {
         }
     }
     getInitialLoad(success, error) { //获取初始化的数据
+      // $.ajax({
+      //     url : `${this.getUsersRoute()}/initial_load`,
+      //     type:'GET',
+      //     async : true,
+      //     contentType:'application/json',
+      //     dataType:'json',
+      //     cache:false,
+      //     success:(res)=>{
+      //       console.log("getInitialLoad:",res);
+      //       success && success(res);
+      //     },
+      //     error:(xhr,err)=>{
+      //       error && error(err);
+      //     }
+      //   });
         request.
             get(`${this.getUsersRoute()}/initial_load`).
             set(this.getDefaultHeadersWithToken()).
             type('application/json').
             accept('application/json').
+            use(nocache).
             end(this.handleResponse.bind(this, 'getInitialLoad', (data,res)=>{
               success && success(data,res);
             }, error));

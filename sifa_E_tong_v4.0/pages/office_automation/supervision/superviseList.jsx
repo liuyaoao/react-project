@@ -1,6 +1,7 @@
 //督办管理
 import $ from 'jquery';
 import React from 'react';
+import {Link,browserHistory} from 'react-router/es6';
 import * as Utils from 'utils/utils.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import { Modal,WingBlank, WhiteSpace,Toast, SwipeAction,Button, Tabs, ListView} from 'antd-mobile';
@@ -38,6 +39,18 @@ class SuperviseList extends React.Component {
       };
   }
   componentWillMount(){
+    if(this.props.location.pathname!="/office_automation/supervision"){
+      this.setState({ showAdd:false,showDetail:true,detailInfo:{} });
+    }
+  }
+  componentWillReceiveProps(nextProps){
+    // console.log("nextProps---this.props---:",nextProps, this.props);
+    if(nextProps.location.pathname=="/office_automation/supervision" && nextProps.location.pathname!=this.props.location.pathname){
+      this.setState({ showAdd:false,showDetail:false,detailInfo:{} });
+      this.getServerListData(this.state.activeTabkey,this.state.currentpage);
+    }
+  }
+  componentDidMount(){
     //从服务端获取数据。
     this.getServerListData(this.state.activeTabkey,this.state.currentpage);
   }
@@ -113,6 +126,8 @@ class SuperviseList extends React.Component {
   onClickOneRow = (rowData)=>{
     // console.log("督办管理某行的点击--rowData:",rowData);
     this.setState({detailInfo:rowData, showDetail:true, showAdd:false });
+    Toast.info(<div><Icon type={'loading'} /><span>  加载中...</span></div>, 2, null, true);
+    browserHistory.push('/office_automation/supervision/detail?unid='+rowData.unid);
   }
   onClickAddNew = ()=>{
     this.setState({showAdd:true,showDetail:false});
@@ -250,14 +265,15 @@ class SuperviseList extends React.Component {
             afterAddNewCall={this.afterAddNewCall}
             backToTableListCall={this.backToTableListCall}
           />:null}
-        {this.state.showDetail?
+        {this.state.showDetail?this.props.children:null}
+        {/*this.state.showDetail?
           <SuperviseDetail
             tokenunid={this.state.tokenunid}
             activeTabkey={this.state.activeTabkey}
             detailInfo={this.state.detailInfo}
             updateListViewCall={this.updateListViewCall}
             backToTableListCall={this.backToTableListCall}
-          />:null}
+          />:null*/}
       </div>
     )
   }

@@ -202,7 +202,7 @@ class CommonBottomTabBarComp extends React.Component {
     return (
       <div>
         <TabBar
-          unselectedTintColor="#949494"
+          unselectedTintColor="black"
           tintColor="#33A3F4"
           barTintColor="white"
           hidden={this.props.hidden}

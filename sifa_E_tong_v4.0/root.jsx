@@ -36,7 +36,7 @@ function emitInitialLoad(callback) {
                 data = JSON.parse(res.text);
             }
             global.window.mm_config = data.client_cfg;
-            global.window.mm_config.SiteName = "司法e通";
+            global.window.mm_config.SiteName = "司法E通";
 
             UserStore.setNoAccounts(data.no_accounts);
             UserStore.setIsAdmin(data.isadmin);

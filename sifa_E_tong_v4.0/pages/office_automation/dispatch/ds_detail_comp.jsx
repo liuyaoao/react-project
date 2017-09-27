@@ -1,6 +1,7 @@
 //发文管理的详情页.
 import $ from 'jquery';
 import React from 'react';
+import {browserHistory} from 'react-router/es6';
 // import * as Utils from 'utils/utils.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import { WingBlank, WhiteSpace, Button, NavBar, Toast,Modal } from 'antd-mobile';
@@ -15,13 +16,15 @@ import CommonVerifyComp from '../common_verify_comp.jsx';
 import SignReportFlowTraceComp from 'pages/office_automation/signReport/signReport_flowTrace_comp.jsx'; //办文跟踪视图
 import CommonRehandleComp from '../common_rehandle_comp.jsx'; //回收重办视图
 
-class DS_DetailComp extends React.Component {
+export default class DS_DetailComp extends React.Component {
   constructor(props) {
       super(props);
       this.onNavBarLeftClick = this.onNavBarLeftClick.bind(this);
       this.state = {
         moduleNameCn:'发文管理',
         modulename:'fwgl', //模块名
+        unid:'',
+        tokenunid:'',
         formParams:{
           "wjbt":'',  //标题。
           "fwwh":"", //发文管理的--文号。
@@ -39,23 +42,36 @@ class DS_DetailComp extends React.Component {
       };
   }
   componentWillMount(){
-    if(this.props.detailInfo && this.props.detailInfo.unid){
-      this.getServerFormData();
+    Toast.hide();
+    let loginInfo = localStorage.getItem(OAUtils.OA_LOGIN_INFO_KEY);
+    let tokenunid = JSON.parse(loginInfo)['tockenunid'];
+    let unid = this.props.location.query.unid;
+    this.setState({
+      tokenunid,
+      unid
+    });
+  }
+  componentDidMount(){
+    let unid = this.props.location.query.unid;
+    if(unid){
+      this.getServerFormData(unid);
     }
   }
-
-  getServerFormData = ()=>{
+  componentWillUnmount(){
+    Toast.hide();
+  }
+  getServerFormData = (unid)=>{
     OAUtils.getModuleFormData({
       moduleName:this.state.moduleNameCn,
-      tokenunid:this.props.tokenunid,
-      unid:this.props.detailInfo.unid,
+      tokenunid:this.state.tokenunid,
+      unid:unid,
       formParams:this.state.formParams,
       successCall: (data)=>{
         let formDataRaw = data.values;
         let formData = OAUtils.formatFormData(data.values);
         console.log("发文管理的表单数据:",formDataRaw);
         if(!formData.unid){
-          Toast.info('该文件已被删除，不能处理了!', 2.5);
+          Toast.info('该文件已被删除，不能处理了!', 2,null,false);
         }
         this.setState({
           formData,
@@ -69,16 +85,12 @@ class DS_DetailComp extends React.Component {
     this.setState({isHide:true});
     // console.log("当前目录：", this.state.curSubTab);
     if(this.state.curSubTab == "content"){
-      this.props.backToTableListCall();
-    }else{
-      this.props.backToTableListCall("showDetail");
-      this.setState({curSubTab:'content'});
+      browserHistory.goBack();
     }
     this.onBackToDetailCall();
   }
   onBackToDetailCall = () => {
     this.setState({curSubTab:'content',selectedTab:''});
-    // this.getServerFormData();
   }
   onClickAddSave = ()=>{ //点击了保存
     let {editSaveTimes} = this.state;
@@ -88,8 +100,7 @@ class DS_DetailComp extends React.Component {
     });
   }
   editSaveSuccCall = (formData,formDataRaw)=>{ //跟新表单数据。
-    this.getServerFormData();
-    this.props.updateListViewCall();
+    this.getServerFormData(this.state.unid);
   }
   onClickToEndBtn = ()=>{//办结
     alert('', '终结后将不能修改，其他人员也不能继续办理，是否继续？', [
@@ -100,13 +111,12 @@ class DS_DetailComp extends React.Component {
   confirmToEndHandle = ()=>{
     OAUtils.toEndItemV2({
       moduleName:this.state.moduleNameCn,
-      tokenunid:this.props.tokenunid,
-      unid:this.props.detailInfo.unid,
+      tokenunid:this.state.tokenunid,
+      unid:this.state.unid,
       formParams:Object.assign({},this.state.formParams,this.state.formData), //特有的表单参数数据。
       successCall: (data)=>{
         Toast.info('办结成功!', 2);
-        this.props.updateListViewCall();
-        this.props.backToTableListCall();
+        this.getServerFormData(this.state.unid);
       },
       errorCall:(res)=>{
         Toast.info('办结失败!!', 2);
@@ -115,8 +125,7 @@ class DS_DetailComp extends React.Component {
   }
 
   render() {
-     const { detailInfo } = this.props;
-     const formData = this.state.formData || {};
+    const {tokenunid,unid,formData} = this.state;
     return (
       <div className={'oa_detail_container ds_detail_container'}>
         <NavBar className="mobile_navbar_custom"
@@ -130,17 +139,15 @@ class DS_DetailComp extends React.Component {
         </NavBar>
         <div style={{marginTop:'60px'}}>
           {this.state.curSubTab == "content" ?
-            (<DS_DetailContentComp
-              tokenunid={this.props.tokenunid}
+            (<DS_DetailContentComp unid={unid}
+              tokenunid={tokenunid}
               moduleNameCn={this.state.moduleNameCn}
-              detailInfo={detailInfo}
               formData={formData}
               formDataRaw={this.state.formDataRaw}
               modulename={this.state.modulename}
               editSaveTimes={this.state.editSaveTimes}
               formParams={this.state.formParams}
-              editSaveSuccCall={this.editSaveSuccCall}
-              backToTableListCall={()=>this.props.backToTableListCall()} />):null}
+              editSaveSuccCall={this.editSaveSuccCall}/>):null}
             {this.state.curSubTab == "content" && formData.unid?<div className="custom_tabBar">
               <CommonBottomTabBarComp
                 hidden={false}
@@ -181,10 +188,10 @@ class DS_DetailComp extends React.Component {
                 }} />
             </div>:null}
             {this.state.curSubTab == "send"?
-              (<CommonSendComp
-                  detailInfo={detailInfo}
-                  tokenunid={this.props.tokenunid}
-                  docunid={detailInfo.unid}
+              (<CommonSendComp unid={unid}
+                  fileTitle={formData['wjbt']}
+                  tokenunid={tokenunid}
+                  docunid={unid}
                   moduleNameCn={this.state.moduleNameCn}
                   modulename={this.state.modulename}
                   otherssign={formData["_otherssign"]}
@@ -192,27 +199,27 @@ class DS_DetailComp extends React.Component {
                   onBackToDetailCall={this.onBackToDetailCall}
                 />):null}
             {this.state.curSubTab == "verify"?
-              (<CommonVerifyComp
-                tokenunid={this.props.tokenunid}
-                docunid={detailInfo.unid}
+              (<CommonVerifyComp unid={unid}
+                tokenunid={tokenunid}
+                docunid={unid}
                 modulename={this.state.modulename}
                 gwlcunid={formData["gwlc"]}
                 onBackToDetailCall={this.onBackToDetailCall}
               />):null}
             {this.state.curSubTab == "track"?
-              (<SignReportFlowTraceComp
-                tokenunid={this.props.tokenunid}
+              (<SignReportFlowTraceComp unid={unid}
+                tokenunid={tokenunid}
                 backDetailCall={this.onBackToDetailCall}
-                docunid={detailInfo.unid}
+                docunid={unid}
                 modulename={this.state.modulename}
                 gwlcunid={formData["gwlc"]} />):
               null}
             {this.state.curSubTab == "rehandle"?
-              (<CommonRehandleComp
-                tokenunid={this.props.tokenunid}
+              (<CommonRehandleComp unid={unid}
+                tokenunid={tokenunid}
                 backDetailCall={this.onBackToDetailCall}
                 editSaveSuccCall={this.editSaveSuccCall}
-                docunid={detailInfo.unid}
+                docunid={unid}
                 modulename={this.state.modulename}
                 fsid={formData["flowsessionid"]}
                 gwlcunid={formData["gwlc"]} />):
@@ -222,11 +229,3 @@ class DS_DetailComp extends React.Component {
     )
   }
 }
-
-DS_DetailComp.defaultProps = {
-};
-DS_DetailComp.propTypes = {
-  // isShow:React.PropTypes.bool,
-};
-
-export default DS_DetailComp;

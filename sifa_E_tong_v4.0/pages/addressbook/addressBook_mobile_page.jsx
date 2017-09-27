@@ -46,7 +46,7 @@ class AddressBookPageMobile extends React.Component {
         };
     }
     onNavBarLeftClick = (e) => {  //navbar left click.
-      browserHistory.push('/modules');
+      browserHistory.goBack();
     }
     onOpenChange = (...args) => { //drawer open changed call.
       // console.log(args);
@@ -113,9 +113,6 @@ class AddressBookPageMobile extends React.Component {
 
     setBreadcrumbData(dataArr){
       this.setState({"breadcrumbData":dataArr});
-    }
-    onClickBackToModules(){
-      browserHistory.push('/modules');
     }
     updateContactsDirectory = ()=>{ //跟新目录结构
       this.getServerDirectoryData();

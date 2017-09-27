@@ -306,8 +306,13 @@
 .doc-edit-form-pc .ant-modal-content label{
   font-size:15px;
 }
-.doc-edit-form-mobile.ant-modal{
-  top:0;
+.doc-edit-form-mobile{
+  form .ant-row textarea.ant-input{
+    overflow: overlay;
+  }
+  .ant-modal{
+    top:0;
+  }
 }
 .address_book_drawer{
   .am-drawer-sidebar{

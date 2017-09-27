@@ -126,12 +126,12 @@ class DocumentListMobile extends React.Component {
                 onClose={() => console.log('global close')}
                 >
 
-              <List.Item key={index} multipleLine
+              <List.Item key={index} multipleLine extra={<a href="javascript:;">查看</a>}
                 onClick={()=>{hasOperaPermission?this.handleShowEditModal(item):''}}>
                 {
                   fileSubTypeName == '律师事务所'?
-                    <div>律所名称：{item.lawOfficeName}</div>:
-                    <div>姓名：{item.userName}</div>
+                    <div style={{fontWeight:'bold'}}>律所名称：{item.lawOfficeName}</div>:
+                    <div style={{fontWeight:'bold'}}>姓名：{item.userName}</div>
                 }
                 {this.getListItemBreifEle(item)}
               </List.Item>

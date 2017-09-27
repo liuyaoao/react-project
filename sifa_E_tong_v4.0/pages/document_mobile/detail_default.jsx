@@ -267,7 +267,7 @@ class DocDetailDefault extends React.Component {
                 <div className="info-body">
                   <FormItem label="">
                     {getFieldDecorator('resume', {initialValue: memberInfo.resume || ''})(
-                      <Input type="textarea" placeholder="简历" autosize={{ minRows: 2, maxRows: 100 }} />
+                      <Input type="textarea" placeholder="简历" autosize />
                     )}
                   </FormItem>
                 </div>

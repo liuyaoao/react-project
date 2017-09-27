@@ -150,24 +150,26 @@ export default class LoginPage extends React.Component {
         );
     }
 
-    finishSignin(team) {
+    finishSignin = ()=>{
         const query = this.props.location.query;
         myWebClient.getInitialLoad(
             (data, res) => {
-                if (!data && res.text) {
+                if (!data && res.text && typeof res.text == "string") {
                     data = JSON.parse(res.text);
                 }
                 global.window.mm_config = data.client_cfg;
-                global.window.mm_config.SiteName = "司法e通";
+                global.window.mm_config.SiteName = "司法E通";
                 UserStore.setNoAccounts(data.no_accounts);
                 UserStore.setIsAdmin(data.isadmin);
                 data.permissions && UserStore.setPermissionData(data.permissions);
                 if (data.user && data.user.id) {
                     global.window.mm_user = data.user;
-                    AppDispatcher.handleServerAction({
-                        type: ActionTypes.RECEIVED_ME,
-                        me: data.user
-                    });
+                    // AppDispatcher.handleServerAction({
+                    //     type: ActionTypes.RECEIVED_ME,
+                    //     me: data.user
+                    // });
+                    UserStore.setCurrentUser(data.user);
+                    UserStore.emitChange(data.user.id);
                 }
 
                 if (data.preferences) {
@@ -345,7 +347,7 @@ export default class LoginPage extends React.Component {
                         />
                         <div className={'sifa_login_title'} style={{textAlign:'center',lineHeight:'60px',marginBottom:'24px'}}>
                             <img className='' src={logoImage} style={{display:'inline-block',width: '60px',marginRight: '12px'}}/>
-                            <span style={{color:'#fff',lineHeight:'60px',fontSize:'36px',verticalAlign: 'middle'}}>司法e通</span>
+                            <span style={{color:'#fff',lineHeight:'60px',fontSize:'36px',verticalAlign: 'middle'}}>司法E通</span>
                         </div>
                         <div className='signup__content'>
                             <div className='signup_background'></div>

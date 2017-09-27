@@ -21,10 +21,10 @@ class DS_DetailContentComp extends React.Component {
         jjcd_value:'', //缓急
       };
   }
-  componentWillMount(){
+  componentDidMount(){
     var me = UserStore.getCurrentUser() || {};
     this.setState({loginUserName:me.username||''});
-    if(this.props.detailInfo && this.props.detailInfo.unid){
+    if(this.props.unid){
       this.getFormVerifyNotion();
       this.getFormAttachmentList();
     }
@@ -36,6 +36,7 @@ class DS_DetailContentComp extends React.Component {
         mj_value:nextProps.formData.mj || "",
         jjcd_value:nextProps.formData.jjcd || "",
       });
+
     }
     if(nextProps.editSaveTimes != this.props.editSaveTimes){ //点击了保存按钮了。
       this.editSave();
@@ -49,7 +50,7 @@ class DS_DetailContentComp extends React.Component {
     OAUtils.saveModuleFormData({
       moduleName:this.props.moduleNameCn,
       tokenunid:this.props.tokenunid,
-      unid:this.props.detailInfo.unid,
+      unid:this.props.unid,
       formParams:Object.assign({},this.props.formParams,this.props.formData,tempFormData), //特有的表单参数数据。
       successCall: (data)=>{
         // console.log("保存-发文管理的表单数据:",data);
@@ -65,7 +66,7 @@ class DS_DetailContentComp extends React.Component {
   getFormVerifyNotion = ()=>{ //获取历史阅文意见数据。
     OAUtils.getFormVerifyNotion({
       tokenunid:this.props.tokenunid,
-      docunid:this.props.detailInfo.unid,
+      docunid:this.props.unid,
       successCall: (data)=>{
         // console.log("get 发文管理的历史阅文意见:",data.values.notions);
         this.setState({
@@ -80,7 +81,7 @@ class DS_DetailContentComp extends React.Component {
   getFormAttachmentList = ()=>{
     OAUtils.getFormAttachmentList({
       tokenunid:this.props.tokenunid,
-      docunid:this.props.detailInfo.unid,
+      docunid:this.props.unid,
       moduleName:this.props.moduleNameCn,
       successCall: (data)=>{
         // console.log("get 发文管理的附件列表:",data);
@@ -116,7 +117,7 @@ class DS_DetailContentComp extends React.Component {
   onFileUploadChange = (file)=>{
     this.setState({
       uploadAttachmentUrl:OAUtils.getUploadAttachmentUrl({
-        docunid:this.props.detailInfo.unid,
+        docunid:this.props.unid,
         filename:file.name,
         moduleName:this.props.moduleNameCn
       })
@@ -125,7 +126,7 @@ class DS_DetailContentComp extends React.Component {
 
   render() {
     const {attachmentList,mj_value,jjcd_value,gwlc_value} = this.state;
-    const { detailInfo, formData, formDataRaw , tokenunid, modulename } = this.props;
+    const { unid, formData, formDataRaw , tokenunid, modulename } = this.props;
     const { getFieldProps, getFieldError } = this.props.form;
     let uploadProps = {
       name: 'inputName',
@@ -260,9 +261,9 @@ class DS_DetailContentComp extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <Button type="default" style={{margin:'0.1rem auto',width:'90%'}}
+              <Button type="default" style={{margin:'0.1rem auto',width:'90%',color:'#0ab0d6'}}
                 onClick={()=>{
-                  location.href = OAUtils.getMainDocumentUrl({ docunid:detailInfo.unid });
+                  location.href = OAUtils.getMainDocumentUrl({ docunid:unid });
                 }}>下载正文</Button>
             </Flex.Item>
           </Flex>
@@ -270,7 +271,7 @@ class DS_DetailContentComp extends React.Component {
           <Flex>
             <Flex.Item className={'uploadContainer'}>
               <Upload {...uploadProps}>
-                <Button type="primary" style={{width:'100%'}}>
+                <Button type="default" style={{width:'100%',color:'#0ab0d6'}}>
                   <Icon type="upload" /> 上传附件
                 </Button>
               </Upload>

@@ -43,11 +43,11 @@ class LoginRecordPage extends React.Component {
     }
 
     onNavBarLeftClick () {
-      browserHistory.push('/modules');
+      browserHistory.goBack();
     }
 
     onClickBackToModules(){
-      browserHistory.push('/modules');
+      browserHistory.goBack();
     }
     handleMenuClick = (item)=>{
       this.setState({current:item.key, open:!this.state.open});

@@ -5,7 +5,7 @@
   height:100%;
 }
 .modules_page_container{
-    a{
+    a,p{
       font-size:15px;
     }
     .back_arrow_icon{
@@ -26,7 +26,7 @@
         box-sizing: content-box;
         border-right: 1px solid #d4d4d4;
         border-bottom: 1px solid #d4d4d4;
-        a{
+        a,p{
           display:inline-block;
           width:50%;
           height: auto;
@@ -120,6 +120,13 @@
         top:-8px;
         right:-8px;
       }
+      .userSettingModule_pc{
+        background: #36b3f5;
+        cursor:pointer;
+      }
+      .userSettingModule_pc:hover{
+        background: #2c8abb;
+      }
     }
     .modules_content_pc .OAModule{
       background: #ED1B24;
@@ -131,16 +138,16 @@
       background: #3dd218;
     }
     .modules_content_pc .mailListModule{
-      background: #1fe6c1;
+      background: #d639b4;
     }
     .modules_content_pc .chatModule{
       background: #2ad0d8;
     }
     .modules_content_pc .settingsModule{
-      background: #7979E0;
+      background: #e06327;
     }
     .modules_content_pc .signinModule{
-      background: #F15858;
+      background: #ec4545;
     }
     .modules_content_pc .OAModule:hover{
       background: #E31720;
@@ -152,16 +159,16 @@
       background: #35ae32;
     }
     .modules_content_pc .mailListModule:hover{
-      background: #10a2ac;
+      background: #ad3292;
     }
     .modules_content_pc .chatModule:hover{
       background: #369adb;
     }
     .modules_content_pc .settingsModule:hover{
-      background: #6e6ed7;
+      background: #ad4f22;
     }
     .modules_content_pc .signinModule:hover{
-      background: #e64e4e;
+      background: #b53131;
     }
     .modules_content_pc .plusModule:hover{
       background: #0059b2;
@@ -265,7 +272,7 @@
   }
 }
 
-a.modules_font:hover{
+a.modules_font:hover,p.modules_font:hover{
   color:#fff;
   text-decoration:none;
   display: inline-block;

@@ -62,7 +62,7 @@ class LoginRecordPage extends React.Component {
       });
     }
     onNavBarLeftClick = (e) => {
-        browserHistory.push('/modules');
+        browserHistory.goBack();
     }
     onOpenChange = (...args) => { //drawer open changed call.
       // console.log(args);
@@ -76,47 +76,44 @@ class LoginRecordPage extends React.Component {
       });
       this.getContentElements(key);
     }
-    onClickBackToModules(){
-      browserHistory.push('/modules');
-    }
     getContentElements(current){
       let content = null;
       let {tokenunid} = this.state;
       switch(current){
         case "待办事项":
-          browserHistory.push('/office_automation/todo_list');
+          browserHistory.replace('/office_automation/todo_list');
           // content = (<PersonalTodoList title={current} tokenunid={tokenunid}/>);
         break;
         case "收文管理":
-          browserHistory.push('/office_automation/incoming_list');
+          browserHistory.replace('/office_automation/incoming_list');
           // content = (<IncomingList title={current} tokenunid={tokenunid}/>);
         break;
         case "发文管理":
-          browserHistory.push('/office_automation/dispatch');
+          browserHistory.replace('/office_automation/dispatch');
           // content = (<DispatchList title={current} tokenunid={tokenunid}/>);
         break;
         case "签报管理":
-          browserHistory.push('/office_automation/sign_report');
+          browserHistory.replace('/office_automation/sign_report');
           // content = (<SignReportList title={current} tokenunid={tokenunid}/>);
         break;
         case "督办管理":
-          browserHistory.push('/office_automation/supervision');
+          browserHistory.replace('/office_automation/supervision');
           // content = (<SuperviseList title={current} tokenunid={tokenunid}/>);
         break;
         case "最新发文":
-          browserHistory.push('/office_automation/new_dispatch');
+          browserHistory.replace('/office_automation/new_dispatch');
           // content = (<NewDispatchList title={current} tokenunid={tokenunid}/>);
         break;
         case "通知公告":
-          browserHistory.push('/office_automation/notice');
+          browserHistory.replace('/office_automation/notice');
           // content = (<NoticeList title={current} tokenunid={tokenunid}/>);
         break;
         case "车辆管理":
-          browserHistory.push('/office_automation/vehicle');
+          browserHistory.replace('/office_automation/vehicle');
           // content = (<VehicleList title={current} tokenunid={tokenunid}/>);
         break;
         case "司法行政系统信息查询":
-          browserHistory.push('/office_automation/administrative_system_infos');
+          browserHistory.replace('/office_automation/administrative_system_infos');
           // content = (<AdministrativeSystemInfos title={current} tokenunid={tokenunid}/>);
         break;
         default:
@@ -154,7 +151,7 @@ class LoginRecordPage extends React.Component {
               rightContent={[
                 <Icon key="6" type="ellipsis" onClick={this.onOpenChange} />
               ]}>
-                <img width="35" height="35" src={signup_logo}/>司法e通
+                <img width="35" height="35" src={signup_logo}/>司法E通
               </NavBar>
               <div style={{marginTop:'60px'}}>
                 {/*this.state.tokenunid ? this.getContentElements() : null*/}

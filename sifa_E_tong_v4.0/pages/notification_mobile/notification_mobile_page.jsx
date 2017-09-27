@@ -109,7 +109,7 @@ class NotificationMobilePage extends React.Component {
     }
 
     onNavBarLeftClick = () => {
-      browserHistory.push('/modules');
+      browserHistory.goBack();
     }
     onSidebarMenuClick = (item) => {
       if(item.key==1){
@@ -169,7 +169,7 @@ class NotificationMobilePage extends React.Component {
               leftContent={[ <Icon type="arrow-left" className="back_arrow_icon" key={192384756}/>,
               <span style={{fontSize:'1em'}} key={13212343653}>返回</span>]}
               rightContent={[ <Icon key="6" type="ellipsis" onClick={this.onOpenChange}/>]} >
-                <img width="35" height="35" src={signup_logo} style={{marginRight:15}}/>司法e通
+                <img width="35" height="35" src={signup_logo} style={{marginRight:15}}/>司法E通
               </NavBar>
               <div className="mobileNotificationHeader"> <h5>{headerName}</h5> </div>
               {this.props.children}

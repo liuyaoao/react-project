@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import myWebClient from 'client/my_web_client.jsx';
 import AppDispatcher from 'dispatcher/app_dispatcher.jsx';
-
+import OrganizationStore from 'pages/stores/organization_store.jsx';
 
 export function getServerOrganizationsData(){ //从服务端获取组织机构数据
   myWebClient.getOrganizationsData((data,res)=>{
@@ -14,6 +14,10 @@ export function getServerOrganizationsData(){ //从服务端获取组织机构�
           organizationsFlatData: flatDataArr,
           organizationsFlatDataMap:flatDataMap
       });
+      OrganizationStore.setOrgaData(objArr);
+      OrganizationStore.setOrgaFlatData(flatDataArr);
+      OrganizationStore.setOrgaFlatMap(flatDataMap);
+      OrganizationStore.emitOrgaChange();
   }, (e,err,res)=>{
       // notification.error({message:"获取组织结构数据失败了！"});
       // console.log("request server orgnizasitions response error info:", err);

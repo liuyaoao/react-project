@@ -2,16 +2,14 @@
 // See License.txt for license information.
 
 import $ from 'jquery';
-import ReactDOM from 'react-dom';
+import React from 'react';
+import {Link} from 'react-router/es6';
 import UserStore from 'stores/user_store.jsx';
 import * as Utils from 'utils/utils.jsx';
 import moment from 'moment';
 import myWebClient from 'client/my_web_client.jsx';
 
-import React from 'react';
-import {Link} from 'react-router/es6';
 import {Icon,message,Calendar} from 'antd';
-
 
 message.config({
   top: 75,
@@ -38,6 +36,10 @@ class UserLoginRecordComp extends React.Component {
     }
 
     componentDidMount(){
+      let timeObj = {
+        startTime:(moment(new Date()).subtract(10,'days')).format('x'),
+        endTime:moment(new Date()).format('x'),
+      };
       this.getRecordData();
     }
 
@@ -56,8 +58,7 @@ class UserLoginRecordComp extends React.Component {
         (data,res)=>{
           if (res.ok) {
             let array = JSON.parse(res.text);
-            console.log("获取用户登录记录数据成功-- data text:",data);
-            console.log("获取用户登录记录数据成功-- res text:",res);
+            console.log("获取用户登录记录数据成功-- res text:",data,res);
             const records = array.map((item) => {
               const time = moment(new Date(item)).format('LL');
               return time;
@@ -110,27 +111,22 @@ class UserLoginRecordComp extends React.Component {
         })
       }
     }
-
     dateCellRender = ()=>{
-
     }
-
     onMobilePanelChange = ()=>{
-
     }
-
     handlePanelChange(value, mode) {
       if (mode == 'year') {
         return;
       }
       // const currentTime = this.state.calendarValue.startOf('month').valueOf();
-      // console.log(value);
+      console.log("选择月份：",value,value.format('YYYY-MM-DD'));
       this.setState({calendarValue: value}, () => {
         const cur = value.format('YYYY-MM-DD');
         const currentTime = this.state.calendarValue.format('YYYY-MM-DD');
         const time = {
           startTime: moment(cur).startOf('month').valueOf(),
-          endTime: moment(cur).endOf('month').valueOf()
+          endTime: moment(cur).endOf('month').valueOf(),
         }
         if (time.startTime == moment(currentTime).startOf('month').valueOf()) {
           this.setRecordStatus(this.state.recordData);
@@ -145,7 +141,7 @@ class UserLoginRecordComp extends React.Component {
     }
 
     getMobileElements(){
-      return (<div style={{  border: '1px solid #d9d9d9', borderRadius: 4 }} className="mobile_userLoginRecord">
+      return (<div style={{  marginTop:'2em',border: '1px solid #d9d9d9', borderRadius: 4 }} className="mobile_userLoginRecord">
         <Calendar dateCellRender={this.dateCellRender} onPanelChange={this.handlePanelChange} onSelect={this.handleSelect} />
               </div>);
     }

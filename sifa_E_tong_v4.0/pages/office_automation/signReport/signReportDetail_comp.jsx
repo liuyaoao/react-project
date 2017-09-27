@@ -1,6 +1,7 @@
 //签报管理的详情页.
 import $ from 'jquery';
 import React from 'react';
+import {browserHistory} from 'react-router/es6';
 import * as Utils from 'utils/utils.jsx';
 // import myWebClient from 'client/my_web_client.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
@@ -19,7 +20,7 @@ import CommonRehandleComp from '../common_rehandle_comp.jsx'; //回收重办视�
 
 const zhNow = moment().locale('zh-cn').utcOffset(8);
 
-class SignReportDetail extends React.Component {
+export default class SignReportDetail extends React.Component {
   constructor(props) {
       super(props);
       this.onNavBarLeftClick = this.onNavBarLeftClick.bind(this);
@@ -27,6 +28,8 @@ class SignReportDetail extends React.Component {
         date: zhNow,
         moduleNameCn:'签报管理',
         modulename:'qbgl', //模块名
+        unid:'',
+        tokenunid:'',
         formParams:{
           "nr":'',  //事由
         },
@@ -39,20 +42,34 @@ class SignReportDetail extends React.Component {
       };
   }
   componentWillMount(){
-    if(this.props.detailInfo && this.props.detailInfo.unid){
-      this.getServerFormData();
+    Toast.hide();
+    let loginInfo = localStorage.getItem(OAUtils.OA_LOGIN_INFO_KEY);
+    let tokenunid = JSON.parse(loginInfo)['tockenunid'];
+    let unid = this.props.location.query.unid;
+    this.setState({ tokenunid,unid });
+  }
+  componentDidMount(){
+    let unid = this.props.location.query.unid;
+    if(unid){
+      this.setState({unid:unid});
+      this.getServerFormData(unid);
     }
   }
-  getServerFormData = ()=>{
-    const { detailInfo } = this.props;
+  componentWillUnmount(){
+    Toast.hide();
+  }
+  getServerFormData = (unid)=>{
     OAUtils.getModuleFormData({
       moduleName:this.state.moduleNameCn,
-      tokenunid:this.props.tokenunid,
-      unid:this.props.detailInfo.unid,
+      tokenunid:this.state.tokenunid,
+      unid:unid,
       formParams:this.state.formParams,
       successCall: (data)=>{
-        // console.log("get 签报管理的表单数据:",data);
         let formData = OAUtils.formatFormData(data.values);
+        // console.log("get 签报管理的表单数据:",formData);
+        if(!formData.unid){
+          Toast.info('该文件已被删除，不能处理了!', 2,null,false);
+        }
         this.setState({
           formData,
           formDataRaw:data.values,
@@ -66,13 +83,10 @@ class SignReportDetail extends React.Component {
 
   onNavBarLeftClick = (e) => {
     if(this.state.curSubTab == "content"){
-      this.props.backToTableListCall();
-    }else{
-      this.props.backToTableListCall("showDetail");
+      browserHistory.goBack();
     }
     this.onBackDetailCall();
   }
-
   onBackDetailCall = ()=>{
     this.setState({curSubTab:'content',selectedTab:''});
   }
@@ -89,8 +103,7 @@ class SignReportDetail extends React.Component {
     });
   }
   editSaveSuccCall = (formData,formDataRaw)=>{ //跟新表单数据。
-    this.getServerFormData();
-    this.props.updateListViewCall();
+    this.getServerFormData(this.state.unid);
   }
   onClickToEndBtn = ()=>{
     alert('', '终结后将不能修改，其他人员也不能继续办理，是否继续？', [
@@ -101,14 +114,13 @@ class SignReportDetail extends React.Component {
   confirmToEndHandle = ()=>{
     OAUtils.toEndItemV2({
       moduleName:this.state.moduleNameCn,
-      tokenunid:this.props.tokenunid,
-      unid:this.props.detailInfo.unid,
+      tokenunid:this.state.tokenunid,
+      unid:this.state.unid,
       formParams:Object.assign({},this.state.formParams,this.state.formData), //特有的表单参数数据。
       successCall: (data)=>{
         // console.log("办结-签报管理:",data);
         Toast.info('办结成功!', 2);
-        this.props.updateListViewCall();
-        this.props.backToTableListCall();
+        this.getServerFormData(this.state.unid);
       },
       errorCall:(res)=>{
         Toast.info('办结失败!!', 2);
@@ -117,12 +129,7 @@ class SignReportDetail extends React.Component {
   }
 
   render() {
-     const {detailInfo} = this.props;
-     const {formData,formDataRaw,historyNotionList,attachmentList} = this.state;
-
-    //  let clsName = this.props.isShow && !this.state.isHide?
-    //  'oa_detail_container ds_detail_container oa_detail_container_show':
-    //  'oa_detail_container ds_detail_container oa_detail_container_hide';
+     const {tokenunid,unid,formData,formDataRaw,historyNotionList,attachmentList} = this.state;
     return (
       <div className={"oa_detail_container ds_detail_container"}>
         <NavBar className="mobile_navbar_custom"
@@ -138,22 +145,22 @@ class SignReportDetail extends React.Component {
           {this.state.curSubTab == "content"?
             (
               <DetailContentComp
+                unid={unid}
                 editSaveTimes={this.state.editSaveTimes}
                 moduleNameCn={this.state.moduleNameCn}
-                activeTabkey={this.props.activeTabkey}
-                tokenunid={this.props.tokenunid}
+                tokenunid={tokenunid}
                 formData={formData}
                 formDataRaw={formDataRaw}
                 formParams={this.state.formParams}
-                editSaveSuccCall={this.editSaveSuccCall}
-                detailInfo={detailInfo} />
+                editSaveSuccCall={this.editSaveSuccCall} />
             ):null}
         </div>
         {this.state.curSubTab == "send"?
           (<CommonSendComp
-              detailInfo={detailInfo}
-              tokenunid={this.props.tokenunid}
-              docunid={detailInfo.unid}
+              unid={unid}
+              fileTitle={formData['bt']}
+              tokenunid={tokenunid}
+              docunid={unid}
               moduleNameCn={this.state.moduleNameCn}
               modulename={this.state.modulename}
               otherssign={formData["_otherssign"]}
@@ -161,32 +168,33 @@ class SignReportDetail extends React.Component {
               onBackToDetailCall={this.onBackDetailCall}
             />):null}
         {this.state.curSubTab == "verify"?
-          (<CommonVerifyComp
-            tokenunid={this.props.tokenunid}
+          (<CommonVerifyComp unid={unid}
+            tokenunid={tokenunid}
             backDetailCall={this.onBackDetailCall}
-            docunid={detailInfo.unid}
+            docunid={unid}
             modulename={this.state.modulename}
             gwlcunid={formData["gwlc"]} />):
           null}
           {this.state.curSubTab == "track"?
-            (<SignReportFlowTraceComp
-              tokenunid={this.props.tokenunid}
+            (<SignReportFlowTraceComp unid={unid}
+              tokenunid={tokenunid}
               backDetailCall={this.onBackDetailCall}
-              docunid={detailInfo.unid}
+              docunid={unid}
               modulename={this.state.modulename}
               gwlcunid={formData["gwlc"]} />):
             null}
             {this.state.curSubTab == "rehandle"?
-              (<CommonRehandleComp
-                tokenunid={this.props.tokenunid}
+              (<CommonRehandleComp unid={unid}
+                tokenunid={tokenunid}
                 backDetailCall={this.onBackDetailCall}
                 editSaveSuccCall={this.editSaveSuccCall}
-                docunid={detailInfo.unid}
+                docunid={unid}
                 modulename={this.state.modulename}
                 fsid={formData["flowsessionid"]}
                 gwlcunid={formData["gwlc"]} />):
               null}
 
+        {this.state.curSubTab == "content" && formData.unid?<div className="custom_tabBar">
           <CommonBottomTabBarComp
             hidden={this.state.curSubTab != "content"}
             isAddNew={false}
@@ -224,17 +232,8 @@ class SignReportDetail extends React.Component {
               });
               this.onClickToEndBtn();
             }} />
+          </div>:null}
       </div>
     )
   }
 }
-
-SignReportDetail.defaultProps = {
-};
-
-SignReportDetail.propTypes = {
-  backToTableListCall:React.PropTypes.func,
-  activeTabkey:React.PropTypes.string,
-};
-
-export default SignReportDetail;

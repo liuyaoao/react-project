@@ -267,7 +267,7 @@ class EditUserInfoDialog extends React.Component {
               </Col>
 
               <Col span={24}>
-                <FormItem {...formItemLayout} label="司法e通密码" hasFeedback>
+                <FormItem {...formItemLayout} label="司法E通密码" hasFeedback>
                   {getFieldDecorator('password', {
                     initialValue:defaultUserPassword,
                     rules: [{

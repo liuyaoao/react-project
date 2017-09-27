@@ -1,12 +1,13 @@
 //发文管理
 import $ from 'jquery';
 import React from 'react';
+import {Link,browserHistory} from 'react-router/es6';
 import * as Utils from 'utils/utils.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import { Modal,WhiteSpace, SwipeAction, Tabs, Toast, ListView, Button} from 'antd-mobile';
 import { Icon} from 'antd';
 const TabPane = Tabs.TabPane;
-import DS_DetailComp from './ds_detail_comp.jsx';//详情
+// import DS_DetailComp from './ds_detail_comp.jsx';//详情
 import DS_AddComp from './ds_add_comp.jsx';//新增
 
 const alert = Modal.alert;
@@ -38,6 +39,18 @@ class DispatchList extends React.Component {
       };
   }
   componentWillMount(){
+    if(this.props.location.pathname!="/office_automation/dispatch"){
+      this.setState({ showAdd:false,showDetail:true,detailInfo:{} });
+    }
+  }
+  componentWillReceiveProps(nextProps){
+    // console.log("nextProps---this.props---:",nextProps, this.props);
+    if(nextProps.location.pathname=="/office_automation/dispatch" && nextProps.location.pathname!=this.props.location.pathname){
+      this.setState({ showAdd:false,showDetail:false,detailInfo:{} });
+      this.getServerListData(this.state.activeTabkey,this.state.currentpage);
+    }
+  }
+  componentDidMount(){
     //从服务端获取数据。
     this.getServerListData(this.state.activeTabkey,this.state.currentpage);
   }
@@ -114,6 +127,8 @@ class DispatchList extends React.Component {
   onClickOneRow = (rowData)=>{
     // console.log("发文管理 click rowData:",rowData);
     this.setState({detailInfo:rowData, showDetail:true,showAdd: false});
+    Toast.info(<div><Icon type={'loading'} /><span>  加载中...</span></div>, 2, null, true);
+    browserHistory.push('/office_automation/dispatch/detail?unid='+rowData.unid);
   }
 
   backToTableListCall = (showType)=>{
@@ -262,14 +277,15 @@ class DispatchList extends React.Component {
             backToTableListCall={()=>this.backToTableListCall()}
             />):null
         }
-        {this.state.showDetail?
+        {this.state.showDetail?this.props.children:null}
+        {/*this.state.showDetail?
           (<DS_DetailComp
             detailInfo={this.state.detailInfo}
             tokenunid={this.state.tokenunid}
             updateListViewCall={this.updateListViewCall}
             backToTableListCall={()=>this.backToTableListCall()}
             />):null
-        }
+        */}
       </div>
     )
   }

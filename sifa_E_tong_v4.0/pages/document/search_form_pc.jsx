@@ -39,14 +39,14 @@ class SearchFormPC extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // console.log('Received values of form: ', values);
-        const param = {};
+        const params = {};
         Object.keys(values).forEach((key) => {
           if (values[key]) {
-            param[key] = values[key];
+            params[key] = values[key];
           }
         });
-        // console.log('Received search params: ', param);
-        this.props.handleSearch(null,Object.assign({},{"from":0,"to":10},param));
+        // console.log('Received search params: ', params);
+        this.props.handleSearch(null,Object.assign({},{"from":0,"to":10},params));
       }
     });
   }

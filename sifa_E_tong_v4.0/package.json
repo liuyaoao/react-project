@@ -99,6 +99,7 @@
     "remote-redux-devtools-on-debugger": "0.7.0",
     "sass-loader": "6.0.3",
     "style-loader": "0.13.2",
+    "superagent-no-cache": "^0.1.1",
     "svg-sprite-loader": "^3.0.5",
     "url-loader": "0.5.8",
     "webpack": "^2.2.1",

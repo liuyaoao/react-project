@@ -100,7 +100,7 @@ class UserSettingMobilePage extends React.Component {
         this.handleCancel();
     }
     handleCancel = () => {
-      browserHistory.push('/modules');
+      browserHistory.goBack();
       this.setState({ loading:false });
     }
     onClickSaveBtn = () => { //点击了保存
@@ -243,7 +243,7 @@ class UserSettingMobilePage extends React.Component {
             <Icon type="arrow-left" className="back_arrow_icon" key={2}/>,
             <span key={1}>返回</span>
           ]} >
-            <img width="35" height="35" src={signup_logo}/>司法e通
+            <img width="35" height="35" src={signup_logo}/>司法E通
           </NavBar>
           <div style={{marginTop:'60px',width:'90%',margin:'0 auto'}}>
             <WhiteSpace size='md' />

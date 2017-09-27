@@ -68,7 +68,7 @@ class DocumentMobilePage extends React.Component {
     this.setState({ open: !this.state.open });
   }
   onNavBarLeftClick = (e) => {  //navbar left click.
-    browserHistory.push('/modules');
+    browserHistory.goBack();
   }
   componentDidMount() {
     // console.log("pathname:",location);

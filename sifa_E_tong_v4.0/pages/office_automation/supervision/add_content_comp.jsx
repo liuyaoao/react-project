@@ -192,7 +192,7 @@ class AddContentCompRaw extends React.Component {
           <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginBottom:'0.1rem'}}/>
           <Flex>
             <Flex.Item>
-              <Upload {...uploadField} className={'uploadContainer'} style={{width:'80%',margin:'0 auto'}}>
+              <Upload {...uploadField} className={'uploadContainer'} style={{width:'80%',margin:'0 auto',color:'#0ab0d6'}}>
                <Button>
                  <Icon type="upload" /> 上传正文
                </Button>
@@ -207,7 +207,7 @@ class AddContentCompRaw extends React.Component {
           <WhiteSpace size='md' style={{borderBottom:'1px solid #c7c3c3',marginBottom:'0.1rem'}}/>
           <Flex>
             <Flex.Item>
-              <Upload {...uploadField} className={'uploadContainer'} style={{width:'80%',margin:'0 auto'}}>
+              <Upload {...uploadField} className={'uploadContainer'} style={{width:'80%',margin:'0 auto',color:'#0ab0d6'}}>
                <Button>
                  <Icon type="upload" /> 上传附件
                </Button>

@@ -1,6 +1,7 @@
 //签报管理
 import $ from 'jquery';
 import React from 'react';
+import {Link,browserHistory} from 'react-router/es6';
 import * as Utils from 'utils/utils.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import { Modal, WingBlank, WhiteSpace, SwipeAction,Toast,
@@ -8,7 +9,7 @@ import { Modal, WingBlank, WhiteSpace, SwipeAction,Toast,
 import { Icon} from 'antd';
 const TabPane = Tabs.TabPane;
 import SignReportAdd from './signReportAdd_comp.jsx';
-import SignReportDetail from './signReportDetail_comp.jsx';
+// import SignReportDetail from './signReportDetail_comp.jsx';
 
 const alert = Modal.alert;
 //签报管理
@@ -38,7 +39,19 @@ class SignReportList extends React.Component {
       };
   }
   componentWillMount(){
+    if(this.props.location.pathname!="/office_automation/sign_report"){
+      this.setState({ showAdd:false,showDetail:true,detailInfo:{} });
+    }
+  }
+  componentDidMount(){
     this.getServerListData(this.state.activeTabkey,this.state.currentpage);
+  }
+  componentWillReceiveProps(nextProps){
+    // console.log("nextProps---this.props---:",nextProps, this.props);
+    if(nextProps.location.pathname=="/office_automation/sign_report" && nextProps.location.pathname!=this.props.location.pathname){
+      this.setState({ showAdd:false,showDetail:false,detailInfo:{} });
+      this.getServerListData(this.state.activeTabkey,this.state.currentpage);
+    }
   }
   getServerListData = (keyName,currentpage)=>{
     let loginInfo = localStorage.getItem(OAUtils.OA_LOGIN_INFO_KEY);
@@ -112,6 +125,8 @@ class SignReportList extends React.Component {
   onClickOneRow = (rowData)=>{
     // console.log("签报管理的 click rowData:",rowData);
     this.setState({detailInfo:rowData, showDetail:true, showAdd:false });
+    Toast.info(<div><Icon type={'loading'} /><span>  加载中...</span></div>, 2, null, true);
+    browserHistory.push('/office_automation/sign_report/detail?unid='+rowData.unid);
   }
   onClickAddNew = ()=>{
     this.setState({showAdd:true,showDetail:false});
@@ -253,14 +268,17 @@ class SignReportList extends React.Component {
             afterAddNewCall={this.afterAddNewCall}
             backToTableListCall={this.backToTableListCall}
           />:null}
-        {this.state.showDetail?
+        {this.state.showDetail?this.props.children:null}
+        {/*
+          this.state.showDetail?
           <SignReportDetail
             activeTabkey={this.state.activeTabkey}
             detailInfo={this.state.detailInfo}
             tokenunid={this.state.tokenunid}
             updateListViewCall={this.updateListViewCall}
             backToTableListCall={this.backToTableListCall}
-          />:null}
+          />:null
+        */}
       </div>
     )
   }

@@ -1,14 +1,15 @@
 //个人办公的待办事项
 import $ from 'jquery';
 import React from 'react';
+import {Link,browserHistory} from 'react-router/es6';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
-import { WhiteSpace, WingBlank, Button, ListView} from 'antd-mobile';
+import { WhiteSpace, WingBlank, Button, ListView, Toast} from 'antd-mobile';
 import {Icon} from 'antd';
 import moment from 'moment';
 
-import DS_DetailComp from './dispatch/ds_detail_comp.jsx';  //发文管理--详情页。
-import SignReportDetail from './signReport/signReportDetail_comp.jsx';  //签报管理--详情页。
-import SuperviseDetail from './supervision/superviseDetail_comp.jsx';  //督办管理--详情页。
+// import DS_DetailComp from './dispatch/ds_detail_comp.jsx';  //发文管理--详情页。
+// import SignReportDetail from './signReport/signReportDetail_comp.jsx';  //签报管理--详情页。
+// import SuperviseDetail from './supervision/superviseDetail_comp.jsx';  //督办管理--详情页。
 
 class PersonalTodoList extends React.Component {
   constructor(props) {
@@ -31,9 +32,21 @@ class PersonalTodoList extends React.Component {
         tokenunid:'',
       };
   }
+  componentWillMount(){
+    if(this.props.location.pathname!="/office_automation/todo_list"){
+      this.setState({ showDetail:true,detailInfo:{} });
+    }
+  }
   componentDidMount(){
     //从服务端获取数据。
     this.getServerListData(this.state.currentpage);
+  }
+  componentWillReceiveProps(nextProps){
+    console.log("nextProps---this.props---:",nextProps, this.props);
+    if(nextProps.location.pathname=="/office_automation/todo_list" && nextProps.location.pathname!=this.props.location.pathname){
+      this.setState({ showDetail:false,detailInfo:{} });
+      this.getServerListData(this.state.currentpage);
+    }
   }
   //获取服务器端的待办事项数据。
   getServerListData = (currentpage)=>{
@@ -87,6 +100,14 @@ class PersonalTodoList extends React.Component {
   onClickOneRow = (rowData)=>{
     // console.log("待办事项 click rowData:",rowData);
     this.setState({detailInfo:rowData, showDetail:true});
+    Toast.info(<div><Icon type={'loading'} /><span>  加载中...</span></div>, 2, null, true);
+    if(rowData.moduleName == "发文管理"){
+      browserHistory.push('/office_automation/todo_list/dispatch_detail?unid='+rowData.unid);
+    }else if(rowData.moduleName == "签报管理"){
+      browserHistory.push('/office_automation/todo_list/signReport_detail?unid='+rowData.unid);
+    }else if(rowData.moduleName == "督办管理"){
+      browserHistory.push('/office_automation/todo_list/supervision_detail?unid='+rowData.unid);
+    }
   }
   backToTableListCall = (showType)=>{   //返回到列表页。
     let showDetail = false;
@@ -181,30 +202,37 @@ class PersonalTodoList extends React.Component {
           useBodyScroll={true}
           scrollerOptions={{ scrollbars: true }}
         />):null}
-        {(showDetail && detailInfo.moduleName=="发文管理")?
+        {showDetail?this.props.children:null}
+        {/*
+          (showDetail && detailInfo.moduleName=="发文管理")?
           <DS_DetailComp
             activeTabkey={'待办'}
             detailInfo={detailInfo}
             tokenunid={tokenunid}
             updateListViewCall={this.updateListViewCall}
             backToTableListCall={this.backToTableListCall}
-          />:null}
-        {(showDetail && detailInfo.moduleName=="签报管理")?
+          />:null
+        */}
+        {/*
+          (showDetail && detailInfo.moduleName=="签报管理")?
           <SignReportDetail
             activeTabkey={'待办'}
             detailInfo={detailInfo}
             tokenunid={tokenunid}
             updateListViewCall={this.updateListViewCall}
             backToTableListCall={this.backToTableListCall}
-          />:null}
-        {(showDetail && detailInfo.moduleName=="督办管理")?
+          />:null
+        */}
+        {/*
+          (showDetail && detailInfo.moduleName=="督办管理")?
           <SuperviseDetail
             activeTabkey={'待办'}
             detailInfo={detailInfo}
             tokenunid={tokenunid}
             updateListViewCall={this.updateListViewCall}
             backToTableListCall={this.backToTableListCall}
-          />:null}
+          />:null
+        */}
       </div>
     )
   }

@@ -8,7 +8,6 @@ const HEADER_X_CLUSTER_ID = 'x-cluster-id';
 const HEADER_TOKEN = 'token';
 const HEADER_BEARER = 'BEARER';
 const HEADER_AUTH = 'Authorization';
-const localStorage_token_key = 'sameview_login_token_key';
 
 export default class Client {
     constructor() {
@@ -17,15 +16,15 @@ export default class Client {
         this.clusterId = '';
         this.logToConsole = false;
         this.useToken = false;
-        this.tokenName = localStorage_token_key;
-        this.token = localStorage.getItem(localStorage_token_key) || "";
+        this.tokenName = window.localStoreTokenName;
+        this.token = localStorage.getItem(window.localStoreTokenName) || "";
         // this.token = '';
         // this.url = '';
         this.url = window.serverUrl;
         this.urlVersion = '/api/v3';
         this.urlVersionV4 = '/api/v4';
         this.defaultHeaders = {
-            'token':localStorage.getItem(localStorage_token_key) || "",
+            'token':localStorage.getItem(window.localStoreTokenName) || "",
             'X-Requested-With': 'XMLHttpRequest'
             // 'Access-Control-Allow-Origin':'*'
         };

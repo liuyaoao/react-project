@@ -328,7 +328,7 @@ class Notice_AddEditContentComp extends React.Component {
                 <Flex>
                   <Flex.Item className={'uploadContainer'}>
                     <Upload {...uploadAttachProps}>
-                      <Button type="primary" style={{width:'100%'}}>
+                      <Button type="default" style={{width:'100%',color:'#0ab0d6'}}>
                         <Icon type="upload" /> 上传图片
                       </Button>
                     </Upload>
@@ -361,7 +361,7 @@ class Notice_AddEditContentComp extends React.Component {
               <Flex>
                 <Flex.Item className={'uploadContainer'}>
                   <Upload {...uploadAttachProps}>
-                    <Button type="primary" style={{width:'100%'}}>
+                    <Button type="default" style={{width:'100%',color:'#0ab0d6'}}>
                       <Icon type="upload" /> 上传附件
                     </Button>
                   </Upload>

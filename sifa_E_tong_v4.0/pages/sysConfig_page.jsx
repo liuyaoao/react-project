@@ -74,7 +74,7 @@ handleClick = (item) => {
 
  }
   onClickBackToModules(){
-    browserHistory.push('/modules');
+    browserHistory.goBack();
   }
 
   getServerUsersData(params){
@@ -99,33 +99,36 @@ handleClick = (item) => {
   afterAddEditUserCall(){ //在新增和编辑后跟新列表。
     this.getServerUsersData();
   }
-  getMobileElements(sidebar){
-    const drawerProps = {
-      open: this.state.open,
-      position: this.state.position,
-      onOpenChange: this.onOpenChange,
-    };
-    let contentAll = this.getListContentElements();
-    return (<div><Button type="primary" inline onClick={() => this.onOpenChange()} style={{ marginRight: '0.08rem',position:'absolute',top:'0',right:'0',zIndex:'3'}} >...</Button>
-        <Drawer
-          style={{ minHeight: document.documentElement.clientHeight - 200 }}
-          touch={true}
-          sidebarStyle={{height:'100%',background:'#fff'}}
-          contentStyle={{ color: '#A6A6A6'}}
-          sidebar={sidebar}
-          {...drawerProps} >
-          <NavBar className="mobile_navbar_custom"
-            iconName = {false}
-            leftContent={[ <Icon type="arrow-left" className="back_arrow_icon"/>,<span style={{fontSize:'0.8em'}}>返回</span>]}
-            onLeftClick={this.onNavBarLeftClick}
-            rightContent={[ <Icon key="1" type="ellipsis" onClick={this.onOpenChange}/>]}>
-            <img width="30" height="30" src={signup_logo} style={{marginRight:22}}/>
-              司法e通
-          </NavBar>
-          {contentAll}
-        </Drawer></div>);
-
-  }
+  // onNavBarLeftClick = (e) => {  //navbar left click.
+  //   browserHistory.push('/');
+  // }
+  // getMobileElements(sidebar){
+  //   const drawerProps = {
+  //     open: this.state.open,
+  //     position: this.state.position,
+  //     onOpenChange: this.onOpenChange,
+  //   };
+  //   let contentAll = this.getListContentElements();
+  //   return (<div><Button type="primary" inline onClick={() => this.onOpenChange()} style={{ marginRight: '0.08rem',position:'absolute',top:'0',right:'0',zIndex:'3'}} >...</Button>
+  //       <Drawer
+  //         style={{ minHeight: document.documentElement.clientHeight - 200 }}
+  //         touch={true}
+  //         sidebarStyle={{height:'100%',background:'#fff'}}
+  //         contentStyle={{ color: '#A6A6A6'}}
+  //         sidebar={sidebar}
+  //         {...drawerProps} >
+  //         <NavBar className="mobile_navbar_custom"
+  //           iconName = {false}
+  //           leftContent={[ <Icon type="arrow-left" className="back_arrow_icon"/>,<span style={{fontSize:'0.8em'}}>返回</span>]}
+  //           onLeftClick={this.onNavBarLeftClick}
+  //           rightContent={[ <Icon key="1" type="ellipsis" onClick={this.onOpenChange}/>]}>
+  //           <img width="30" height="30" src={signup_logo} style={{marginRight:22}}/>
+  //             司法E通
+  //         </NavBar>
+  //         {contentAll}
+  //       </Drawer></div>);
+  //
+  // }
 
   getPCElements(sidebar){
     let contentAll = this.getListContentElements();

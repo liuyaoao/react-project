@@ -77,7 +77,7 @@ class CommonSendComp extends React.Component {
       docunid: this.props.docunid,
       gwlcunid:this.props.gwlcunid,
       modulename:this.props.modulename,
-      title: this.props.detailInfo.fileTitle || '',
+      title: this.props.fileTitle || '',
       message: 1,  //提示方式，1为网络消息，2为手机短信
       personunids: [personunids],
       successCall: (data)=>{

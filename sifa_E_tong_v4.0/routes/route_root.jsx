@@ -21,6 +21,15 @@ function preLogin(nextState, replace, callback) {
   callback();
 }
 
+function preEnterModulesPage(nextState, replace, callback){ //进入模块选择页面的预处理
+  if(Utils.isMobile() && nextState.location.pathname != '/modules_mobile'){
+    replace('/modules_mobile');
+  }else if(!Utils.isMobile() && nextState.location.pathname == '/modules_mobile'){
+    replace('/modules');
+  }
+  callback();
+}
+
 function preEnterAddressBook(nextState, replace, callback){ //进入通讯录的预处理
   // console.log("preEnterAddressBook:",nextState,Utils.isMobile());
   if(Utils.isMobile() && nextState.location.pathname != '/address_book_mobile'){
@@ -81,8 +90,16 @@ export default {
         [
             {
                 path: 'modules',  //模块展示页面
+                onEnter: preEnterModulesPage,
                 getComponents: (location, callback) => {
-                    System.import('pages/modules_page.jsx').then(RouteUtils.importComponentSuccess(callback));
+                    System.import('pages/modules_comp/modules_pc_page.jsx').then(RouteUtils.importComponentSuccess(callback));
+                }
+            },
+            {
+                path: 'modules_mobile',  //模块展示页面 --移动端
+                onEnter: preEnterModulesPage,
+                getComponents: (location, callback) => {
+                    System.import('pages/modules_mobile/modules_mobile_page.jsx').then(RouteUtils.importComponentSuccess(callback));
                 }
             },
             {
@@ -131,7 +148,7 @@ export default {
                 path: 'login_record_mobile',   //登录签到 / 记录页面-- 移动端的
                 onEnter: preEnterLoginRecord,
                 getComponents: (location, callback) => {
-                    System.import('pages/login_record/loginRecord_mobile_page.jsx').then(RouteUtils.importComponentSuccess(callback));
+                    System.import('pages/login_record_mobile/loginRecord_mobile_page.jsx').then(RouteUtils.importComponentSuccess(callback));
                 }
             },
             {
