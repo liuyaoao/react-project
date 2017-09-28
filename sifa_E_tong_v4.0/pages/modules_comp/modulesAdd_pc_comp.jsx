@@ -1,24 +1,8 @@
 
 import $ from 'jquery';
-import ReactDOM from 'react-dom';
-import * as Utils from 'utils/utils.jsx';
-
 import React from 'react';
-import {Link} from 'react-router/es6';
-import {Row,Col,Icon,message,Checkbox,Modal,Button} from 'antd';
-
+import {Row,Col,Checkbox,Modal,Button} from 'antd';
 import * as commonUtils from '../utils/common_utils.jsx';
-
-import logo_icon from 'images/modules_img/logo_icon.png';
-import edit_icon from 'images/modules_img/edit_icon.png';
-import OA_icon from 'images/modules_img/OA_icon.png';
-import chat_icon from 'images/modules_img/chat_icon.png';
-import document_icon from 'images/modules_img/document_icon.png';
-import mailList_icon from 'images/modules_img/mailList_icon.png';
-import modify_icon from 'images/modules_img/modify_icon.png';
-import settings_icon from 'images/modules_img/settings_icon.png';
-import signin_icon from 'images/modules_img/signin_icon.png';
-import logOut_icon from 'images/modules_img/logOut_icon.png';
 
 class ModulesAddPcComp extends React.Component {
     constructor(props) {
@@ -28,11 +12,9 @@ class ModulesAddPcComp extends React.Component {
           curDelModuleIds:[], //当前删除的模块数的id.
         };
     }
-
     componentWillMount(){
       this.refreshModules();
     }
-
     componentWillReceiveProps(nextProps){
       if(nextProps.visible && !this.props.visible){
         this.refreshModules();
@@ -61,9 +43,6 @@ class ModulesAddPcComp extends React.Component {
     getModulesItem(allModulesData,curDelModuleIds){
       let modulesItem = allModulesData.map((item)=>{
         let isChecked = curDelModuleIds.indexOf(item.id) == -1;
-        if(item.id == this.props.notShowModuleIdInPC){
-          return "";
-        }
         return (
             <Row key={item.id} style={{height:'25px',width:'100%'}}>
               <Col span={24}>
@@ -94,7 +73,6 @@ class ModulesAddPcComp extends React.Component {
 
     render() {
       let modulesItem = this.getModulesItem(this.props.allModulesData,this.state.curDelModuleIds);
-      // console.log("Modal modulesItem---:",modulesItem);
         return (
               <Modal className="sys-edit-form"
                 visible={this.props.visible}
@@ -125,8 +103,7 @@ ModulesAddPcComp.propTypes = {
   allModulesData:React.PropTypes.array,
   localStoreKey4Modules:React.PropTypes.string,
   closeAddDialogCall:React.PropTypes.func,
-  afterCloseAddDialog:React.PropTypes.func,
-  notShowModuleIdInPC:React.PropTypes.string
+  afterCloseAddDialog:React.PropTypes.func
 };
 
 export default ModulesAddPcComp;

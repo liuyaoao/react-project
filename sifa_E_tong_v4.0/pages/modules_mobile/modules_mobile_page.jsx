@@ -1,41 +1,31 @@
 
-import * as Utils from 'utils/utils.jsx';
-
 import React from 'react';
 import LogOutComp from 'pages/components/log_out_comp.jsx'
-// import * as GlobalActions from 'actions/global_actions.jsx';
 import UserStore from 'stores/user_store.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
-// import TeamStore from 'stores/team_store.jsx';
-// import BrowserStore from 'stores/browser_store.jsx';
-import Constants from 'utils/constants.jsx';
-// import {sortTeamsByDisplayName} from 'utils/team_utils.jsx';
+// import Constants from 'utils/constants.jsx';
 
 import OA_icon from 'images/modules_img/OA_icon.png';
 import chat_icon from 'images/modules_img/chat_icon.png';
 import document_icon from 'images/modules_img/document_icon.png';
 import mailList_icon from 'images/modules_img/mailList_icon.png';
 import modify_icon from 'images/modules_img/modify_icon.png';
-import settings_icon from 'images/modules_img/settings_icon.png';
+// import settings_icon from 'images/modules_img/settings_icon.png';
 import signin_icon from 'images/modules_img/signin_icon.png';
 import userSetting_icon from 'images/modules_img/userSetting_icon.png';
 
 import ModulesMobileComp  from 'pages/modules_mobile/modules_mobile_comp.jsx';
-// import ModulesPcComp  from 'pages/modules_comp/modules_pc_comp.jsx';
 
 import {Toast} from 'antd-mobile';
 import {Icon} from 'antd';
 import myWebClient from 'client/my_web_client.jsx';
-
-const notShow_moduleId_inMobile = "1006";
 window.timeCount = (new Date()).getTime();
 
 export default class ChooseModulesMobilePage extends React.Component {
     constructor(props) {
         super(props);
-        this.handleGoMatter = this.handleGoMatter.bind(this);
         this.state = {
-            localStoreKey4Modules:'S_F_E_T_MODULES_KEY',
+            localStoreKey4Modules:'S_F_E_T_MODULES_KEY_mobile',
             allModulesData:[],
             colsNameCn:[ "标题", "发布日期", "所属类别", "所属单位"], //通知公告的列表项。
             colsNameEn:["fileTitle", "publishTime", "type" ,"unit"],
@@ -43,48 +33,11 @@ export default class ChooseModulesMobilePage extends React.Component {
             noticeListData:[],
             randomStr:'',
             oaLoginErrorText: '',
-            isMobile: Utils.isMobile(),
             unViewedCount:0, //群聊里的当前频道未读消息数。
-            initUserInfo: {
-              id:"",
-              allow_marketing:false,
-              auth_service:"",
-              create_at:0,
-              delete_at:0,
-              email:"",
-              email_verified:false,
-              failed_attempts:0,
-              first_name:"",
-              last_activity_at:0,
-              last_name:"",
-              last_password_update:0,
-              last_picture_update:0,
-              locale:"zh-CN",
-              mfa_active:false,
-              mfa_secret:"",
-              nickname:"",
-              notify_props:{channel:"true",desktop:"all",desktop_sound:"true",email:"true",first_name:"false",mention_keys:"","push":"mention"},
-              organizations:"",
-              password:"",
-              phone:"",
-              position:"",
-              restrictedUsernames:["all", "channel", "matterbot"],
-              roles:"system_user",
-              update_at:0,
-              username:"",
-              oaUserName:"",
-              oaPassword:"",
-              redressUserName:"",
-              redressPassword:"",
-              validUsernameChars:"^[a-z0-9\.\-_]+$",
-              passwordChange:false,
-              effective:true
-            }
         };
     }
     componentWillMount() {
       this.getAllModulesData();
-      // this.setState({loginUserName:me.username || ''});
     }
     componentDidMount(){
       this.getOALoginInfo();
@@ -200,19 +153,18 @@ export default class ChooseModulesMobilePage extends React.Component {
           singleclassName:"chatModule",
           iconName : chat_icon,
           tagName:'a',
-          onclick:'this.props.handleGoMatter',
           linkTo : "channels",
           canSetPrivilege:true
         },
-        {
-          id:"1006",
-          name : "系统设置",
-          singleclassName:"settingsModule",
-          iconName : settings_icon,
-          tagName:'Link',
-          linkTo : "sys_config",
-          canSetPrivilege:true
-        },
+        // {
+        //   id:"1006",
+        //   name : "系统设置",
+        //   singleclassName:"settingsModule",
+        //   iconName : settings_icon,
+        //   tagName:'Link',
+        //   linkTo : "sys_config",
+        //   canSetPrivilege:true
+        // },
         {
           id:"1007",
           name : "登录签到",
@@ -323,38 +275,14 @@ export default class ChooseModulesMobilePage extends React.Component {
     // }
 
     render() {
-        let {localStoreKey4Modules, allModulesData,initUserInfo} = this.state;
-        // let finalEle = this.state.isMobile ?
-        //     (<ModulesMobileComp
-        //       initUserInfo={initUserInfo}
-        //       tokenunid={this.state.tokenunid}
-        //       oaLoginErrorText={this.state.oaLoginErrorText}
-        //       localStoreKey4Modules={localStoreKey4Modules}
-        //       allModulesData={allModulesData}
-        //       notShowModuleIdInMobile={notShow_moduleId_inMobile}
-        //       noticeListData={this.state.noticeListData}
-        //       unViewedCount={this.state.unViewedCount}
-        //       handleGoMatter={this.handleGoMatter} />) :
-        //     (<ModulesPcComp
-        //       initUserInfo={initUserInfo}
-        //       tokenunid={this.state.tokenunid}
-        //       oaLoginErrorText={this.state.oaLoginErrorText}
-        //       localStoreKey4Modules={localStoreKey4Modules}
-        //       allModulesData={allModulesData}
-        //       notShowModuleIdInMobile={notShow_moduleId_inMobile}
-        //       notShowModuleIdInPC={notShow_moduleId_inPC}
-        //       noticeListData={this.state.noticeListData}
-        //       unViewedCount={this.state.unViewedCount}
-        //       handleGoMatter={this.handleGoMatter}/>);
+        let {localStoreKey4Modules, allModulesData} = this.state;
         return (
           <div className='' style={{height:'100%'}}>
             <ModulesMobileComp
-              initUserInfo={initUserInfo}
               tokenunid={this.state.tokenunid}
               oaLoginErrorText={this.state.oaLoginErrorText}
               localStoreKey4Modules={localStoreKey4Modules}
               allModulesData={allModulesData}
-              notShowModuleIdInMobile={notShow_moduleId_inMobile}
               noticeListData={this.state.noticeListData}
               unViewedCount={this.state.unViewedCount}
               handleGoMatter={this.handleGoMatter}

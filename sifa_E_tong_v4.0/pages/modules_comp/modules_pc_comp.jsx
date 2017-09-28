@@ -25,13 +25,8 @@ notification.config({
 class ModulesPcComp extends React.Component {
     constructor(props) {
         super(props);
-        this.hideAddEditDialog = this.hideAddEditDialog.bind(this);
-
-        // this.handleSendLink = this.handleSendLink.bind(this);
         let delModules = (localStorage.getItem(props.localStoreKey4Modules) || '').split(',');
         delModules = commonUtils.removeNullValueOfArr(delModules);
-        (delModules.indexOf(props.notShowModuleIdInPC) == -1)?
-          localStorage.setItem(props.localStoreKey4Modules,[props.notShowModuleIdInPC].join(',')):null;
         this.state = {
           colNumPerRow:4,
           showAddDialog:false,
@@ -320,7 +315,6 @@ class ModulesPcComp extends React.Component {
                 allModulesData={this.props.allModulesData}
                 localStoreKey4Modules={this.props.localStoreKey4Modules}
                 closeAddDialogCall={this.closeAddDialogCall}
-                notShowModuleIdInPC={this.props.notShowModuleIdInPC}
                 afterCloseAddDialog={this.afterCloseAddDialog}/>
 
               <EditUserInfoDialog
@@ -338,10 +332,8 @@ ModulesPcComp.defaultProps = {
 };
 ModulesPcComp.propTypes = {
   allModulesData:React.PropTypes.array,
-  handleGoMatter:React.PropTypes.func,
   localStoreKey4Modules:React.PropTypes.string,
-  notShowModuleIdInMobile:React.PropTypes.string,
-  notShowModuleIdInPC:React.PropTypes.string
+  notShowModuleIdInMobile:React.PropTypes.string
     // params: React.PropTypes.object.isRequired
 };
 

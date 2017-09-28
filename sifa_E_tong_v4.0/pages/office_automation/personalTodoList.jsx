@@ -102,11 +102,11 @@ class PersonalTodoList extends React.Component {
     this.setState({detailInfo:rowData, showDetail:true});
     Toast.info(<div><Icon type={'loading'} /><span>  加载中...</span></div>, 2, null, true);
     if(rowData.moduleName == "发文管理"){
-      browserHistory.push('/office_automation/todo_list/dispatch_detail?unid='+rowData.unid);
+      browserHistory.push('/office_automation/todo_list/dispatch_detail?unid='+rowData.frmunid);
     }else if(rowData.moduleName == "签报管理"){
-      browserHistory.push('/office_automation/todo_list/signReport_detail?unid='+rowData.unid);
+      browserHistory.push('/office_automation/todo_list/signReport_detail?unid='+rowData.frmunid);
     }else if(rowData.moduleName == "督办管理"){
-      browserHistory.push('/office_automation/todo_list/supervision_detail?unid='+rowData.unid);
+      browserHistory.push('/office_automation/todo_list/supervision_detail?unid='+rowData.frmunid);
     }
   }
   backToTableListCall = (showType)=>{   //返回到列表页。

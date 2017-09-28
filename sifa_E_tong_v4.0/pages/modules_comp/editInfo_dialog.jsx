@@ -1,14 +1,10 @@
 //用户信息新增和编辑界面
 import $ from 'jquery';
 import React from 'react';
-import * as Utils from 'utils/utils.jsx';
 import myWebClient from 'client/my_web_client.jsx';
-import { Row, Col, Form, Icon, Input, Button as ButtonPc ,notification,
-  TreeSelect, Modal,message,Switch,Radio } from 'antd';
+import { Row, Col, Form, Input, Button as ButtonPc ,notification,Modal,message } from 'antd';
   import * as commonUtils from '../utils/common_utils.jsx';
 const FormItem = Form.Item;
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
 message.config({
   top: 75,
   duration: 2,
@@ -28,7 +24,6 @@ class EditUserInfoDialog extends React.Component {
       this.state = {
         loading: false,
         visible: false,
-        isMobile: Utils.isMobile(),
         confirmDirty:false,
         menberInfo:{},
         donNeedParams : ['key','confirmPassword'],
@@ -189,11 +184,9 @@ class EditUserInfoDialog extends React.Component {
     };
     let oaPassword = commonUtils.Base64Decode(menberInfo.oaPassword || "");
     let redressPassword = commonUtils.Base64Decode(menberInfo.redressPassword || "");
-
-    let clsname = this.state.isMobile ? "doc-edit-form doc-edit-form-mobile" :"doc-edit-form doc-edit-form-pc";
     return (
       <div>
-      <Modal className={clsname}
+      <Modal className="doc-edit-form doc-edit-form-pc"
         visible={this.props.visible}
         title='编辑用户个人信息'
         onOk={this.handleAddOrEdit}
@@ -208,7 +201,7 @@ class EditUserInfoDialog extends React.Component {
         ]}
       >
         <div className="doc-edit">
-          <Form  className={this.state.isMobile?"":"edit-form"} style={{margin:0}}>
+          <Form  className="edit-form" style={{margin:0}}>
             <Row>
               <Col span={24}>
                 <FormItem

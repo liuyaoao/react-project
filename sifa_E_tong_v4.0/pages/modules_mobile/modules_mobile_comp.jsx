@@ -17,7 +17,6 @@ import notice_icon from 'images/modules_img/notice_icon.png';
 const isIPhone = new RegExp('\\biPhone\\b|\\biPod\\b', 'i').test(window.navigator.userAgent);
 let maskProps;
 if (isIPhone) {
-  // Note: the popup content will not scroll.
   maskProps = {
     onTouchStart: e => e.preventDefault(),
   };
@@ -28,8 +27,6 @@ class ModulesMobileComp extends React.Component {
         super(props);
         let delModules = (localStorage.getItem(props.localStoreKey4Modules) || '').split(',');
         delModules = commonUtils.removeNullValueOfArr(delModules);
-        (delModules.indexOf(props.notShowModuleIdInMobile) == -1)?
-          localStorage.setItem(props.localStoreKey4Modules,[props.notShowModuleIdInMobile].join(',')):null;
         this.state = {
           colNumPerRow:3,
           showDelIcon:false,
@@ -236,9 +233,6 @@ class ModulesMobileComp extends React.Component {
     getModulesItemList(){
       let modulesItem = this.props.allModulesData.map((item,index)=>{
         let isChecked = this.state.curDelModuleIds.indexOf(item.id) == -1;
-        if(item.id == this.props.notShowModuleIdInMobile){
-          return "";
-        }
         return (
           <Row key={item.id} style={{width:'100%'}}>
             <Col span={24} className={'checkbox_'+item.id}>
@@ -326,13 +320,13 @@ class ModulesMobileComp extends React.Component {
                 className="mobile_navbar_custom"
                 iconName = {false}
                 leftContent={[
-                  <Icon type="appstore-o" style={{ fontSize: '25px' }} className="back_arrow_icon" key={19475609}/>,
+                  <Icon type="appstore-o" style={{ fontSize: '25px' }} className="back_arrow_icon" key={109}/>,
                   <span style={{fontSize:'1.2em',margin:'0 0 5px 6px'}} key={93}>{this.state.showDelIcon?('取消'):null}</span>
                 ]}
                 onLeftClick={this.onNavBarLeftClick}
                 rightContent={[
-                  <LogOutComp key={'logoutcomp_123456'}><span style={{fontSize:'1em'}} key={909}>退出</span></LogOutComp>
-                ]} >
+                  <LogOutComp key={'156'}><span style={{fontSize:'1em'}} key={79}>退出</span></LogOutComp>
+                ]}>
                 <img width="35" height="35" src={signup_logo}/>司法E通
               </NavBar>
               <div className='modules_content modules_content_mobile' style={{}}>
@@ -348,11 +342,6 @@ class ModulesMobileComp extends React.Component {
                       {listItem}
                   </div>
                 </div>
-                {/*<div className="modules_footer row">
-                  <span>版权所有@长沙市司法局</span>
-                  <span>ICP备案10200870号</span>
-                  <span>技术支持：湖南必和必拓科技发展公司</span>
-                </div>*/}
             </div>
         );
     }
@@ -364,8 +353,6 @@ ModulesMobileComp.propTypes = {
   allModulesData:React.PropTypes.array,
   handleGoMatter:React.PropTypes.func,
   localStoreKey4Modules:React.PropTypes.string,
-  notShowModuleIdInMobile:React.PropTypes.string
-    // params: React.PropTypes.object.isRequired
 };
 
 export default ModulesMobileComp;

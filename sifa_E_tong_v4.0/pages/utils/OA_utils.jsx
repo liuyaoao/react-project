@@ -3,6 +3,7 @@ import AppDispatcher from 'dispatcher/app_dispatcher.jsx';
 import * as commonUtils from 'pages/utils/common_utils.jsx';
 
 export const OA_LOGIN_INFO_KEY = 'sifa_oa_login_info_key';
+export const rootlbunid = '72060E133431242D987C0A80A4124268'; //这个是固定的。
 
 export function loginOASystem(loginOAUser, successCall,errorCall){ //登录OA系统
   const loginUrl = 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.ValidatePerson';
@@ -53,10 +54,10 @@ export function getOrganization(params) {
         "url" : options.moduleUrl
       },
       async : true,
-      // xhrFields: {
-      //     withCredentials: true
-      // },
-      // crossDomain: true,
+      xhrFields: {
+          withCredentials: true
+      },
+      crossDomain: true,
       success : (result)=>{
         let res  = decodeURIComponent(result);
         res = res.replace(/%20/g, " ");
@@ -262,6 +263,11 @@ export function getModuleFormData(params) {
         // "urlparam" : encodeURIComponent(JSON.stringify(options.urlParams||{}))
       },
       async : true,
+      cache:false,
+      xhrFields: {
+          withCredentials: true
+      },
+      crossDomain: true,
       success : (result)=>{
         let res  = decodeURIComponent(result);
         res = res.replace(/%20/g, " ");
@@ -732,10 +738,10 @@ export function finalRequestServerWithUrlParam(options,param){
       },
       async : true,
       cache:false,
-      // xhrFields: {
-      //     withCredentials: true
-      // },
-      // crossDomain: true,
+      xhrFields: {
+          withCredentials: true
+      },
+      crossDomain: true,
       success : (result)=>{
         let res  = decodeURIComponent(result);
         res = res.replace(/%20/g, " ");

@@ -1,13 +1,8 @@
 
 import React from 'react';
-// import LogOutComp from './components/log_out_comp.jsx'
-// import * as GlobalActions from 'actions/global_actions.jsx';
 import UserStore from 'stores/user_store.jsx';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
-// import TeamStore from 'stores/team_store.jsx';
-// import BrowserStore from 'stores/browser_store.jsx';
-import Constants from 'utils/constants.jsx';
-// import {sortTeamsByDisplayName} from 'utils/team_utils.jsx';
+// import Constants from 'utils/constants.jsx';
 
 import OA_icon from 'images/modules_img/OA_icon.png';
 import chat_icon from 'images/modules_img/chat_icon.png';
@@ -18,24 +13,17 @@ import settings_icon from 'images/modules_img/settings_icon.png';
 import signin_icon from 'images/modules_img/signin_icon.png';
 import userSetting_icon from 'images/modules_img/userSetting_pc_icon.png';
 
-// import ModulesMobileComp  from './modules_comp/modules_mobile_comp.jsx';
 import ModulesPcComp  from 'pages/modules_comp/modules_pc_comp.jsx';
 
 import {Icon} from 'antd';
 import myWebClient from 'client/my_web_client.jsx';
-// import Client from 'client/web_client.jsx';
-
-const notShow_moduleId_inPC = "1001"; //真正上线时用这个。
 
 export default class ChooseModulesPage extends React.Component {
     constructor(props) {
         super(props);
-        this.handleGoMatter = this.handleGoMatter.bind(this);
         this.state = {
-            localStoreKey4Modules:'S_F_E_T_MODULES_KEY',
+            localStoreKey4Modules:'S_F_E_T_MODULES_KEY_PC',
             allModulesData:[],
-            colsNameCn:[ "标题", "发布日期", "所属类别", "所属单位"], //通知公告的列表项。
-            colsNameEn:["fileTitle", "publishTime", "type" ,"unit"],
             tokenunid:'', //登录OA系统获取认证id。
             noticeListData:[],
             oaLoginErrorText: '',
@@ -111,14 +99,14 @@ export default class ChooseModulesPage extends React.Component {
 
     getAllModulesData(){
       let modulesData = [
-        {
-          id:"1001",
-          name : "OA系统",
-          singleclassName:"OAModule",
-          iconName : OA_icon,
-          tagName:'Link',
-          linkTo : "office_automation"
-        },
+        // {
+        //   id:"1001",
+        //   name : "OA系统",
+        //   singleclassName:"OAModule",
+        //   iconName : OA_icon,
+        //   tagName:'Link',
+        //   linkTo : "office_automation"
+        // },
         {
           id:"1002",
           name : "矫正系统",
@@ -151,7 +139,6 @@ export default class ChooseModulesPage extends React.Component {
         //   singleclassName:"chatModule",
         //   iconName : chat_icon,
         //   tagName:'a',
-        //   onclick:'this.props.handleGoMatter',
         //   linkTo : "channels",
         //   canSetPrivilege:true
         // },
@@ -183,27 +170,17 @@ export default class ChooseModulesPage extends React.Component {
       ];
       this.setState({"allModulesData":modulesData});
     }
-    handleGoMatter() {
-      if(window.gotoChat){
-        gotoChat.getCookie();
-      }
-      console.log('进入群聊');
-      // GlobalActions.redirectUserToDefaultTeam();
-      // browserHistory.push('/siteview/channels/town-square');
-    }
     getServerNoticeListData = (tokenunid)=>{ //从服务端获取列表数据
       OAUtils.getNoticeListData({
         tokenunid: tokenunid,
         currentpage:1,
-        rootlbunid:'72060E133431242D987C0A80A4124268', //这个是固定的。
+        rootlbunid:OAUtils.rootlbunid, //这个是固定的。
         shbz:"1", //表示已通过。这里只获取已通过审核了的。
-        viewcolumntitles:this.state.colsNameCn.join(','),
+        viewcolumntitles:([ "标题", "发布日期", "所属类别", "所属单位"]).join(','),
         successCall: (data)=>{
-          let {colsNameEn} = this.state;
-          let parseData = OAUtils.formatServerListData(colsNameEn, data.values);
-          // console.log("get 通知公告的list data:",data,parseData);
+          // console.log("get 通知公告的list data:",data);
           this.setState({
-            noticeListData:parseData,
+            noticeListData:OAUtils.formatServerListData(["fileTitle", "publishTime", "type" ,"unit"], data.values),
           });
         },
         errorCall: (data)=>{
@@ -277,28 +254,6 @@ export default class ChooseModulesPage extends React.Component {
 
     render() {
         let {localStoreKey4Modules, allModulesData,initUserInfo} = this.state;
-        // let finalEle = this.state.isMobile ?
-        //     (<ModulesMobileComp
-        //       initUserInfo={initUserInfo}
-        //       tokenunid={this.state.tokenunid}
-        //       oaLoginErrorText={this.state.oaLoginErrorText}
-        //       localStoreKey4Modules={localStoreKey4Modules}
-        //       allModulesData={allModulesData}
-        //       notShowModuleIdInMobile={notShow_moduleId_inMobile}
-        //       noticeListData={this.state.noticeListData}
-        //       unViewedCount={this.state.unViewedCount}
-        //       handleGoMatter={this.handleGoMatter} />) :
-        //     (<ModulesPcComp
-        //       initUserInfo={initUserInfo}
-        //       tokenunid={this.state.tokenunid}
-        //       oaLoginErrorText={this.state.oaLoginErrorText}
-        //       localStoreKey4Modules={localStoreKey4Modules}
-        //       allModulesData={allModulesData}
-        //       notShowModuleIdInMobile={notShow_moduleId_inMobile}
-        //       notShowModuleIdInPC={notShow_moduleId_inPC}
-        //       noticeListData={this.state.noticeListData}
-        //       unViewedCount={this.state.unViewedCount}
-        //       handleGoMatter={this.handleGoMatter}/>);
         return (
           <div className='' style={{height:'100%'}}>
             <ModulesPcComp
@@ -307,10 +262,8 @@ export default class ChooseModulesPage extends React.Component {
               oaLoginErrorText={this.state.oaLoginErrorText}
               localStoreKey4Modules={localStoreKey4Modules}
               allModulesData={allModulesData}
-              notShowModuleIdInPC={notShow_moduleId_inPC}
               noticeListData={this.state.noticeListData}
               unViewedCount={this.state.unViewedCount}
-              handleGoMatter={this.handleGoMatter}
             />
           </div>
         );
