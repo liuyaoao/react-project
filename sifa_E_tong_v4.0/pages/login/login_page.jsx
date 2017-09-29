@@ -83,12 +83,12 @@ export default class LoginPage extends React.Component {
             this.setState({verifyCode});
         }
         // 判断验证码是否正确，暂时注释掉。
-        // if(verifyCode.toLowerCase() != this.state.createdVerifyCode.toLowerCase()){ //验证码有错误.
-        //   this.setState({
-        //       serverError: '验证码有误！'
-        //   });
-				// 	return;
-				// }
+        if(verifyCode.toLowerCase() != this.state.createdVerifyCode.toLowerCase()){ //验证码有错误.
+          this.setState({
+              serverError: '验证码有误！'
+          });
+					return;
+				}
 
         // don't trim the password since we support spaces in passwords
         loginId = loginId.trim().toLowerCase();

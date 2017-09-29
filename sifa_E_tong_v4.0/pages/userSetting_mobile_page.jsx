@@ -224,12 +224,22 @@ class UserSettingMobilePage extends React.Component {
       const { menberInfo } = this.state;
       const formItemLayout = {
         labelCol: {
-          xs: { span: 24 },
-          sm: { span: 7 },
+          xs: { span: 6 },
+          sm: { span: 6 },
         },
         wrapperCol: {
-          xs: { span: 24 },
-          sm: { span: 16 },
+          xs: { span: 18 },
+          sm: { span: 18 },
+        },
+      };
+      const formItemLayout1 = {
+        labelCol: {
+          xs: { span: 10 },
+          sm: { span: 10 },
+        },
+        wrapperCol: {
+          xs: { span: 14 },
+          sm: { span: 14 },
         },
       };
       let oaPassword = commonUtils.Base64Decode(menberInfo.oaPassword || "");
@@ -307,7 +317,7 @@ class UserSettingMobilePage extends React.Component {
                   </Col>
 
                   <Col span={24}>
-                    <FormItem {...formItemLayout} label="司法E通密码" hasFeedback>
+                    <FormItem {...formItemLayout1} label="司法E通密码" hasFeedback>
                       {getFieldDecorator('password', {
                         initialValue:defaultUserPassword,
                         rules: [{
@@ -324,7 +334,7 @@ class UserSettingMobilePage extends React.Component {
                   </Col>
 
                   <Col span={24}>
-                    <FormItem {...formItemLayout} label="重新确认密码" hasFeedback>
+                    <FormItem {...formItemLayout1} label="确认密码" hasFeedback>
                       {getFieldDecorator('confirmPassword', {
                         initialValue:defaultUserPassword,
                         rules: [{
@@ -339,7 +349,7 @@ class UserSettingMobilePage extends React.Component {
                   </Col>
 
                   <Col span={24}>
-                    <FormItem {...formItemLayout} label="OA系统用户名">
+                    <FormItem {...formItemLayout1} label="OA系统用户名">
                       {getFieldDecorator('oaUserName', {
                         initialValue:menberInfo.oaUserName,
                       })(
@@ -348,7 +358,7 @@ class UserSettingMobilePage extends React.Component {
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayout} label="OA系统密码">
+                    <FormItem {...formItemLayout1} label="OA系统密码">
                       {getFieldDecorator('oaPassword', {
                         initialValue:oaPassword?oaPassword:'',
                       })(
@@ -357,7 +367,7 @@ class UserSettingMobilePage extends React.Component {
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayout} label="矫正系统用户名">
+                    <FormItem {...formItemLayout1} label="矫正用户名">
                       {getFieldDecorator('redressUserName', {
                         initialValue:menberInfo.redressUserName,
                       })(
@@ -366,7 +376,7 @@ class UserSettingMobilePage extends React.Component {
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayout} label="矫正系统密码">
+                    <FormItem {...formItemLayout1} label="矫正系统密码">
                       {getFieldDecorator('redressPassword', {
                         initialValue:redressPassword?redressPassword:'',
                       })(

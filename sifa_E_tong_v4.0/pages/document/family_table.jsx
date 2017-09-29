@@ -1,5 +1,4 @@
 import React from 'react';
-import superagent from 'superagent';
 import UserStore from 'stores/user_store.jsx';
 import { Table, Input, Popconfirm, Button, notification } from 'antd';
 

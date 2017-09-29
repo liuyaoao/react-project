@@ -4,6 +4,7 @@ import * as commonUtils from 'pages/utils/common_utils.jsx';
 
 export const OA_LOGIN_INFO_KEY = 'sifa_oa_login_info_key';
 export const rootlbunid = '72060E133431242D987C0A80A4124268'; //这个是固定的。
+export const OA_TODO_LIST_KEY = 'sifa_e_tong_todoItemCount';
 
 export function loginOASystem(loginOAUser, successCall,errorCall){ //登录OA系统
   const loginUrl = 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.ValidatePerson';
@@ -20,6 +21,38 @@ export function loginOASystem(loginOAUser, successCall,errorCall){ //登录OA系
         "param" : param
       },
       async : true,
+      cache:false,
+      xhrFields: {
+          withCredentials: true
+      },
+      crossDomain: true,
+      success : (result)=>{
+        var data  = decodeURIComponent(result);
+        data = data.replace(/%20/g, " ");
+        let res = JSON.parse(data);
+        if(res.code == "1"){
+          successCall && successCall(res);
+        }else{
+          errorCall && errorCall(res);
+        }
+      }
+    });
+}
+export function logOutOASystem(tokenunid, successCall,errorCall){ //登录OA系统
+  const loginUrl = 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage';
+  $.ajax({
+      url : loginUrl,
+      type:'POST',
+      data : {
+        "tokenunid" : tokenunid,
+        "url":'/openagent?agent=hcit.project.moa.transform.agent.ExitLogin'
+      },
+      async : true,
+      cache:false,
+      xhrFields: {
+          withCredentials: true
+      },
+      crossDomain: true,
       success : (result)=>{
         var data  = decodeURIComponent(result);
         data = data.replace(/%20/g, " ");
@@ -54,6 +87,7 @@ export function getOrganization(params) {
         "url" : options.moduleUrl
       },
       async : true,
+      cache:false,
       xhrFields: {
           withCredentials: true
       },
@@ -752,7 +786,6 @@ export function finalRequestServerWithUrlParam(options,param){
         if(res.indexOf('/script>') != -1){
           res = res.substring(res.indexOf('/script>')+9);
         }
-        // console.log("server request 返回--：", res);
         let data = JSON.parse(res);
         if(data.code == "1"){
           options.successCall && options.successCall(data);

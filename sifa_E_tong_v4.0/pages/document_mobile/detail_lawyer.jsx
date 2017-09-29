@@ -1,23 +1,19 @@
 import $ from 'jquery';
 import React from 'react';
 import moment from 'moment';
-import * as Utils from 'utils/utils.jsx';
 import {WingBlank, WhiteSpace,NavBar,Button} from 'antd-mobile';
-import { Row, Col, Form, Icon, Input,  Radio, Table, Modal, DatePicker, notification, Select, Checkbox } from 'antd';
+import { Row, Col, Form, Icon, Input, DatePicker } from 'antd';
 const { MonthPicker } = DatePicker;
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
-const Option = Select.Option;
 
 import signup_logo from 'images/signup_logo.png';
 
 class DocDetailLawyer extends React.Component {
-  componentWillReceiveProps(nextProps) {
-    const {memberInfo} = this.props;
-    if (nextProps.memberInfo.id !== memberInfo.id) {
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   const {memberInfo} = this.props;
+  //   if (nextProps.memberInfo.id !== memberInfo.id) {
+  //   }
+  // }
   handleToggleTag(e) {
     var target = e.target;
     var checks = 5;
@@ -115,46 +111,13 @@ class DocDetailLawyer extends React.Component {
                       )}
                     </FormItem>
                   </Col>
-                  {/*<Col span={24}>
-                    <FormItem {...formItemLayout} label="律所负责人">
-                      {getFieldDecorator('lawOfficePrincipal', {initialValue: memberInfo.lawOfficePrincipal || ''})(
-                        <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="律所地址">
-                      {getFieldDecorator('lawOfficeAddress', {initialValue: memberInfo.lawOfficeAddress || ''})(
-                        <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>*/}
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="性别">
                       {getFieldDecorator('gender', {initialValue: memberInfo.gender || ''})(
-                        <RadioGroup>
-                          <RadioButton value="男">男</RadioButton>
-                          <RadioButton value="女">女</RadioButton>
-                        </RadioGroup>
+                        <Input type="text" placeholder="" />
                       )}
                     </FormItem>
                   </Col>
-                  {/*<Col span={24} id="editDepartmentSelect">
-                    <FormItem {...formItemLayout} label="部门">
-                      {getFieldDecorator('department', {initialValue: memberInfo.department || ''})(
-                        <Select
-                          mode="combobox"
-                          size="default"
-                          onChange={this.handleChangeDepart}
-                          getPopupContainer={() => document.getElementById('editDepartmentSelect')}
-                        >
-                          {departmentTypes ? departmentTypes.map((item, index) => {
-                            return <Option key={item}>{item}</Option>
-                          }) : null}
-                        </Select>
-                      )}
-                    </FormItem>
-                  </Col>*/}
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="执业证号">
                       {getFieldDecorator('lawyerLicenseNo', {initialValue: memberInfo.lawyerLicenseNo||''})(
@@ -215,16 +178,6 @@ class DocDetailLawyer extends React.Component {
                       )}
                     </FormItem>
                   </Col>
-                  {/* <Col span={24} id="addLawyerPunishTime">
-                    <FormItem {...formItemLayout} label="惩罚日期">
-                      {getFieldDecorator('lawyerPunishTime',
-                        {
-                          initialValue: (memberInfo.lawyerPunishTime && memberInfo.lawyerPunishTime!='null')  ? moment(memberInfo.lawyerPunishTime, 'YYYY/MM') : null
-                        })(
-                        <MonthPicker getCalendarContainer={() => document.getElementById('addLawyerPunishTime')} />
-                      )}
-                    </FormItem>
-                  </Col> */}
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="处理单位">
                       {getFieldDecorator('lawyerPunishUnit', {initialValue: memberInfo.lawyerPunishUnit||''})(

@@ -5,7 +5,6 @@ import React from 'react';
 import {Link,browserHistory} from 'react-router/es6';
 import UserStore from 'stores/user_store.jsx';
 import * as Utils from 'utils/utils.jsx';
-import request from 'superagent';
 import LogOutComp from './components/log_out_comp.jsx';
 import * as commonUtils from 'pages/utils/common_utils.jsx';
 
@@ -15,9 +14,9 @@ import { Layout, Menu, Breadcrumb, Icon,notification} from 'antd';
 const { SubMenu } = Menu;
 const { Header, Content, Sider ,Footer} = Layout;
 
-import StatisticalAnalysisComp from './notification/statisticalAnalysis_comp.jsx'; //统计分析
-import ERecordComp from './notification/eRecord_comp.jsx'; //电子档案
-import NoticeComp from './notification/notice_comp.jsx'; //通知公告
+import StatisticalAnalysisPcComp from './notification/statisticalAnalysis_pc_comp.jsx'; //统计分析
+import ERecordisPcComp from './notification/eRecord_pc_comp.jsx'; //电子档案
+import NoticePcComp from './notification/notice_pc_comp.jsx'; //通知公告
 
 import signup_logo from 'images/signup_logo.png';
 import logOut_icon from 'images/modules_img/logOut_icon.png';
@@ -48,9 +47,7 @@ class NotificationPage extends React.Component {
             organListData:[], //矫正的组织结构列表数据。
             loginUserName:'', //矫正系统的登录用户.
             redressOrganId:'', //矫正系统里的组织机构Id.
-            noticeListData:null,
             tongjiData:null, //统计分析的数据
-            eRecordData:null,//电子档案的数据
             isMobile: Utils.isMobile()
         };
     }
@@ -135,7 +132,7 @@ class NotificationPage extends React.Component {
              res = JSON.parse(res);
           }catch(e){
           }
-          console.log("矫正系统的获取统计分析的返回---：",res,state);
+          // console.log("矫正系统的获取统计分析的返回---：",res,state);
           if(res.respCode != "0"){
             this.state.isMobile ?
               Toast.info(res.respMsg, 2, null, false):
@@ -146,156 +143,31 @@ class NotificationPage extends React.Component {
           }
       });
     }
-    getServerNoticeListData = (organId,currentIndex)=>{
-      $.post(`${urlPrefix}/android/infoPublish/query.action`,
-        {
-          organId:organId,
-          currentIndex:currentIndex
-        },(data,state)=>{
-          let res = decodeURIComponent(data);
-          try{
-             res = JSON.parse(res);
-          }catch(e){
-          }
-          // console.log("矫正系统的获取通知公告的返回---：",res,state);
-          if(res.respCode != "0"){
-            this.state.isMobile ?
-              Toast.info(res.respMsg, 2, null, false):
-              notification.error({message: '矫正系统获取通知列表失败，'+res.respMsg});
-          }else{
-            let values = this.parseServerListData(res.values);
-            for(let i in values){
-              let optionData=values[i].pubTime.split('');
-              optionData.splice(10,1," ");
-              values[i].pubTime=optionData.join('');
 
-            }
-            this.setState({
-              noticeListData:values || [],
-            });
-          }
-      });
-    }
-    getServerERecordData = (params)=>{
-      $.post(`${urlPrefix}/android/manager/getRymcList.action`,
-        Object.assign({},{currentIndex:1},params),(data,state)=>{
-          let res = decodeURIComponent(data);
-          try{
-             res = JSON.parse(res);
-          }catch(e){
-          }
-          console.log("矫正系统的获取电子档案的返回---：",res,state);
-          if(res.respCode != "0"){
-            this.state.isMobile ?
-              Toast.info(res.respMsg, 2, null, false):
-              notification.error({message: '矫正系统获取电子档案失败，'+res.respMsg});
-          }else{
-            let values = this.parseServerListData(res.values);
-            this.setState({
-              eRecordData:values || [],
-            });
-            notification.success({message: '矫正系统获取电子档案成功，'+res.respMsg});
-
-          }
-      });
-    }
     parseServerListData = (values)=>{
       for(let i=0;i<values.length;i++){
         values[i]['key'] = values[i].id || values[i].identity;
       }
       return values;
     }
-    handleSearchDocument = (params)=> {
-      this.getServerERecordData(params);
-
-    }
 
     getContentElements(){
       if(this.state.menuTab==0){ // 通知公告
-        if(this.state.redressOrganId && !this.state.noticeListData){
-          this.getServerNoticeListData(this.state.redressOrganId,1);
-        }
-        return (<NoticeComp noticeListData={this.state.noticeListData}/>);
+        return (<NoticePcComp redressOrganId={this.state.redressOrganId}/>);
       }else if(this.state.menuTab==1){ //统计分析
         if(this.state.redressOrganId && !this.state.tongjiData){
           this.getServerAnalysisData(this.state.redressOrganId,1);
         }
-        return (<StatisticalAnalysisComp tongjiData={this.state.tongjiData} />);
-      }else if(this.state.menuTab==2){ //电子档案
-        if(this.state.redressOrganId && !this.state.eRecordData){
-          this.getServerERecordData({
-            organId:this.state.redressOrganId,
-            currentIndex:1
-          });
-        }
-        return (<ERecordComp
+        return (<StatisticalAnalysisPcComp
+          getServerAnalysisData={this.getServerAnalysisData}
           redressOrganId={this.state.redressOrganId}
-          organListData={this.state.organListData}
-          eRecordData={this.state.eRecordData}
-          handleSearchDocument={this.handleSearchDocument} />);
+          tongjiData={this.state.tongjiData} />);
+      }else if(this.state.menuTab==2){ //电子档案
+        return (<ERecordisPcComp
+          redressOrganId={this.state.redressOrganId}
+          organListData={this.state.organListData} />);
       }
       return null;
-    }
-    getMobileElements(sidebarMobile){
-      let headerName = this.state.menuTab==0 ? "通知公告" : this.state.menuTab==1?"统计分析":"电子档案";
-        const drawerProps = {
-          open: this.state.open,
-          position: this.state.position,
-          onOpenChange: this.onOpenChange,
-        };
-        let content = this.getContentElements();
-        return (
-          <div className='notificationPage_drawer'>
-            <Drawer
-              style={{ minHeight: document.documentElement.clientHeight - 200 }}
-              touch={true}
-              sidebarStyle={{height:'100%',background:'#2071a7',zIndex:'12',overflow:'hidden'}}
-              contentStyle={{ color: '#A6A6A6'}}
-              sidebar={sidebarMobile}
-              {...drawerProps}
-            >
-              <NavBar className="mobile_navbar_custom"
-              iconName = {false} onLeftClick={this.onNavBarLeftClick}
-              style={{position:'fixed',height:'60px',zIndex:'13',width:'100%'}}
-              leftContent={[ <Icon type="arrow-left" className="back_arrow_icon" key={192384756}/>,
-              <span style={{fontSize:'1em'}} key={13212343653}>返回</span>]}
-              rightContent={[ <Icon key="6" type="ellipsis" onClick={this.onOpenChange}/>]} >
-                <img width="35" height="35" src={signup_logo} style={{marginRight:15}}/>司法E通
-              </NavBar>
-              <div className="mobileNotificationHeader"> <h5>{headerName}</h5> </div>
-              {content}
-            </Drawer>
-          </div>
-        );
-      }
-      getPCElements(sidebar){
-        let content = this.getContentElements();
-        let headerName = this.state.menuTab==0 ? "通知公告" : this.state.menuTab==1?"统计分析":"电子档案";
-        return (
-          <div>
-              <Layout style={{ height: '100vh' }}>
-                 <Header className="header custom_ant_header"
-                 style={{position:'fixed',width:'100%',zIndex:'13'}}>
-                   <div className="custom_ant_header_logo" onClick={this.onClickBackToModules}>
-                     <span className="logo_icon"><img width="40" height="40" src={signup_logo}/></span>
-                     <div className="logo_title">
-                       <p>@{this.state.loginUserName}</p><p>司法E通</p>
-                       </div>
-                   </div>
-                   <div className="notificationHeader"> <h5>{headerName}</h5> </div>
-                   <div className="" style={{position:'absolute',right:'32px',top:'0'}}><LogOutComp className="" addGoBackBtn/></div>
-                 </Header>
-                 <Layout style={{marginTop:'64px',height: '100%'}}>
-                   {sidebar}
-                   <Layout style={{ padding: '0' }}>
-                     <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280,overflow: 'initial' }}>
-                       {content}
-                     </Content>
-                   </Layout>
-                 </Layout>
-              </Layout>
-          </div>
-        );
     }
     render() {
       let sidebarMenuMarTop = this.state.isMobile ? '60px' : '0';
@@ -316,10 +188,35 @@ class NotificationPage extends React.Component {
           </Menu>
         </Sider>
       );
-      let finalEle = this.state.isMobile ? this.getMobileElements(sidebar) : this.getPCElements(sidebar);
-      return (<div className="notification_container">
-        {finalEle}
-      </div>);
+      let content = this.getContentElements();
+      let headerName = this.state.menuTab==0 ? "通知公告" : this.state.menuTab==1?"统计分析":"电子档案";
+      return (
+        <div className="notification_container">
+          <div>
+            <Layout style={{ height: '100vh' }}>
+               <Header className="header custom_ant_header"
+               style={{position:'fixed',width:'100%',zIndex:'13'}}>
+                 <div className="custom_ant_header_logo" onClick={this.onClickBackToModules}>
+                   <span className="logo_icon"><img width="40" height="40" src={signup_logo}/></span>
+                   <div className="logo_title">
+                     <p>@{this.state.loginUserName}</p><p>司法E通</p>
+                     </div>
+                 </div>
+                 <div className="notificationHeader"> <h5>{headerName}</h5> </div>
+                 <div className="" style={{position:'absolute',right:'32px',top:'0'}}><LogOutComp className="" addGoBackBtn/></div>
+               </Header>
+               <Layout style={{marginTop:'64px',height: '100%'}}>
+                 {sidebar}
+                 <Layout style={{ padding: '0' }}>
+                   <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280,overflow: 'initial' }}>
+                     {content}
+                   </Content>
+                 </Layout>
+               </Layout>
+            </Layout>
+          </div>
+        </div>
+      );
     }
 }
 

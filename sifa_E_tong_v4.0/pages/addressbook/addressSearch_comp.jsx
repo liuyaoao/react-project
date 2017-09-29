@@ -4,7 +4,6 @@ import moment from 'moment';
 import * as Utils from 'utils/utils.jsx';
 import UserStore from 'stores/user_store.jsx';
 import myWebClient from 'client/my_web_client.jsx';
-import superagent from 'superagent';
 
 import {InputItem,List} from 'antd-mobile';
 import { Row, Col, Form, Icon, Input, Button as ButtonPc,Upload,message,notification,Spin, Alert } from 'antd';

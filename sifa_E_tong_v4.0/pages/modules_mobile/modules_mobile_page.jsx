@@ -68,6 +68,7 @@ export default class ChooseModulesMobilePage extends React.Component {
         if(loginInfo && me.oaUserName == JSON.parse(loginInfo)['oaUserName']){
           let loginInfoObj = JSON.parse(loginInfo);
           this.setState({tokenunid:loginInfoObj['tockenunid']});
+          // console.log("存在localStorage里的OA登陆信息:",loginInfoObj);
           this.getServerNoticeListData(loginInfoObj['tockenunid']);
           return;
         }
@@ -98,19 +99,21 @@ export default class ChooseModulesMobilePage extends React.Component {
       Toast.info(<div><Icon type={'loading'} /><span>  正在退出...</span></div>, 2, null, true);
       myWebClient.removeToken();
       localStorage.removeItem(OAUtils.OA_LOGIN_INFO_KEY);
+      localStorage.removeItem(OAUtils.OA_TODO_LIST_KEY);
       sessionStorage.clear();
       myWebClient.logout(
           () => {
             Toast.hide();
             UserStore.clear();
             browserHistory.push('/login');
+            OAUtils.logOutOASystem(this.state.tokenunid);
           },
           () => {
-              browserHistory.push('/login');
+            UserStore.clear();
+            browserHistory.push('/login');
           }
       );
     }
-
     getAllModulesData(){
       let modulesData = [
         {

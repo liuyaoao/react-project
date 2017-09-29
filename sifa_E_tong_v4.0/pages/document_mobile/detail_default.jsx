@@ -1,27 +1,21 @@
 import $ from 'jquery';
 import React from 'react';
 import moment from 'moment';
-import * as Utils from 'utils/utils.jsx';
 import MyWebClient from 'client/my_web_client.jsx';
 
 import {WingBlank, WhiteSpace,NavBar,Button} from 'antd-mobile';
-import { Row, Col, Form, Icon, Input, Radio, Table, Modal, DatePicker, notification, Select } from 'antd';
+import { Row, Col, Form, Icon, Input, DatePicker } from 'antd';
 const { MonthPicker } = DatePicker;
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
-const Option = Select.Option;
 
 import signup_logo from 'images/signup_logo.png';
 
 class DocDetailDefault extends React.Component {
-  componentDidMount(){
-  }
-  componentWillReceiveProps(nextProps) {
-    const {memberInfo} = this.props;
-    if (nextProps.memberInfo.id !== memberInfo.id) {
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   const {memberInfo} = this.props;
+  //   if (nextProps.memberInfo.id !== memberInfo.id) {
+  //   }
+  // }
   handleToggleTag(e) {
     var target = e.target;
     var checks = 5;
@@ -41,13 +35,9 @@ class DocDetailDefault extends React.Component {
       }
     }
   }
-  handleChangeDepart(value) {
-    // console.log(`Selected: ${value}`);
-  }
   onNavBarLeftClick = (e) => {
       this.props.backToListPageCall();
   }
-
   render() {
     const formItemLayout = {
       labelCol: {
@@ -69,9 +59,7 @@ class DocDetailDefault extends React.Component {
         sm: { span: 14 },
       },
     };
-    // let familyMembersTable = this.getFamilyMembers();
-    const { memberInfo, departmentTypes } = this.props;
-    // console.log(memberInfo);
+    const { memberInfo } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <div className={'document_detail_container'}>
@@ -114,10 +102,7 @@ class DocDetailDefault extends React.Component {
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="性别">
                       {getFieldDecorator('gender', {initialValue: memberInfo.gender || ''})(
-                        <RadioGroup>
-                          <RadioButton value="男">男</RadioButton>
-                          <RadioButton value="女">女</RadioButton>
-                        </RadioGroup>
+                        <Input type="text" placeholder="" />
                       )}
                     </FormItem>
                   </Col>
@@ -142,22 +127,6 @@ class DocDetailDefault extends React.Component {
                       )}
                     </FormItem>
                   </Col>
-                  {/*<Col span={24} id="editDepartmentSelect">
-                    <FormItem {...formItemLayout} label="部门">
-                      {getFieldDecorator('department', {initialValue: memberInfo.department || ''})(
-                        <Select
-                          mode="combobox"
-                          size="default"
-                          onChange={this.handleChangeDepart}
-                          getPopupContainer={() => document.getElementById('editDepartmentSelect')}
-                        >
-                          {departmentTypes.map((item, index) => {
-                            return <Option key={item}>{item}</Option>
-                          })}
-                        </Select>
-                      )}
-                    </FormItem>
-                  </Col>*/}
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="出生地">
                       {getFieldDecorator('createParty', {initialValue: memberInfo.createParty || ''})(
@@ -207,20 +176,6 @@ class DocDetailDefault extends React.Component {
                       )}
                     </FormItem>
                   </Col>
-                  {/*<Col span={24}>
-                    <FormItem {...formItemLayout} label="拟任职务">
-                      {getFieldDecorator('proposedOffice', {initialValue: memberInfo.proposedOffice || ''})(
-                        <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="拟免职务">
-                      {getFieldDecorator('jobTitle', {initialValue: memberInfo.jobTitle || ''})(
-                        <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>*/}
                 </Row>
               </Col>
               <Col span={24} className="tag-list">
@@ -272,15 +227,6 @@ class DocDetailDefault extends React.Component {
                   </FormItem>
                 </div>
               </Col>
-              {/*<Col span={24} className="tag-list">
-                <p className="info-title">
-                  <label>家庭主要成员及重要社会关系</label>
-                  <a href="javascript:;" className="pull-right p-r-10" onClick={this.handleToggleTag}><Icon type="up" /></a>
-                </p>
-                <div className="info-body">
-                  {familyMembersTable}
-                </div>
-              </Col>*/}
               <Col span={24} className="tag-list">
                 <p className="info-title">
                   <label>其他信息</label>
@@ -302,35 +248,6 @@ class DocDetailDefault extends React.Component {
                       <Input type="textarea" placeholder="" autosize={{ minRows: 2, maxRows: 100 }} />
                     )}
                   </FormItem>
-                  {/*
-                  <div className="form-item" id="editReportingUnit">
-                    <div className="item-label"><label>呈报单位:</label></div>
-                    {getFieldDecorator('reportingTime', {initialValue: memberInfo.reportingTime ? moment(memberInfo.reportingTime, 'YYYY/MM') : null})(
-                      <MonthPicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('editReportingUnit')} />
-                    )}
-                    {getFieldDecorator('reportingUnit', {initialValue: memberInfo.reportingUnit || ''})(
-                      <Input type="textarea" placeholder="" autosize={{ minRows: 2, maxRows: 100 }} />
-                    )}
-                  </div>
-                  <div className="form-item" id="editApprovalOpinion">
-                    <div className="item-label"><label>审批机关意见:</label></div>
-                    {getFieldDecorator('approvalTime', {initialValue: memberInfo.approvalTime ? moment(memberInfo.approvalTime, 'YYYY/MM') : null})(
-                      <MonthPicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('editApprovalOpinion')} />
-                    )}
-                    {getFieldDecorator('approvalOpinion', {initialValue: memberInfo.approvalOpinion || ''})(
-                      <Input type="textarea" placeholder="" autosize={{ minRows: 2, maxRows: 100 }} />
-                    )}
-                  </div>
-                  <div className="form-item" id="editApprovalRemovalOpinion">
-                    <div className="item-label"><label>行政机关任免意见:</label></div>
-                    {getFieldDecorator('appointAndRemoveTime', {initialValue: memberInfo.appointAndRemoveTime ? moment(memberInfo.appointAndRemoveTime, 'YYYY/MM') : null})(
-                      <MonthPicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('editApprovalRemovalOpinion')} />
-                    )}
-                    {getFieldDecorator('appointAndRemoveOpinion', {initialValue: memberInfo.appointAndRemoveOpinion || ''})(
-                      <Input type="textarea" placeholder="" autosize={{ minRows: 2, maxRows: 100 }} />
-                    )}
-                  </div>
-                  */}
                 </div>
               </Col>
             </Row>

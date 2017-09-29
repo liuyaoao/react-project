@@ -66,7 +66,7 @@ class ModulesMobileComp extends React.Component {
         viewcolumntitles:'标题,模块',
         successCall: (data)=>{
           // console.log("待办事项的list,为了获取待办事项数目--:",data);
-          localStorage.setItem("sifa_e_tong_todoItemCount",data.itemcount);
+          localStorage.setItem(OAUtils.OA_TODO_LIST_KEY,data.itemcount);
           this.setState({
             todoTotalItemCount:data.itemcount,
           });

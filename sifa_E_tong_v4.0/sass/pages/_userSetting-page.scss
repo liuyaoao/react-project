@@ -3,6 +3,17 @@
   .userSetting_body{
     margin-top:60px;
     margin-bottom:60px;
+    .ant-form-item-label{
+      text-align:left;
+    }
+    .ant-row .ant-input{
+      text-align: right;
+      border:0;
+      background-color:#f5f5f9;
+    }
+    .has-success.has-feedback:after, .has-warning.has-feedback:after, .has-error.has-feedback:after, .is-validating.has-feedback:after{
+      right:-5px;
+    }
   }
   .ant-col-xs-24.ant-form-item-label{
     padding:0;

@@ -3,7 +3,6 @@ import React from 'react';
 import moment from 'moment';
 import UserStore from 'stores/user_store.jsx';
 import * as organizationUtils from '../utils/organization_utils.jsx';
-import superagent from 'superagent';
 import myWebClient from 'client/my_web_client.jsx';
 import OrganizationAddEditComp from './organizationAddEdit_comp.jsx';
 import OrganizationTreeComp from './organizationTree_comp.jsx';

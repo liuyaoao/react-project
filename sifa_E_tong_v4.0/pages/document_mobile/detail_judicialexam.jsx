@@ -1,24 +1,19 @@
 import $ from 'jquery';
 import React from 'react';
 import moment from 'moment';
-import * as Utils from 'utils/utils.jsx';
 import {WingBlank, WhiteSpace,NavBar,Button} from 'antd-mobile';
-import { Row, Col, Form, Icon, Input,  Radio, Table, Modal, DatePicker, notification, Select, Checkbox } from 'antd';
+import { Row, Col, Form, Icon, Input,  Radio, DatePicker } from 'antd';
 const { MonthPicker } = DatePicker;
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
-const Option = Select.Option;
 
 import signup_logo from 'images/signup_logo.png';
 
 class DocDetailJudicialExam extends React.Component {
-  componentWillReceiveProps(nextProps) {
-    const {memberInfo} = this.props;
-    if (nextProps.memberInfo.id !== memberInfo.id) {
-    }
-  }
-
+  // componentWillReceiveProps(nextProps) {
+  //   const {memberInfo} = this.props;
+  //   if (nextProps.memberInfo.id !== memberInfo.id) {
+  //   }
+  // }
   handleToggleTag(e) {
     var target = e.target;
     var checks = 5;
@@ -37,9 +32,6 @@ class DocDetailJudicialExam extends React.Component {
         arrow.className = 'anticon anticon-down';
       }
     }
-  }
-  handleChangeDepart(value) {
-    // console.log(`Selected: ${value}`);
   }
   onNavBarLeftClick = (e) => {
       this.props.backToListPageCall();
@@ -114,10 +106,7 @@ class DocDetailJudicialExam extends React.Component {
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="性别">
                       {getFieldDecorator('gender', {initialValue: memberInfo.gender || ''})(
-                        <RadioGroup>
-                          <RadioButton value="男">男</RadioButton>
-                          <RadioButton value="女">女</RadioButton>
-                        </RadioGroup>
+                        <Input type="text" placeholder="" />
                       )}
                     </FormItem>
                   </Col>

@@ -4,8 +4,6 @@ import moment from 'moment';
 import * as Utils from 'utils/utils.jsx';
 import * as organizationUtils from '../utils/organization_utils.jsx';
 import myWebClient from 'client/my_web_client.jsx';
-import superagent from 'superagent';
-
 import { Row, Col, Icon, Input, Button as ButtonPc, Table,message,notification } from 'antd';
 import {Modal as ModalAm} from 'antd-mobile';
 const ModalAmAlert = ModalAm.alert;

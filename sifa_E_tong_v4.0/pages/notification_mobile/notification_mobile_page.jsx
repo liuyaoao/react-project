@@ -5,30 +5,22 @@ import React from 'react';
 import {Link,browserHistory} from 'react-router/es6';
 import UserStore from 'stores/user_store.jsx';
 import * as Utils from 'utils/utils.jsx';
-import request from 'superagent';
 import LogOutComp from 'pages/components/log_out_comp.jsx';
 import * as commonUtils from 'pages/utils/common_utils.jsx';
 
-import { Drawer, List, NavBar,Button,Toast } from 'antd-mobile';
-import { Layout, Menu, Breadcrumb, Icon,notification} from 'antd';
+import { Drawer, List, NavBar,Toast } from 'antd-mobile';
+import { Layout, Menu, Icon} from 'antd';
 
 const { SubMenu } = Menu;
-const { Header, Content, Sider ,Footer} = Layout;
+const {  Sider } = Layout;
 
 // import StatisticalAnalysisComp from 'pages/notification/statisticalAnalysis_comp.jsx'; //统计分析
 // import ERecordComp from 'pages/notification/eRecord_comp.jsx'; //电子档案
 // import NoticeComp from 'pages/notification/notice_comp.jsx'; //通知公告
 
 import signup_logo from 'images/signup_logo.png';
-import logOut_icon from 'images/modules_img/logOut_icon.png';
-const Item = List.Item;
-const Brief = Item.Brief;
 const urlPrefix = 'http://218.77.44.11:10080/CS_JrlService';
 
-notification.config({
-  top: 68,
-  duration: 3
-});
 class NotificationMobilePage extends React.Component {
     constructor(props) {
         super(props);
@@ -46,10 +38,6 @@ class NotificationMobilePage extends React.Component {
             organListData:[], //矫正的组织结构列表数据。
             loginUserName:'', //矫正系统的登录用户.
             redressOrganId:'', //矫正系统里的组织机构Id.
-            noticeListData:null,
-            tongjiData:null, //统计分析的数据
-            eRecordData:null,//电子档案的数据
-            isMobile: Utils.isMobile()
         };
         // this.onNavBarLeftClick = this.onNavBarLeftClick.bind(this);
     }
@@ -72,9 +60,7 @@ class NotificationMobilePage extends React.Component {
               }catch(e){
               }
               if(res.respCode != "0"){ //登录失败。
-                this.state.isMobile ?
-                  Toast.info(res.respMsg, 2, null, false):
-                  notification.error({message: '矫正系统登录失败，'+res.respMsg});
+                Toast.info("矫正系统登录失败"+res.respMsg, 2, null, false);
               }else{ //登录成功。
                 let values = res.values[0];
                 this.setState({
@@ -128,11 +114,10 @@ class NotificationMobilePage extends React.Component {
       this.setState({ open: !this.state.open });
     }
     render() {
-      let sidebarMenuMarTop = this.state.isMobile ? '60px' : '0';
       const sidebarMobile = (
         <Sider width={240} className="custom_ant_sidebar"
           style={{ background: '#2071a7',color:'#fff',overflow: 'auto',
-          zIndex:'99999', marginTop:sidebarMenuMarTop, height:'100%'}}>
+          zIndex:'99999', marginTop:'60px', height:'100%'}}>
           <Menu
             theme="dark"
             mode="inline"

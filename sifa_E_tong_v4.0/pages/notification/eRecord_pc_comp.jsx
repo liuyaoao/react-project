@@ -7,18 +7,24 @@ import avator_woman from 'images/avator_icon/avator_woman.png';
 import { createForm } from 'rc-form';
 import { Modal,Flex
    , ListView,List,InputItem} from 'antd-mobile';
-import { Icon,Table,Select,Button as ButtonPc} from 'antd';
+import { Icon,Table,Select,Button as ButtonPc,notification} from 'antd';
+
+const urlPrefix = 'http://218.77.44.11:10080/CS_JrlService';
+
 const isIPhone = new RegExp('\\biPhone\\b|\\biPod\\b', 'i').test(window.navigator.userAgent);
 const Option = Select.Option;
 let maskProps;
 if (isIPhone) {
-  // Note: the popup content will not scroll.
   maskProps = {
     onTouchStart: e => e.preventDefault(),
   };
 }
+notification.config({
+  top: 68,
+  duration: 3
+});
 
-class ERecordisMobileComp extends React.Component {
+class ERecordisPcComp extends React.Component {
   constructor(props) {
       super(props);
       this.onOrganSelectChange = this.onOrganSelectChange.bind(this);
@@ -33,19 +39,65 @@ class ERecordisMobileComp extends React.Component {
         sel: '',
         visible: false,
         contactInfo:{},
-
+        curPageNum:1,
+        totalCount:0,
+        eRecordListData:[], //电子档案列表数据
+        searchParams:{}, //查询参数。
       };
   }
-
-
+  componentDidMount(){
+    if(this.state.selectOrganId){
+      this.getServereRecordListData({organId:this.state.selectOrganId,currentIndex:this.state.curPageNum});
+    }
+  }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.redressOrganId && nextProps.redressOrganId!=this.props.redressOrganId){
+      this.setState({
+        selectOrganId:nextProps.redressOrganId
+      });
+      this.getServereRecordListData({organId:nextProps.redressOrganId,currentIndex:this.state.curPageNum});
+    }
+  }
+  getServereRecordListData = (params,searchParams)=>{
+    $.post(`${urlPrefix}/android/manager/getRymcList.action`,
+      Object.assign({},this.state.searchParams, searchParams || {}, params),(data,state)=>{
+        let res = decodeURIComponent(data);
+        try{
+           res = JSON.parse(res);
+        }catch(e){
+        }
+        // console.log("矫正系统的获取电子档案的返回---：",res,state);
+        if(res.respCode != "0"){
+            notification.error({message: '矫正系统获取电子档案失败，'+res.respMsg});
+        }else{
+          let values = this.parseServerListData(res.values);
+          this.setState({
+            eRecordListData:values || [],
+            curPageNum:res.currentIndex,
+            totalCount:res.totalRowsCount
+          });
+        }
+    });
+  }
+  parseServerListData = (values)=>{
+    for(let i=0;i<values.length;i++){
+      values[i]['key'] = values[i].id || values[i].identity;
+    }
+    return values;
+  }
+  onPaginationChange = (current,pageSize)=>{
+    this.getServereRecordListData({organId:this.state.selectOrganId,currentIndex:current});
+  }
   onClickSearchSubmit = ()=>{
     this.props.form.validateFields((error, value) => {
       let params = value || {};
       params.organId = this.state.selectOrganId;
       !params.name ? delete params.name : null;
       !params.telephone ? delete params.telephone : null;
-      console.log("document search form validateFields", error, params);
-      this.props.handleSearchDocument(params||{});
+      this.setState({
+        searchParams:params
+      });
+      this.getServereRecordListData({organId:this.state.selectOrganId,currentIndex:1},params);
     });
   }
   handleOk = (e) => {
@@ -63,12 +115,9 @@ class ERecordisMobileComp extends React.Component {
   onClickOnRow = (data)=>{ //显示新增编辑弹窗。
     let info = data || {};
     this.setState({
-     contactInfo:info,
-     visible: true,
-   });
-  //  console.log(data);
-  //  console.log(data.name);
-  //  console.log(this.state.visible);
+       contactInfo:info,
+       visible: true,
+     });
    }
   componentWillMount(){
     const columns = [{
@@ -86,15 +135,13 @@ class ERecordisMobileComp extends React.Component {
                     </div>
                   </div>
                   <div className={'list_item_left'}>
-                    {record.uploadUrl!=='' ? (
-                       <img width="54" height="54" src={record.uploadUrl}/>
-                    ):record.sex=="男"?
-                    (<img width="54" height="54" src={avator_man}/>):
-                    (<img width="54" height="54" src={avator_woman}/>)}
+                    {
+                      record.sex=="男"?
+                      (<img width="54" height="54" src={avator_man}/>):
+                      (<img width="54" height="54" src={avator_woman}/>)
+                    }
                   </div>
                   <div className={'list_item_right'}>
-
-
                     <a href="javascript:;" style={{position:'absolute',bottom:'-1.1rem',right:'0'}} onClick={()=>this.onClickOnRow(record)}>查看</a>
 
                   </div>
@@ -113,19 +160,9 @@ class ERecordisMobileComp extends React.Component {
       selectOrganId:val
     });
   }
-  componentWillReceiveProps(nextProps){
-    if(nextProps.redressOrganId && nextProps.redressOrganId!=this.props.redressOrganId){
-      this.setState({selectOrganId:nextProps.redressOrganId});
-    }
-  }
   render() {
     const { contactInfo,visible } = this.state;
-
     let selectOrganId = this.state.selectOrganId || this.props.redressOrganId;
-    //console.log("selectOrganId--:",selectOrganId);
-    // if(!selectOrganId){
-    //   selectOrganId = this.props.organListData[0]['organId'];
-    // }
     const { columns } = this.state;
     const { getFieldProps, getFieldError } = this.props.form;
 
@@ -134,7 +171,6 @@ class ERecordisMobileComp extends React.Component {
       organData.push({label:this.props.organListData[i].organName+'('+this.props.organListData[i].count+')',
          value: this.props.organListData[i].organId});
     }
-    // console.log(organData);
     let optionData=[];
     for(let i in this.props.organListData){
       optionData.push(this.props.organListData[i].organName+'('+this.props.organListData[i].count+')');
@@ -181,21 +217,18 @@ class ERecordisMobileComp extends React.Component {
         {sponsorDepartmentSource}
       </div>)
     ;
-    let ModalData =
-    (<div><Modal
-               title="电子档案详情"
-               visible={visible}
-               onOk={this.handleOk}
-               onCancel={this.handleCancel}
-               width="400px"
-               height="813px"
-               maskClosable={true}
-            >
+    let ModalData =(<div>
+          <Modal
+             title="电子档案详情"
+             visible={visible}
+             onOk={this.handleOk}
+             onCancel={this.handleCancel}
+             width="400px"
+             height="813px"
+             maskClosable={true}>
                  <List>
                          <List.Item key='0'><span>姓名</span><span>{contactInfo.name}</span></List.Item>
-                         {contactInfo.uploadUrl!=='' ? (
-                            <List.Item key='1'><span>图像</span><img src={contactInfo.uploadUrl}/></List.Item>
-                         ):contactInfo.sex=="男"?
+                         {contactInfo.sex=="男"?
                          (<List.Item key='1'><span>图像</span><img src={avator_man}/></List.Item>):
                          (<List.Item key='1'><span>图像</span><img src={avator_woman}/></List.Item>)}
                          <List.Item key='2'><span>性别</span><span>{contactInfo.sex}</span></List.Item>
@@ -221,28 +254,35 @@ class ERecordisMobileComp extends React.Component {
                  </List>
                  <span style={{position:'absolute',right:0,top:0,cursor:'pointer'}} onClick={this.handleCancel}
                    ><Icon type="close" /></span>
-         </Modal></div>)
-    ;
+              </Modal>
+         </div>);
+    let pagination = { //分页组件参数配置。
+      pageSize:15,
+      current:this.state.curPageNum,
+      total:this.state.totalCount,
+      onChange:this.onPaginationChange,
+    };
     return (
-      <div className="newDispatchList eRecordStyle">
-          {multiTabPanels}
-
-          <div style={{width:'100%'}}>
-            <Table
-              columns={columns}
-              showHeader={false}
-              dataSource={this.props.eRecordData||[]}
-              pagination={{ pageSize: 10 }}/>
-          </div>
-          {ModalData}
+      <div className="notificationdetai_container ERecordPcStyle">
+        <div className="newDispatchList eRecordStyle">
+            {multiTabPanels}
+            <div style={{width:'100%'}}>
+              <Table
+                columns={columns}
+                showHeader={false}
+                dataSource={this.state.eRecordListData||[]}
+                pagination={pagination}/>
+            </div>
+            {ModalData}
+        </div>
       </div>
     )
   }
 }
 
-ERecordisMobileComp.defaultProps = {
+ERecordisPcComp.defaultProps = {
 };
-ERecordisMobileComp.propTypes = {
+ERecordisPcComp.propTypes = {
 };
 
-export default createForm()(ERecordisMobileComp);
+export default createForm()(ERecordisPcComp);

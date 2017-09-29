@@ -5,13 +5,9 @@ import ReactDOM from 'react-dom';
 
 import React from 'react';
 import {Link} from 'react-router/es6';
-
 import { Drawer, List, NavBar,Button } from 'antd-mobile';
 import {  Menu, Icon,Affix as AffixPc, Row, Col,Badge } from 'antd';
-// import List  from 'antd-mobile/lib/list';
-
 import signup_logo from 'images/signup_logo.png';
-
 
 class PersonalLoginRecordComp extends React.Component {
   constructor(props) {
@@ -24,15 +20,6 @@ class PersonalLoginRecordComp extends React.Component {
         signInRecordData:[],
         calendarData:[],
       };
-  }
-  componentWillMount() {
-    let _this = this;
-    // const request = superagent.get('../config/organizations.json')
-    //   .then(function(response) {
-    //     const body = response.body;
-    //     // console.log("request local orgnizasitions:",body);
-    //     _this.setState({"organizationsData":body});
-    //   });
   }
   getSelectedMonthData(){
       let calendar_data = [];

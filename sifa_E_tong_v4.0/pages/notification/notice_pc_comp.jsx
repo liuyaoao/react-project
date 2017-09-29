@@ -1,40 +1,33 @@
 import $ from 'jquery';
 import React from 'react';
 import * as Utils from 'utils/utils.jsx';
-import {  Icon, Table } from 'antd';
+import {Link} from 'react-router/es6';
+import {  Icon, Table,notification } from 'antd';
 import {Toast} from 'antd-mobile';
-
 const urlPrefix = 'http://218.77.44.11:10080/CS_JrlService';
+
+notification.config({
+  top: 68,
+  duration: 3
+});
 //矫正系统的通知公告。
-export default class NoticeMobileComp extends React.Component {
+export default class NoticePcComp extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-        // isMobile: Utils.isMobile(),
-        organId:'',
-        noticeListData:[], //通知公告列表数据
         curPageNum:1,
         totalCount:0,
+        noticeListData:[],
       };
   }
   componentDidMount(){
-    // console.log('props.location.query.organId--:',this.props.location.query.organId);
-    let curOrganId = this.props.location.query.organId;
-    if(this.props.location.query.organId){
-      this.getServerNoticeListData(curOrganId,1);
-      this.setState({
-        organId:curOrganId,
-      });
+    if(this.props.redressOrganId){
+      this.getServerNoticeListData(this.props.redressOrganId,this.state.curPageNum);
     }
   }
   componentWillReceiveProps(nextProps){
-    // console.log('nextProps.location.query.organId--:',nextProps.location.query.organId);
-    let curOrganId = nextProps.location.query.organId;
-    if(curOrganId && curOrganId != this.state.organId){
-      this.getServerNoticeListData(curOrganId,1);
-      this.setState({
-        organId:curOrganId,
-      });
+    if(nextProps.redressOrganId && nextProps.redressOrganId!=this.props.redressOrganId){
+      this.getServerNoticeListData(nextProps.redressOrganId,this.state.curPageNum);
     }
   }
   getServerNoticeListData = (organId,currentIndex)=>{
@@ -48,9 +41,9 @@ export default class NoticeMobileComp extends React.Component {
            res = JSON.parse(res);
         }catch(e){
         }
-        console.log("矫正系统的获取通知公告的返回---：",res,state);
+        // console.log("矫正系统的获取通知公告的返回---：",res,state);
         if(res.respCode != "0"){
-          Toast.info(res.respMsg, 2, null, false);
+            notification.error({message: '矫正系统获取通知列表失败，'+res.respMsg});
         }else{
           let values = this.parseServerListData(res.values);
           for(let i in values){
@@ -73,10 +66,10 @@ export default class NoticeMobileComp extends React.Component {
     return values;
   }
   onPaginationChange = (current,pageSize)=>{
-    this.getServerNoticeListData(this.state.organId,current);
+    this.getServerNoticeListData(this.props.redressOrganId,current);
   }
-  getBodyPages = ()=>{
-    const columns = [
+  getBodyPagesColumns(){
+    return [
       {
         title: '标题',
         dataIndex: 'STitle',
@@ -100,23 +93,20 @@ export default class NoticeMobileComp extends React.Component {
           <span style={{color:text?'green':'gray'}}>{text?"重要":"不重要"}</span>
         )
       }];
-      let pagination = { //分页组件参数配置。
-        pageSize:15,
-        current:this.state.curPageNum,
-        total:this.state.totalCount,
-        onChange:this.onPaginationChange,
-      };
-      return (
-        <div style={{width:'100%'}} className='noticeMobile'>
-          <Table columns={columns} dataSource={this.state.noticeListData||[]} pagination={pagination}/>
-        </div>
-      );
   }
   render() {
-    let bodyPages=this.getBodyPages();
+    let columns=this.getBodyPagesColumns();
+    let pagination = { //分页组件参数配置。
+      pageSize:15,
+      current:this.state.curPageNum,
+      total:this.state.totalCount,
+      onChange:this.onPaginationChange,
+    };
     return (
       <div>
-        {bodyPages}
+        <div className='noticePC'>
+          <Table columns={columns} dataSource={this.state.noticeListData||[]} pagination={pagination}/>
+        </div>
       </div>
     )
   }

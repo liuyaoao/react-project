@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import React from 'react';
+import * as OAUtils from 'pages/utils/OA_utils.jsx';
 import { Button,Badge} from 'antd-mobile';
 import { Layout, Menu, Icon} from 'antd';
 const { SubMenu } = Menu;
@@ -11,7 +12,7 @@ class OaSiderbarComp extends React.Component {
       super(props);
       this.state = {
         current: '待办事项',
-        todoTotalItemCount:localStorage.getItem("sifa_e_tong_todoItemCount"),
+        todoTotalItemCount:localStorage.getItem(OAUtils.OA_TODO_LIST_KEY),
       };
   }
   componentWillMount(){
@@ -20,13 +21,13 @@ class OaSiderbarComp extends React.Component {
     let routeName = location.pathname.split('/')[2]||'';
     this.setState({
       current:routeName2TabMap[routeName],
-      todoTotalItemCount:localStorage.getItem("sifa_e_tong_todoItemCount"),
+      todoTotalItemCount:localStorage.getItem(OAUtils.OA_TODO_LIST_KEY),
     });
   }
   componentWillReceiveProps(nextProps){
     if(nextProps.isOpen && !this.props.isOpen){
       this.setState({
-        todoTotalItemCount:localStorage.getItem("sifa_e_tong_todoItemCount"),
+        todoTotalItemCount:localStorage.getItem(OAUtils.OA_TODO_LIST_KEY),
       });
     }
   }

@@ -58,7 +58,7 @@ function preEnterLoginRecord(nextState, replace, callback){ //进入登录签到
 }
 
 function preEnterNotification(nextState,replace, callback){
-  console.log("preEnterNotification----parent--0");
+  // console.log("preEnterNotification----parent--0");
   if(Utils.isMobile() && nextState.location.pathname.indexOf('/notification_mobile') == -1){
     replace('/notification_mobile');
   }else if(!Utils.isMobile() && nextState.location.pathname.indexOf('/notification_mobile') != -1){

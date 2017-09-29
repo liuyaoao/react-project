@@ -1,28 +1,19 @@
 import $ from 'jquery';
 import React from 'react';
 import moment from 'moment';
-import * as Utils from 'utils/utils.jsx';
-import {WingBlank, WhiteSpace,NavBar,Button} from 'antd-mobile';
-import { Row, Col, Form, Icon, Input, Radio, Table, Modal, DatePicker, notification, Select, Checkbox } from 'antd';
+import { WhiteSpace,NavBar,Button} from 'antd-mobile';
+import { Row, Col, Form, Icon, Input, DatePicker } from 'antd';
 const { MonthPicker } = DatePicker;
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
-const Option = Select.Option;
 
-import head_boy from 'images/head_boy.png';
-import head_girl from 'images/head_girl.png';
-
-import MyWebClient from 'client/my_web_client.jsx';
 import signup_logo from 'images/signup_logo.png';
 //司法所长档案的编辑窗口
 class DocDetailSifaDirector extends React.Component {
-  componentWillReceiveProps(nextProps) {
-    const {memberInfo} = this.props;
-    if (nextProps.memberInfo.id !== memberInfo.id) {
-      // console.log(nextProps.memberInfo.id, nextProps.memberInfo.userName);
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   const {memberInfo} = this.props;
+  //   if (nextProps.memberInfo.id !== memberInfo.id) {
+  //   }
+  // }
   handleToggleTag(e) {
     var target = e.target;
     var checks = 5;
@@ -42,13 +33,9 @@ class DocDetailSifaDirector extends React.Component {
       }
     }
   }
-  handleChangeDepart(value) {
-    // console.log(`Selected: ${value}`);
-  }
   onNavBarLeftClick = (e) => {
       this.props.backToListPageCall();
   }
-
   render() {
     const formItemLayout = {
       labelCol: {
@@ -74,7 +61,7 @@ class DocDetailSifaDirector extends React.Component {
       labelCol: { span: 4 },
       wrapperCol: { span: 8, offset: 4 },
     };
-    const { memberInfo, departmentTypes } = this.props;
+    const { memberInfo } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <div className="document_detail_container">
@@ -114,27 +101,10 @@ class DocDetailSifaDirector extends React.Component {
                       )}
                     </FormItem>
                   </Col>
-                  {/*<Col span={24}>
-                    <FormItem {...formItemLayout} label="律所负责人">
-                      {getFieldDecorator('lawOfficePrincipal', {initialValue: memberInfo.lawOfficePrincipal || ''})(
-                        <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="律所地址">
-                      {getFieldDecorator('lawOfficeAddress', {initialValue: memberInfo.lawOfficeAddress || ''})(
-                        <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>*/}
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="性别">
                       {getFieldDecorator('gender', {initialValue: memberInfo.gender || ''})(
-                        <RadioGroup>
-                          <RadioButton value="男">男</RadioButton>
-                          <RadioButton value="女">女</RadioButton>
-                        </RadioGroup>
+                        <Input type="text" placeholder="" />
                       )}
                     </FormItem>
                   </Col>
@@ -145,22 +115,6 @@ class DocDetailSifaDirector extends React.Component {
                       )}
                     </FormItem>
                   </Col>
-                  {/*<Col span={24} id="editDepartmentSelect">
-                    <FormItem {...formItemLayout} label="部门">
-                      {getFieldDecorator('department', {initialValue: memberInfo.department || ''})(
-                        <Select
-                          mode="combobox"
-                          size="default"
-                          onChange={this.handleChangeDepart}
-                          getPopupContainer={() => document.getElementById('editDepartmentSelect')}
-                        >
-                          {departmentTypes ? departmentTypes.map((item, index) => {
-                            return <Option key={item}>{item}</Option>
-                          }) : null}
-                        </Select>
-                      )}
-                    </FormItem>
-                  </Col>*/}
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="职务">
                       {getFieldDecorator('currentPosition', {initialValue: memberInfo.currentPosition||''})(

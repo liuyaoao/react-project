@@ -1,12 +1,9 @@
 import $ from 'jquery';
 import React from 'react';
 import * as Utils from 'utils/utils.jsx';
-import superagent from 'superagent';
-// import myWebClient from 'client/my_web_client.jsx';
 import {  notification } from 'antd';
 import {Toast} from 'antd-mobile';
 import echarts from 'echarts';
-import StatisticalAnalysisMobileComp from './statisticalAnalysis_mobile_comp.jsx';
 
 notification.config({
   top: 68,
@@ -27,11 +24,10 @@ const analysisKey2name = {
 };
 
 //矫正系统的统计分析。
-class StatisticalAnalysisComp extends React.Component {
+class StatisticalAnalysisPcComp extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-        isMobile: Utils.isMobile(),
       };
   }
   getChartOptions = (xAxisData,seriesData)=>{
@@ -137,22 +133,19 @@ class StatisticalAnalysisComp extends React.Component {
   }
 
   render(){
-  let echartView=this.state.isMobile ?
-  (<StatisticalAnalysisMobileComp tongjiData={this.props.tongjiData}/>) :
-  (<div id="tongjiChartsMainContaner" style={{height:600,margin:"0 auto",marginTop:30}}></div>);
     return (
       <div className="notificationdetai_container">
         <span style={{fontSize:"1em",width:'100%',marginTop:22,color:'black',fontWeight:'bold'}}>统计分析类型数量</span>
-        {echartView}
+        <div id="tongjiChartsMainContaner" style={{height:600,margin:"0 auto",marginTop:30}}></div>
       </div>
     )
   }
 }
 
-StatisticalAnalysisComp.defaultProps = {
+StatisticalAnalysisPcComp.defaultProps = {
 };
 
-StatisticalAnalysisComp.propTypes = {
+StatisticalAnalysisPcComp.propTypes = {
 };
 
-export default StatisticalAnalysisComp;
+export default StatisticalAnalysisPcComp;

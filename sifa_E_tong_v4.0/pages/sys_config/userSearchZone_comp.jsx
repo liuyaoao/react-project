@@ -2,7 +2,6 @@ import $ from 'jquery';
 import React from 'react';
 import moment from 'moment';
 import * as Utils from 'utils/utils.jsx';
-import superagent from 'superagent';
 
 import {InputItem,List} from 'antd-mobile';
 import { Row, Col, Form, Icon, Input, Button as ButtonPc } from 'antd';

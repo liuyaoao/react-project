@@ -3,7 +3,6 @@ import React from 'react';
 import moment from 'moment';
 import myWebClient from 'client/my_web_client.jsx';
 import * as Utils from 'utils/utils.jsx';
-import superagent from 'superagent';
 
 import { Row, Col, Form, Icon, Input, Button as ButtonPc ,notification, Select, Modal,message,Switch,Radio } from 'antd';
 const FormItem = Form.Item;
