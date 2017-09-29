@@ -64,15 +64,11 @@ class DocDetailLegalWorker extends React.Component {
           ]}>
           <img width="35" height="35" src={signup_logo}/>司法E通
         </NavBar>
-        <div className='doc-edit-form-mobile' style={{marginTop:'60px',width:'90%',margin:'0 auto'}}>
+        <div className='doc-edit-form-mobile'>
           <WhiteSpace size='md' />
           <Form className={'document_detail_body'}>
             <Row>
               <Col span={24} className="tag-list">
-                <p className="info-title">
-                  <label>基本资料</label>
-                  <a href="javascript:;" className="pull-right p-r-10" onClick={this.handleToggleTag}><Icon type="up" /></a>
-                </p>
                 <Row className="info-body">
                   <FormItem label="id" style={{display: "none"}}>
                     {getFieldDecorator('id', {initialValue: memberInfo.id || ''})(

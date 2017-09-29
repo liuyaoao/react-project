@@ -97,6 +97,7 @@
         .am-list-brief {
           font-size: .3rem;
           margin-top: .12rem;
+          color:black;
         }
       }
       .am-list-line-multiple {
@@ -202,6 +203,8 @@
     margin-right:6px;
   }
 }
+
+
 .document_detail_container{
   .document_detail_body{
     margin-top:60px;
@@ -307,11 +310,35 @@
   font-size:15px;
 }
 .doc-edit-form-mobile{
+  margin:0 auto;
+  width:95%;
   form .ant-row textarea.ant-input{
     overflow: overlay;
   }
-  .ant-modal{
-    top:0;
+  .ant-form .ant-form-item{
+    margin-bottom:5px;
+    .ant-col-xs-24.ant-form-item-label{
+      padding-bottom:0;
+    }
+  }
+  .ant-form .ant-row label{
+    font-size:0.34rem;
+  }
+  .ant-row.ant-form-item{
+    .ant-input{
+      font-size:0.33rem;
+    }
+  }
+  .info-title {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 15px;
+    margin-top: 5px;
+
+    label {
+      border-bottom: 3px solid #49a9ee;
+      margin-bottom: -2px;
+      padding: 0 5px 5px 0;
+    }
   }
 }
 .address_book_drawer{

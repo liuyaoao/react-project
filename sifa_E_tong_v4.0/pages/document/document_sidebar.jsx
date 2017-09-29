@@ -55,7 +55,7 @@ export default class DocumentSidebar extends React.Component {
         currentFileSubId: currentFileSubId,
         curDepartmentId: curDepartmentId
       }
-      console.log('menu item Clicked, searchParam: ', searchParam);
+      // console.log('menu item Clicked, searchParam: ', searchParam);
       this.props.handleSearch(searchParam,{"from":0,"to":10});
       this.props.onClickMenuItem();
     }
@@ -63,7 +63,7 @@ export default class DocumentSidebar extends React.Component {
 
   onMenuOpenChange = (openKeys) => {
     const state = this.state;
-    console.log('menu onMenuOpenChange: ', openKeys);
+    // console.log('menu onMenuOpenChange: ', openKeys);
     const latestOpenKey = openKeys.find(key => !(state.openKeys.indexOf(key) > -1));
     const latestCloseKey = state.openKeys.find(key => !(openKeys.indexOf(key) > -1));
 
@@ -86,7 +86,7 @@ export default class DocumentSidebar extends React.Component {
     if(currentFileId == currentFileSubId){ //表示是当前就是第一级了。
       currentFileSubId = '';
     }
-    console.log('menu onMenuOpenChange: currentFileId, currentFileSubId: ', currentFileId,currentFileSubId);
+    // console.log('menu onMenuOpenChange: currentFileId, currentFileSubId: ', currentFileId,currentFileSubId);
     this.props.setcurrentFileId(currentFileId);
     this.props.setcurrentFileSubId( currentFileSubId );
     this.props.setcurDepartmentId('');

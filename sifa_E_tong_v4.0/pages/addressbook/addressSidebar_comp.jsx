@@ -46,7 +46,7 @@ export default class AddressSidebarMenuComp extends React.Component {
 
   // menu item click handler
   handleMenuItemClick = (e) => {
-    console.log('Clicked: ', e);
+    // console.log('Clicked: ', e);
     if(!e.key){return;}
     this.setState({ current: e.key });
     let tempArr = e.keyPath;
@@ -58,7 +58,7 @@ export default class AddressSidebarMenuComp extends React.Component {
   }
   onMenuOpenChange = (openKeys) => {
     const state = this.state;
-    console.log('openKeys: ', openKeys);
+    // console.log('openKeys: ', openKeys);
     const latestOpenKey = openKeys.find(key => !(state.openKeys.indexOf(key) > -1));
     const latestCloseKey = state.openKeys.find(key => !(openKeys.indexOf(key) > -1));
     if(latestOpenKey){
