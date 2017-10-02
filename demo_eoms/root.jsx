@@ -53,12 +53,12 @@ function emitInitialLoad(callback) {
               browserHistory.replace('/login');
             }
 
-            if (data.preferences) {
-                AppDispatcher.handleServerAction({
-                    type: ActionTypes.RECEIVED_PREFERENCES,
-                    preferences: data.preferences
-                });
-            }
+            // if (data.preferences) {
+            //     AppDispatcher.handleServerAction({
+            //         type: ActionTypes.RECEIVED_PREFERENCES,
+            //         preferences: data.preferences
+            //     });
+            // }
             callback && callback();
         },
         (err) => {

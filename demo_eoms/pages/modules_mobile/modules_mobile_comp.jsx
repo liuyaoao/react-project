@@ -49,29 +49,6 @@ class ModulesMobileComp extends React.Component {
         loginUserName:me.username || '',
         loginUserNickname:me.nickname || '',
       });
-      if(this.props.tokenunid){
-        this.getServerTODOListData(this.props.tokenunid);
-      }
-    }
-    componentWillReceiveProps(nextProps){
-      if(nextProps.tokenunid && nextProps.tokenunid!=this.props.tokenunid){
-        this.getServerTODOListData(nextProps.tokenunid);
-      }
-    }
-    getServerTODOListData = (tokenunid)=>{ //获取OA系统的待办事项列表
-      OAUtils.getPersonalTodoListData({
-        tokenunid: tokenunid,
-        currentpage:1,
-        urlparam:{ key:'dbsx',type:3 },
-        viewcolumntitles:'标题,模块',
-        successCall: (data)=>{
-          // console.log("待办事项的list,为了获取待办事项数目--:",data);
-          localStorage.setItem(OAUtils.OA_TODO_LIST_KEY,data.itemcount);
-          this.setState({
-            todoTotalItemCount:data.itemcount,
-          });
-        }
-      });
     }
     refreshModules(){
       let delModules = (localStorage.getItem(this.props.localStoreKey4Modules) || '').split(',');

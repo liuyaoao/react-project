@@ -240,7 +240,7 @@ if (TEST) {
     );
     config.plugins.push(
         new CopyWebpackPlugin([
-            {from: 'images/emoji', to: 'emoji'},
+            // {from: 'images/emoji', to: 'emoji'},
             {from: 'images/logo-email.png', to: 'images'},
             {from: 'images/circles.png', to: 'images'},
             {from: 'images/favicon', to: 'images/favicon'},

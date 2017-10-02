@@ -27,8 +27,6 @@ export default class ChooseModulesMobilePage extends React.Component {
         this.state = {
             localStoreKey4Modules:'S_F_E_T_MODULES_KEY_mobile',
             allModulesData:[],
-            colsNameCn:[ "标题", "发布日期", "所属类别", "所属单位"], //通知公告的列表项。
-            colsNameEn:["fileTitle", "publishTime", "type" ,"unit"],
             tokenunid:'', //登录OA系统获取认证id。
             noticeListData:[],
             randomStr:'',
@@ -40,7 +38,6 @@ export default class ChooseModulesMobilePage extends React.Component {
       this.getAllModulesData();
     }
     componentDidMount(){
-      this.getOALoginInfo();
       let randomStr = Math.random().toString().split('.')[1];
       this.setState({randomStr});
       let _this = this;
@@ -58,31 +55,6 @@ export default class ChooseModulesMobilePage extends React.Component {
           // console.log('增加了监听器了！！！！',window['handleClickBackBtn'+randomStr]);
           window.addEventListener("popstate", window['handleClickBackBtn'+randomStr],false);
         },100);
-      }
-      this.getChatNewMessageNum();
-    }
-    getOALoginInfo(){
-      let me = UserStore.getCurrentUser() || {};
-      let loginInfo = localStorage.getItem(OAUtils.OA_LOGIN_INFO_KEY);
-      if(me.oaUserName){
-        if(loginInfo && me.oaUserName == JSON.parse(loginInfo)['oaUserName']){
-          let loginInfoObj = JSON.parse(loginInfo);
-          this.setState({tokenunid:loginInfoObj['tockenunid']});
-          // console.log("存在localStorage里的OA登陆信息:",loginInfoObj);
-          this.getServerNoticeListData(loginInfoObj['tockenunid']);
-          return;
-        }
-        OAUtils.loginOASystem({oaUserName:me.oaUserName,oaPassword:me.oaPassword}, (res)=>{ //登录OA系统获取认证id。
-          // console.log("successCall:"+res);
-          res.values['oaUserName'] = me.oaUserName;
-          res.values['tokenunid'] = res.values['tockenunid'];
-          localStorage.setItem(OAUtils.OA_LOGIN_INFO_KEY,JSON.stringify(res.values));
-          this.setState({tokenunid:res.values.tockenunid});
-          this.getServerNoticeListData(res.values.tockenunid);
-        },(res)=>{
-          // console.log("errorCall:"+res);
-          this.setState({oaLoginErrorText: res.ErrorText});
-        });
       }
     }
     componentWillUnmount(){
@@ -106,7 +78,7 @@ export default class ChooseModulesMobilePage extends React.Component {
             Toast.hide();
             UserStore.clear();
             browserHistory.push('/login');
-            OAUtils.logOutOASystem(this.state.tokenunid);
+            // OAUtils.logOutOASystem(this.state.tokenunid);
           },
           () => {
             UserStore.clear();
@@ -193,101 +165,16 @@ export default class ChooseModulesMobilePage extends React.Component {
       }
       // console.log('进入群聊');
     }
-    getServerNoticeListData = (tokenunid)=>{ //从服务端获取列表数据
-      OAUtils.getNoticeListData({
-        tokenunid: tokenunid,
-        currentpage:1,
-        rootlbunid:'72060E133431242D987C0A80A4124268', //这个是固定的。
-        shbz:"1", //表示已通过。这里只获取已通过审核了的。
-        viewcolumntitles:this.state.colsNameCn.join(','),
-        successCall: (data)=>{
-          let {colsNameEn} = this.state;
-          let parseData = OAUtils.formatServerListData(colsNameEn, data.values);
-          // console.log("get 通知公告的list data:",data,parseData);
-          this.setState({
-            noticeListData:parseData,
-          });
-        },
-        errorCall: (data)=>{
-          this.setState({isLoading:false,isMoreLoading:false});
-        }
-      });
-    }
-    getChatNewMessageNum(){ //获取群聊里当前频道的未读消息数。
-      // const teams = TeamStore.getAll();
-      // const teamMembers = TeamStore.getMyTeamMembers();
-      // let teamId = BrowserStore.getGlobalItem('team');
-      //
-      // if (!teams[teamId] && teamMembers.length > 0) {
-      //     let myTeams = [];
-      //     for (const index in teamMembers) {
-      //         if (teamMembers.hasOwnProperty(index)) {
-      //             const teamMember = teamMembers[index];
-      //             myTeams.push(teams[teamMember.team_id]);
-      //         }
-      //     }
-      //     if (myTeams.length > 0) {
-      //         myTeams = myTeams.sort(sortTeamsByDisplayName);
-      //         teamId = myTeams[0].id;
-      //     }
-      // }
-      // if (teams[teamId]) {
-      //     const channelId = BrowserStore.getGlobalItem(teamId);
-      //     Client.setTeamId(teamId);
-      //     if (channelId) {
-      //       this.countNewMessageNum(channelId);
-      //     } else {
-      //       Client.getChannels((res)=>{
-      //           // console.log("获取所有的频道的信息--：",res);
-      //           let curChannelId='';
-      //           for(let i=0;i<res.length;i++){
-      //             if(res[i]['name'] == "town-square"){
-      //               curChannelId = res[i]['id'];
-      //             }
-      //           }
-      //           this.countNewMessageNum(curChannelId);
-      //       });
-      //     }
-      // }
-
-    }
-    // countNewMessageNum(channelId){ //
-    //   let me = UserStore.getCurrentUser() || {};
-    //   Client.getChannelMember(channelId, me.id, (res)=>{
-    //     // console.log("获取默认频道的最近查看时间--：",res);
-    //     let last_viewed_at = res.last_viewed_at;
-    //     Client.getPostsPage(channelId,0,100,
-    //       (data) => {
-    //         const posts = data.posts;
-    //         const order = data.order;
-    //         let unViewedCount = 0;
-    //         unViewedCount = order.reduce((count, orderId) => {
-    //           const post = posts[orderId];
-    //           if (post.create_at > last_viewed_at &&
-    //             post.user_id !== me.id &&
-    //             post.state !== Constants.POST_DELETED) {
-    //               return count + 1;
-    //             }
-    //             return count;
-    //           }, 0);
-    //           this.setState({unViewedCount:unViewedCount});
-    //           // console.log("---------getPostsPage----------:", data,unViewedCount);
-    //         },(err) => {}
-    //       );
-    //   });
-    // }
 
     render() {
         let {localStoreKey4Modules, allModulesData} = this.state;
         return (
           <div className='' style={{height:'100%'}}>
             <ModulesMobileComp
-              tokenunid={this.state.tokenunid}
               oaLoginErrorText={this.state.oaLoginErrorText}
               localStoreKey4Modules={localStoreKey4Modules}
               allModulesData={allModulesData}
               noticeListData={this.state.noticeListData}
-              unViewedCount={this.state.unViewedCount}
               handleGoMatter={this.handleGoMatter}
             />
           </div>

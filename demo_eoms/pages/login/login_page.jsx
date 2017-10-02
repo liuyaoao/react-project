@@ -169,12 +169,12 @@ export default class LoginPage extends React.Component {
                     UserStore.emitChange(data.user.id);
                 }
 
-                if (data.preferences) {
-                    AppDispatcher.handleServerAction({
-                        type: ActionTypes.RECEIVED_PREFERENCES,
-                        preferences: data.preferences
-                    });
-                }
+                // if (data.preferences) {
+                //     AppDispatcher.handleServerAction({
+                //         type: ActionTypes.RECEIVED_PREFERENCES,
+                //         preferences: data.preferences
+                //     });
+                // }
                 browserHistory.push("/modules");
             },
             (err) => {

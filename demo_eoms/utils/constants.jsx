@@ -2,68 +2,43 @@
 // See License.txt for license information.
 
 import keyMirror from 'key-mirror/keyMirror.js';
-
-import audioIcon from 'images/icons/audio.png';
-import videoIcon from 'images/icons/video.png';
-import excelIcon from 'images/icons/excel.png';
-import pptIcon from 'images/icons/ppt.png';
-import pdfIcon from 'images/icons/pdf.png';
-import codeIcon from 'images/icons/code.png';
-import wordIcon from 'images/icons/word.png';
-import patchIcon from 'images/icons/patch.png';
-import genericIcon from 'images/icons/generic.png';
-
 import logoImage from 'images/logo_compact.png';
-import logoWebhook from 'images/webhook_icon.jpg';
+// import solarizedDarkCSS from '!!file-loader?name=files/code_themes/[hash].[ext]!highlight.js/styles/solarized-dark.css';
 
-import solarizedDarkCSS from '!!file-loader?name=files/code_themes/[hash].[ext]!highlight.js/styles/solarized-dark.css';
-import solarizedDarkIcon from 'images/themes/code_themes/solarized-dark.png';
+// import solarizedLightCSS from '!!file-loader?name=files/code_themes/[hash].[ext]!highlight.js/styles/solarized-light.css';
 
-import solarizedLightCSS from '!!file-loader?name=files/code_themes/[hash].[ext]!highlight.js/styles/solarized-light.css';
-import solarizedLightIcon from 'images/themes/code_themes/solarized-light.png';
+// import githubCSS from '!!file-loader?name=files/code_themes/[hash].[ext]!highlight.js/styles/github.css';
 
-import githubCSS from '!!file-loader?name=files/code_themes/[hash].[ext]!highlight.js/styles/github.css';
-import githubIcon from 'images/themes/code_themes/github.png';
+// import monokaiCSS from '!!file-loader?name=files/code_themes/[hash].[ext]!highlight.js/styles/monokai.css';
 
-import monokaiCSS from '!!file-loader?name=files/code_themes/[hash].[ext]!highlight.js/styles/monokai.css';
-import monokaiIcon from 'images/themes/code_themes/monokai.png';
-
-import defaultThemeImage from 'images/themes/organization.png';
-// import mattermostDarkThemeImage from 'images/themes/mattermost_dark.png';
-// import mattermostThemeImage from 'images/themes/mattermost.png';
-import sameviewDarkThemeImage from 'images/themes/sameview_dark.png';
-import sameviewThemeImage from 'images/themes/sameview.png';
-import windows10ThemeImage from 'images/themes/windows_dark.png';
-
-export const Preferences = {
-    CATEGORY_DIRECT_CHANNEL_SHOW: 'direct_channel_show',
-    CATEGORY_GROUP_CHANNEL_SHOW: 'group_channel_show',
-    CATEGORY_DISPLAY_SETTINGS: 'display_settings',
-    DISPLAY_PREFER_NICKNAME: 'nickname_full_name',
-    DISPLAY_PREFER_FULL_NAME: 'full_name',
-    CATEGORY_ADVANCED_SETTINGS: 'advanced_settings',
-    TUTORIAL_STEP: 'tutorial_step',
-    CHANNEL_DISPLAY_MODE: 'channel_display_mode',
-    CHANNEL_DISPLAY_MODE_CENTERED: 'centered',
-    CHANNEL_DISPLAY_MODE_FULL_SCREEN: 'full',
-    CHANNEL_DISPLAY_MODE_DEFAULT: 'full',
-    MESSAGE_DISPLAY: 'message_display',
-    MESSAGE_DISPLAY_CLEAN: 'clean',
-    MESSAGE_DISPLAY_COMPACT: 'compact',
-    MESSAGE_DISPLAY_DEFAULT: 'clean',
-    COLLAPSE_DISPLAY: 'collapse_previews',
-    COLLAPSE_DISPLAY_DEFAULT: 'false',
-    USE_MILITARY_TIME: 'use_military_time',
-    CATEGORY_THEME: 'theme',
-    CATEGORY_FLAGGED_POST: 'flagged_post',
-    CATEGORY_NOTIFICATIONS: 'notifications',
-    CATEGORY_FAVORITE_CHANNEL: 'favorite_channel',
-    EMAIL_INTERVAL: 'email_interval',
-    INTERVAL_IMMEDIATE: 30, // "immediate" is a 30 second interval
-    INTERVAL_FIFTEEN_MINUTES: 15 * 60,
-    INTERVAL_HOUR: 60 * 60
-};
-
+// export const Preferences = {
+//     CATEGORY_DIRECT_CHANNEL_SHOW: 'direct_channel_show',
+//     CATEGORY_GROUP_CHANNEL_SHOW: 'group_channel_show',
+//     CATEGORY_DISPLAY_SETTINGS: 'display_settings',
+//     DISPLAY_PREFER_NICKNAME: 'nickname_full_name',
+//     DISPLAY_PREFER_FULL_NAME: 'full_name',
+//     CATEGORY_ADVANCED_SETTINGS: 'advanced_settings',
+//     TUTORIAL_STEP: 'tutorial_step',
+//     CHANNEL_DISPLAY_MODE: 'channel_display_mode',
+//     CHANNEL_DISPLAY_MODE_CENTERED: 'centered',
+//     CHANNEL_DISPLAY_MODE_FULL_SCREEN: 'full',
+//     CHANNEL_DISPLAY_MODE_DEFAULT: 'full',
+//     MESSAGE_DISPLAY: 'message_display',
+//     MESSAGE_DISPLAY_CLEAN: 'clean',
+//     MESSAGE_DISPLAY_COMPACT: 'compact',
+//     MESSAGE_DISPLAY_DEFAULT: 'clean',
+//     COLLAPSE_DISPLAY: 'collapse_previews',
+//     COLLAPSE_DISPLAY_DEFAULT: 'false',
+//     USE_MILITARY_TIME: 'use_military_time',
+//     CATEGORY_THEME: 'theme',
+//     CATEGORY_FLAGGED_POST: 'flagged_post',
+//     CATEGORY_NOTIFICATIONS: 'notifications',
+//     CATEGORY_FAVORITE_CHANNEL: 'favorite_channel',
+//     EMAIL_INTERVAL: 'email_interval',
+//     INTERVAL_IMMEDIATE: 30, // "immediate" is a 30 second interval
+//     INTERVAL_FIFTEEN_MINUTES: 15 * 60,
+//     INTERVAL_HOUR: 60 * 60
+// };
 export const ActionTypes = keyMirror({
     RECEIVED_ERROR: null,
 
@@ -186,68 +161,64 @@ export const ActionTypes = keyMirror({
     EMOJI_POSTED: null
 });
 
-export const WebrtcActionTypes = keyMirror({
-    INITIALIZE: null,
-    NOTIFY: null,
-    CHANGED: null,
-    ANSWER: null,
-    DECLINE: null,
-    CANCEL: null,
-    NO_ANSWER: null,
-    BUSY: null,
-    FAILED: null,
-    UNSUPPORTED: null,
-    MUTED: null,
-    IN_PROGRESS: null,
-    DISABLED: null,
-    RHS: null
-});
+// export const WebrtcActionTypes = keyMirror({
+//     INITIALIZE: null,
+//     NOTIFY: null,
+//     CHANGED: null,
+//     ANSWER: null,
+//     DECLINE: null,
+//     CANCEL: null,
+//     NO_ANSWER: null,
+//     BUSY: null,
+//     FAILED: null,
+//     UNSUPPORTED: null,
+//     MUTED: null,
+//     IN_PROGRESS: null,
+//     DISABLED: null,
+//     RHS: null
+// });
 
 export const UserStatuses = {
     OFFLINE: 'offline',
     AWAY: 'away',
     ONLINE: 'online'
 };
-
+// export const TutorialSteps = {
+//     INTRO_SCREENS: 0,
+//     POST_POPOVER: 1,
+//     CHANNEL_POPOVER: 2,
+//     MENU_POPOVER: 3
+// };
 export const UserSearchOptions = {
     ALLOW_INACTIVE: 'allow_inactive',
     WITHOUT_TEAM: 'without_team'
 };
-
-export const SocketEvents = {
-    POSTED: 'posted',
-    POST_EDITED: 'post_edited',
-    POST_DELETED: 'post_deleted',
-    CHANNEL_CREATED: 'channel_created',
-    CHANNEL_DELETED: 'channel_deleted',
-    CHANNEL_VIEWED: 'channel_viewed',
-    DIRECT_ADDED: 'direct_added',
-    NEW_USER: 'new_user',
-    ADDED_TO_TEAM: 'added_to_team',
-    LEAVE_TEAM: 'leave_team',
-    UPDATE_TEAM: 'update_team',
-    USER_ADDED: 'user_added',
-    USER_REMOVED: 'user_removed',
-    USER_UPDATED: 'user_updated',
-    TYPING: 'typing',
-    PREFERENCE_CHANGED: 'preference_changed',
-    PREFERENCES_CHANGED: 'preferences_changed',
-    PREFERENCES_DELETED: 'preferences_deleted',
-    EPHEMERAL_MESSAGE: 'ephemeral_message',
-    STATUS_CHANGED: 'status_change',
-    HELLO: 'hello',
-    WEBRTC: 'webrtc',
-    REACTION_ADDED: 'reaction_added',
-    REACTION_REMOVED: 'reaction_removed'
-};
-
-export const TutorialSteps = {
-    INTRO_SCREENS: 0,
-    POST_POPOVER: 1,
-    CHANNEL_POPOVER: 2,
-    MENU_POPOVER: 3
-};
-
+// export const SocketEvents = {
+//     POSTED: 'posted',
+//     POST_EDITED: 'post_edited',
+//     POST_DELETED: 'post_deleted',
+//     CHANNEL_CREATED: 'channel_created',
+//     CHANNEL_DELETED: 'channel_deleted',
+//     CHANNEL_VIEWED: 'channel_viewed',
+//     DIRECT_ADDED: 'direct_added',
+//     NEW_USER: 'new_user',
+//     ADDED_TO_TEAM: 'added_to_team',
+//     LEAVE_TEAM: 'leave_team',
+//     UPDATE_TEAM: 'update_team',
+//     USER_ADDED: 'user_added',
+//     USER_REMOVED: 'user_removed',
+//     USER_UPDATED: 'user_updated',
+//     TYPING: 'typing',
+//     PREFERENCE_CHANGED: 'preference_changed',
+//     PREFERENCES_CHANGED: 'preferences_changed',
+//     PREFERENCES_DELETED: 'preferences_deleted',
+//     EPHEMERAL_MESSAGE: 'ephemeral_message',
+//     STATUS_CHANGED: 'status_change',
+//     HELLO: 'hello',
+//     WEBRTC: 'webrtc',
+//     REACTION_ADDED: 'reaction_added',
+//     REACTION_REMOVED: 'reaction_removed'
+// };
 export const PostTypes = {
     JOIN_LEAVE: 'system_join_leave',
     JOIN_CHANNEL: 'system_join_channel',
@@ -305,13 +276,13 @@ export const ErrorBarTypes = {
 };
 
 export const Constants = {
-    Preferences,
-    SocketEvents,
+    // Preferences,
+    // SocketEvents,
     ActionTypes,
-    WebrtcActionTypes,
+    // WebrtcActionTypes,
     UserStatuses,
     UserSearchOptions,
-    TutorialSteps,
+    // TutorialSteps,
     PostTypes,
     ErrorPageTypes,
     ErrorBarTypes,
@@ -357,17 +328,17 @@ export const Constants = {
     PDF_TYPES: ['pdf'],
     PATCH_TYPES: ['patch'],
     SVG_TYPES: ['svg'],
-    ICON_FROM_TYPE: {
-        audio: audioIcon,
-        video: videoIcon,
-        spreadsheet: excelIcon,
-        presentation: pptIcon,
-        pdf: pdfIcon,
-        code: codeIcon,
-        word: wordIcon,
-        patch: patchIcon,
-        other: genericIcon
-    },
+    // ICON_FROM_TYPE: {
+    //     audio: audioIcon,
+    //     video: videoIcon,
+    //     spreadsheet: excelIcon,
+    //     presentation: pptIcon,
+    //     pdf: pdfIcon,
+    //     code: codeIcon,
+    //     word: wordIcon,
+    //     patch: patchIcon,
+    //     other: genericIcon
+    // },
     ICON_NAME_FROM_TYPE: {
         audio: 'audio',
         video: 'video',
@@ -412,7 +383,7 @@ export const Constants = {
     POST_FAILED: 'failed',
     POST_DELETED: 'deleted',
     SYSTEM_MESSAGE_PREFIX: 'system_',
-    SYSTEM_MESSAGE_PROFILE_IMAGE: logoImage,
+    // SYSTEM_MESSAGE_PROFILE_IMAGE: logoImage,
     RESERVED_TEAM_NAMES: [
         'signup',
         'login',
@@ -484,86 +455,86 @@ export const Constants = {
             mentionHighlightBg: '#f3e197',
             mentionHighlightLink: '#2f81b7',
             codeTheme: 'github',
-            image: defaultThemeImage
+            // image: defaultThemeImage
         },
-        sameview: {
-            type: '三人即时通',
-            sidebarBg: '#fafafa',
-            sidebarText: '#333333',
-            sidebarUnreadText: '#333333',
-            sidebarTextHoverBg: '#e6f2fa',
-            sidebarTextActiveBorder: '#378FD2',
-            sidebarTextActiveColor: '#111111',
-            sidebarHeaderBg: '#3481B9',
-            sidebarHeaderTextColor: '#ffffff',
-            onlineIndicator: '#7DBE00',
-            awayIndicator: '#DCBD4E',
-            mentionBj: '#2389d7',
-            mentionColor: '#ffffff',
-            centerChannelBg: '#ffffff',
-            centerChannelColor: '#333333',
-            newMessageSeparator: '#FF8800',
-            linkColor: '#2389d7',
-            buttonBg: '#23A2FF',
-            buttonColor: '#FFFFFF',
-            errorTextColor: '#a94442',
-            mentionHighlightBg: '#f3e197',
-            mentionHighlightLink: '#2f81b7',
-            codeTheme: 'github',
-            image: sameviewThemeImage
-        },
-        sameviewDark: {
-            type: '三人即时通 Dark',
-            sidebarBg: '#1B2C3E',
-            sidebarText: '#fff',
-            sidebarUnreadText: '#fff',
-            sidebarTextHoverBg: '#4A5664',
-            sidebarTextActiveBorder: '#66B9A7',
-            sidebarTextActiveColor: '#FFFFFF',
-            sidebarHeaderBg: '#1B2C3E',
-            sidebarHeaderTextColor: '#FFFFFF',
-            onlineIndicator: '#65dcc8',
-            awayIndicator: '#c1b966',
-            mentionBj: '#B74A4A',
-            mentionColor: '#FFFFFF',
-            centerChannelBg: '#2F3E4E',
-            centerChannelColor: '#DDDDDD',
-            newMessageSeparator: '#5de5da',
-            linkColor: '#A4FFEB',
-            buttonBg: '#4CBBA4',
-            buttonColor: '#FFFFFF',
-            errorTextColor: '#ff6461',
-            mentionHighlightBg: '#984063',
-            mentionHighlightLink: '#A4FFEB',
-            codeTheme: 'solarized-dark',
-            image: sameviewDarkThemeImage
-        },
-        windows10: {
-            type: 'Windows Dark',
-            sidebarBg: '#171717',
-            sidebarText: '#fff',
-            sidebarUnreadText: '#fff',
-            sidebarTextHoverBg: '#302e30',
-            sidebarTextActiveBorder: '#196CAF',
-            sidebarTextActiveColor: '#FFFFFF',
-            sidebarHeaderBg: '#1f1f1f',
-            sidebarHeaderTextColor: '#FFFFFF',
-            onlineIndicator: '#399fff',
-            awayIndicator: '#c1b966',
-            mentionBj: '#0177e7',
-            mentionColor: '#FFFFFF',
-            centerChannelBg: '#1F1F1F',
-            centerChannelColor: '#DDDDDD',
-            newMessageSeparator: '#CC992D',
-            linkColor: '#0D93FF',
-            buttonBg: '#0177e7',
-            buttonColor: '#FFFFFF',
-            errorTextColor: '#ff6461',
-            mentionHighlightBg: '#784098',
-            mentionHighlightLink: '#A4FFEB',
-            codeTheme: 'monokai',
-            image: windows10ThemeImage
-        }
+        // sameview: {
+        //     type: '三人即时通',
+        //     sidebarBg: '#fafafa',
+        //     sidebarText: '#333333',
+        //     sidebarUnreadText: '#333333',
+        //     sidebarTextHoverBg: '#e6f2fa',
+        //     sidebarTextActiveBorder: '#378FD2',
+        //     sidebarTextActiveColor: '#111111',
+        //     sidebarHeaderBg: '#3481B9',
+        //     sidebarHeaderTextColor: '#ffffff',
+        //     onlineIndicator: '#7DBE00',
+        //     awayIndicator: '#DCBD4E',
+        //     mentionBj: '#2389d7',
+        //     mentionColor: '#ffffff',
+        //     centerChannelBg: '#ffffff',
+        //     centerChannelColor: '#333333',
+        //     newMessageSeparator: '#FF8800',
+        //     linkColor: '#2389d7',
+        //     buttonBg: '#23A2FF',
+        //     buttonColor: '#FFFFFF',
+        //     errorTextColor: '#a94442',
+        //     mentionHighlightBg: '#f3e197',
+        //     mentionHighlightLink: '#2f81b7',
+        //     codeTheme: 'github',
+        //     image: sameviewThemeImage
+        // },
+        // sameviewDark: {
+        //     type: '三人即时通 Dark',
+        //     sidebarBg: '#1B2C3E',
+        //     sidebarText: '#fff',
+        //     sidebarUnreadText: '#fff',
+        //     sidebarTextHoverBg: '#4A5664',
+        //     sidebarTextActiveBorder: '#66B9A7',
+        //     sidebarTextActiveColor: '#FFFFFF',
+        //     sidebarHeaderBg: '#1B2C3E',
+        //     sidebarHeaderTextColor: '#FFFFFF',
+        //     onlineIndicator: '#65dcc8',
+        //     awayIndicator: '#c1b966',
+        //     mentionBj: '#B74A4A',
+        //     mentionColor: '#FFFFFF',
+        //     centerChannelBg: '#2F3E4E',
+        //     centerChannelColor: '#DDDDDD',
+        //     newMessageSeparator: '#5de5da',
+        //     linkColor: '#A4FFEB',
+        //     buttonBg: '#4CBBA4',
+        //     buttonColor: '#FFFFFF',
+        //     errorTextColor: '#ff6461',
+        //     mentionHighlightBg: '#984063',
+        //     mentionHighlightLink: '#A4FFEB',
+        //     codeTheme: 'solarized-dark',
+        //     image: sameviewDarkThemeImage
+        // },
+        // windows10: {
+        //     type: 'Windows Dark',
+        //     sidebarBg: '#171717',
+        //     sidebarText: '#fff',
+        //     sidebarUnreadText: '#fff',
+        //     sidebarTextHoverBg: '#302e30',
+        //     sidebarTextActiveBorder: '#196CAF',
+        //     sidebarTextActiveColor: '#FFFFFF',
+        //     sidebarHeaderBg: '#1f1f1f',
+        //     sidebarHeaderTextColor: '#FFFFFF',
+        //     onlineIndicator: '#399fff',
+        //     awayIndicator: '#c1b966',
+        //     mentionBj: '#0177e7',
+        //     mentionColor: '#FFFFFF',
+        //     centerChannelBg: '#1F1F1F',
+        //     centerChannelColor: '#DDDDDD',
+        //     newMessageSeparator: '#CC992D',
+        //     linkColor: '#0D93FF',
+        //     buttonBg: '#0177e7',
+        //     buttonColor: '#FFFFFF',
+        //     errorTextColor: '#ff6461',
+        //     mentionHighlightBg: '#784098',
+        //     mentionHighlightLink: '#A4FFEB',
+        //     codeTheme: 'monokai',
+        //     image: windows10ThemeImage
+        // }
     },
     THEME_ELEMENTS: [
         {
@@ -675,32 +646,32 @@ export const Constants = {
             group: 'centerChannelElements',
             id: 'codeTheme',
             uiName: 'Code Theme',
-            themes: [
-                {
-                    id: 'solarized-dark',
-                    uiName: 'Solarized Dark',
-                    cssURL: solarizedDarkCSS,
-                    iconURL: solarizedDarkIcon
-                },
-                {
-                    id: 'solarized-light',
-                    uiName: 'Solarized Light',
-                    cssURL: solarizedLightCSS,
-                    iconURL: solarizedLightIcon
-                },
-                {
-                    id: 'github',
-                    uiName: 'GitHub',
-                    cssURL: githubCSS,
-                    iconURL: githubIcon
-                },
-                {
-                    id: 'monokai',
-                    uiName: 'Monokai',
-                    cssURL: monokaiCSS,
-                    iconURL: monokaiIcon
-                }
-            ]
+            // themes: [
+            //     {
+            //         id: 'solarized-dark',
+            //         uiName: 'Solarized Dark',
+            //         cssURL: solarizedDarkCSS,
+            //         iconURL: solarizedDarkIcon
+            //     },
+            //     {
+            //         id: 'solarized-light',
+            //         uiName: 'Solarized Light',
+            //         cssURL: solarizedLightCSS,
+            //         iconURL: solarizedLightIcon
+            //     },
+            //     {
+            //         id: 'github',
+            //         uiName: 'GitHub',
+            //         cssURL: githubCSS,
+            //         iconURL: githubIcon
+            //     },
+            //     {
+            //         id: 'monokai',
+            //         uiName: 'Monokai',
+            //         cssURL: monokaiCSS,
+            //         iconURL: monokaiIcon
+            //     }
+            // ]
         }
     ],
     DEFAULT_CODE_THEME: 'github',
@@ -935,7 +906,7 @@ export const Constants = {
     CHANNEL_SCROLL_ADJUSTMENT: 100,
     EMOJI_PATH: '/static/emoji',
     RECENT_EMOJI_KEY: 'recentEmojis',
-    DEFAULT_WEBHOOK_LOGO: logoWebhook,
+    // DEFAULT_WEBHOOK_LOGO: logoWebhook,
     MHPNS: 'https://push.3ren.com',
     MTPNS: 'http://push-test.3ren.com',
     BOT_NAME: 'BOT',
