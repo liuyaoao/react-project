@@ -13,3 +13,4 @@
 
 ## 框架和重要组件说明
 * 总框架是reactJs。且整个项目是在原开源项目mattermost进行二次开放的。
+* 主ui组件是antd和antd-mobile, 一个是用于pc端的，一个是用于移动端的。
