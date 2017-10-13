@@ -1,6 +1,3 @@
-// Copyright (c) 2016-present Mattermost, Inc. All Rights Reserved.
-// See License.txt for license information.
-
 import $ from 'jquery';
 import request from 'superagent';
 import nocache from 'superagent-no-cache';
@@ -282,6 +279,7 @@ class MyWebClient {
             type('application/json').
             accept('application/json').
             send(outgoingData).
+            use(nocache).
             end(this.handleResponse.bind(
                 this,
                 'login',
@@ -294,7 +292,6 @@ class MyWebClient {
                             outer.defaultHeaders[HEADER_AUTH] = `${HEADER_BEARER} ${outer.token}`;
                         }
                     }
-
                     if (success) {
                         success(data, res);
                     }
@@ -307,6 +304,7 @@ class MyWebClient {
         request.
             post(`${this.getUsersRoute()}/logout`).
             set(this.defaultHeaders).
+            use(nocache).
             type('application/json').
             accept('application/json').
             end(this.handleResponse.bind(this, 'logout', (data,res)=>{
@@ -327,6 +325,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           end(this.handleResponse.bind(this, 'contacts_directory', (data,res)=>{
             success && success(data,res);
           }, error));
@@ -340,6 +339,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           send(param).
           end(this.handleResponse.bind(this, 'contacts', (data,res)=>{
             success && success(data,res);
@@ -353,6 +353,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           send(param).
           end(this.handleResponse.bind(this, 'contacts_'+actionName, (data,res)=>{
             success && success(data,res);
@@ -365,6 +366,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           send(contactsIds).
           end(this.handleResponse.bind(this, 'contactsIds_batchdelete', (data,res)=>{
             success && success(data,res);
@@ -377,6 +379,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           end(this.handleResponse.bind(this, 'deleteAll_Contacts', (data,res)=>{
             success && success(data,res);
           }, error));
@@ -389,6 +392,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           end(this.handleResponse.bind(this, 'organizations', (data,res)=>{
             success && success(data,res);
           }, error));
@@ -401,6 +405,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           // send(params).
           end(this.handleResponse.bind(this, 'getAllUser', (data,res)=>{
             success && success(data,res);
@@ -413,6 +418,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           send(params).
           end(this.handleResponse.bind(this, 'getSearch', (data,res)=>{
             success && success(data,res);
@@ -426,6 +432,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           send(params).
           end(this.handleResponse.bind(this, 'users'+actionName, (data,res)=>{
             success && success(data,res);
@@ -439,6 +446,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           send(params).
           end(this.handleResponse.bind(this, 'modify_users_password', (data,res)=>{
             success && success(data,res);
@@ -452,6 +460,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           send(userIds).
           end(this.handleResponse.bind(this, 'batchdelete', (data,res)=>{
             success && success(data,res);
@@ -465,6 +474,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           send(params).
           end(this.handleResponse.bind(this, 'organizations '+actionName, (data,res)=>{
             success && success(data,res);
@@ -478,6 +488,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           end(this.handleResponse.bind(this, 'organizations_delete', (data,res)=>{
             success && success(data,res);
           }, error));
@@ -490,6 +501,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           send(params).
           end(this.handleResponse.bind(this, 'user_punchcard', (data,res)=>{
             success && success(data,res);
@@ -503,6 +515,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           end(this.handleResponse.bind(this, 'permission_data', (data,res)=>{
             success && success(data,res);
           }, error));
@@ -514,6 +527,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           end(this.handleResponse.bind(this, 'permission_by_orga', (data,res)=>{
             success && success(data,res);
           }, error));
@@ -525,6 +539,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           send(params).
           end(this.handleResponse.bind(this, 'update_permission_by_orga', (data,res)=>{
             success && success(data,res);
@@ -541,6 +556,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           send(params).
           end(this.handleResponse.bind(this, 'getSearchFileInfo', success, error));
     }
@@ -552,6 +568,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           end(this.handleResponse.bind(this, 'getUserInfo', success, error));
     }
     // create file info
@@ -562,6 +579,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           send(params).
           end(this.handleResponse.bind(this, 'createFileInfo', success, error));
     }
@@ -574,6 +592,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           send(params).
           end(this.handleResponse.bind(this, 'updateFileInfo', success, error));
     }
@@ -586,6 +605,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           send(id).
           end(this.handleResponse.bind(this, 'deleteFileInfo', success, error));
     }
@@ -596,6 +616,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           send(params).
           end(this.handleResponse.bind(this, 'deleteFileInfoFor_all', (data,res)=>{
             success && success(data,res);
@@ -610,6 +631,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           send(params).
           end(this.handleResponse.bind(this, 'getSearchFileFamilyMember', success, error));
     }
@@ -622,6 +644,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           send(id).
           end(this.handleResponse.bind(this, 'createFileFamilyMember', success, error));
     }
@@ -634,6 +657,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           send(id).
           end(this.handleResponse.bind(this, 'updateFileFamilyMember', success, error));
     }
@@ -646,6 +670,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           send(id).
           end(this.handleResponse.bind(this, 'deleteFileFamilyMember', success, error));
     }
@@ -658,6 +683,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           end(this.handleResponse.bind(this, 'getFileDepartment', success, error));
     }
 
@@ -669,6 +695,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           end(this.handleResponse.bind(this, 'getBlacklist', success, error));
     }
 
@@ -680,6 +707,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           end(this.handleResponse.bind(this, 'getNotInBlacklist', success, error));
     }
 
@@ -691,6 +719,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           end(this.handleResponse.bind(this, 'addBlacklistUser', success, error));
     }
 
@@ -702,6 +731,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           end(this.handleResponse.bind(this, 'deleteBlacklistUser', success, error));
     }
 
@@ -713,6 +743,7 @@ class MyWebClient {
           set(this.defaultHeaders).
           type('application/json').
           accept('application/json').
+          use(nocache).
           end(this.handleResponse.bind(this, 'getUserInfo', success, error));
     }
 

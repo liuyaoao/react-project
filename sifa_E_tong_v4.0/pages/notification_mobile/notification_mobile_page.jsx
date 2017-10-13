@@ -70,7 +70,7 @@ class NotificationMobilePage extends React.Component {
                   organFlag:values.flag,  //隶属机构标识级别。组织机构标识：1、市 2、区 3、县 4、乡镇 5、街道
                 });
                 this.getServerOrganData(values.organId);
-                browserHistory.push(location.pathname+'?organId='+values.organId);
+                browserHistory.replace(location.pathname+'?organId='+values.organId);
               }
               // console.log("矫正系统的登录返回---：",res,state);
           }
@@ -100,13 +100,13 @@ class NotificationMobilePage extends React.Component {
     onSidebarMenuClick = (item) => {
       if(item.key==1){
         this.setState({  current: "1",menuTab:0});
-        browserHistory.push('/notification_mobile/notice?organId='+this.state.redressOrganId);
+        browserHistory.replace('/notification_mobile/notice?organId='+this.state.redressOrganId);
       }else if(item.key==2){
         this.setState({  current: "2",menuTab:1});
-        browserHistory.push('/notification_mobile/tongji?organId='+this.state.redressOrganId);
+        browserHistory.replace('/notification_mobile/tongji?organId='+this.state.redressOrganId);
       }else if(item.key==3){
         this.setState({  current: "3",menuTab:2});
-        browserHistory.push('/notification_mobile/elec_doc?organId='+this.state.redressOrganId);
+        browserHistory.replace('/notification_mobile/elec_doc?organId='+this.state.redressOrganId);
       }
       this.setState({open:!this.state.open});
     }

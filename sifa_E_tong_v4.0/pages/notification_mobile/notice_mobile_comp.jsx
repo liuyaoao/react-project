@@ -48,7 +48,7 @@ export default class NoticeMobileComp extends React.Component {
            res = JSON.parse(res);
         }catch(e){
         }
-        console.log("矫正系统的获取通知公告的返回---：",res,state);
+        // console.log("矫正系统的获取通知公告的返回---：",res,state);
         if(res.respCode != "0"){
           Toast.info(res.respMsg, 2, null, false);
         }else{

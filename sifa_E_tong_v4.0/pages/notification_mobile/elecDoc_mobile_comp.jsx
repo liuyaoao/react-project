@@ -33,8 +33,7 @@ class ElecDocMobileComp extends React.Component {
         columns:[],
         sel: '',
         organListData:[], //矫正的组织结构列表数据。
-
-        selectOrganId:'1',//选中的组织结构的ID数组
+        selectOrganId:1,//选中的组织结构的ID数组
         curPageNum:1,
         totalCount:0,
         eRecordListData:[], //电子档案列表数据
@@ -75,8 +74,9 @@ class ElecDocMobileComp extends React.Component {
         organId:curOrganId,
         currentIndex:this.state.curPageNum
       });
+      this.getServerOrganData(curOrganId);
       this.setState({
-        selectOrganId:curOrganId,
+        selectOrganId:+curOrganId,
       });
     }
   }
@@ -88,8 +88,9 @@ class ElecDocMobileComp extends React.Component {
         organId:curOrganId,
         currentIndex:this.state.curPageNum
       });
+      this.getServerOrganData(curOrganId);
       this.setState({
-        selectOrganId:curOrganId,
+        selectOrganId:+curOrganId,
       });
     }
   }
@@ -101,7 +102,7 @@ class ElecDocMobileComp extends React.Component {
            res = JSON.parse(res);
         }catch(e){
         }
-        console.log("矫正系统的获取电子档案的返回---：",res,state);
+        // console.log("矫正系统的获取电子档案的返回---：",res,state);
         if(res.respCode != "0"){
             Toast.info(res.respMsg, 2, null, false);
         }else{
@@ -115,7 +116,7 @@ class ElecDocMobileComp extends React.Component {
     });
   }
   //获取组织机构数据
-  getServerOrganData = (organId)=>{
+  getServerOrganData = (organId,callback)=>{
     let params = {organId:organId};
     $.post(`${urlPrefix}/android/datb/getAndroidOrgan.action`,
       params,(data,state)=>{
@@ -127,6 +128,7 @@ class ElecDocMobileComp extends React.Component {
         if(res.respCode == "0"){
             let organList = res.values;
             this.setState({ organListData:organList });
+            callback && callback();
         }
     });
   }
@@ -154,7 +156,7 @@ class ElecDocMobileComp extends React.Component {
     });
   }
   onClickOnRow = (data)=>{ //显示新增编辑弹窗。
-    console.log(data);
+    // console.log(data);
     Popup.show(<div className='popList'>
      <List renderHeader={() => (
        <div style={{ position: 'relative',color:'black',fontSize:'0.4rem'}}>
@@ -215,9 +217,9 @@ class ElecDocMobileComp extends React.Component {
     const { getFieldProps, getFieldError } = this.props.form;
 
     let organData = [];
-    for(let i in this.props.organListData){
-      organData.push({label:this.props.organListData[i].organName+'('+this.props.organListData[i].count+')',
-         value: this.props.organListData[i].organId});
+    for(let i in this.state.organListData){
+      organData.push({label:this.state.organListData[i].organName+'('+this.state.organListData[i].count+')',
+         value: this.state.organListData[i].organId});
     }
 
     let sponsorDepartmentSource=(
@@ -267,7 +269,7 @@ class ElecDocMobileComp extends React.Component {
     };
     return (
       <div className="notificationdetai_container">
-        <div className="newDispatchList eRecordStyle">
+        <div className="eRecordStyle">
           {sponsorDepartmentSource}
           <div style={{width:'100%'}}>
             <Table
@@ -278,7 +280,6 @@ class ElecDocMobileComp extends React.Component {
           </div>
         </div>
       </div>
-
     )
   }
 }

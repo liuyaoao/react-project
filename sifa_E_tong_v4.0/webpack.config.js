@@ -45,13 +45,13 @@ var config = {
                 loader: 'babel-loader',
                 exclude: /(node_modules|non_npm_dependencies)/,
                 query: {
-                    presets: [
+                    presets: [ //转码规则。
                         'react',
                         ['es2015', {modules: false}],
                         'stage-0'
                     ],
-                    plugins: [
-                      ['transform-runtime'],
+                    plugins: [ //插件
+                      ['transform-runtime'], //外化一些引用，避免污染全局对象。
                       ["import", [
                         { "style": "css", "libraryName": "antd-mobile"},
                         { "style": true, "libraryName": "antd"}
@@ -231,7 +231,7 @@ if (TEST) {
 } else {
     // For some reason these break mocha. So they go here.
     config.plugins.push(
-        new HtmlWebpackPlugin({
+        new HtmlWebpackPlugin({ //在webpack打包时简化HTML文件的创建。每次编译时对于文件名里包含hash值并且需要不断变化时非常有用。
             // filename: 'root.html',
             filename: '../index.html',
             inject: 'head',
@@ -239,7 +239,7 @@ if (TEST) {
         })
     );
     config.plugins.push(
-        new CopyWebpackPlugin([
+        new CopyWebpackPlugin([ //直接复制某单个文件或整个文件夹到编译后的目录下。
             {from: 'images/emoji', to: 'emoji'},
             {from: 'images/logo-email.png', to: 'images'},
             {from: 'images/circles.png', to: 'images'},

@@ -155,7 +155,7 @@ class ERecordisPcComp extends React.Component {
 
   }
   onOrganSelectChange(val){
-    console.log("onOrganSelectChange--:",val);
+    // console.log("onOrganSelectChange--:",val);
     this.setState({
       selectOrganId:val
     });

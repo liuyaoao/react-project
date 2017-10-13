@@ -101,7 +101,7 @@ class AdminLoginMobileComp extends React.Component {
                     <List.Item key={index} multipleLine>
                       <div className="addressbook_row">
                         <div className="addressbook_detail" style={{paddingLeft:'0'}}>
-                          <div className=""><span>姓名：</span>{record.name}</div>
+                          <div className="" style={{fontWeight:'bold'}}><span>姓名：</span>{record.name}</div>
                           <div className=""><span>用户名：</span>{record.userName}</div>
                         </div>
                         <div className="addressbook_right">

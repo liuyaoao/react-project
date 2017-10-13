@@ -12,5 +12,13 @@
 * 最后是把前端代码打包编译成生产环境可用：Run `npm run build`; 该命令有可能会遇到一个问题，后面再详细说下。
 
 ## 框架和重要组件说明
+* 近期修改： 去掉了该系统的群聊部分，只用了原系统的框架结构，所以还是有很少一部分是用的原群聊的东西，没有完全剥离开。
 * 总框架是reactJs。且整个项目是在原开源项目mattermost进行二次开放的。
+### 0、antd和antd-mobile：
 * 主ui组件是antd和antd-mobile, 一个是用于pc端的，一个是用于移动端的。
+###  1、superagent：
+*  是一个先进的小而先进的客户端的HTTP请求库。和node.js模块有相同的api,功能很丰富，使用还算比较简单。
+*  可以和它配合使用的还有，superagent-no-cache：使用方式：.use(nocache); 该插件是用来阻止浏览器缓存该请求，以免获取的是旧的数据。
+*  superagent-prefix： .use(prefix); 给url加一个绝对url的前缀，一般是测试的时候用。
+### 2、mattermost-redux:
+*  这个本来是mattermost开源项目自己弄的一个redux组件，可以使用npm下载。但是我们在使用的时候遇到一些问题，所以单独copy出来放在我们项目里了，然后稍微改了一些地方以适应我们自己的需求。所以可以不用原mattermost那样使用npm install的方式下载了。

@@ -47,6 +47,10 @@ function emitInitialLoad(callback) {
                     type: ActionTypes.RECEIVED_ME,
                     me: data.user
                 });
+            }else if(location.pathname != "/login"){
+              myWebClient.removeToken();
+              sessionStorage.clear();
+              browserHistory.replace('/login');
             }
 
             if (data.preferences) {
