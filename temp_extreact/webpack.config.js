@@ -9,7 +9,7 @@ const sourcePath = path.join(__dirname, './src');
 
 module.exports = function (env) {
 
-    portfinder.basePort = (env && env.port) || 8080; // the default port to use
+    portfinder.basePort = (env && env.port) || 10011; // the default port to use
 
     return portfinder.getPortPromise().then(port => {
         const nodeEnv = env && env.prod ? 'production' : 'development';
@@ -49,7 +49,7 @@ module.exports = function (env) {
         plugins.push(new HtmlWebpackPlugin({
             template: 'index.html',
             hash: true
-        }), new OpenBrowserPlugin({ 
+        }), new OpenBrowserPlugin({
             url: `http://localhost:${port}`
         }));
 
