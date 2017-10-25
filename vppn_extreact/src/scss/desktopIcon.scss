@@ -1,0 +1,132 @@
+.desktopIcon-manager {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    // background-image: url("images/untitled.png");
+    // background-repeat: no-repeat;
+    // background-color: rgb(235, 236, 238);
+    padding: 20px;
+    overflow: hidden;
+}
+
+.desktopIcon-manager ul {
+    height: 100%;
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+}
+
+.desktopIcon-manager ul li {
+    position: absolute;
+    display: block;
+    width: 80px;
+    height: 80px;
+    text-align: center;
+    margin: 0;
+    float: left;
+    border: transparent 1px solid;
+    overflow: hidden;
+    // cursor: pointer;
+}
+
+.icons li img {
+    max-height: 60px;
+    max-width: 80px;
+}
+
+.icon-text {
+    position: static;
+    height: 20px;
+    line-height: 20px;
+    width: 100%;
+    margin: 0px;
+    font-size: 12px;
+    // font-family: 微软雅黑;
+    color: white;
+}
+
+.icons-move {
+    border: rgb(110, 142, 179) 1px solid !important;
+    // background-color: rgb(194, 208, 226);
+    background: linear-gradient(rgba(255,255,255,0.6), rgba(200,225,255,0.6));
+    // filter: alpha(opacity = 60);
+    // opacity: 0.6;
+    border-radius: 3px;
+}
+
+.icons-focus {
+    border: rgb(110, 142, 179) 1px solid !important;
+    // background-color: rgb(194, 208, 226);
+    background: linear-gradient(rgba(255,255,255,0.8), rgba(200,225,255,0.8));
+    // filter: alpha(opacity = 100);
+    // opacity: 1;
+    border-radius: 3px;
+}
+
+.icon-position-line {
+    position: absolute;
+    width: 80px;
+    height: 2px;
+    background: #33ddff;
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+
+/*
+ * 右键菜单
+ */
+.content-menu {
+    position: absolute;
+    width: 150px;
+    height: auto;
+    background-color: rgb(255, 255, 255);
+    border: #CCC 1px solid;
+    display: none;
+    // border-radius:5px;
+    z-index:999;
+}
+
+.content-menu ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+.content-menu ul li {
+    list-style: none;
+    line-height: 30px;
+    height: 30px;
+    margin: 3px 0px;
+    padding:0px;
+    font-size: 13px;
+}
+.content-menu .icon{
+	float: left;
+  height: 30px;
+  line-height: 30px;
+  padding-left: 6px;
+  display: none;
+}
+.content-menu ul li a{
+	text-decoration:none;
+	display:block;
+	font-family: 微软雅黑;
+	padding:0px 5px 0px 25px;
+	// width:140px;
+	height:100%;
+	color: #333;
+	outline:none;
+}
+.content-menu ul li a:hover {
+    background-color: #DDD;
+}
+
+.content-menu ul hr {
+    margin: 1px 0px;
+    height: 0px;
+    border: 0px;
+    border-bottom: #CCC 1px solid;
+}

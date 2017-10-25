@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 const ExtReactWebpackPlugin = require('@extjs/reactor-webpack-plugin');
@@ -46,12 +47,19 @@ module.exports = function (env) {
             );
         }
 
-        plugins.push(new HtmlWebpackPlugin({
+        plugins.push(
+          new HtmlWebpackPlugin({
             template: 'index.html',
             hash: true
-        }), new OpenBrowserPlugin({
-            url: `http://localhost:${port}`
-        }));
+          }),
+          new OpenBrowserPlugin({
+              url: `http://localhost:${port}`
+          }),
+          new CopyWebpackPlugin([ //直接复制某单个文件或整个文件夹到编译后的目录下。
+            {from: 'images', to: path.resolve(__dirname, './build/images')},
+            {from: 'scss', to: path.resolve(__dirname, './build/scss')}
+          ])
+        );
 
         return {
             devtool: isProd ? 'source-map' : 'cheap-module-source-map',
@@ -78,6 +86,43 @@ module.exports = function (env) {
                         use: [
                             'babel-loader'
                         ],
+                    },
+                    {
+                        test: /\.scss$/,
+                        use: [{
+                            loader: 'style-loader'
+                        }, {
+                            loader: 'css-loader'
+                        }, {
+                            loader: 'sass-loader'
+                            // options: {
+                            //     includePaths: ['node_modules/compass-mixins/lib']
+                            // }
+                        }]
+                    },
+                    {
+                        test: /\.css$/,
+                        use: [
+                          {loader:'style-loader'},
+                          {loader:'css-loader'},
+                          {
+                            loader:'postcss-loader',
+                            options: {
+                              plugins: (loader) => [
+                                require('autoprefixer')({
+                                  browsers: ['last 2 versions', 'Firefox ESR', '> 1%', 'ie >= 8', 'iOS >= 8', 'Android >= 4'],
+                                })
+                              ]
+                            }
+                          }
+                        ]
+                    },
+                    {
+                        test: /\.(png|eot|tiff|svg|woff2|woff|ttf|gif|mp3|jpg)$/,
+                        loaders: [
+                            'file-loader?hash=sha512&digest=hex&name=files/[hash].[ext]',
+                            'image-webpack-loader'
+                        ]
                     },
                 ],
             },

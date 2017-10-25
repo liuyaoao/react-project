@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import React, { Component } from 'react'
 import { Transition, Container, TitleBar, Button, Sheet, Panel } from '@extjs/ext-react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
@@ -26,6 +27,7 @@ class Layout extends Component {
     navigate = (path) => {
         this.setState({ showAppMenu: false });
         this.props.history.push(path);
+        console.log("jquery body dom:",$('body'));
     }
 
     render() {
