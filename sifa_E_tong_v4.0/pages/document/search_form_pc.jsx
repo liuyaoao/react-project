@@ -60,6 +60,13 @@ class SearchFormPC extends React.Component {
   }
   beforeUploadCall(file) {
     // console.log('file beforeUploadCall :',file);
+    const {departmentFlatMap, currentFileSubId,curDepartmentId } = this.props;
+    let fileSubTypeName = currentFileSubId ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
+    let departmentName = curDepartmentId ? (departmentFlatMap[curDepartmentId].resourceName||'') : '';
+    if(fileSubTypeName == "局属二级机构" && !departmentName){
+      this.props.openNotification('info', '请先选择部门');
+      return false;
+    }
     let fileNameSplit = file.name.split('.');
     if(fileNameSplit[fileNameSplit.length-1] != "xlsx" && fileNameSplit[fileNameSplit.length-1] != "xls"){
       this.props.openNotification('info', '只能上传excel文档');
@@ -96,7 +103,7 @@ class SearchFormPC extends React.Component {
     let fileTypeName = currentFileId ? (departmentFlatMap[currentFileId].resourceName||'') : '';
     let fileSubTypeName = currentFileSubId ? (departmentFlatMap[currentFileSubId].resourceName||'') : '';
     let departmentName = curDepartmentId ? (departmentFlatMap[curDepartmentId].resourceName||'') : '';
-    let outputUrl = ':;';
+    let outputUrl = ':;';  //导出的url;
     if ( (["市局机关","局属二级机构","公证员"]).indexOf(fileSubTypeName)!=-1 ) {
       formItemInput=(
         <FormItem label="姓名" className="p-r-10"> {getFieldDecorator('userName')( <Input placeholder="" /> )} </FormItem>
@@ -106,7 +113,7 @@ class SearchFormPC extends React.Component {
             href={window.serverUrl+"/modle/personnelFiles.xls"}><Icon type="download" /> 下载干部简历模板
           </a>
         );
-      action_url = MyWebClient.getfileInfoImportUrl();
+      action_url = MyWebClient.getfileInfoImportUrl(fileSubTypeName,departmentName);
       uploadDocName = fileSubTypeName+"人员";
       outputUrl = MyWebClient.getBaseRoute() + "/export/fileinformation/cadre?department="+ departmentName + "&fileInfoSubType=" + fileSubTypeName + "&fileInfoType=" + fileTypeName;
     }else if(fileSubTypeName == '区县司法局'){

@@ -40,26 +40,7 @@ export default class DocumentDetailPage extends React.Component {
   componentDidMount() {
     let randomStr = Math.random().toString().split('.')[1];
     this.setState({randomStr});
-    let _this = this;
-    // window['handleClickBackBtn'+randomStr] = function (e) {
-    //   // console.log("我监听到了浏览器的返回按钮事件啦");
-    //   _this.backToListPageCall();
-    // }
-    // if (window.history && window.history.pushState) {
-    //   setTimeout(()=>{
-    //     // console.log('增加了监听器了！！！！',window['handleClickBackBtn'+randomStr]);
-    //     window.addEventListener("popstate", window['handleClickBackBtn'+randomStr],false);
-    //   },100);
-    // }
   }
-  // componentWillUnmount(){
-  //   if (window.history && window.history.pushState) {
-  //     setTimeout(()=>{
-  //       // console.log('注销监听器了！！！！',window['handleClickBackBtn'+this.state.randomStr]);
-  //       window.removeEventListener("popstate",window['handleClickBackBtn'+this.state.randomStr],false);
-  //     },100);
-  //   }
-  // }
   backToListPageCall = ()=>{ //点击返回按钮返回。
     browserHistory.goBack();
   }

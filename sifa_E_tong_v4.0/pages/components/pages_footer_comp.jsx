@@ -33,7 +33,7 @@ export default class PagesFooterComp extends React.Component {
                           <span style={{marginRight:'1em'}}>版权所有@长沙市司法局</span>
                           <span>ICP备案10200870号</span>
                           {this.state.isMobile?(<br/>):null}
-                          <span>&nbsp;&nbsp;&nbsp;技术支持：湖南必和必拓科技发展公司</span>
+                          {/*<span>&nbsp;&nbsp;&nbsp;技术支持：湖南必和必拓科技发展公司</span>*/}
                         </div>
                       </div>
                     </div>

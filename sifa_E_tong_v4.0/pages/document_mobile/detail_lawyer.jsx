@@ -42,22 +42,26 @@ class DocDetailLawyer extends React.Component {
   render() {
     const formItemLayout = {
       labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
+        xs: { span: 6 },
+        sm: { span: 6 },
       },
       wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 14 },
+        xs: { span: 18 },
+        sm: { span: 18 },
       },
+    };
+    const formItemLayout2 = {
+      labelCol: { xs: { span: 15 },sm: { span: 15 } },
+      wrapperCol: { xs: { span: 9 },sm: { span: 9 } },
     };
     const formItemLayout1 = {
       labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
+        xs: { span: 20 },
+        sm: { span: 20 },
       },
       wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
+        xs: { span: 4 },
+        sm: { span: 4 },
       },
     };
     const formTailLayout = {
@@ -85,106 +89,107 @@ class DocDetailLawyer extends React.Component {
                 <Row className="info-body">
                   <FormItem label="id" style={{display: "none"}}>
                     {getFieldDecorator('id', {initialValue: memberInfo.id || ''})(
-                      <Input type="text" placeholder="" />
+                      <Input type="text" placeholder="" disabled/>
                     )}
                   </FormItem>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="姓名">
                       {getFieldDecorator('userName', {
-                        initialValue: memberInfo.userName || '',
+                        initialValue: memberInfo.userName || '-',
                         rules: [{
                           required: true, message: '请输入姓名',
                         }],
                       })(
-                        <Input type="text" placeholder="" />
+                        <Input type="text" disabled/>
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="律所名称">
-                      {getFieldDecorator('lawOfficeName', {initialValue: memberInfo.lawOfficeName || ''})(
-                        <Input type="text" placeholder="" />
+                      {getFieldDecorator('lawOfficeName', {initialValue: memberInfo.lawOfficeName || '-'})(
+                        <Input type="text" disabled />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="性别">
-                      {getFieldDecorator('gender', {initialValue: memberInfo.gender || ''})(
-                        <Input type="text" placeholder="" />
+                      {getFieldDecorator('gender', {initialValue: memberInfo.gender || '-'})(
+                        <Input type="text" disabled />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="执业证号">
-                      {getFieldDecorator('lawyerLicenseNo', {initialValue: memberInfo.lawyerLicenseNo||''})(
-                        <Input type="text" placeholder="" />
+                      {getFieldDecorator('lawyerLicenseNo', {initialValue: memberInfo.lawyerLicenseNo||'-'})(
+                        <Input type="text" disabled />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="执业状态">
-                      {getFieldDecorator('lawyerStatus', {initialValue: memberInfo.lawyerStatus||''})(
-                        <Input type="text" placeholder="" />
+                      {getFieldDecorator('lawyerStatus', {initialValue: memberInfo.lawyerStatus||'-'})(
+                        <Input type="text" disabled />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayout} label="执业证类别">
-                      {getFieldDecorator('lawyerPracticeType', {initialValue: memberInfo.lawyerPracticeType||''})(
-                        <Input type="text" placeholder="" />
+                    <FormItem {...formItemLayout2} label="执业证类别">
+                      {getFieldDecorator('lawyerPracticeType', {initialValue: memberInfo.lawyerPracticeType||'-'})(
+                        <Input type="text" disabled />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="资格证号">
-                      {getFieldDecorator('lawyerQualificationCode', {initialValue: memberInfo.lawyerQualificationCode||''})(
-                        <Input type="text" placeholder="" />
+                      {getFieldDecorator('lawyerQualificationCode', {initialValue: memberInfo.lawyerQualificationCode||'-'})(
+                        <Input type="text" disabled />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24} id="addFirstPracticeTime">
-                    <FormItem {...formItemLayout} label="首次执业时间">
+                    <FormItem {...formItemLayout2} label="首次执业时间">
                       {getFieldDecorator('lawyerFirstPracticeTime',
                         {
-                          initialValue: (memberInfo.lawyerFirstPracticeTime && memberInfo.lawyerFirstPracticeTime!='null') ? moment(memberInfo.lawyerFirstPracticeTime, 'YYYY/MM') : null
+                          initialValue: (memberInfo.lawyerFirstPracticeTime && memberInfo.lawyerFirstPracticeTime!='null') ? memberInfo.lawyerFirstPracticeTime : '-'
                         })(
-                        <MonthPicker getCalendarContainer={() => document.getElementById('addFirstPracticeTime')} />
+                          <Input type="text" disabled/>
+                        // <MonthPicker getCalendarContainer={() => document.getElementById('addFirstPracticeTime')} />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayout} label="执业时间（单位：年）">
-                      {getFieldDecorator('lawyerPracticeTime', {initialValue: memberInfo.lawyerPracticeTime || ''})(
-                        <Input />
+                    <FormItem {...formItemLayout1} label="执业时间（单位：年）">
+                      {getFieldDecorator('lawyerPracticeTime', {initialValue: memberInfo.lawyerPracticeTime || '-'})(
+                        <Input disabled/>
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayout} label="是否受过行政处罚或行业处分">
-                      {getFieldDecorator('lawyerIsPunish', {initialValue: memberInfo.lawyerIsPunish || ''})(
-                        <Input />
+                    <FormItem {...formItemLayout1} label="是否受过行政处罚或行业处分">
+                      {getFieldDecorator('lawyerIsPunish', {initialValue: memberInfo.lawyerIsPunish || '-'})(
+                        <Input disabled/>
                       )}
                     </FormItem>
                   </Col>
 
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="惩罚日期">
-                      {getFieldDecorator('lawyerIsPunish', {initialValue: memberInfo.lawyerPunishTime || ''})(
-                        <Input />
+                      {getFieldDecorator('lawyerIsPunish', {initialValue: memberInfo.lawyerPunishTime || '-'})(
+                        <Input disabled/>
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="处理单位">
-                      {getFieldDecorator('lawyerPunishUnit', {initialValue: memberInfo.lawyerPunishUnit||''})(
-                        <Input />
+                      {getFieldDecorator('lawyerPunishUnit', {initialValue: memberInfo.lawyerPunishUnit||'-'})(
+                        <Input disabled/>
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="惩罚结果">
-                      {getFieldDecorator('lawyerPunishResult', {initialValue: memberInfo.lawyerPunishResult||''})(
-                        <Input />
+                      {getFieldDecorator('lawyerPunishResult', {initialValue: memberInfo.lawyerPunishResult||'-'})(
+                        <Input disabled/>
                       )}
                     </FormItem>
                   </Col>

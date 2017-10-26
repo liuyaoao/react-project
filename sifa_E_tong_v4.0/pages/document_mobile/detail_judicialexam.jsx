@@ -40,23 +40,17 @@ class DocDetailJudicialExam extends React.Component {
   render() {
     const formItemLayout = {
       labelCol: {
-        xs: { span: 24 },
-        sm: { span: 4 },
+        xs: { span: 6 },
+        sm: { span: 6 },
       },
       wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 14 },
+        xs: { span: 18 },
+        sm: { span: 18 },
       },
     };
-    const formItemLayout1 = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 14 },
-      },
+    const formItemLayout2 = {
+      labelCol: { xs: { span: 15 },sm: { span: 15 } },
+      wrapperCol: { xs: { span: 9 },sm: { span: 9 } },
     };
     const formTailLayout = {
       labelCol: { span: 4 },
@@ -94,7 +88,7 @@ class DocDetailJudicialExam extends React.Component {
                           required: true, message: '请输入姓名',
                         }],
                       })(
-                        <Input type="text" placeholder="" />
+                        <Input type="text" placeholder="" disabled/>
                       )}
                     </FormItem>
                   </Col>
@@ -102,22 +96,22 @@ class DocDetailJudicialExam extends React.Component {
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="性别">
                       {getFieldDecorator('gender', {initialValue: memberInfo.gender || ''})(
-                        <Input type="text" placeholder="" />
+                        <Input type="text" placeholder="" disabled />
                       )}
                     </FormItem>
                   </Col>
 
                   <Col span={24}>
-                    <FormItem {...formItemLayout} label="身份证号码">
+                    <FormItem {...formItemLayout2} label="身份证号码">
                       {getFieldDecorator('lawyerLicenseNo', {initialValue: memberInfo.lawyerLicenseNo||''})(
-                        <Input type="text" placeholder="" />
+                        <Input type="text" placeholder="" disabled/>
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="证书编号">
                       {getFieldDecorator('lawyerQualificationCode', {initialValue: memberInfo.lawyerQualificationCode||''})(
-                        <Input type="text" placeholder="" />
+                        <Input type="text" placeholder="" disabled/>
                       )}
                     </FormItem>
                   </Col>
@@ -125,14 +119,14 @@ class DocDetailJudicialExam extends React.Component {
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="学历">
                       {getFieldDecorator('fullTimeEducation', {initialValue: memberInfo.fullTimeEducation||''})(
-                        <Input type="text" placeholder="" />
+                        <Input type="text" placeholder="" disabled/>
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="专业">
                       {getFieldDecorator('specializedJob', {initialValue: memberInfo.specializedJob||''})(
-                        <Input type="text" placeholder="" />
+                        <Input type="text" placeholder="" disabled/>
                       )}
                     </FormItem>
                   </Col>
@@ -140,7 +134,7 @@ class DocDetailJudicialExam extends React.Component {
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="职业">
                       {getFieldDecorator('currentPosition', {initialValue: memberInfo.currentPosition||''})(
-                        <Input type="text" placeholder="" />
+                        <Input type="text" placeholder="" disabled/>
                       )}
                     </FormItem>
                   </Col>
@@ -148,21 +142,21 @@ class DocDetailJudicialExam extends React.Component {
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="通讯地址">
                       {getFieldDecorator('createParty', {initialValue: memberInfo.createParty||''})(
-                        <Input type="text" placeholder="" />
+                        <Input type="text" placeholder="" disabled/>
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="电话号码">
                       {getFieldDecorator('inServiceEducation', {initialValue: memberInfo.inServiceEducation||''})(
-                        <Input type="text" placeholder="" />
+                        <Input type="text" placeholder="" disabled/>
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="email">
                       {getFieldDecorator('expertise', {initialValue: memberInfo.expertise||''})(
-                        <Input type="text" placeholder="" />
+                        <Input type="text" placeholder="" disabled/>
                       )}
                     </FormItem>
                   </Col>

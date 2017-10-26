@@ -207,7 +207,7 @@
 
 .document_detail_container{
   .document_detail_body{
-    margin-top:60px;
+    // margin-top:60px;
   }
   .ant-col-xs-24.ant-form-item-label{
     padding:0;
@@ -217,6 +217,7 @@
   }
 
 }
+
 
 .p-r-10 {
   padding-right: 10px;
@@ -306,8 +307,14 @@
 .btn.btn-white {
   background: #fff;
 }
-.doc-edit-form-pc .ant-modal-content label{
-  font-size:15px;
+.doc-edit-form-pc {
+
+  .ant-modal-content label{
+    font-size:15px;
+  }
+  .ant-form .ant-row.ant-form-item{
+    margin-bottom: 0.2rem;
+  }
 }
 .doc-edit-form-mobile{
   margin:0 auto;
@@ -340,6 +347,13 @@
       padding: 0 5px 5px 0;
     }
   }
+  .list-closed {
+    .info-body {
+      display: none;
+      transition: display 0.3s;
+    }
+  }
+
 }
 .address_book_drawer{
   .am-drawer-sidebar{

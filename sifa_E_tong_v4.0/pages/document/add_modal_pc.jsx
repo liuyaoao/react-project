@@ -162,11 +162,11 @@ class DocumentAddModalPC extends React.Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 8 },
+        sm: { span: 6 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 14 },
+        sm: { span: 18 },
       },
     };
     const formItemLayout1 = {
@@ -176,8 +176,8 @@ class DocumentAddModalPC extends React.Component {
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 14 },
-      },
+        sm: { span: 16 },
+      }
     };
     // let familyMembersTable = this.getFamilyMembers();
     const { memberInfo } = this.props;
@@ -220,6 +220,13 @@ class DocumentAddModalPC extends React.Component {
                 </p>
                 <Row className="info-body">
                   <Col span={24}>
+                    <FormItem {...formItemLayout} label="序号">
+                      {getFieldDecorator('code', {initialValue: ''})(
+                        <Input type="text" placeholder="" />
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={24}>
                     <FormItem {...formItemLayout} label="姓名">
                       {getFieldDecorator('userName', {
                         initialValue: '',
@@ -227,6 +234,13 @@ class DocumentAddModalPC extends React.Component {
                           required: true, message: '请输入姓名',
                         }],
                       })(
+                        <Input type="text" placeholder="" />
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={24}>
+                    <FormItem {...formItemLayout} label="现任职务">
+                      {getFieldDecorator('currentPosition', {initialValue: ''})(
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
@@ -241,29 +255,24 @@ class DocumentAddModalPC extends React.Component {
                       )}
                     </FormItem>
                   </Col>
-                  {/*<Col span={24}>
-                    <FormItem {...formItemLayout} label="身份证号码">
-                      <Input type="text" placeholder="" defaultValue={memberInfo.IDCard} />
-                    </FormItem>
-                  </Col>*/}
-                  <Col span={24} id="addBirthDay">
-                    <FormItem {...formItemLayout} label="出生年月">
-                      {getFieldDecorator('birthDay', {initialValue: memberInfo.birthDay ? moment(memberInfo.birthDay, 'YYYY/MM') : null})(
-                        <MonthPicker getCalendarContainer={() => document.getElementById('addBirthDay')} />
-                      )}
-                    </FormItem>
-                  </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayout1} label="民族">
+                    <FormItem {...formItemLayout} label="民族">
                       {getFieldDecorator('famousFamily', {initialValue: ''})(
                         <Input type="text" placeholder="" />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem {...formItemLayout1} label="籍贯">
+                    <FormItem {...formItemLayout} label="籍贯">
                       {getFieldDecorator('nativePlace', {initialValue: ''})(
                         <Input type="text" placeholder="" />
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={24} id="addBirthDay">
+                    <FormItem {...formItemLayout} label="出生年月">
+                      {getFieldDecorator('birthDay', {initialValue: null})(
+                        <MonthPicker getCalendarContainer={() => document.getElementById('addBirthDay')} />
                       )}
                     </FormItem>
                   </Col>
@@ -283,129 +292,101 @@ class DocumentAddModalPC extends React.Component {
                       )}
                     </FormItem>
                   </Col>*/}
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="出生地">
-                      {getFieldDecorator('createParty', {initialValue: ''})(
-                        <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="健康状况">
-                      {getFieldDecorator('healthStatus', {initialValue: ''})(
-                        <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={24} id="addJoinPartyTime">
-                    <FormItem {...formItemLayout1} label="入党时间">
-                      {getFieldDecorator('joinPartyTime', {initialValue: memberInfo.joinPartyTime ? moment(memberInfo.joinPartyTime, 'YYYY/MM') : null})(
-                        <MonthPicker getCalendarContainer={() => document.getElementById('addJoinPartyTime')} />
-                      )}
-                    </FormItem>
-                  </Col>
                   <Col span={24} id="addJoinWorkerTime">
-                    <FormItem {...formItemLayout1} label="参加工作时间">
-                      {getFieldDecorator('joinWorkerTime', {initialValue: memberInfo.joinWorkerTime ? moment(memberInfo.joinWorkerTime, 'YYYY/MM') : null})(
+                    <FormItem {...formItemLayout} label="参加工作时间">
+                      {getFieldDecorator('joinWorkerTime', {initialValue: null})(
                         <MonthPicker getCalendarContainer={() => document.getElementById('addJoinWorkerTime')} />
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="专业技术职务">
-                      {getFieldDecorator('specializedJob', {initialValue: ''})(
-                        <Input type="text" placeholder="" />
+                  <Col span={24} id="addJoinPartyTime">
+                    <FormItem {...formItemLayout} label="入党时间">
+                      {getFieldDecorator('joinPartyTime', {initialValue: null})(
+                        <MonthPicker getCalendarContainer={() => document.getElementById('addJoinPartyTime')} />
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="熟悉专业有何专长">
-                      {getFieldDecorator('expertise', {initialValue: ''})(
-                        <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="现任职务">
-                      {getFieldDecorator('currentPosition', {initialValue: ''})(
-                        <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>
-                  {/*<Col span={24}>
-                    <FormItem {...formItemLayout} label="拟任职务">
-                      {getFieldDecorator('proposedOffice', {initialValue: ''})(
-                        <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={24}>
-                    <FormItem {...formItemLayout} label="拟免职务">
-                      {getFieldDecorator('jobTitle', {initialValue: ''})(
-                        <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>*/}
-                </Row>
-              </Col>
-              <Col span={24} className="tag-list">
-                <p className="info-title">
-                  <label>学历学位</label>
-                  <a href="javascript:;" className="pull-right p-r-10" onClick={this.handleToggleTag}><Icon type="up" /></a>
-                </p>
-                <Row className="info-body">
-                  <Col span={12}>
-                    <FormItem {...formItemLayout1} label="全日制教育">
-                      {getFieldDecorator('fullTimeEducation', {initialValue: ''})(
-                        <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={12}>
-                    <FormItem {...formItemLayout1} label="毕业院校系及专业">
-                      {getFieldDecorator('graduatesAddress', {initialValue: ''})(
-                        <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={12}>
-                    <FormItem {...formItemLayout1} label="在职教育">
+
+                  <Col span={24} className="tag-list">
+                    <p className="info-title">
+                      <label>学历学位</label>
+                      <a href="javascript:;" className="pull-right p-r-10" onClick={this.handleToggleTag}><Icon type="up" /></a>
+                    </p>
+                    <Row className="info-body">
+                      <Col span={24}>
+                        <FormItem {...formItemLayout} label="全日制学历学位">
+                          {getFieldDecorator('fullTimeEducation', {initialValue: ''})(
+                            <Input type="text" placeholder="" />
+                          )}
+                        </FormItem>
+                      </Col>
+                      <Col span={24}>
+                      <FormItem {...formItemLayout} label="在职学历学位">
                       {getFieldDecorator('inServiceEducation', {initialValue: ''})(
                         <Input type="text" placeholder="" />
                       )}
-                    </FormItem>
+                      </FormItem>
+                      </Col>
+                      <Col span={24}>
+                        <FormItem {...formItemLayout} label="所学专业">
+                          {getFieldDecorator('graduatesAddress', {initialValue: ''})(
+                            <Input type="text" placeholder="" />
+                          )}
+                        </FormItem>
+                      </Col>
+                    </Row>
                   </Col>
-                  <Col span={12}>
-                    <FormItem {...formItemLayout1} label="毕业院校系及专业">
-                      {getFieldDecorator('inServiceAddress', {initialValue: ''})(
-                        <Input type="text" placeholder="" />
-                      )}
-                    </FormItem>
+
+                  <Col span={24} className="tag-list">
+                    <p className="info-title"> </p>
+                    <div className="info-body">
+                      <Col span={12}  id="reportingTime">
+                        <FormItem {...formItemLayout1} label="任现职务时间:">
+                          {getFieldDecorator('reportingTime', {initialValue: null})(
+                            <MonthPicker getCalendarContainer={() => document.getElementById('reportingTime')} />
+                          )}
+                        </FormItem>
+                      </Col>
+                      <Col span={12}  id="approvalTime">
+                        <FormItem {...formItemLayout1} label="任现职级时间:">
+                          {getFieldDecorator('approvalTime', {initialValue: null})(
+                            <MonthPicker getCalendarContainer={() => document.getElementById('approvalTime')} />
+                          )}
+                        </FormItem>
+                      </Col>
+                      <Col span={24} >
+                        <FormItem label="说明">
+                          {getFieldDecorator('approvalOpinion', {initialValue: ''})(
+                            <Input type="textarea" placeholder="" autosize={{ minRows: 2, maxRows: 10 }} />
+                          )}
+                        </FormItem>
+                      </Col>
+                      <Col span={24}>
+                        <FormItem label="出生地">
+                          {getFieldDecorator('createParty', {initialValue: ''})(
+                            <Input type="text" placeholder="" />
+                          )}
+                        </FormItem>
+                      </Col>
+                      <Col span={24}>
+                        <FormItem  label="健康状况">
+                          {getFieldDecorator('healthStatus', {initialValue: ''})(
+                            <Input type="text" placeholder="" />
+                          )}
+                        </FormItem>
+                      </Col>
+                      <Col span={24}>
+                        <FormItem label="简历">
+                          {getFieldDecorator('resume', {initialValue: ''})(
+                            <Input type="textarea" placeholder="简历" autosize={{ minRows: 2, maxRows: 10 }} />
+                          )}
+                        </FormItem>
+                      </Col>
+                    </div>
                   </Col>
                 </Row>
               </Col>
-              <Col span={24} className="tag-list">
-                <p className="info-title">
-                  <label>简历</label>
-                  <a href="javascript:;" className="pull-right p-r-10" onClick={this.handleToggleTag}><Icon type="up" /></a>
-                </p>
-                <div className="info-body">
-                  <FormItem label="">
-                    {getFieldDecorator('resume', {initialValue: ''})(
-                      <Input type="textarea" placeholder="简历" rows={4} />
-                    )}
-                  </FormItem>
-                </div>
-              </Col>
-              {/*<Col span={24} className="tag-list">
-                <p className="info-title">
-                  <label>家庭主要成员及重要社会关系</label>
-                  <a href="javascript:;" className="pull-right p-r-10" onClick={this.handleToggleTag}><Icon type="up" /></a>
-                </p>
-                <div className="info-body">
-                  {familyMembersTable}
-                </div>
-              </Col>*/}
+
               <Col span={24} className="tag-list">
                 <p className="info-title">
                   <label>其他信息</label>
@@ -414,50 +395,27 @@ class DocumentAddModalPC extends React.Component {
                 <div className="info-body">
                   <FormItem label="奖惩情况">
                     {getFieldDecorator('certificateOfMerit', {initialValue: ''})(
-                      <Input type="textarea" placeholder="" rows={4} />
+                      <Input type="textarea" placeholder="" autosize={{ minRows: 2, maxRows: 10 }} />
                     )}
                   </FormItem>
                   <FormItem label="近三年年度考核结果">
                     {getFieldDecorator('annualAssessment', {initialValue: ''})(
-                      <Input type="textarea" placeholder="" rows={4} />
+                      <Input type="textarea" placeholder="" autosize={{ minRows: 2, maxRows: 10 }} />
                     )}
                   </FormItem>
-                  <FormItem label="任职日期">
-                    {getFieldDecorator('reasonsForDismissal', {initialValue: ''})(
-                      <Input type="textarea" placeholder="" rows={4} />
+                  <FormItem label="家庭主要成员情况">
+                    {getFieldDecorator('family', {initialValue: ''})(
+                      <Input type="textarea" placeholder="" autosize={{ minRows: 2, maxRows: 10 }} />
                     )}
                   </FormItem>
-                  {/*
-                  <div className="form-item" id="addReportingUnit">
-                    <div className="item-label"><label>呈报单位:</label></div>
-                    {getFieldDecorator('reportingTime', {initialValue: null})(
-                      <MonthPicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('addReportingUnit')} />
-                    )}
-                    {getFieldDecorator('reportingUnit', {initialValue: ''})(
-                      <Input type="textarea" placeholder="" rows={4} />
-                    )}
-                  </div>
-                  <div className="form-item" id="addApprovalOpinion">
-                    <div className="item-label"><label>审批机关意见:</label></div>
-                    {getFieldDecorator('approvalTime', {initialValue: null})(
-                      <MonthPicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('addApprovalOpinion')} />
-                    )}
-                    {getFieldDecorator('approvalOpinion', {initialValue: ''})(
-                      <Input type="textarea" placeholder="" rows={4} />
-                    )}
-                  </div>
-                  <div className="form-item" id="addApprovalRemovalOpinion">
-                    <div className="item-label"><label>行政机关任免意见:</label></div>
-                    {getFieldDecorator('appointAndRemoveTime', {initialValue: null})(
-                      <MonthPicker style={{float: "right"}} getCalendarContainer={() => document.getElementById('addApprovalRemovalOpinion')} />
-                    )}
+                  <FormItem label="主要社会关系">
                     {getFieldDecorator('appointAndRemoveOpinion', {initialValue: ''})(
-                      <Input type="textarea" placeholder="" rows={4} />
+                      <Input type="textarea" placeholder="" autosize={{ minRows: 2, maxRows: 10 }} />
                     )}
-                  </div>
-                  */}
+                  </FormItem>
                 </div>
               </Col>
+
             </Row>
           </Form>
         </div>

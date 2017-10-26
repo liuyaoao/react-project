@@ -43,11 +43,11 @@ class DocDetailLegalWorker extends React.Component {
   render() {
     const formItemLayout = {
       labelCol: {
-        xs: { span: 24 },
+        xs: { span: 6 },
         sm: { span: 6 },
       },
       wrapperCol: {
-        xs: { span: 24 },
+        xs: { span: 18 },
         sm: { span: 18 },
       },
     };
@@ -72,47 +72,47 @@ class DocDetailLegalWorker extends React.Component {
                 <Row className="info-body">
                   <FormItem label="id" style={{display: "none"}}>
                     {getFieldDecorator('id', {initialValue: memberInfo.id || ''})(
-                      <Input type="text" placeholder="" />
+                      <Input type="text" disabled />
                     )}
                   </FormItem>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="姓名">
                       {getFieldDecorator('userName', {
-                        initialValue: memberInfo.userName || '',
+                        initialValue: memberInfo.userName || '-',
                         rules: [{
                           required: true, message: '请输入姓名',
                         }],
                       })(
-                        <Input type="text" placeholder="" />
+                        <Input type="text" disabled />
                       )}
                     </FormItem>
                   </Col>
 
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="执业机构">
-                      {getFieldDecorator('lawOfficeAddress', {initialValue: memberInfo.lawOfficeAddress||''})(
-                        <Input type="text" placeholder="" />
+                      {getFieldDecorator('lawOfficeAddress', {initialValue: memberInfo.lawOfficeAddress||'-'})(
+                        <Input type="text" disabled />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="执业证号">
-                      {getFieldDecorator('lawyerLicenseNo', {initialValue: memberInfo.lawyerLicenseNo||''})(
-                        <Input type="text" placeholder="" />
+                      {getFieldDecorator('lawyerLicenseNo', {initialValue: memberInfo.lawyerLicenseNo||'-'})(
+                        <Input type="text" disabled />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="执业状态">
-                      {getFieldDecorator('lawyerStatus', {initialValue: memberInfo.lawyerStatus||''})(
-                        <Input type="text" placeholder="" />
+                      {getFieldDecorator('lawyerStatus', {initialValue: memberInfo.lawyerStatus||'-'})(
+                        <Input type="text" disabled />
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
                     <FormItem {...formItemLayout} label="联系方式">
-                      {getFieldDecorator('inServiceEducation', {initialValue: memberInfo.inServiceEducation||''})(
-                        <Input type="text" placeholder="" />
+                      {getFieldDecorator('inServiceEducation', {initialValue: memberInfo.inServiceEducation||'-'})(
+                        <Input type="text" disabled />
                       )}
                     </FormItem>
                   </Col>

@@ -255,7 +255,7 @@ class UserSettingMobilePage extends React.Component {
           ]} >
             <img width="35" height="35" src={signup_logo}/>司法E通
           </NavBar>
-          <div style={{marginTop:'60px',width:'96%',margin:'0 auto'}}>
+          <div style={{width:'96%',margin:'0 auto'}}>
             <WhiteSpace size='md' />
             <div className="userSetting_body doc-edit-form-mobile">
               <Form className="edit-form" style={{margin:0}}>
@@ -264,8 +264,6 @@ class UserSettingMobilePage extends React.Component {
                     <FormItem
                       {...formItemLayout}
                       label="用户名"
-                      colon
-                      hasFeedback
                     >
                       {getFieldDecorator('username', {
                         initialValue:menberInfo.username,
@@ -276,7 +274,7 @@ class UserSettingMobilePage extends React.Component {
                           validator: this.checkUserNameExist,
                         }],
                       })(
-                        <Input />
+                        <Input disabled/>
                       )}
                     </FormItem>
                   </Col>
@@ -288,7 +286,7 @@ class UserSettingMobilePage extends React.Component {
                           required: true, message: '姓名为必填项！', whitespace: true
                         }],
                       })(
-                        <Input/>
+                        <Input disabled/>
                       )}
                     </FormItem>
                   </Col>

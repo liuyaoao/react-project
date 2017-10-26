@@ -90,30 +90,34 @@ class MyWebClient {
     getfileInformationUrl(){
       return `${this.url}/fileInformation`;
     }
-
-    getfileInfoImportUrl(){
+    getfileInfoImportPrefix(){
       return `${this.url}${this.urlVersion}/import/fileInformation`;
+    }
+    getfileInfoImportUrl(fileSubTypeName,departmentName){
+      if(fileSubTypeName == "局属二级机构"){
+        return `${this.url}${this.urlVersion}/import/fileInformation?fileInfoSubType=${fileSubTypeName}&department=${departmentName}`;
+      }
+      return `${this.url}${this.urlVersion}/import/fileInformation?fileInfoSubType=${fileSubTypeName}`;
     }
     getDefaultHeadersWithToken(){
       return Object.assign({},this.defaultHeaders,{ token:this.getLocalStorageToken() });
     }
 
     getlawfirmfileInfoImportUrl(){ //律所 导入地址。
-      return `${this.getfileInfoImportUrl()}/lawfirm`;
+      return `${this.getfileInfoImportPrefix()}/lawfirm`;
     }
 
     getjudicialexamInfoImportUrl(){ //司法考试处 导入地址。
-      return `${this.getfileInfoImportUrl()}/judicialExamination`;
+      return `${this.getfileInfoImportPrefix()}/judicialExamination`;
     }
     getLegalWorkerImportUrl(){ //法律工作者 导入地址。
-      return `${this.getfileInfoImportUrl()}/grassrootsLegalWerviceWorkers`;
+      return `${this.getfileInfoImportPrefix()}/grassrootsLegalWerviceWorkers`;
     }
     getSifa_DirectorImportUrl(){ //司法所长 导入地址。
-      return `${this.getfileInfoImportUrl()}/superintendent`;
+      return `${this.getfileInfoImportPrefix()}/superintendent`;
     }
-
     getLawyerfileInfoImportUrl(){
-      return `${this.getfileInfoImportUrl()}/lawyer`;
+      return `${this.getfileInfoImportPrefix()}/lawyer`;
     }
 
     getfileInfoDepartmentImportUrl(org){
@@ -745,6 +749,13 @@ class MyWebClient {
           accept('application/json').
           use(nocache).
           end(this.handleResponse.bind(this, 'getUserInfo', success, error));
+    }
+    getProfilePictureUrl(id, lastPictureUpdate) {
+        let url = `${this.getUsersRoute()}/${id}/image`;
+        if (lastPictureUpdate) {
+            url += `?time=${lastPictureUpdate}`;
+        }
+        return url;
     }
 
 }

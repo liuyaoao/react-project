@@ -204,12 +204,7 @@ class EditUserInfoDialog extends React.Component {
           <Form  className="edit-form" style={{margin:0}}>
             <Row>
               <Col span={24}>
-                <FormItem
-                  {...formItemLayout}
-                  label="用户名"
-                  colon
-                  hasFeedback
-                >
+                <FormItem {...formItemLayout} label="用户名">
                   {getFieldDecorator('username', {
                     initialValue:menberInfo.username,
                     validateTrigger:'onBlur',
@@ -219,7 +214,7 @@ class EditUserInfoDialog extends React.Component {
                       validator: this.checkUserNameExist,
                     }],
                   })(
-                    <Input />
+                    <Input disabled/>
                   )}
                 </FormItem>
               </Col>
@@ -231,7 +226,7 @@ class EditUserInfoDialog extends React.Component {
                       required: true, message: '姓名为必填项！', whitespace: true
                     }],
                   })(
-                    <Input/>
+                    <Input disabled/>
                   )}
                 </FormItem>
               </Col>

@@ -224,7 +224,7 @@ class ModulesPcComp extends React.Component {
       });
     }
 
-    hideAddEditDialog() {   // 隐藏编辑的弹窗。
+    hideAddEditDialog=()=> {   // 隐藏编辑的弹窗。
       this.setState({ visibleEditModel: false });
     }
 

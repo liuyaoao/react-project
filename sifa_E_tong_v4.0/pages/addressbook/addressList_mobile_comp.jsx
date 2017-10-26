@@ -9,8 +9,8 @@ import {removeValueFromArr} from 'pages/utils/common_utils.jsx';
 import { Modal,SwipeAction,List,Button,Popup } from 'antd-mobile';
 import { Row, Col, Icon,notification, Input, Tooltip,message } from 'antd';
 const alert = Modal.alert;
-import avatorIcon_man from 'images/avator_icon/avator_man.png';
-import avatorIcon_woman from 'images/avator_icon/avator_woman.png';
+import avatorIcon_man from 'images/avator_icon/contact_avator.png';
+// import avatorIcon_woman from 'images/avator_icon/avator_woman.png';
 notification.config({
   top: 68,
   duration: 3
@@ -19,12 +19,11 @@ notification.config({
 class AddressListMobileComp extends React.Component {
   constructor(props) {
       super(props);
-      this.showDeleteConfirmDialog = this.showDeleteConfirmDialog.bind(this);
-      this.confirmDeleteContacts = this.confirmDeleteContacts.bind(this);
       let permissionData = UserStore.getPermissionData();
       let hasOperaPermission = permissionData['address_book'] ? permissionData['address_book'].indexOf('action') != -1 : false;
       this.state = {
         permissionData:permissionData,
+        userId:UserStore.getCurrentUser().id,
         hasOperaPermission:hasOperaPermission, //是否有操作权限。
       };
   }
@@ -33,64 +32,10 @@ class AddressListMobileComp extends React.Component {
   }
   componentDidMount(){
     window.addEventListener("popstate", this.hidePopup);
+    // console.log(this.state.userId);
   }
   componentWillReceiveProps(nextProps){
   }
-  onClickDeleteContact = (text,record)=>{
-  }
-  onClickEditItem = (evt,record,index)=>{
-    // console.log("点击编辑通讯录的事件--evt-：",evt,$(evt.target));
-    // if($(evt.target).closest(".addressbook_right").length>0){
-    //   evt.stopPropagation();
-    //   return false;
-    // }
-    // this.showAddEditDialog('',record,index);
-  }
-  // showAddEditDialog(text,record,index){
-  //   // console.log("text:"+text+"index:"+index);
-  //   let data = record || {};
-  //   this.props.showAddEditDialog(data);
-  // }
-  showDeleteConfirmDialog = (record)=>{
-    let selectedIds = record.id ? [record.id] : [];
-    alert('删除', '确定删除么?', [
-      { text: '取消', onPress: () => console.log('cancel') },
-      { text: '确定', onPress: () => this.confirmDeleteContacts(selectedIds) },
-    ]);
-  }
-  confirmDeleteContacts(contactsIds){ //删除用户
-    if(!contactsIds || contactsIds.length<=0){ return; }
-    contactsIds = contactsIds.join(',');
-    console.log('ok',contactsIds);
-    myWebClient.deleteContacts(contactsIds,
-      (data,res)=>{
-        notification.success({message: '联系人删除成功！'});
-        console.log("联系人删除成功：",data);
-        this.props.afterDeleteContactsCall();
-      },(e,err,res)=>{
-        notification.error({message: '联系人删除失败！'});
-        console.log("delete 联系人 fialed!", err);
-      }
-    );
-  }
-
-  // onClickDeleteAll = ()=>{
-  //   alert('删除', '确定全部删除吗?', [
-  //     { text: '取消', onPress: () => console.log('cancel') },
-  //     { text: '确定', onPress: () => this.confirmDeleteAllContacts() },
-  //   ]);
-  // }
-  // confirmDeleteAllContacts(){ //删除所有用户
-  //   myWebClient.deleteAllContacts(
-  //     (data,res)=>{
-  //       notification.success({message: '全部联系人删除成功！'});
-  //       console.log("联系人删除成功：",data);
-  //       this.props.afterDeleteContactsCall();
-  //     },(e,err,res)=>{
-  //       notification.error({message: '全部联系人删除失败！'});
-  //     }
-  //   );
-  // }
   onClickPrePage = ()=>{ //上一页
     let currentPage = this.props.curPageNum;
     if(currentPage > 1){
@@ -120,7 +65,8 @@ class AddressListMobileComp extends React.Component {
       },otherParams);
     }
   }
-  getTelephoneDialEles= (groupShortCode, telephoneNumber, landline)=>{ //构造可直接拨号的视图。
+  onClickEditItem = (evt,record,index)=>{
+    let {groupShortCode, telephoneNumber, landline} = record;
     let teleStr = '';
     if(!groupShortCode && !telephoneNumber &&!landline){
       return;
@@ -149,16 +95,7 @@ class AddressListMobileComp extends React.Component {
       }
     }
     let teleArr = removeValueFromArr( (teleStr||'').split(",") );
-    if(teleArr.length==1){
-      return (<a href={"tel:"+telephoneNumber}>
-                <Icon type="phone" style={{fontSize:'0.6rem',fontWeight:'bold',color:'#189A09'}}/>
-              </a>);
-    }else if(teleArr.length>1){
-      return (<a href="javascript:void(0);" onClick={()=>{this.showPopupDialTele(teleArr)}}>
-                <Icon type="phone" style={{fontSize:'0.6rem',fontWeight:'bold',color:'#189A09'}}/>
-              </a>);
-    }
-    return null;
+    this.showPopupDialTele(teleArr);
   }
   showPopupDialTele = (teleArr)=>{
     Popup.show(<div>
@@ -173,6 +110,16 @@ class AddressListMobileComp extends React.Component {
   }
   hidePopup = ()=>{
     Popup.hide();
+  }
+  getCanDialTelephone = (teleStr)=>{
+    let teleArr = removeValueFromArr( $.trim(teleStr||'').split(",") );
+    let arrLen = teleArr.length;
+    return teleArr.map((telenum, index) => (
+      <span key={index}>
+        <a href={"tel:"+telenum}>{telenum}</a>
+        {(index<arrLen-1)?",":""}
+      </span>
+    ));
   }
 
   render() {
@@ -191,44 +138,24 @@ class AddressListMobileComp extends React.Component {
         <div className='addressbook_list mobile_addressbook_list' style={{width:'100%'}}>
           <List style={{ margin: '0.1rem 0', backgroundColor: 'white' }}>
             {addressListData.map((record, index) => (
-              <SwipeAction key={index} style={{ backgroundColor: '#f3f3f3' }}
-                autoClose
-                disabled={this.state.hasOperaPermission ? false : true}
-                right={[
-                  {
-                    text: '取消',
-                    onPress: () => console.log('cancel'),
-                    style: { backgroundColor: '#ddd', color: 'white' },
-                  },
-                  {
-                    text: '删除',
-                    onPress: ()=>{this.showDeleteConfirmDialog(record)},
-                    style: { backgroundColor: '#F4333C', color: 'white' },
-                  },
-                ]}
-                onOpen={() => console.log('global open')}
-                onClose={() => console.log('global close')}
-                >
-                <List.Item key={index} multipleLine
-                  onClick={ (evt)=>{this.state.hasOperaPermission ? this.onClickEditItem(evt,record,index) : ''} }>
-                  <div className="addressbook_row">
-                    <span className="addressbook_avator">
-                      <img className="member_icon" width="54" height="54" src={this.props.iconArr[index]}/>
-                    </span>
-                    <div className="addressbook_detail">
-                      <div className="member_name">
-                        <span>{record.userName}</span>
-                        </div>
-                        <div className="member_email"><span>集团短码：</span>{record.groupShortCode}</div>
-                        <div className="member_phone"><span>手机号码：</span>{record.telephoneNumber}</div>
-                        <div className="member_phone"><span>座机号码：</span>{record.landline}</div>
+              <List.Item key={index} multipleLine
+                onClick={ (evt)=>{this.state.hasOperaPermission ? this.onClickEditItem(evt,record,index) : ''} }>
+                <div className="addressbook_row">
+                  <span className="addressbook_avator">
+                    <img className="member_icon" width="54" height="54" src={this.props.iconArr[index]}/>
+                  </span>
+                  <div className="addressbook_detail">
+                    <div className="member_name">
+                      <span>{record.userName}</span>
                       </div>
-                      <div className="addressbook_right">
-                        {this.getTelephoneDialEles(record.groupShortCode, record.telephoneNumber, record.landline)}
-                      </div>
+                      <div className="member_email"><span>集团短码：</span>{this.getCanDialTelephone(record.groupShortCode)}</div>
+                      <div className="member_phone"><span>手机号码：</span>{this.getCanDialTelephone(record.telephoneNumber)}</div>
+                      <div className="member_phone"><span>座机号码：</span>{this.getCanDialTelephone(record.landline)}</div>
                     </div>
+                    <div className="addressbook_right">
+                    </div>
+                  </div>
                 </List.Item>
-              </SwipeAction>
               )
             )}
           </List>
