@@ -427,15 +427,18 @@ class Manager extends Component{
     return (
       /* jshint ignore: start */
       <div>
+        {/*桌面上的图标*/}
         <div id="desktop" className="desktopIcon-manager">
           <ul id="icons" className="icons">
             {icons}
-            <div id="icon_position_line" className="icon-position-line"/>
+            <div id="icon_position_line" className="icon-position-line"></div>
           </ul>
         </div>
         <div className='window-manager'>
+          {/*所有已打开窗口*/}
           <div className='windows'>{windows}</div>
         </div>
+        {/*右键菜单*/}
         <div className="content-menu">
           <ul>
               <li><a href="javascript:;">Refresh</a></li>
