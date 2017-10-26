@@ -1,4 +1,3 @@
-// 'use strict';
 
 var Store = {
 
@@ -16,4 +15,4 @@ var Store = {
 	}
 }
 
-module.exports = Store;
+export default Store;

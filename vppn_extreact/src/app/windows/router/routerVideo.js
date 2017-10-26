@@ -1,6 +1,7 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-const Utils = require('../../script/utils');
+import React,{Component} from 'react';
+import ReactDOM from 'react-dom';
+import Utils from '../../script/utils';
+
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as HomeActions from '../../actions/home_action';
@@ -134,22 +135,20 @@ var setWinHeight = function(id, width, height){
 }
 
 var timer = null;
-var RouterVideo = React.createClass({
-  getInitialState: function () {
-    return {
-      menuStatus: 3,
-      videoData: [],
-      videoUrl: ""
-    };
-  },
-  componentDidMount: function(){
+class RouterVideo extends Component{
+  state = {
+    menuStatus: 3,
+    videoData: [],
+    videoUrl: ""
+  }
+
+  componentDidMount(){
     uuid = Utils.generateUuid(32);
     // var windowId = '#window-' + this.props.id;
     var videoWindow = this.props.manager.get('video');
     setWinHeight(this.props.id, videoWindow.width, videoWindow.height);
     // document.addEventListener('mousemove', this.handleMouseMove);
     this.getVideos();
-
     timer = setInterval(function(){
       if(this.props.windowSizeChange.flag && this.props.windowSizeChange.windowId=='video') {
         var videoWindow = this.props.manager.get('video');
@@ -161,7 +160,7 @@ var RouterVideo = React.createClass({
         this.setState({videoUrl: ""});
       }
     }.bind(this), 10);
-  },
+  }
   // shouldComponentUpdate: function(nextProps, nextState) {
   //   var cl = $("#window-" + this.props.id);
   //   if(cl.hasClass('active') && nextProps.windowSizeChange) {
@@ -179,18 +178,18 @@ var RouterVideo = React.createClass({
   //   }
   //   return true;
   // },
-  componentDidUpdate: function() {
+  componentDidUpdate() {
     var cl = $("#window-" + this.props.id);
     if(cl.hasClass('active')) {
       var videoWindow = this.props.manager.get('video');
       setWinHeight(this.props.id, videoWindow.width, videoWindow.height);
     }
-  },
-  componentWillUnmount: function() {
+  }
+  componentWillUnmount() {
     // document.removeEventListener('mousemove', this.handleMouseMove);
     clearInterval(timer);
     timer = null;
-  },
+  }
   // handleMouseMove: function(){
   //   var cl = $("#window-" + this.props.id);
   //   if (cl.hasClass('active')) {
@@ -199,7 +198,7 @@ var RouterVideo = React.createClass({
   //     setWinHeight(this.props.id, videoWindow.width, videoWindow.height);
   //   }
   // },
-  render: function () {
+  render () {
     var videoSidebar_li = this.state.videoData.map(function (data, i) {
       return (
         <li id={"videoSidebar_li_"+i} key={"videoSidebar_li_"+i} className={i==0?"active":""}>
@@ -271,8 +270,8 @@ var RouterVideo = React.createClass({
         </div>
       </div>
     );
-  },
-  _getVideoList: function(videoData){
+  }
+  _getVideoList(videoData){
     switch (this.state.menuStatus) {
       case 1:
         return <VideoTable videoData={videoData} handleDblClickVideo={this.handleDblClickVideo} />
@@ -286,8 +285,8 @@ var RouterVideo = React.createClass({
       default:
         break;
     }
-  },
-  handleShow: function(key, e){
+  }
+  handleShow = (key, e)=>{
     $('#videoWindow .wi').each(function(){
       $(this).removeClass('active');
     })
@@ -296,14 +295,14 @@ var RouterVideo = React.createClass({
     })
     $('#videoSidebar_li_' + key).addClass('active');
     $('#video_right_' + key).addClass('active');
-  },
-  handleToggleMenu: function(key) {
+  }
+  handleToggleMenu = (key)=>{
     this.setState({menuStatus: key});
-  },
-  handleSearch: function(e){
+  }
+  handleSearch = (e)=>{
     e.preventDefault();
-  },
-  getVideos: function(){
+  }
+  getVideos(){
     var postData = {
       act_type: "get_video"
     }
@@ -324,12 +323,12 @@ var RouterVideo = React.createClass({
         }
       }
     });
-  },
-  handleMousedownVideo: function(e) {
+  }
+  handleMousedownVideo(e) {
     $("#videoWindow .wi-right-1 .phone_video").removeClass("video_focus");
 		$("#"+e.currentTarget.id).addClass("video_focus");
-  },
-  resizeVideoDialog: function() {
+  }
+  resizeVideoDialog() {
     var windowId = '#window-' + this.props.id;
     var windowHeight = $(windowId).height();
     var windowWidth = $(windowId).width();
@@ -345,8 +344,8 @@ var RouterVideo = React.createClass({
       $('#videoDialog').css("left", (windowWidth-width)/2 + "px");
       $('#videoDialog').css("top", "0px");
     }, 100);
-  },
-  handleDblClickVideo: function(e) {
+  }
+  handleDblClickVideo = (e)=>{
     var videoId = e.currentTarget.id;
     setTimeout(function(){
       showMetroDialog('#videoDialog');
@@ -367,8 +366,8 @@ var RouterVideo = React.createClass({
       // $('#video_player.vjs-audio.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar').css("visibility", "visible");
     }.bind(this), 100);
     this.resizeVideoDialog();
-  },
-  handleCloseDialog: function() {
+  }
+  handleCloseDialog() {
     var videoPlayer = videojs('video_player_'+uuid);
     videoPlayer.pause();
     videoPlayer.hide();
@@ -376,23 +375,23 @@ var RouterVideo = React.createClass({
     // $('#video_player.vjs-audio.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar').css("visibility", "collapse");
     hideMetroDialog('#videoDialog');
   }
-});
+}
 
 // module.exports = PhoneVideo;
-function mapStateToProps(state){
+const mapStateToProps = (state)=>{
   const { windowSizeChange } = state.homeReducer;
   return {
     windowSizeChange
   }
 }
 
-function mapDispatchToProps(dispatch){
+const mapDispatchToProps = (dispatch)=>{
   return {
     actions: bindActionCreators(HomeActions, dispatch)
   }
 }
 
-module.exports = connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(RouterVideo);

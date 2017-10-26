@@ -17,13 +17,6 @@ var bodyWidth = document.documentElement.clientWidth / 2, bodyHeight = (document
 
 class Icon extends Component{
 
-  propTypes= {
-    manager: React.PropTypes.instanceOf(ManagerModel).isRequired,
-    // window: React.PropTypes.instanceOf(WindowModel).isRequired,
-    icon: React.PropTypes.instanceOf(IconModel).isRequired,
-    offset: React.PropTypes.object.isRequired
-  }
-
   componentWillMount () {
     this.icon = this.props.icon;
   }
@@ -483,12 +476,12 @@ class Icon extends Component{
     return position;
   }
 
-  preventDefault (e) {
+  preventDefault=(e)=>{
     e.preventDefault();
     return false;
   }
 
-  handleMove (e) {
+  handleMove=(e)=>{
     e.preventDefault();
     this.focus();
     var mouse = this.convertPoints(e);
@@ -496,7 +489,7 @@ class Icon extends Component{
     // this.refs.content.getDOMNode().children[0].focus();
   }
 
-  handleMouseMove (e) {
+  handleMouseMove = (e)=>{
     if (this.icon.mode === INACTIVE) { return true; }
     $(ReactDOM.findDOMNode(this))[0].style.zIndex = "1";
     var mouse = this.convertPoints(e);
@@ -504,7 +497,7 @@ class Icon extends Component{
     this.quickUpdate();
   }
 
-  handleMouseUp (e) {
+  handleMouseUp = (e)=>{
     if(this.icon.mode != INACTIVE) {
       $(ReactDOM.findDOMNode(this))[0].style.zIndex = "";
       $("#icon_position_line").hide();
@@ -515,15 +508,15 @@ class Icon extends Component{
     this.icon.endChange();
   }
 
-  handleIconMouseMove (e) {
+  handleIconMouseMove = (e)=>{
     $(ReactDOM.findDOMNode(this)).addClass("icons-move");
   }
 
-  handleIconMouseOut (e) {
+  handleIconMouseOut = (e)=>{
     $(ReactDOM.findDOMNode(this)).removeClass("icons-move");
   }
 
-  handleIconDblClick () {
+  handleIconDblClick = ()=>{
     // alert("double click " + this.icon.title);
     if(this.icon.id == "phone_disconnect") {
       // $(document.body).css("background-image", "url(../images/bj.jpg)");
@@ -598,6 +591,13 @@ class Icon extends Component{
     );
   }
 
+}
+
+Icon.propTypes= {
+  manager: React.PropTypes.instanceOf(ManagerModel).isRequired,
+  // window: React.PropTypes.instanceOf(WindowModel).isRequired,
+  icon: React.PropTypes.instanceOf(IconModel).isRequired,
+  offset: React.PropTypes.object.isRequired
 }
 
 export default Icon;

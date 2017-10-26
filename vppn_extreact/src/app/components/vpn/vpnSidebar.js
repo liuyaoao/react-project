@@ -1,7 +1,8 @@
-var React = require('react');
+import React,{Component} from 'react';
 
-var VpnSidebar = React.createClass({
-  render: function(){
+class VpnSidebar extends Component{
+
+  render(){
     return (
       <ul className="sidebar2 sidebar3">
         <li id="vpnSidebar_li_6" className="active"><a onClick={this.handleShow.bind(this, 6)}> Overview</a></li>
@@ -14,8 +15,8 @@ var VpnSidebar = React.createClass({
         <li id="vpnSidebar_li_5"><a onClick={this.handleShow.bind(this, 5)}> Tunnel 5</a></li>
       </ul>
     )
-  },
-  handleShow: function(key, e){
+  }
+  handleShow = (key, e)=>{
     $('#vpnWindow .wi').each(function(){
       $(this).removeClass('active');
     })
@@ -58,7 +59,7 @@ var VpnSidebar = React.createClass({
       default:
         break;
     }
-  },
-});
+  }
+}
 
-module.exports = VpnSidebar;
+export default VpnSidebar;

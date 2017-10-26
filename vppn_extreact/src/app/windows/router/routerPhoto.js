@@ -1,6 +1,8 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-const Utils = require('../../script/utils');
+
+import React,{Component} from 'react';
+import ReactDOM from 'react-dom';
+import Utils from '../../script/utils';
+
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as HomeActions from '../../actions/home_action';
@@ -154,15 +156,13 @@ var setWinHeight = function(id, width, height){
 }
 
 var timer = null;
-var RouterPhoto = React.createClass({
-  getInitialState: function () {
-    return {
-      menuStatus: 3,
-      photoData:  [],
-      imageGalleryData: []
-    };
-  },
-  componentDidMount: function(){
+class RouterPhoto extends Component{
+  state = {
+    menuStatus: 3,
+    photoData:  [],
+    imageGalleryData: []
+  }
+  componentDidMount(){
     // var windowId = '#window-' + this.props.id;
     var photoWindow = this.props.manager.get('photo');
     setWinHeight(this.props.id, photoWindow.width, photoWindow.height);
@@ -176,7 +176,7 @@ var RouterPhoto = React.createClass({
         hideMetroDialog('#photoDialog');
       }
     }.bind(this), 10);
-  },
+  }
   // shouldComponentUpdate: function(nextProps, nextState) {
   //   var cl = $("#window-" + this.props.id);
   //   if(cl.hasClass('active') && nextProps.windowSizeChange) {
@@ -188,18 +188,18 @@ var RouterPhoto = React.createClass({
   //   }
   //   return true;
   // },
-  componentDidUpdate: function() {
+  componentDidUpdate() {
     var cl = $("#window-" + this.props.id);
     if(cl.hasClass('active')) {
       var photoWindow = this.props.manager.get('photo');
       setWinHeight(this.props.id, photoWindow.width, photoWindow.height);
     }
-  },
-  componentWillUnmount: function() {
+  }
+  componentWillUnmount() {
     // document.removeEventListener('mousemove', this.handleMouseMove);
     clearInterval(timer);
     timer = null;
-  },
+  }
   // handleMouseMove: function(){
   //   var cl = $("#window-" + this.props.id);
   //   if (cl.hasClass('active')) {
@@ -208,7 +208,7 @@ var RouterPhoto = React.createClass({
   //     setWinHeight(this.props.id, photoWindow.width, photoWindow.height);
   //   }
   // },
-  render: function () {
+  render () {
     var photoSidebar_li = this.state.photoData.map(function (data, i) {
       return (
         <li id={"photoSidebar_li_"+i} key={"photoSidebar_li_"+i} className={i==0?"active":""}>
@@ -268,8 +268,8 @@ var RouterPhoto = React.createClass({
         </div>
       </div>
     );
-  },
-  _getPhotoList: function(photoData){
+  }
+  _getPhotoList(photoData){
     switch (this.state.menuStatus) {
       case 1:
         return <PhotoTable photoData={photoData} handleDblClickPhoto={this.handleDblClickPhoto} />
@@ -283,8 +283,8 @@ var RouterPhoto = React.createClass({
       default:
         break;
     }
-  },
-  handleShow: function(key, e){
+  }
+  handleShow = (key, e)=>{
     $('#photoWindow .wi').each(function(){
       $(this).removeClass('active');
     })
@@ -297,14 +297,14 @@ var RouterPhoto = React.createClass({
     this.setState({imageGalleryData: this.state.photoData[key].albumPhotos});
     this.refs.ImageGallery._handleResize();
     this.refs.ImageGallery.slideToIndex(0);
-  },
-  handleToggleMenu: function(key) {
+  }
+  handleToggleMenu = (key)=>{
     this.setState({menuStatus: key});
-  },
-  handleSearch: function(e){
+  }
+  handleSearch = (e)=>{
     e.preventDefault();
-  },
-  getPhotos: function(){
+  }
+  getPhotos(){
     var postData = {
       act_type: "get_picture"
     }
@@ -328,12 +328,12 @@ var RouterPhoto = React.createClass({
         }
       }
     });
-  },
-  handleMousedownPhoto: function(e) {
+  }
+  handleMousedownPhoto = (e)=>{
     $("#photoWindow .wi-right-1 .phone_photo").removeClass("photo_focus");
 		$("#"+e.currentTarget.id).addClass("photo_focus");
-  },
-  resizeImageGallery: function() {
+  }
+  resizeImageGallery = ()=>{
     var windowId = '#window-' + this.props.id;
     var windowHeight = $(windowId).height();
     var windowWidth = $(windowId).width();
@@ -362,19 +362,19 @@ var RouterPhoto = React.createClass({
       }
       this.refs.ImageGallery._handleResize();
     }.bind(this), 50);
-  },
-  handleDblClickPhoto: function(e) {
+  }
+  handleDblClickPhoto = (e)=>{
     this.refs.ImageGallery.slideToIndex(parseInt(e.currentTarget.id.substr(e.currentTarget.id.lastIndexOf("_")+1)));
     setTimeout(function(){
       showMetroDialog('#photoDialog');
     }, 100);
     this.resizeImageGallery();
-  },
-  handleImageLoad: function(event) {
+  }
+  handleImageLoad(event) {
     console.log('Image loaded ', event.target)
     // this.resizeImageGallery();
-  },
-  handleSlide: function() {
+  }
+  handleSlide() {
     var windowId = '#window-' + this.props.id;
     var windowHeight = $(windowId).height();
     var windowWidth = $(windowId).width();
@@ -401,27 +401,28 @@ var RouterPhoto = React.createClass({
       $('#photoDialog').css("top", "0px");
     }
     this.refs.ImageGallery._handleResize();
-  },
-  handleScreenChange: function(event) {
+  }
+  handleScreenChange(event) {
     this.resizeImageGallery();
   }
-});
+
+}
 
 // module.exports = RouterPhoto;
-function mapStateToProps(state){
+const mapStateToProps = (state)=>{
   const { windowSizeChange } = state.homeReducer;
   return {
     windowSizeChange
   }
 }
 
-function mapDispatchToProps(dispatch){
+const mapDispatchToProps = (dispatch)=>{
   return {
     actions: bindActionCreators(HomeActions, dispatch)
   }
 }
 
-module.exports = connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(RouterPhoto);

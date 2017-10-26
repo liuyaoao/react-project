@@ -1,16 +1,19 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-const Utils = require('../script/utils');
+
+import React,{Component} from 'react';
+import ReactDOM from 'react-dom';
+import Utils from '../script/utils';
+
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as HomeActions from '../actions/home_action';
+
 import VpnSidebar from '../components/vpn/vpnSidebar';
 import VpnMultiChannel from '../components/vpn/vpnMultiChannel';
 import VpnOverview from '../components/vpn/vpnOverview';
 import VpnTopology from '../components/vpn/vpnTopology';
 import VpnProxyServer from '../components/vpn/vpnProxyServer';
 
-var CommonDialog = require('../components/common/dialog');
+import CommonDialog from '../components/common/dialog';
 
 var setRightHeight = function(id){
   // console.log(id);
@@ -26,26 +29,55 @@ var setRightHeight = function(id){
   $(windowId + ' .wi-right-1 .frame .wi-content').css("height", hg2 - 51 - 60); // - 60
 }
 
-var VpnConfig = React.createClass({
-  getInitialState: function () {
-    return {
-    };
-  },
-  componentDidMount: function(){
+class VpnConfig extends Component{
+  state = {
+
+  }
+  componentDidMount(){
     setRightHeight(this.props.id);
     document.addEventListener('mousemove', this.handleMouseMove);
     $(".ws-select").select2();
-  },
-  componentWillUnmount: function () {
+  }
+  componentWillUnmount () {
     document.removeEventListener('mousemove', this.handleMouseMove);
-  },
-  handleMouseMove: function(){
+  }
+  handleMouseMove = ()=>{
     var cl = $("#window-" + this.props.id);
     if (cl.hasClass('active')) {
       setRightHeight(this.props.id);
     }
-  },
-  render: function () {
+  }
+  getVPNStatus = (key)=>{
+    this.refs["VpnMultiChannel_"+key].getVPNStatus();
+  }
+  getVPNConfig = (key)=>{
+    this.refs["VpnMultiChannel_"+key].getVPNConfig();
+  }
+  // getVPNServerList: function(key) {
+  //   this.refs["VpnMultiChannel_"+key].getVPNServerList();
+  // },
+  getVPNStatus_overview = (key)=>{
+    this.refs.vpnOverview.getVPNStatus(key);
+  }
+  getVPNConfig_overview = (key)=>{
+    this.refs.vpnOverview.getVPNConfig(key);
+  }
+  // getVPNServerList_overview: function() {
+  //   this.refs.vpnOverview.getVPNServerList();
+  // },
+  getVPNConfig_vpntopolopy = (key)=>{
+    this.refs.vpnTopology.getVPNConfig_vpntopolopy(key);
+  }
+  getVPNStatus_vpntopolopy = (key)=>{
+    this.refs.vpnTopology.getVPNStatus_vpntopolopy(key);
+  }
+  // getVPNServerList_proxyServer: function() {
+  //   this.refs.vpnProxyServer.getVPNServerList();
+  // }
+  getVPNManagerServer = ()=>{
+    this.refs.vpnProxyServer.getVPNManagerServer();
+  }
+  render () {
     const { dialogMsg, cySize, managerServerIP, managerServerPort, proxyServerList, windowSizeChange, vpntopologyData, vpntopologyStatus, windowSize } = this.props;
     return (
       <div className="grid condensed no-margin net-win" id="vpnWindow" style={{margin:"0 1px"}}>
@@ -91,41 +123,12 @@ var VpnConfig = React.createClass({
         <CommonDialog id="vpnDiaglog" dialogMsg={dialogMsg} />
       </div>
     );
-  },
-  getVPNStatus: function(key) {
-    this.refs["VpnMultiChannel_"+key].getVPNStatus();
-  },
-  getVPNConfig: function(key) {
-    this.refs["VpnMultiChannel_"+key].getVPNConfig();
-  },
-  // getVPNServerList: function(key) {
-  //   this.refs["VpnMultiChannel_"+key].getVPNServerList();
-  // },
-  getVPNStatus_overview: function(key) {
-    this.refs.vpnOverview.getVPNStatus(key);
-  },
-  getVPNConfig_overview: function(key) {
-    this.refs.vpnOverview.getVPNConfig(key);
-  },
-  // getVPNServerList_overview: function() {
-  //   this.refs.vpnOverview.getVPNServerList();
-  // },
-  getVPNConfig_vpntopolopy: function(key){
-    this.refs.vpnTopology.getVPNConfig_vpntopolopy(key);
-  },
-  getVPNStatus_vpntopolopy: function(key){
-    this.refs.vpnTopology.getVPNStatus_vpntopolopy(key);
-  },
-  // getVPNServerList_proxyServer: function() {
-  //   this.refs.vpnProxyServer.getVPNServerList();
-  // },
-  getVPNManagerServer: function() {
-    this.refs.vpnProxyServer.getVPNManagerServer();
   }
-});
+
+}
 
 
-function mapStateToProps(state){
+const mapStateToProps = (state)=>{
   const { dialogMsg, cySize, managerServerIP, managerServerPort, proxyServerList, windowSizeChange, vpntopologyData, vpntopologyStatus, windowSize } = state.homeReducer;
   return {
     dialogMsg,
@@ -140,13 +143,13 @@ function mapStateToProps(state){
   }
 }
 
-function mapDispatchToProps(dispatch){
+const mapDispatchToProps = (dispatch)=>{
   return {
     actions: bindActionCreators(HomeActions, dispatch)
   }
 }
 
-module.exports = connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(VpnConfig);

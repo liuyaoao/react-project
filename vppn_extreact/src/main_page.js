@@ -225,7 +225,6 @@ class ReactWMHome extends Component{
     $('.open-start-menu').on('click', toggleStartMenu);
     $('.open-start-menu').blur(hideStartMenu);
     $('.open-menu-win').on('click', openMenuWin);
-
   }
   render(){
     return (

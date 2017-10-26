@@ -1,5 +1,5 @@
 
-var _ = require('lodash');
+import _ from 'lodash';
 var signals = require('signals');
 
 var INACTIVE = 0;

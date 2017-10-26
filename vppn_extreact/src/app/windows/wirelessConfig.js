@@ -1,10 +1,12 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-const Utils = require('../script/utils');
-var {connect} = require('react-redux');
-var {bindActionCreators} = require('redux');
-var NetworkSidebar = require('../components/network/networkSidebar');
-var CommonDialog = require('../components/common/dialog');
+
+import React,{Component} from 'react';
+import ReactDOM from 'react-dom';
+
+import Utils from '../script/utils';
+// var {connect} = require('react-redux');
+// var {bindActionCreators} = require('redux');
+import NetworkSidebar from'../components/network/networkSidebar';
+import CommonDialog from'../components/common/dialog';
 
 var setRightHeight = function(id){
   // console.log(id);
@@ -21,15 +23,14 @@ var setRightHeight = function(id){
 
 var bGetWifiSettingsInfo_done = false, bGetWifiSettingsWPASecurityKeys_done = false;
 var getWifiSetting_timer = null;
-var WirelessConfig = React.createClass({
-  getInitialState: function () {
-    return {
-      vpnSwitch: true,
-      vpnWhite: [],
-      dialogMsg: ""
-    };
-  },
-  componentDidMount: function(){
+
+class WirelessConfig extends Component{
+  state = {
+    vpnSwitch: true,
+    vpnWhite: [],
+    dialogMsg: ""
+  }
+  componentDidMount(){
     setRightHeight(this.props.id);
     document.addEventListener('mousemove', this.handleMouseMove);
     $(".ws-select").select2();
@@ -44,21 +45,21 @@ var WirelessConfig = React.createClass({
       _this.getWifiSettingsInfo();
       _this.getWifiSettingsWPASecurityKeys();
     }, 3000);
-  },
-  componentWillUnmount: function () {
+  }
+  componentWillUnmount () {
     document.removeEventListener('mousemove', this.handleMouseMove);
     // document.removeEventListener('mouseup', this.handleMouseUp);
     // $('.content').css('overflow', 'auto');
     clearInterval(getWifiSetting_timer);
     getWifiSetting_timer = null;
-  },
-  handleMouseMove: function(){
+  }
+  handleMouseMove = ()=>{
     var cl = $("#window-" + this.props.id);
     if (cl.hasClass('active')) {
       setRightHeight(this.props.id);
     }
-  },
-  render: function () {
+  }
+  render () {
     var Channel2GList = this._getChannelMenu(2);
     var Channel5GList = this._getChannelMenu(5);
     return (
@@ -338,8 +339,8 @@ var WirelessConfig = React.createClass({
         <CommonDialog id="networkDiaglog" dialogMsg={this.state.dialogMsg} />
       </div>
     );
-  },
-  _getChannelMenu: function(band){
+  }
+  _getChannelMenu(band){
     var channelArr =  Utils.getChannelMenu(band);
     var ChannelMenu = channelArr.map(function(ch, i){
       if (ch < 10) {
@@ -352,8 +353,8 @@ var WirelessConfig = React.createClass({
       )
     }.bind(this))
     return ChannelMenu;
-  },
-  handleSubmitWifiSettings: function(e) {
+  }
+  handleSubmitWifiSettings(e) {
     e.preventDefault();
     $("#wifiSettingForm").hide();
     $("#wi_wait").show();
@@ -404,8 +405,8 @@ var WirelessConfig = React.createClass({
         });
       }
     });
-  },
-  getWifiSettingsInfo: function() {
+  }
+  getWifiSettingsInfo() {
     var postData = {
       modle_name: "WLANConfiguration",
       method: "GetInfo"
@@ -457,8 +458,8 @@ var WirelessConfig = React.createClass({
         });
       }
     });
-  },
-  getWifiSettingsWPASecurityKeys: function() {
+  }
+  getWifiSettingsWPASecurityKeys() {
     var postData = {
       modle_name: "WLANConfiguration",
       method: "GetWPASecurityKeys"
@@ -501,8 +502,8 @@ var WirelessConfig = React.createClass({
         });
       }
     });
-  },
-  handleSubmitInternet: function(e){
+  }
+  handleSubmitInternet(e){
     e.preventDefault();
     var postData = {
       interface: this.refs.clientInterface.value.trim(),
@@ -524,7 +525,7 @@ var WirelessConfig = React.createClass({
         console.log(result);
       }
     });
-  },
-});
+  }
+}
 
-module.exports = WirelessConfig;
+export default WirelessConfig;

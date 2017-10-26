@@ -1,7 +1,11 @@
-var React = require('react');
+import React,{Component} from 'react';
 
-var PhotoThumbnail = React.createClass({
-  render: function(){
+class PhotoThumbnail extends Component{
+
+  handleDblClickPhoto = (e)=>{
+    this.props.handleDblClickPhoto(e);
+  }
+  render(){
     var {photoData} = this.props;
     var PhotoItems = photoData.albumPhotos.map(function(photo, i){
       return (
@@ -16,10 +20,8 @@ var PhotoThumbnail = React.createClass({
         {PhotoItems}
       </div>
     )
-  },
-  handleDblClickPhoto: function(e) {
-    this.props.handleDblClickPhoto(e);
   }
-});
 
-module.exports = PhotoThumbnail;
+}
+
+export default PhotoThumbnail;

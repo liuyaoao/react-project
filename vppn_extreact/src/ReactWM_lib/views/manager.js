@@ -5,9 +5,9 @@ import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 // var CSSTransitionGroup = require('react/addons').addons.CSSTransitionGroup;
 
-// import { connect } from 'react-redux';
-// import { bindActionCreators } from 'redux';
-// import * as HomeActions from '../../app/actions/home_action';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as HomeActions from '../../app/actions/home_action';
 
 import WindowModel from '../models/window';
 import IconModel from '../models/icon';
@@ -475,4 +475,26 @@ Manager.statics= {
 Manager.propTypes= {
   manager: React.PropTypes.instanceOf(ManagerModel).isRequired
 }
-export default Manager;
+
+//react-redux,容器组件配置
+const mapStateToProps = (state)=>{
+  const { desktopType, cySize, vpntopologyData, vpntopologyStatus, myPhoneIP } = state.homeReducer;
+  return {
+    desktopType,
+    cySize,
+    vpntopologyData,
+    vpntopologyStatus,
+    myPhoneIP
+  }
+}
+const mapDispatchToProps = (dispatch)=>{
+  return {
+    actions: bindActionCreators(HomeActions, dispatch)
+  }
+}
+const ManagerConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Manager);
+
+export default ManagerConnect;

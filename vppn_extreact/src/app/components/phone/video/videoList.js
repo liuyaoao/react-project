@@ -1,7 +1,11 @@
-var React = require('react');
+import React,{Component} from 'react';
 
-var VideoList = React.createClass({
-  render: function(){
+class VideoList extends Component{
+
+  handleDblClickVideo = (e)=>{
+    this.props.handleDblClickVideo(e);
+  }
+  render(){
     var {videoData} = this.props;
     var VideoItems = videoData.albumVideos.map(function(video, i){
       return (
@@ -21,10 +25,8 @@ var VideoList = React.createClass({
         {VideoItems}
       </div>
     )
-  },
-  handleDblClickVideo: function(e) {
-    this.props.handleDblClickVideo(e);
   }
-});
 
-module.exports = VideoList;
+}
+
+export default VideoList;

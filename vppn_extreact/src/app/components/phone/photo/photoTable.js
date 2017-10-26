@@ -1,7 +1,11 @@
-var React = require('react');
+import React,{Component} from 'react';
 
-var PhotoTable = React.createClass({
-  render: function(){
+class PhotoTable extends Component{
+
+  handleDblClickPhoto = (e)=>{
+    this.props.handleDblClickPhoto(e);
+  }
+  render(){
     var {photoData} = this.props;
     var PhotoItems = photoData.albumPhotos.map(function(photo, i){
       return (
@@ -49,10 +53,8 @@ var PhotoTable = React.createClass({
         </div>
       </div>
     )
-  },
-  handleDblClickPhoto: function(e) {
-    this.props.handleDblClickPhoto(e);
   }
-});
 
-module.exports = PhotoTable;
+}
+
+export default PhotoTable;

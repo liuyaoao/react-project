@@ -112,4 +112,4 @@ Object.defineProperty(Utils, 'getFileIcon', {
 	}
 });
 
-module.exports = Utils;
+export default Utils;

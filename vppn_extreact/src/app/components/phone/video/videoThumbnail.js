@@ -1,7 +1,11 @@
-var React = require('react');
+import React,{Component} from 'react';
 
-var VideoThumbnail = React.createClass({
-  render: function(){
+class VideoThumbnail extends Component{
+
+  handleDblClickVideo = (e)=>{
+    this.props.handleDblClickVideo(e);
+  }
+  render(){
     var {videoData} = this.props;
     var VideoItems = videoData.albumVideos.map(function(video, i){
       return (
@@ -16,10 +20,8 @@ var VideoThumbnail = React.createClass({
         {VideoItems}
       </div>
     )
-  },
-  handleDblClickVideo: function(e) {
-    this.props.handleDblClickVideo(e);
   }
-});
 
-module.exports = VideoThumbnail;
+}
+
+export default VideoThumbnail;

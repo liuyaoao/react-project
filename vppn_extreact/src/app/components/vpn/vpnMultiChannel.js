@@ -1,20 +1,19 @@
-var React = require('react');
-var Utils = require('../../script/utils');
+import React,{Component} from 'react';
+import Utils from '../../script/utils';
 
-var VpnMultiChannel = React.createClass({
-  getInitialState: function () {
-    return {
-      // vpnSwitch_disable: false,
-      // vpnSwitch: false,
-      vpnStatus: "OFF",
-      // serverList: [],
-      vpnWhite: [],
-      serverSelect: false,
-      ping: null
-    };
-  },
-  componentDidMount: function(){
+class VpnMultiChannel extends Component{
+  state = {
+    // vpnSwitch_disable: false,
+    // vpnSwitch: false,
+    vpnStatus: "OFF",
+    // serverList: [],
+    vpnWhite: [],
+    serverSelect: false,
+    ping: null
+  }
+  componentDidMount(){
     var _self = this;
+    this.hasMounted = true;
     var $server = $(this.refs.vpnServer);
     $(this.refs.vpnServer).on("select2:open", function (e) {
       _self.refs.vpnServer.value = "";
@@ -49,8 +48,8 @@ var VpnMultiChannel = React.createClass({
     // else {
     //   this.setState({vpnSwitch_disable: false});
     // }
-  },
-  shouldComponentUpdate: function(nextProps, nextState) {
+  }
+  shouldComponentUpdate(nextProps, nextState) {
     if(nextProps.proxyServerList != this.props.proxyServerList) {
       while (this.refs.vpnServer.options.length > 0) {
         this.refs.vpnServer.options.remove(0);
@@ -63,18 +62,19 @@ var VpnMultiChannel = React.createClass({
       }
     }
     return true;
-  },
-  componentWillUnmount: function(){
+  }
+  componentWillUnmount(){
+    this.hasMounted = false;
     // document.body.removeEventListener("click", this.handleBodyClick);
-  },
-  handleBodyClick: function(e){
+  }
+  handleBodyClick = (e)=>{
     if (e.target.className && e.target.className.indexOf('sel-text') == -1 && this.state.serverSelect) {
-      if(this.isMounted()) {
+      if(this.hasMounted) {
         this.setState({serverSelect: false});
       }
     }
-  },
-  render: function(){
+  }
+  render(){
     var {vpnSwitch, vpnWhite, vpnSwitch_disable, vpnStatus} = this.state;
     var {id} = this.props;
     var VpnWhiteList = vpnWhite.map(function(white, i){
@@ -187,8 +187,8 @@ var VpnMultiChannel = React.createClass({
         </div>
       </div>
     )
-  },
-  handleToggleServer: function(){
+  }
+  handleToggleServer(){
     var {serverSelect} = this.state;
     if (!serverSelect) {
       $(this.refs.vpnServer).select2("open");
@@ -198,8 +198,8 @@ var VpnMultiChannel = React.createClass({
     }
     $('.select2.select2-container').css("margin-top", '0px')
     this.setState({serverSelect: !serverSelect});
-  },
-  handleServerChange: function(e){
+  }
+  handleServerChange(e){
     if (!e.target.value) {
       $(this.refs.vpnServer).val(null).trigger('change');
     }
@@ -210,8 +210,8 @@ var VpnMultiChannel = React.createClass({
     // else {
     //   this.setState({vpnSwitch_disable: false});
     // }
-  },
-  getVPNStatus: function(expectedStatus) {
+  }
+  getVPNStatus(expectedStatus) {
     var postData = {
       act_type: "get_vpnstatus",
       channel: this.props.id-1
@@ -231,7 +231,7 @@ var VpnMultiChannel = React.createClass({
       cache:false,
       data: postData,
       complete : function(result){
-        if(!_this.isMounted()) {
+        if(!_this.hasMounted) {
           console.log("VpnMultiChannel has been unmounted!");
           return;
         }
@@ -292,8 +292,8 @@ var VpnMultiChannel = React.createClass({
         }
       }
     });
-  },
-  getVPNConfig: function() {
+  }
+  getVPNConfig() {
     var postData = {
       act_type: "get_vpnconfig",
       channel: this.props.id-1
@@ -312,7 +312,7 @@ var VpnMultiChannel = React.createClass({
       cache:false,
       data: postData,
       complete : function(result){
-        if(!_this.isMounted()) {
+        if(!_this.hasMounted) {
           console.log("VpnMultiChannel has been unmounted!");
           return;
         }
@@ -364,7 +364,7 @@ var VpnMultiChannel = React.createClass({
         // }
       }
     });
-  },
+  }
   // getVPNServerList: function() {
   //   const { managerServerIP, managerServerPort } = this.props;
   //   var postData = {
@@ -403,7 +403,7 @@ var VpnMultiChannel = React.createClass({
   //     }
   //   });
   // },
-  handleSubmitVpn: function(){
+  handleSubmitVpn(){
     // e.preventDefault();
     var postData = {
       act_type: "set_tinc",
@@ -437,8 +437,8 @@ var VpnMultiChannel = React.createClass({
         }
       }
     });
-  },
-  handleOpenVpn: function(e){
+  }
+  handleOpenVpn = (e)=>{
     e.preventDefault();
     var dialogMsg = {
       title: 'Tips'
@@ -510,8 +510,8 @@ var VpnMultiChannel = React.createClass({
     // if(checked) {
     //   this.handleSubmitVpn();
     // }
-  },
-  handleCloseVpn: function(e){
+  }
+  handleCloseVpn = (e)=>{
     e.preventDefault();
     this.setState({vpnStatus: "CLOSING"});
     var postData = {
@@ -554,12 +554,12 @@ var VpnMultiChannel = React.createClass({
         }
       }
     });
-  },
-  _showDialog: function(dialogMsg, dialogId) {
+  }
+  _showDialog(dialogMsg, dialogId) {
     this.props.setDialogMsg(dialogMsg);
     showMetroDialog('#' + dialogId);
-  },
-  handlePing: function() {
+  }
+  handlePing() {
     var postData = {
       act_type: "get_speed",
       dest_ip: this.refs.serverIP.value.trim(),
@@ -590,8 +590,8 @@ var VpnMultiChannel = React.createClass({
         }
       }
     });
-  },
-  handleDeleteWhite: function(white){
+  }
+  handleDeleteWhite = (white)=>{
     // console.log(white);
     var postData = {
       act_type: "del_whitelist",
@@ -621,8 +621,8 @@ var VpnMultiChannel = React.createClass({
         }
       }
     });
-  },
-  handleAddWhite: function(e){
+  }
+  handleAddWhite = (e)=>{
     e.preventDefault();
     var addWhite = this.refs.addWhite.value.trim();
     var dialogMsg = {
@@ -676,6 +676,7 @@ var VpnMultiChannel = React.createClass({
       }
     });
   }
-});
 
-module.exports = VpnMultiChannel;
+}
+
+export default VpnMultiChannel;

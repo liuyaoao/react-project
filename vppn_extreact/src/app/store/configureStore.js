@@ -8,7 +8,7 @@ const finalCreateStore = compose(
   // applyMiddleware(createLogger())
 )(createStore)
 
-module.exports = function configureStore(initialState) {
+export default function configureStore(initialState) {
   const store = finalCreateStore(rootReducer, initialState)
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers

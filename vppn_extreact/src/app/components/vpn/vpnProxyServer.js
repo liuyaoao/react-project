@@ -1,17 +1,14 @@
-var React = require('react');
-var Utils = require('../../script/utils');
+import React,{Component} from 'react';
+import Utils from '../../script/utils';
 
-var VpnProxyServer = React.createClass({
-  getInitialState: function(){
-    return {
-      // vpnProxyServerList: []
-    }
-  },
-  componentDidMount: function() {
+class VpnProxyServer extends Component{
+  state = {
+  }
+  componentDidMount() {
     this.getVPNManagerServer();
     // this.getVPNServerList();
-  },
-  render: function() {
+  }
+  render() {
     const { managerServerIP, managerServerPort, proxyServerList } = this.props;
     // var {vpnProxyServerList} = this.state;
     var VpnProxyServerList = proxyServerList.map(function(proxyServer, i){
@@ -69,8 +66,8 @@ var VpnProxyServer = React.createClass({
         </div>
       </div>
     )
-  },
-  getVPNManagerServer: function() {
+  }
+  getVPNManagerServer() {
     var postData = {
       act_type: "get_managerserver"
     }
@@ -120,8 +117,8 @@ var VpnProxyServer = React.createClass({
         _this.getVPNServerList(sessionId);
       }
     });
-  },
-  handleRefreshServerList: function() {
+  }
+  handleRefreshServerList() {
     var sessionId = Utils.generateUuid(16);
     this.props.setManagerServerSessionId(sessionId);
     this.getVPNServerList(sessionId);
@@ -137,8 +134,8 @@ var VpnProxyServer = React.createClass({
         timer = null;
       }
     }.bind(this), 5000);
-  },
-  getVPNServerList: function(sessionId) {
+  }
+  getVPNServerList(sessionId) {
     const { managerServerIP, managerServerPort } = this.props;
     var postData = {
       act_type: "get_serverlist",
@@ -173,8 +170,8 @@ var VpnProxyServer = React.createClass({
         }
       }
     });
-  },
-  getVPNServerStatus: function(sessionId) {
+  }
+  getVPNServerStatus(sessionId) {
     var postData = {
       act_type: "get_serverstatus",
       session_id: sessionId
@@ -211,8 +208,8 @@ var VpnProxyServer = React.createClass({
         }
       }
     });
-  },
-  setVPNManagerServer: function(e) {
+  }
+  setVPNManagerServer(e) {
     e.preventDefault();
     var dialogMsg = {
       title: 'Tips'
@@ -252,8 +249,8 @@ var VpnProxyServer = React.createClass({
         }
       }
     });
-  },
-  handlePingServer: function(serverIp){
+  }
+  handlePingServer(serverIp){
     var dialogEl = $("#vpnDiaglog #content");
     dialogEl[0].innerHTML = '';
     var dialogMsg = {
@@ -301,11 +298,11 @@ var VpnProxyServer = React.createClass({
       }
     });
     // dialogEl.append("<p>One</p>");
-  },
-  _showDialog: function(dialogMsg, dialogId) {
+  }
+  _showDialog(dialogMsg, dialogId) {
     this.props.setDialogMsg(dialogMsg);
     showMetroDialog('#' + dialogId);
   }
-});
+}
 
-module.exports = VpnProxyServer;
+export default VpnProxyServer;

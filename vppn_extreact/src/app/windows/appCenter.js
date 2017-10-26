@@ -1,5 +1,6 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+import React,{Component} from 'react';
+import ReactDOM from 'react-dom';
+// import Utils from '../script/utils';
 
 var setWinHeight = function(id){
   var windowId = '#window-' + id;
@@ -22,22 +23,22 @@ var notInstalledApps = [
   { name: 'Youku', version: '7.1.1.12088', icon: 'images/icon/app01.png', desc: 'Integrated multiple powerful video client'},
 ]
 
-var AppCenter = React.createClass({
-  componentDidMount: function(){
+class AppCenter extends Component{
+  componentDidMount(){
     setWinHeight(this.props.id);
     document.addEventListener('mousemove', this.handleMouseMove);
     $(".ws-select").select2();
   },
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     document.removeEventListener('mousemove', this.handleMouseMove);
-  },
-  handleMouseMove: function(){
+  }
+  handleMouseMove = ()=>{
     var cl = $("#window-" + this.props.id);
     if (cl.hasClass('active')) {
       setWinHeight(this.props.id);
     }
-  },
-  render: function() {
+  }
+  render() {
     var NotInstalledList = notInstalledApps.map(function(app, i){
       return (
         <div className="list" key={i}>
@@ -126,6 +127,6 @@ var AppCenter = React.createClass({
     $(e.target.parentNode).addClass('active');
     $('#appWindow #wi_right_' + key).addClass('active');
   },
-})
+}
 
-module.exports = AppCenter;
+export default AppCenter;

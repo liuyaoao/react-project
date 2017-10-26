@@ -1,7 +1,11 @@
-var React = require('react');
+import React,{Component} from 'react';
 
-var PhotoList = React.createClass({
-  render: function(){
+class PhotoList extends Component{
+
+  handleDblClickPhoto = (e)=>{
+    this.props.handleDblClickPhoto(e);
+  }
+  render(){
     var {photoData} = this.props;
     var PhotoItems = photoData.albumPhotos.map(function(photo, i){
       return (
@@ -21,10 +25,7 @@ var PhotoList = React.createClass({
         {PhotoItems}
       </div>
     )
-  },
-  handleDblClickPhoto: function(e) {
-    this.props.handleDblClickPhoto(e);
   }
-});
+}
 
-module.exports = PhotoList;
+export default PhotoList;

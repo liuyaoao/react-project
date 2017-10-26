@@ -1,8 +1,8 @@
-var {combineReducers} = require('redux');
-var homeReducer = require('./home_reducer');
+import {combineReducers} from 'redux';
+import homeReducer from './home_reducer';
 
 const rootReducer = combineReducers({
   homeReducer
 });
 
-module.exports = rootReducer;
+export default rootReducer;

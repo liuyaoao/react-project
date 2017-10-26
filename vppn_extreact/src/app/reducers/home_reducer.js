@@ -1,6 +1,6 @@
-var {combineReducers} = require('redux');
-var ACTIONS = require('../actions/home_action');
-var Store = require('../script/store');
+import {combineReducers} from 'redux';
+import * as ACTIONS from '../actions/home_action';
+import Store from '../script/store';
 
 var initUserLogin = Store.get('userLogin') || false;
 var windowSizeChange = function(state = {windowId:'', flag:false}, action){
@@ -146,4 +146,4 @@ const homeReducer = combineReducers({
     windowSize
 })
 
-module.exports = homeReducer;
+export default homeReducer;

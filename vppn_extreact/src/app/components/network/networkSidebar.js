@@ -1,7 +1,7 @@
-var React = require('react');
+import React,{Component} from 'react';
 
-var NetworkSidebar = React.createClass({
-  render: function(){
+class NetworkSidebar extends Component{
+  render(){
     return (
       <ul className="sidebar2 sidebar3">
         <li className="active"><a onClick={this.handleShow.bind(this, 1)}><span className="mif-wifi-connect icon"></span> Wireless</a></li>
@@ -13,8 +13,8 @@ var NetworkSidebar = React.createClass({
         <li className=""><a><span className="mif-notification icon"></span> Notification</a></li>
       </ul>
     )
-  },
-  handleShow: function(key, e){
+  }
+  handleShow(key, e){
     $('#networkWindow .wi').each(function(){
       $(this).removeClass('active');
     })
@@ -31,7 +31,8 @@ var NetworkSidebar = React.createClass({
       default:
         break;
     }
-  },
-});
+  }
 
-module.exports = NetworkSidebar;
+}
+
+export default NetworkSidebar;

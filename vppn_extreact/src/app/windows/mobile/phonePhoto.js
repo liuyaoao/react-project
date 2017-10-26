@@ -1,6 +1,8 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-const Utils = require('../../script/utils');
+
+import React,{Component} from 'react';
+import ReactDOM from 'react-dom';
+
+import Utils from '../../script/utils';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as HomeActions from '../../actions/home_action';
@@ -154,15 +156,13 @@ var setWinHeight = function(id, width, height){
 }
 
 var timer = null;
-var PhonePhoto = React.createClass({
-  getInitialState: function () {
-    return {
-      menuStatus: 3,
-      photoData: [],
-      imageGalleryData: []
-    };
-  },
-  componentDidMount: function(){
+class PhonePhoto extends Component{
+  state = {
+    menuStatus: 3,
+    photoData: [],
+    imageGalleryData: []
+  }
+  componentDidMount(){
     // var windowId = '#window-' + this.props.id;
     var phonePhotoWindow = this.props.manager.get('phone_photo');
     setWinHeight(this.props.id, phonePhotoWindow.width, phonePhotoWindow.height);
@@ -176,7 +176,7 @@ var PhonePhoto = React.createClass({
         hideMetroDialog('#phonePhotoDialog');
       }
     }.bind(this), 10);
-  },
+  }
   // shouldComponentUpdate: function(nextProps, nextState) {
   //   var cl = $("#window-" + this.props.id);
   //   if(cl.hasClass('active') && nextProps.windowSizeChange) {
@@ -194,18 +194,18 @@ var PhonePhoto = React.createClass({
   //   }
   //   return true;
   // },
-  componentDidUpdate: function() {
+  componentDidUpdate() {
     var cl = $("#window-" + this.props.id);
     if(cl.hasClass('active')) {
       var phonePhotoWindow = this.props.manager.get('phone_photo');
       setWinHeight(this.props.id, phonePhotoWindow.width, phonePhotoWindow.height);
     }
-  },
-  componentWillUnmount: function() {
+  }
+  componentWillUnmount() {
     // document.removeEventListener('mousemove', this.handleMouseMove);
     clearInterval(timer);
     timer = null;
-  },
+  }
   // handleMouseMove: function(){
   //   var cl = $("#window-" + this.props.id);
   //   if (cl.hasClass('active')) {
@@ -214,7 +214,7 @@ var PhonePhoto = React.createClass({
   //     setWinHeight(this.props.id, phonePhotoWindow.width, phonePhotoWindow.height);
   //   }
   // },
-  render: function () {
+  render () {
     var phonePhotoSidebar_li = this.state.photoData.map(function (data, i) {
       return (
         <li id={"phonePhotoSidebar_li_"+i} key={"phonePhotoSidebar_li_"+i} className={i==0?"active":""}>
@@ -287,8 +287,8 @@ var PhonePhoto = React.createClass({
         </div>
       </div>
     );
-  },
-  _getPhotoList: function(photoData){
+  }
+  _getPhotoList(photoData){
     switch (this.state.menuStatus) {
       case 1:
         return <PhotoTable photoData={photoData} handleDblClickPhoto={this.handleDblClickPhoto} />
@@ -302,8 +302,8 @@ var PhonePhoto = React.createClass({
       default:
         break;
     }
-  },
-  handleShow: function(key, e){
+  }
+  handleShow = (key, e)=>{
     $('#phonePhotoWindow .wi').each(function(){
       $(this).removeClass('active');
     })
@@ -321,14 +321,14 @@ var PhonePhoto = React.createClass({
     this.setState({imageGalleryData: this.state.photoData[key].albumPhotos});
     this.refs.ImageGallery._handleResize();
     this.refs.ImageGallery.slideToIndex(0);
-  },
-  handleToggleMenu: function(key) {
+  }
+  handleToggleMenu = (key)=>{
     this.setState({menuStatus: key});
-  },
-  handleSearch: function(e){
+  }
+  handleSearch = (e)=>{
     e.preventDefault();
-  },
-  getPhotos: function(){
+  }
+  getPhotos(){
     const { myPhoneIP } = this.props;
     var _this = this;
     $.ajax({
@@ -356,12 +356,12 @@ var PhonePhoto = React.createClass({
         }
       }
     });
-  },
-  handleMousedownPhoto: function(e) {
+  }
+  handleMousedownPhoto = (e)=>{
     $("#phonePhotoWindow .wi-right-1 .phone_photo").removeClass("photo_focus");
 		$("#"+e.currentTarget.id).addClass("photo_focus");
-  },
-  resizeImageGallery: function() {
+  }
+  resizeImageGallery = ()=>{
     var windowId = '#window-' + this.props.id;
     var windowHeight = $(windowId).height();
     var windowWidth = $(windowId).width();
@@ -390,19 +390,19 @@ var PhonePhoto = React.createClass({
       }
       this.refs.ImageGallery._handleResize();
     }.bind(this), 100);
-  },
-  handleDblClickPhoto: function(e) {
+  }
+  handleDblClickPhoto = (e)=>{
     this.refs.ImageGallery.slideToIndex(parseInt(e.currentTarget.id.substr(e.currentTarget.id.lastIndexOf("_")+1)));
     setTimeout(function(){
       showMetroDialog('#phonePhotoDialog');
     }, 100);
     this.resizeImageGallery();
-  },
-  handleImageLoad: function(event) {
+  }
+  handleImageLoad = (event)=>{
     console.log('Image loaded ', event.target)
     // this.resizeImageGallery();
-  },
-  handleSlide: function() {
+  }
+  handleSlide() {
     var windowId = '#window-' + this.props.id;
     var windowHeight = $(windowId).height();
     var windowWidth = $(windowId).width();
@@ -429,14 +429,14 @@ var PhonePhoto = React.createClass({
       $('#phonePhotoDialog').css("top", "0px");
     }
     this.refs.ImageGallery._handleResize();
-  },
-  handleScreenChange: function(event) {
+  }
+  handleScreenChange(event) {
     this.resizeImageGallery();
   }
-});
+}
 
 // module.exports = PhonePhoto;
-function mapStateToProps(state){
+const mapStateToProps = (state)=>{
   const { windowSizeChange, myPhoneIP } = state.homeReducer;
   return {
     windowSizeChange,
@@ -444,13 +444,13 @@ function mapStateToProps(state){
   }
 }
 
-function mapDispatchToProps(dispatch){
+const mapDispatchToProps = (dispatch)=>{
   return {
     actions: bindActionCreators(HomeActions, dispatch)
   }
 }
 
-module.exports = connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(PhonePhoto);

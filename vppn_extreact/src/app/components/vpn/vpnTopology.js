@@ -1,5 +1,6 @@
-var React = require('react');
-var Utils = require('../../script/utils');
+import React,{Component} from 'react';
+import Utils from '../../script/utils';
+
 var dataArr = [], statusArr = [];
 var bDelete = false, bAddNode = false;
 var count = 0;
@@ -15,14 +16,14 @@ var sourceNode = null,newNode = null,newEdge = null;
 var bMouseDown = false;
 
 var timer = null;
-var VpnTopology = React.createClass({
-  getInitialState:function(){
-    return({
-        elWidth: 0,
-        elHeight: 0
-    })
-  },
-  componentDidMount: function(){
+
+class VpnTopology extends Component{
+  state = {
+      elWidth: 0,
+      elHeight: 0
+  }
+  componentDidMount(){
+    this.hasMounted = true;
       // var container = this.props.manager.get('settings-2');
       // setWinHeight(this.props.id, container.width, container.height);
 
@@ -36,10 +37,9 @@ var VpnTopology = React.createClass({
           this.props.setWindowSizeChange(false);
         }
       }.bind(this), 10);
-  },
+  }
 
-
-  shouldComponentUpdate: function(nextProps, nextState) {
+  shouldComponentUpdate(nextProps, nextState) {
     var _this = this;
     //cyDraw false第一次绘图  true不是第一次绘图
     //若不是第一次绘图：vpntopologyData 更新的情况下才绘图
@@ -61,13 +61,14 @@ var VpnTopology = React.createClass({
     //     }
     // }
     return true;
-  },
-  componentWillUnmount: function() {
+  }
+  componentWillUnmount() {
+    this.hasMounted = false;
     clearInterval(timer);
     timer = null;
-  },
+  }
 
-  initTopological: function(data, status, elWidth, elHeight) {
+  initTopological(data, status, elWidth, elHeight) {
       cyDraw = true;
       var _this = this;
       var nodesArr = [];
@@ -453,9 +454,9 @@ var VpnTopology = React.createClass({
             return uuid.join('');
         }
 
-  },
+  }
 
-  handleOnClickAddNode:function(){
+  handleOnClickAddNode(){
     var _this = this;
     //添加白名单
     bAddNode = true;
@@ -521,14 +522,14 @@ var VpnTopology = React.createClass({
           bAddNode = false;
         }
     });
-  },
+  }
 
-  _showDialog: function(dialogMsg, dialogId) {
+  _showDialog(dialogMsg, dialogId) {
     this.props.setDialogMsg(dialogMsg);
     showMetroDialog('#' + dialogId);
-  },
+  }
 
-  render: function(){
+  render(){
     return (
       <div className="wi-right-1 padding20 auto-y">
         <div className="wire-block">
@@ -546,9 +547,9 @@ var VpnTopology = React.createClass({
         </form>
       </div>
     )
-  },
+  }
 
-  getVPNConfig_vpntopolopy: function(channel) {
+  getVPNConfig_vpntopolopy(channel) {
     var postData = {
       act_type: "get_vpnconfig",
       channel: channel-1
@@ -567,7 +568,7 @@ var VpnTopology = React.createClass({
       cache:false,
       data: postData,
       complete : function(result){
-        if(!_this.isMounted()) {
+        if(!_this.hasMounted) {
           console.log("VpnTopology has been unmounted!");
           return;
         }
@@ -632,9 +633,9 @@ var VpnTopology = React.createClass({
         }
       }
     });
-  },
+  }
 
-  getVPNStatus_vpntopolopy: function(channel) {
+  getVPNStatus_vpntopolopy(channel) {
     var postData = {
       act_type: "get_vpnstatus",
       channel: channel-1
@@ -653,7 +654,7 @@ var VpnTopology = React.createClass({
       cache:false,
       data: postData,
       complete : function(result){
-        if(!_this.isMounted()) {
+        if(!_this.hasMounted) {
           console.log("vpnTopology has been unmounted!");
           return;
         }
@@ -690,9 +691,9 @@ var VpnTopology = React.createClass({
         }
       }
     });
-  },
+  }
 
-  deleteWhite_vpntopology: function(white, channel){
+  deleteWhite_vpntopology(white, channel){
       var postData = {
         act_type: "del_whitelist",
         uri: white,
@@ -724,9 +725,9 @@ var VpnTopology = React.createClass({
           }
         }
       });
-  },
+  }
 
-  addWhite_vpntopolopy: function(white, channel){
+  addWhite_vpntopolopy(white, channel){
     var postData = {
       act_type: "add_whitelist",
       uri: white,
@@ -758,6 +759,6 @@ var VpnTopology = React.createClass({
       }
     });
   }
-});
+}
 
-module.exports = VpnTopology;
+export default VpnTopology;

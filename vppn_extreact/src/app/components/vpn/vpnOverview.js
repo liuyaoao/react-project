@@ -1,19 +1,18 @@
-var React = require('react');
-var Utils = require('../../script/utils');
+import React,{Component} from 'react';
+import Utils from '../../script/utils';
 
-var VpnOverview = React.createClass({
-  getInitialState: function(){
-    return {
-      vpnChannelsList: [
-        {id: 1, connection: 'OFF', proxyAddress: '', vpnIP: '', whiteListNum: 0},
-        {id: 2, connection: 'OFF', proxyAddress: '', vpnIP: '', whiteListNum: 0},
-        {id: 3, connection: 'OFF', proxyAddress: '', vpnIP: '', whiteListNum: 0},
-        {id: 4, connection: 'OFF', proxyAddress: '', vpnIP: '', whiteListNum: 0},
-        {id: 5, connection: 'OFF', proxyAddress: '', vpnIP: '', whiteListNum: 0}
-      ]
-    }
-  },
-  componentDidMount: function() {
+class VpnOverview extends Component{
+  state = {
+    vpnChannelsList: [
+      {id: 1, connection: 'OFF', proxyAddress: '', vpnIP: '', whiteListNum: 0},
+      {id: 2, connection: 'OFF', proxyAddress: '', vpnIP: '', whiteListNum: 0},
+      {id: 3, connection: 'OFF', proxyAddress: '', vpnIP: '', whiteListNum: 0},
+      {id: 4, connection: 'OFF', proxyAddress: '', vpnIP: '', whiteListNum: 0},
+      {id: 5, connection: 'OFF', proxyAddress: '', vpnIP: '', whiteListNum: 0}
+    ]
+  }
+  componentDidMount() {
+    this.hasMounted = true;
     for(var i = 0; i < this.state.vpnChannelsList.length; i++) {
       var key = this.state.vpnChannelsList[i].id;
       var $server = $(this.refs['vpnServer_' + key]);
@@ -29,14 +28,13 @@ var VpnOverview = React.createClass({
         }
       }.bind(key));
     }
-
     for(var i = 1; i < 6; i++) {
       this.getVPNStatus(i);
       this.getVPNConfig(i);
     }
     // this.getVPNServerList();
-  },
-  shouldComponentUpdate: function(nextProps, nextState) {
+  }
+  shouldComponentUpdate(nextProps, nextState) {
     if(nextProps.proxyServerList != this.props.proxyServerList) {
       for(var i = 0; i < this.state.vpnChannelsList.length; i++) {
         var key = this.state.vpnChannelsList[i].id;
@@ -52,8 +50,11 @@ var VpnOverview = React.createClass({
       }
     }
     return true;
-  },
-  render: function(){
+  }
+  componentWillUnmount(){
+    this.hasMounted = false;
+  }
+  render(){
     var { vpnChannelsList } = this.state;
     var VpnChannelsList = vpnChannelsList.map(function(channel, i){
       return (
@@ -137,8 +138,8 @@ var VpnOverview = React.createClass({
         </div>
       </div>
     )
-  },
-  handleToggleServer: function(key){
+  }
+  handleToggleServer(key){
     var $server = $(this.refs['vpnServer_' + key]);
     if (!this.refs['serverIP_' + key].value) {
       $server.val(null).trigger('change');
@@ -149,8 +150,8 @@ var VpnOverview = React.createClass({
     $server.on("select2:select", function (e) {
       _self.refs['serverIP_' + key].value = e.target.value;
     });
-  },
-  handleShow: function(key, flag, e){
+  }
+  handleShow(key, flag, e){
     $('#vpnWindow .wi').each(function(){
       $(this).removeClass('active');
     })
@@ -178,8 +179,8 @@ var VpnOverview = React.createClass({
     this.props.getVPNStatus(key);
     this.props.getVPNConfig(key);
     // this.props.getVPNServerList(key);
-  },
-  getVPNStatus: function(channel, expectedStatus) {
+  }
+  getVPNStatus(channel, expectedStatus) {
     var postData = {
       act_type: "get_vpnstatus",
       channel: channel-1
@@ -198,7 +199,7 @@ var VpnOverview = React.createClass({
       cache:false,
       data: postData,
       complete : function(result){
-        if(!_this.isMounted()) {
+        if(!_this.hasMounted) {
           console.log("vpnOverview has been unmounted!");
           return;
         }
@@ -267,8 +268,8 @@ var VpnOverview = React.createClass({
         _this.setState({vpnChannelsList: vpnChannelsList});
       }
     });
-  },
-  getVPNConfig: function(channel) {
+  }
+  getVPNConfig(channel) {
     var postData = {
       act_type: "get_vpnconfig",
       channel: channel-1
@@ -287,7 +288,7 @@ var VpnOverview = React.createClass({
       cache:false,
       data: postData,
       complete : function(result){
-        if(!_this.isMounted()) {
+        if(!_this.hasMounted) {
           console.log("vpnOverview has been unmounted!");
           return;
         }
@@ -349,7 +350,7 @@ var VpnOverview = React.createClass({
         _this.setState({vpnChannelsList: vpnChannelsList});
       }
     });
-  },
+  }
   // getVPNServerList: function() {
   //   const { managerServerIP, managerServerPort } = this.props;
   //   var postData = {
@@ -394,7 +395,7 @@ var VpnOverview = React.createClass({
   //     }
   //   });
   // },
-  handleSubmitVpn: function(channel){
+  handleSubmitVpn(channel){
     // e.preventDefault();
     var postData = {
       act_type: "set_tinc",
@@ -428,8 +429,8 @@ var VpnOverview = React.createClass({
         }
       }
     });
-  },
-  handleOpenVpn: function(key, e) {
+  }
+  handleOpenVpn(key, e) {
     var dialogMsg = {
       title: 'Tips'
     }
@@ -497,8 +498,8 @@ var VpnOverview = React.createClass({
         }
       }
     });
-  },
-  handleCloseVPN: function(key, e) {
+  }
+  handleCloseVPN(key, e) {
     var vpnChannelsList = this.state.vpnChannelsList.slice(0);
     var vpnChannel = null;
     for(var i = 0; i < vpnChannelsList.length; i++) {
@@ -544,11 +545,11 @@ var VpnOverview = React.createClass({
         }
       }
     });
-  },
-  _showDialog: function(dialogMsg, dialogId) {
+  }
+  _showDialog(dialogMsg, dialogId) {
     this.props.setDialogMsg(dialogMsg);
     showMetroDialog('#' + dialogId);
-  },
-});
+  }
+}
 
-module.exports = VpnOverview;
+export default VpnOverview;

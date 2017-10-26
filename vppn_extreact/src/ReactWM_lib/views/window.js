@@ -14,12 +14,9 @@ var RESIZE_NS = 4;
 var bodyWidth = document.documentElement.clientWidth / 2, bodyHeight = (document.documentElement.clientHeight - 50) / 2;
 
 class Window extends Component{
-  propTypes= {
-    window: React.PropTypes.instanceOf(WindowModel).isRequired,
-    offset: React.PropTypes.object.isRequired
-  }
 
   componentWillMount() {
+    this.hasMounted = true;
     this.window = this.props.window;
   }
 
@@ -32,7 +29,7 @@ class Window extends Component{
   componentDidUpdate() {
     var _this = this;
     setTimeout(function(){
-      if(_this.isMounted()) {
+      if(_this.hasMounted) {
         ReactDOM.findDOMNode(_this).style.transition = 'box-shadow 0.15s ease';
       }
     }, 500);
@@ -46,6 +43,7 @@ class Window extends Component{
   }
 
   componentWillUnmount() {
+    this.hasMounted = false;
     this.window.off('change', this.forceUpdate);
     document.removeEventListener('mousemove', this.handleMouseMove);
     document.removeEventListener('mouseup', this.handleMouseUp);
@@ -86,35 +84,35 @@ class Window extends Component{
     return false;
   }
 
-  handlePropagation(e) {
+  handlePropagation = (e)=>{
     if (!(e.ctrlKey || e.metaKey || e.altKey || e.button !== 0)){
       this.focus();
       e.stopPropagation();
     }
   }
 
-  handleResize (e) {
+  handleResize = (e)=>{
     this.focus();
     var mouse = this.convertPoints(e);
     this.window.startResize(mouse.x, mouse.y);
     e.stopPropagation();
   }
 
-  handleResize_ew (e) {
+  handleResize_ew = (e)=>{
     this.focus();
     var mouse = this.convertPoints(e);
     this.window.startResize_ew(mouse.x, mouse.y);
     e.stopPropagation();
   }
 
-  handleResize_ns (e) {
+  handleResize_ns = (e)=>{
     this.focus();
     var mouse = this.convertPoints(e);
     this.window.startResize_ns(mouse.x, mouse.y);
     e.stopPropagation();
   }
 
-  handleMove (e) {
+  handleMove = (e)=>{
     e.preventDefault();
     this.focus();
     var mouse = this.convertPoints(e);
@@ -122,14 +120,14 @@ class Window extends Component{
     ReactDOM.findDOMNode(this.refs.content).children[0].focus();
   }
 
-  handleMouseMove (e) {
+  handleMouseMove = (e)=>{
     if (this.window.mode === INACTIVE) { return true; }
     var mouse = this.convertPoints(e);
     this.window.update(mouse.x, mouse.y);
     this.quickUpdate();
   }
 
-  handleMouseUp () {
+  handleMouseUp = ()=>{
     this.window.endChange();
     this.props.setWindowSizeChange({windowId: this.window.id, flag: false});
   }
@@ -138,7 +136,7 @@ class Window extends Component{
     this.window.requestFocus();
   }
 
-  close () {
+  close = ()=>{
     this.window.requestFocus();
     this.window.close();
     if(this.window.id == "my-phone") {
@@ -244,6 +242,11 @@ class Window extends Component{
       /* jshint ignore: end */
     );
   }
+}
+
+Window.propTypes= {
+  window: React.PropTypes.instanceOf(WindowModel).isRequired,
+  offset: React.PropTypes.object.isRequired
 }
 
 export default Window;

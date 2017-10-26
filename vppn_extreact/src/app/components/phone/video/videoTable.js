@@ -1,7 +1,11 @@
-var React = require('react');
+import React,{Component} from 'react';
 
-var VideoTable = React.createClass({
-  render: function(){
+class VideoTable extends Component{
+
+  handleDblClickVideo = (e)=>{
+    this.props.handleDblClickVideo(e);
+  }
+  render(){
     var {videoData} = this.props;
     var VideoItems = videoData.albumVideos.map(function(video, i){
       return (
@@ -52,10 +56,8 @@ var VideoTable = React.createClass({
         </div>
       </div>
     )
-  },
-  handleDblClickVideo: function(e) {
-    this.props.handleDblClickVideo(e);
   }
-});
 
-module.exports = VideoTable;
+}
+
+export default VideoTable;
