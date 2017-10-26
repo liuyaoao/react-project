@@ -24,11 +24,12 @@ var notInstalledApps = [
 ]
 
 class AppCenter extends Component{
+
   componentDidMount(){
     setWinHeight(this.props.id);
     document.addEventListener('mousemove', this.handleMouseMove);
     $(".ws-select").select2();
-  },
+  }
   componentWillUnmount () {
     document.removeEventListener('mousemove', this.handleMouseMove);
   }
@@ -116,8 +117,8 @@ class AppCenter extends Component{
         </div>
       </div>
     )
-  },
-  handleShow: function(key, e){
+  }
+  handleShow = (key, e)=>{
     $('#appWindow .wi').each(function(){
       $(this).removeClass('active');
     })
@@ -126,7 +127,7 @@ class AppCenter extends Component{
     })
     $(e.target.parentNode).addClass('active');
     $('#appWindow #wi_right_' + key).addClass('active');
-  },
+  }
 }
 
 export default AppCenter;

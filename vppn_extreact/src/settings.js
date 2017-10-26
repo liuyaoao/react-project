@@ -15,7 +15,7 @@ import RouterPhoto from './app/windows/router/routerPhoto';
 import RouterVideo from './app/windows/router/routerVideo';
 // var RouterFileView = require('./app/windows/router/routerFileView');
 // var RouterMusicView = require('./app/windows/router/routerMusicView');
-// var AppCenter = require('./app/windows/appCenter');
+import AppCenter from './app/windows/appCenter';
 
 class Settings extends Component{
   state = {
@@ -73,9 +73,9 @@ class Settings extends Component{
       // case 'music':
       //   return <RouterMusicView id={id} manager={this.props.manager}/>
       //   break;
-      // case 'app-center':
-      //   return <AppCenter id={id}/>
-      //   break;
+      case 'app-center':
+        return <AppCenter id={id}/>
+        break;
       default:
         return null;
     }

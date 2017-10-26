@@ -4,6 +4,10 @@ import $ from 'jquery';
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as HomeActions from '../../app/actions/home_action';
+
 import WindowModel from '../models/window';
 import ManagerModel from '../models/manager';
 // var TaskbarModel = require('../models/taskbar');
@@ -45,7 +49,7 @@ class Taskbar extends Component{
     }
   }
 
-  toggleWindow(e) {
+  toggleWindow = (e)=>{
     const { desktopType } = this.props;
     var windows;
     if(desktopType == "router") {
@@ -88,7 +92,7 @@ class Taskbar extends Component{
     this.props.manager.focus(null);
   }
 
-  toggleAllWindows() {
+  toggleAllWindows = ()=>{
     const { desktopType } = this.props;
     var windows;
     if(desktopType == "router") {
@@ -227,4 +231,21 @@ Taskbar.propTypes={
   // taskbar: React.PropTypes.instanceOf(TaskbarModel).isRequired
 }
 
-export default Taskbar;
+// module.exports = Taskbar;
+const mapStateToProps = (state)=>{
+  const { desktopType } = state.homeReducer;
+  return {
+    desktopType
+  }
+}
+
+const mapDispatchToProps = (dispatch)=>{
+  return {
+    actions: bindActionCreators(HomeActions, dispatch)
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Taskbar);

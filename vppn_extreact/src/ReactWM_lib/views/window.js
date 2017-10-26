@@ -1,6 +1,6 @@
 
 var _ = require('lodash');
-import $ from 'jquery';
+// import $ from 'jquery';
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 // var classSet = require('react/addons').addons.classSet;
@@ -144,7 +144,7 @@ class Window extends Component{
     }
   }
 
-  maximize () {
+  maximize = ()=>{
     ReactDOM.findDOMNode(this).style.transition = 'all 0.3s ease';
     this.window.requestFocus();
     if(!this.window.isMaximize) {
@@ -179,7 +179,7 @@ class Window extends Component{
     }.bind(this), 300);
   }
 
-  minimize () {
+  minimize = ()=>{
     ReactDOM.findDOMNode(this).style.transition = 'all 0.3s ease';
     this.window.requestFocus();
     this.window.minimize($('#taskbar-'+this.window.id).offset().left + 16 + $('#taskbar-'+this.window.id).width()/2, 0);
