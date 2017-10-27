@@ -148,7 +148,7 @@ var openMenuWin = function () {
   $('#start-container').hide();
 };
 
-//router icons
+//router icons。  添加PC端的桌面图标
 manager.open_icon('photo', {
   x: 0,
   y: 0,
@@ -180,7 +180,7 @@ manager.open_icon('my-phone', {
   iconUrl: 'images/icon/my-phone.png'
 });
 
-//phone icons
+//phone icons.  添加手机端的桌面图标
 manager.open_icon('phone_disconnect', {
   type: 'phone',
   x: 0,
