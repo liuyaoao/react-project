@@ -1,7 +1,8 @@
 import $ from 'jquery';
 import React from 'react';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
-import { Button,Tabs, List, Switch,Toast} from 'antd-mobile';
+import { Button,Tabs, List, Switch,Toast,InputItem,
+  TextareaItem,Flex} from 'antd-mobile';
 import { Icon} from 'antd';
 import { createForm } from 'rc-form';
 const TabPane = Tabs.TabPane;
@@ -14,6 +15,7 @@ class CommonSendComp extends React.Component {
         flowBranchList:[], //流程分支列表
         flowBranch2PersonMap:{}, //流程分支对应的人员列表
         activeTabkey:'',
+        messageType:'message_1', //选择发送的消息类型
       };
   }
   componentWillMount(){
@@ -92,17 +94,13 @@ class CommonSendComp extends React.Component {
     });
   }
 
-  // onClickShowDepartment = () => {
-  //   this.setState({showDepartment: true});
-  // }
-
-  // onBackSendContentCall = () => {
-  //   this.setState({showDepartment: false});
-  // }
   handleTabClick = (key)=>{
     this.setState({
       activeTabkey:key,
     });
+  }
+  onClickCheckedMsgType = (checked,msgType)=>{ //选择某一种发送消息类型
+    this.setState({messageType:msgType});
   }
 
   render() {
@@ -144,7 +142,7 @@ class CommonSendComp extends React.Component {
                 initialValue: false,
                 valuePropName: 'checked',
               })}
-              onClick={(checked) => { console.log(checked); }}
+              onClick={(checked) => { this.onClickCheckedMsgType(checked,"message_1"); }}
             />}
           >网络消息</List.Item>
           <List.Item
@@ -153,13 +151,40 @@ class CommonSendComp extends React.Component {
                 initialValue: false,
                 valuePropName: 'checked',
               })}
-              onClick={(checked) => { console.log(checked); }}
+              onClick={(checked) => { this.onClickCheckedMsgType(checked,"message_2"); }}
             />}
           >手机短信</List.Item>
         </div>
+        {
+          this.state.messageType=="message_2":
+          (<div>
+            <Flex>
+              <Flex.Item>
+                <div style={{margin:'0.2rem 0 0 0.2rem',color:'black',fontSize: '0.34rem'}}>标题：</div>
+                <TextareaItem
+                  {...getFieldProps('bt')}
+                  title=""
+                  placeholder={'请输入...'}
+                  rows={4}
+                  labelNumber={0}
+                />
+              </Flex.Item>
+            </Flex>
+            <Flex>
+              <Flex.Item>
+                <div style={{margin:'0.2rem 0 0 0.2rem',color:'black',fontSize: '0.34rem'}}>标题：</div>
+                <TextareaItem
+                  {...getFieldProps('bt')}
+                  title=""
+                  placeholder={'请输入...'}
+                  rows={4}
+                  labelNumber={0}
+                />
+              </Flex.Item>
+            </Flex>
+          </div>):null
+        }
         <Button className="btn" type="primary" onClick={this.onClickSend}>发送</Button>
-
-        {/*this.state.showDepartment? (<DS_DepartmentComp backSendContentCall={()=>this.onBackSendContentCall()} isShow={true}/>):null*/}
       </div>
     )
   }

@@ -22,3 +22,7 @@
 *  superagent-prefix： .use(prefix); 给url加一个绝对url的前缀，一般是测试的时候用。
 ### 2、mattermost-redux:
 *  这个本来是mattermost开源项目自己弄的一个redux组件，可以使用npm下载。但是我们在使用的时候遇到一些问题，所以单独copy出来放在我们项目里了，然后稍微改了一些地方以适应我们自己的需求。所以可以不用原mattermost那样使用npm install的方式下载了。
+
+###关于本地开发环境和生产打包编译:
+* 首先，本地开发环境和打包编译的配置文件是分开的。
+*
