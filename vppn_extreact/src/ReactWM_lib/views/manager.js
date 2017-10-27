@@ -18,7 +18,12 @@ import CommonDialog from '../../app/components/common/dialog';
 
 var heartbeatTimer = null;
 class Manager extends Component{
-
+  state = {
+    offset: {
+      top: 0,
+      left: 0
+    }
+  }
   componentDidMount () {
     this.manager = this.props.manager;
     this.manager.on('change', this.forceUpdate, this);
@@ -34,18 +39,14 @@ class Manager extends Component{
 
       //点击桌面的时候显示右键菜单
       $(".desktopIcon-manager").contextmenu(function(event) {
-
           var x=event.clientX;
           var y=event.clientY-50;
           var menu=$(".content-menu");
-
           //判断坐标
           var width=document.getElementById('desktop').clientWidth;
           var height=document.getElementById('desktop').clientHeight;
-
           x=(x+menu.width())>=width?width-menu.width():x;
           y=(y+menu.height())>=height?y-menu.height():y;
-
           //alert("可视高度："+height+",鼠标高度："+y);
           menu.css("top",y);
           menu.css("left",x);
@@ -124,13 +125,6 @@ class Manager extends Component{
     clearInterval(heartbeatTimer);
     heartbeatTimer = null;
   }
-  state = {
-    offset: {
-      top: 0,
-      left: 0
-    }
-  }
-
   arrange() {
     var ul=$(".icons");
       var desktop=$(".desktopIcon-manager");

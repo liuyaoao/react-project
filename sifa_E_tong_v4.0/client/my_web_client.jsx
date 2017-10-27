@@ -349,6 +349,20 @@ class MyWebClient {
             success && success(data,res);
           }, error));
     }
+    getContactsByUserNames(userNames,success,error){ //通过逗号隔开的用户名字符串获取通讯录列表
+      let _this = this;
+      this.defaultHeaders[HEADER_TOKEN] = localStorage.getItem(this.tokenName);
+      request.
+          post(`${this.getUsersRoute()}/contacts/search`).
+          set(this.defaultHeaders).
+          type('application/json').
+          accept('application/json').
+          use(nocache).
+          send(userNames||'').
+          end(this.handleResponse.bind(this, 'contacts', (data,res)=>{
+            success && success(data,res);
+          }, error));
+    }
 
     addOrEditContacts(actionName,param, success, error) {
       this.defaultHeaders[HEADER_TOKEN] = localStorage.getItem(this.tokenName);
@@ -756,6 +770,22 @@ class MyWebClient {
             url += `?time=${lastPictureUpdate}`;
         }
         return url;
+    }
+    sendTelephoneMessage(params, success,error){
+      $.ajax({
+          url : `${this.url}${this.urlVersion4}/sms/send`,
+          type:'POST',
+          data : params,
+          async : true,
+          cache:false,
+          xhrFields: {
+              withCredentials: true
+          },
+          crossDomain: true,
+          success : (data)=>{
+            success && success(data);
+          }
+        });
     }
 
 }

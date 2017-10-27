@@ -25,4 +25,9 @@
 
 ###关于本地开发环境和生产打包编译:
 * 首先，本地开发环境和打包编译的配置文件是分开的。
-*
+#### 开发环境的配置是：
+*    root.html, webpack.config.js, 启动的批处理为：run.bat,express_server.bat。 编译好的文件是打包到dist目录的。
+#### 生产环境的打包配置是：
+*    root_build.html, webpack.config.build.js, 启动的批处理为：build.bat。 编译好的文件是打包到dist_build目录的。
+
+##

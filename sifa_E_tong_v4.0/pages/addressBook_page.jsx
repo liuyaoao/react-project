@@ -113,7 +113,6 @@ class AddressBookPage extends React.Component {
       myWebClient.getServerAddressBook(params,
         (data,res)=>{
           let parseData = JSON.parse(res.text);
-          // console.log("request server addressbook error res text:",objArr);
           let objArr = addressBookUtils.parseContactsData(parseData.contacts);
           this.setState({
             "addressbookData":objArr,

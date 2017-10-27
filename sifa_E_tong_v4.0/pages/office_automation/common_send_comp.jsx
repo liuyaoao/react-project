@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import React from 'react';
 import * as OAUtils from 'pages/utils/OA_utils.jsx';
+import MyWebClient from 'client/my_web_client.jsx';
+import * as addressBookUtils from 'pages/utils/addressBook_utils.jsx';
 import { Button,Tabs, List, Switch,Toast,InputItem,
   TextareaItem,Flex} from 'antd-mobile';
 import { Icon} from 'antd';
@@ -15,7 +17,10 @@ class CommonSendComp extends React.Component {
         flowBranchList:[], //流程分支列表
         flowBranch2PersonMap:{}, //流程分支对应的人员列表
         activeTabkey:'',
-        messageType:'message_1', //选择发送的消息类型
+        checkedPersonNames:[], //选中的要发送的人员的用户名列表
+        checkedPersonPhones:[], //选中的要发送的人员的手机号列表
+        networkMsg:false, //是否勾选发送网络消息
+        phoneMsg:false, //是否勾选发送手机短信
       };
   }
   componentWillMount(){
@@ -31,7 +36,7 @@ class CommonSendComp extends React.Component {
       otherssign:this.props.otherssign,
       gwlcunid:this.props.gwlcunid,
       successCall: (data)=>{
-        console.log("get 发文管理的发送的流程和人员信息数据:",data);
+        // console.log("get 发文管理的发送的流程和人员信息数据:",data);
         this.formatServerSendInfo(data.values['lcfzs']); //解析流程分支数据
       }
     });
@@ -53,10 +58,6 @@ class CommonSendComp extends React.Component {
       flowBranch2PersonMap,
       flowBranchList,
     });
-  }
-
-  onChange = (val) => {
-    console.log(val);
   }
 
   onClickSend = () => {
@@ -92,6 +93,58 @@ class CommonSendComp extends React.Component {
         this.props.onBackToDetailCall();
       }
     });
+    this.sendTelephoneMessage();
+  }
+  sendTelephoneMessage(){ //发送手机短信
+    if(!this.state.phoneMsg || this.state.checkedPersonPhones.length<=0){ return;}
+    let tempFormData = this.props.form.getFieldsValue();
+    MyWebClient.sendTelephoneMessage({
+      "destaddr" : this.state.checkedPersonPhones.join(';'),
+      "messagecontent" : "标题："+this.props.fileTitle+";  内容："+tempFormData.messagecontent
+    },(data)=>{
+      // let parseData = (typeof data == "string")? JSON.parse(data):{};
+      console.log("sendTelephoneMessage---response-----:",data);
+      // Toast.info('发送成功!', 2);
+      // data = data.replace(/%20/g, " ");
+      // let res = JSON.parse(data);
+      // if(res.code == "1"){
+      //   successCall && successCall(res);
+      // }else{
+      //   errorCall && errorCall(res);
+      // }
+    },null);
+  }
+  onPersonCheckChanged = (evt)=>{  //当选中人员有变动时
+    let checkedList = $(".checkbox_list .checkbox_"+this.state.activeTabkey+":checked");
+    let checkedNames = [];
+    checkedList.each((index,ele)=>{
+      checkedNames.push($(ele).data("commonname"));
+    });
+    // console.log("onPersonCheckChanged:",$(evt.target).is(':checked'),checkedList,checkedNames);
+    this.setState({checkedPersonNames:checkedNames});
+    if(checkedNames.length<=0){
+      this.setState({checkedPersonPhones:[]});
+      return;
+    }
+    MyWebClient.getContactsByUserNames(checkedNames.join(','),(data,res)=>{  //获取选中的人员的手机号码。
+      let parseData = JSON.parse(res.text);
+      let objArr = data||[];
+      console.log("getContactsByUserNames---response---:",data);
+      let personPhoneArr = objArr.map((item)=>{
+        return item.telephoneNumber;
+      });
+      this.setState({checkedPersonPhones:personPhoneArr});
+    },null);
+  }
+  onSendPhoneChanged = (val)=>{
+    val = val.replace(/;/g, ',');
+    val = val.replace(/；/g, ',');
+    val = val.replace(/，/g, ',');
+    val = val.replace(/。/g, ',');
+    // val = val.replace(/./g, ',');
+    this.setState({
+      checkedPersonPhones:val.split(',')
+    });
   }
 
   handleTabClick = (key)=>{
@@ -100,14 +153,18 @@ class CommonSendComp extends React.Component {
     });
   }
   onClickCheckedMsgType = (checked,msgType)=>{ //选择某一种发送消息类型
-    this.setState({messageType:msgType});
+    if(msgType == "networkMsg"){
+      this.setState({networkMsg:checked});
+    }else if(msgType == "phoneMsg"){
+      this.setState({phoneMsg:checked});
+    }
   }
 
   render() {
     let {flowBranch2PersonMap, flowBranchList} = this.state;
     const { getFieldProps } = this.props.form;
     return (
-      <div style={{minHeight:"5rem",padding:"0.2rem",marginBottom:'1em'}}>
+      <div className="oa_send_container" style={{minHeight:"5rem",padding:"0.2rem",marginBottom:'1em'}}>
         {!this.state.showDepartment? (
           <Tabs
             defaultActiveKey={this.state.activeTabkey}
@@ -124,7 +181,12 @@ class CommonSendComp extends React.Component {
                     <div className="checkbox_list">
                       {flowBranch2PersonMap[k.value] && flowBranch2PersonMap[k.value].map(person => (
                         <div key={person.unid} className="checkbox_custom">
-                          <input type="checkbox" id={person.unid} data-unid={person.unid} className={"checkbox_"+k.value} />
+                          <input type="checkbox"
+                            id={person.unid}
+                            data-commonname={person.commonname}
+                            data-unid={person.unid}
+                            onChange={this.onPersonCheckChanged}
+                            className={"checkbox_"+k.value} />
                           <label htmlFor={person.unid}><span className="box"><i></i></span>{person.commonname}</label>
                         </div>
                       ))}
@@ -138,45 +200,71 @@ class CommonSendComp extends React.Component {
         <div className="switch_custom">
           <List.Item
             extra={<Switch
-              {...getFieldProps('message_1', {
+              {...getFieldProps('networkMsg', {
                 initialValue: false,
                 valuePropName: 'checked',
               })}
-              onClick={(checked) => { this.onClickCheckedMsgType(checked,"message_1"); }}
+              onClick={(checked) => { this.onClickCheckedMsgType(checked,"networkMsg"); }}
             />}
           >网络消息</List.Item>
           <List.Item
             extra={<Switch
-              {...getFieldProps('message_2', {
+              {...getFieldProps('phoneMsg', {
                 initialValue: false,
                 valuePropName: 'checked',
               })}
-              onClick={(checked) => { this.onClickCheckedMsgType(checked,"message_2"); }}
+              onClick={(checked) => { this.onClickCheckedMsgType(checked,"phoneMsg"); }}
             />}
           >手机短信</List.Item>
         </div>
         {
-          this.state.messageType=="message_2":
+          this.state.phoneMsg?
           (<div>
             <Flex>
               <Flex.Item>
-                <div style={{margin:'0.2rem 0 0 0.2rem',color:'black',fontSize: '0.34rem'}}>标题：</div>
+                <div style={{margin:'0.2rem 0 0 0.2rem',color:'black',fontSize: '0.34rem'}}>收件人：</div>
                 <TextareaItem
-                  {...getFieldProps('bt')}
                   title=""
-                  placeholder={'请输入...'}
-                  rows={4}
+                  placeholder={''}
+                  rows={2}
                   labelNumber={0}
+                  value={this.state.checkedPersonNames.join(',')}
                 />
               </Flex.Item>
             </Flex>
             <Flex>
               <Flex.Item>
-                <div style={{margin:'0.2rem 0 0 0.2rem',color:'black',fontSize: '0.34rem'}}>标题：</div>
+                <div style={{margin:'0.2rem 0 0 0.2rem',color:'black',fontSize: '0.34rem'}}>电话号码：<span style={{color:'red',fontSize:'0.28rem'}}>(*多个号码以逗号','隔开)</span></div>
                 <TextareaItem
-                  {...getFieldProps('bt')}
+                  {...getFieldProps('destaddr')}
                   title=""
-                  placeholder={'请输入...'}
+                  placeholder={''}
+                  rows={2}
+                  labelNumber={0}
+                  onChange={this.onSendPhoneChanged}
+                  value={this.state.checkedPersonPhones.join(',')}
+                />
+              </Flex.Item>
+            </Flex>
+            <Flex>
+              <Flex.Item>
+                <div style={{margin:'0.2rem 0 0 0.2rem',color:'black',fontSize: '0.34rem'}}>主题：</div>
+                <TextareaItem
+                  title=""
+                  placeholder={''}
+                  rows={2}
+                  labelNumber={0}
+                  value={this.props.fileTitle}
+                />
+              </Flex.Item>
+            </Flex>
+            <Flex>
+              <Flex.Item>
+                <div style={{margin:'0.2rem 0 0 0.2rem',color:'black',fontSize: '0.34rem'}}>短信内容：</div>
+                <TextareaItem
+                  {...getFieldProps('messagecontent')}
+                  title=""
+                  placeholder={''}
                   rows={4}
                   labelNumber={0}
                 />
