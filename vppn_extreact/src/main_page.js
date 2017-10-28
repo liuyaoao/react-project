@@ -93,6 +93,7 @@ var hideStartMenu = function () {
   }, 200);
 };
 
+//点击开始菜单的某一项，打开窗口。
 var openMenuWin = function () {
   var defaultOptions = {
     id: '',

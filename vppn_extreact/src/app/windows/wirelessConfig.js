@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import Utils from '../script/utils';
 // var {connect} = require('react-redux');
 // var {bindActionCreators} = require('redux');
+import { Container } from '@extjs/ext-react';
 import NetworkSidebar from'../components/network/networkSidebar';
 import CommonDialog from'../components/common/dialog';
 
@@ -69,6 +70,7 @@ class WirelessConfig extends Component{
             <NetworkSidebar getWifiSettingsInfo={this.getWifiSettingsInfo} getWifiSettingsWPASecurityKeys={this.getWifiSettingsWPASecurityKeys}/>
           </div>
           <div className="cell colspan3 wi-right">
+            {/*第一个tab的右边内容块*/}
             <div className="wi active" id="wi_right_1">
               <form id="wifiSettingForm" action="/cgi-bin/wifi_settings.cgi" method="post" onSubmit={this.handleSubmitWifiSettings} style={{display:"none"}}>
                 <div className="wi-right-1">
@@ -252,6 +254,7 @@ class WirelessConfig extends Component{
                 <img src="images/loading.gif" style={{width:"40px", height:"40px", marginTop:"20px"}}/>
               </div>
             </div>
+            {/*第一个tab的右边内容块*/}
             <div className="wi" id="wi_right_2">
               <div className="wi-right-1">
                 <form id="internetForm" className="in-form auto-y" action="/cgi-bin/set-tinc.cgi" method="post" onSubmit={this.handleSubmitInternet}>

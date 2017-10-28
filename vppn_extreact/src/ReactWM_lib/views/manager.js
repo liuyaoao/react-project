@@ -9,14 +9,15 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as HomeActions from '../../app/actions/home_action';
 
-import WindowModel from '../models/window';
+import WindowModel from '../models/window'; //窗口的控制器和数据模型
 import IconModel from '../models/icon';
 import ManagerModel from '../models/manager';
-import Window from './window';
-import Icon from './icon';
+import Window from './window'; //窗口组件
+import Icon from './icon';  //图标组件
 import CommonDialog from '../../app/components/common/dialog';
 
 var heartbeatTimer = null;
+//整个桌面部分控件
 class Manager extends Component{
   state = {
     offset: {
@@ -27,61 +28,56 @@ class Manager extends Component{
   componentDidMount () {
     this.manager = this.props.manager;
     this.manager.on('change', this.forceUpdate, this);
-
     var el = $(ReactDOM.findDOMNode(this));
-    this.setState({ offset: el.offset() });
-
+    this.setState({  offset: el.offset() });
     var _this = this;
     //屏蔽浏览器右键菜单
-      $(document).contextmenu(function() {
-          return false;
-      });
-
-      //点击桌面的时候显示右键菜单
-      $(".desktopIcon-manager").contextmenu(function(event) {
-          var x=event.clientX;
-          var y=event.clientY-50;
-          var menu=$(".content-menu");
-          //判断坐标
-          var width=document.getElementById('desktop').clientWidth;
-          var height=document.getElementById('desktop').clientHeight;
-          x=(x+menu.width())>=width?width-menu.width():x;
-          y=(y+menu.height())>=height?y-menu.height():y;
-          //alert("可视高度："+height+",鼠标高度："+y);
-          menu.css("top",y);
-          menu.css("left",x);
-          menu.show();
-      });
+    $(document).contextmenu(function() {
+        return false;
+    });
+    //点击桌面的时候显示右键菜单
+    $(".desktopIcon-manager").contextmenu(function(event) {
+        var x=event.clientX;
+        var y=event.clientY-50;
+        var menu=$(".content-menu");
+        //判断坐标
+        var width=document.getElementById('desktop').clientWidth;
+        var height=document.getElementById('desktop').clientHeight;
+        x=(x+menu.width())>=width?width-menu.width():x;
+        y=(y+menu.height())>=height?y-menu.height():y;
+        //alert("可视高度："+height+",鼠标高度："+y);
+        menu.css("top",y);
+        menu.css("left",x);
+        menu.show();
+    });
 
     $(".content-menu ul li").click(function() {
-          var text=$(this).text();
-
-          switch (text) {
+        var text=$(this).text();
+        switch (text) {
           case "Refresh":
               document.location.reload();
               break;
           case "Line Up To Grid":
-        $("#icon_check_lineUptoGrid").toggle();
-        if($("#icon_check_lineUptoGrid").is(':visible')) {
-          _this.arrange();
-        }
-        localStorage.lineUptoGrid = $("#icon_check_lineUptoGrid")[0].style.display;
+              $("#icon_check_lineUptoGrid").toggle();
+              if($("#icon_check_lineUptoGrid").is(':visible')) {
+                _this.arrange();
+              }
+              localStorage.lineUptoGrid = $("#icon_check_lineUptoGrid")[0].style.display;
               break;
           case "Show All Windows":
           case "Hide All Windows":
-        _this.toggleAllWindows();
+              _this.toggleAllWindows();
               break;
           case "Logout":
               if(confirm("Are you should to log out？")){
-
               }
               break;
           default:
               break;
-          }
+        }
 
-          $(".content-menu").hide();
-      });
+        $(".content-menu").hide();
+    });
   }
 
  shouldComponentUpdate(nextProps, nextState) {
@@ -391,7 +387,7 @@ class Manager extends Component{
     const { desktopType, cySize, vpntopologyData, vpntopologyStatus } = this.props;
     var bShowAll = true;
     var windows, icons;
-    if(desktopType == "router") {
+    if(desktopType == "router") { //pc端的图标
       windows = this.props.manager.openWindows_router().map(function (window) {
         if(!window.isMinimize) {
           bShowAll = false;
@@ -404,7 +400,7 @@ class Manager extends Component{
         return <Icon key={icon.id} offset={this.state.offset} icon={icon} manager={this.props.manager} desktopType={desktopType} setDesktopType={this.props.actions.setDesktopType}/>
       }, this);
     }
-    else if(desktopType == "phone") {
+    else if(desktopType == "phone") {  //移动端的图标
       windows = this.props.manager.openWindows_phone().map(function (window) {
         if(!window.isMinimize) {
           bShowAll = false;
@@ -447,6 +443,7 @@ class Manager extends Component{
               <li><a href="javascript:;">Logout</a></li>
           </ul>
         </div>
+        {/*一个通用的提示弹窗*/}
         <CommonDialog id="phoneDisDialog" dialogMsg={{title: 'Tips', content: 'Are you sure to disconnect from your phone ?'}} confirmFunc={this._diaglogConformFunc} />
         <div data-role="dialog, draggable" id="phoneDisNotifyDialog" className="padding20 dialog" data-overlay="true">
           <h3>Tips</h3>

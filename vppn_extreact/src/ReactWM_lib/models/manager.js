@@ -3,6 +3,7 @@ var _ = require('lodash');
 var signals = require('signals');
 import Window from './window';
 import Icon from './icon';
+import ContextMenuModel from './contextMenu';
 
 var INITIAL_INDEX = 1;
 
@@ -14,6 +15,7 @@ var Manager =  function (windows, icons) {
   this._active = false;
 
   this._icons = {};
+  this._contextMenuModel = new ContextMenuModel({id:"contextMenu_1"});
 
   if (_.isArray(windows)) {
     windows.forEach(this.add, this);

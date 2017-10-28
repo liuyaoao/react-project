@@ -14,6 +14,7 @@ import ManagerModel from '../models/manager';
 import Window from './window';
 import StartMenu from './startMenu';
 
+//整个任务栏部分
 class Taskbar extends Component{
   state = {
     upload: 0,

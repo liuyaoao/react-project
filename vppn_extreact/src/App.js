@@ -1,6 +1,7 @@
 
 import React,{Component} from 'react'
 import {Provider} from 'react-redux';
+
 import { renderWhenReady } from '@extjs/reactor';
 import ReactWMHome from './main_page';
 import "./scss/screen.scss";

@@ -209,3 +209,34 @@ $fontSize: 0.9rem;
     }
   }
 }
+.ext_treeList_container{
+  .x-treelist-row [class^="mif-"],[class*=" mif-"] {
+    position: absolute;
+  }
+  max-width: 100%;
+  font-weight: normal;
+  // overflow-y: auto;
+  li.x-treelist-item {
+    cursor: pointer;
+    // border-top: none;
+    color: #595959; //656e79
+    // border-bottom: 1px solid #eee;
+    div.x-treelist-item-wrap {
+      // padding-left: 45px;
+      // background-color: #fff;
+      // padding-top: 15px;
+      // padding-bottom: 15px;
+
+    }
+
+  }
+  li.x-treelist-item:hover {
+    // background: #00ccff; //00ccff rgba(0, 204, 255, 0.33)
+  }
+  li.x-treelist-item-selected {
+    // background-color: #0072c6; //00b4f5; 2374b5 1b9aff
+    div.x-treelist-item-wrap{
+      // color: #fff;
+    }
+  }
+}
