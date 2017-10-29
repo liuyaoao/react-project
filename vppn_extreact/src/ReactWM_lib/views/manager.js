@@ -14,6 +14,7 @@ import IconModel from '../models/icon';
 import ManagerModel from '../models/manager';
 import Window from './window'; //窗口组件
 import Icon from './icon';  //图标组件
+import ContextMenu from './ContextMenu';  //右键菜单组件
 import CommonDialog from '../../app/components/common/dialog';
 
 var heartbeatTimer = null;
@@ -30,54 +31,6 @@ class Manager extends Component{
     this.manager.on('change', this.forceUpdate, this);
     var el = $(ReactDOM.findDOMNode(this));
     this.setState({  offset: el.offset() });
-    var _this = this;
-    //屏蔽浏览器右键菜单
-    $(document).contextmenu(function() {
-        return false;
-    });
-    //点击桌面的时候显示右键菜单
-    $(".desktopIcon-manager").contextmenu(function(event) {
-        var x=event.clientX;
-        var y=event.clientY-50;
-        var menu=$(".content-menu");
-        //判断坐标
-        var width=document.getElementById('desktop').clientWidth;
-        var height=document.getElementById('desktop').clientHeight;
-        x=(x+menu.width())>=width?width-menu.width():x;
-        y=(y+menu.height())>=height?y-menu.height():y;
-        //alert("可视高度："+height+",鼠标高度："+y);
-        menu.css("top",y);
-        menu.css("left",x);
-        menu.show();
-    });
-
-    $(".content-menu ul li").click(function() {
-        var text=$(this).text();
-        switch (text) {
-          case "Refresh":
-              document.location.reload();
-              break;
-          case "Line Up To Grid":
-              $("#icon_check_lineUptoGrid").toggle();
-              if($("#icon_check_lineUptoGrid").is(':visible')) {
-                _this.arrange();
-              }
-              localStorage.lineUptoGrid = $("#icon_check_lineUptoGrid")[0].style.display;
-              break;
-          case "Show All Windows":
-          case "Hide All Windows":
-              _this.toggleAllWindows();
-              break;
-          case "Logout":
-              if(confirm("Are you should to log out？")){
-              }
-              break;
-          default:
-              break;
-        }
-
-        $(".content-menu").hide();
-    });
   }
 
  shouldComponentUpdate(nextProps, nextState) {
@@ -303,7 +256,7 @@ class Manager extends Component{
     return position;
   }
 
-  toggleAllWindows() {
+  toggleAllWindows = ()=>{
     const { desktopType } = this.props;
     var windows;
     if(desktopType == "router") {
@@ -399,8 +352,7 @@ class Manager extends Component{
       icons = this.props.manager.allIcons_router().map(function (icon) {
         return <Icon key={icon.id} offset={this.state.offset} icon={icon} manager={this.props.manager} desktopType={desktopType} setDesktopType={this.props.actions.setDesktopType}/>
       }, this);
-    }
-    else if(desktopType == "phone") {  //移动端的图标
+    }else if(desktopType == "phone") {  //移动端的图标
       windows = this.props.manager.openWindows_phone().map(function (window) {
         if(!window.isMinimize) {
           bShowAll = false;
@@ -418,7 +370,7 @@ class Manager extends Component{
       /* jshint ignore: start */
       <div>
         {/*桌面上的图标*/}
-        <div id="desktop" className="desktopIcon-manager">
+        <div ref="desktopManager" id="desktop" className="desktopIcon-manager">
           <ul id="icons" className="icons">
             {icons}
             <div id="icon_position_line" className="icon-position-line"></div>
@@ -429,20 +381,13 @@ class Manager extends Component{
           <div className='windows'>{windows}</div>
         </div>
         {/*右键菜单*/}
-        <div className="content-menu">
-          <ul>
-              <li><a href="javascript:;">Refresh</a></li>
-              <li><span id="icon_check_lineUptoGrid" className="mif-checkmark icon" style={{display: localStorage.lineUptoGrid ? localStorage.lineUptoGrid : "block"}}></span><a href="javascript:;">Line Up To Grid</a></li>
-              <li><a href="javascript:;">{bShowAll ? "Show All Windows" : "Hide All Windows"}</a></li>
-              <hr/>
-              <li><a href="javascript:;">Help</a></li>
-              <hr/>
-              <li><a href="javascript:;">About</a></li>
-              <hr/>
-              <li><a href="javascript:;">Settings</a></li>
-              <li><a href="javascript:;">Logout</a></li>
-          </ul>
-        </div>
+        <ContextMenu
+          manager={this.props.manager}
+          desktopType={desktopType}
+          desktopManagerCls={'desktopIcon-manager'}
+          arrange={this.arrange}
+          toggleAllWindows={this.toggleAllWindows}
+        />
         {/*一个通用的提示弹窗*/}
         <CommonDialog id="phoneDisDialog" dialogMsg={{title: 'Tips', content: 'Are you sure to disconnect from your phone ?'}} confirmFunc={this._diaglogConformFunc} />
         <div data-role="dialog, draggable" id="phoneDisNotifyDialog" className="padding20 dialog" data-overlay="true">

@@ -390,6 +390,10 @@ _.extend(Manager.prototype, {
     });
   },
 
+  getContextMenu:function(){
+    return this._contextMenuModel;
+  },
+
 
   /**
    * export as a standard JS array

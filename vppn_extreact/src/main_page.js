@@ -80,6 +80,7 @@ var clickBody = function(e){
     // manager.focus(null);
     $(".icons li").removeClass("icons-focus");
   }
+  manager.getContextMenu().hideContextMenuEmit();
 }
 
 var toggleStartMenu = function () {

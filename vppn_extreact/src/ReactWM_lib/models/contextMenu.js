@@ -23,6 +23,13 @@ _.extend(ContextMenuModel.prototype, {
     // height: 80,
     title: ''
   },
+  hideContextMenuEmit: function(){
+    this.emit("change:hide");
+  },
+  showContextMenuEmit: function(clickX,clickY){
+    this.emit("change:show",clickX,clickY);
+  },
+
 
 });
 
