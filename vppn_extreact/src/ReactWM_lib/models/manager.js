@@ -151,8 +151,7 @@ _.extend(Manager.prototype, {
     if(id == null) {
       this._active = false;
       this.emit('change');
-    }
-    else {
+    }else {
       var window = _.isObject(id) ? id : this.get(id);
 
       if (! window) {
@@ -394,6 +393,9 @@ _.extend(Manager.prototype, {
     return this._contextMenuModel;
   },
 
+  clickDesktopEmit:function(){
+    this.emit('click:desktop');
+  },
 
   /**
    * export as a standard JS array

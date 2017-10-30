@@ -12,7 +12,7 @@ import WindowModel from '../models/window';
 import ManagerModel from '../models/manager';
 // var TaskbarModel = require('../models/taskbar');
 import Window from './window';
-import StartMenu from './startMenu';
+import StartMenu from './startMenu'; //开始菜单。
 
 //整个任务栏部分
 class Taskbar extends Component{
@@ -89,8 +89,8 @@ class Taskbar extends Component{
     }
   }
 
-  handleClickStart = ()=>{
-    this.props.manager.focus(null);
+  onClickAppBar = (evt)=>{
+    this.props.manager.emit("click:appbar");
   }
 
   toggleAllWindows = ()=>{
@@ -192,15 +192,9 @@ class Taskbar extends Component{
     }
 
     return (
-      // <span style={{padding:0}}>
-      //   {windows}
-      // </span>
-      <div className="app-bar fixed-top darcula" data-role="appbar">
+      <div className="app-bar fixed-top darcula" data-role="appbar" onClick={this.onClickAppBar}>
           {/*<a className="app-bar-element branding">BrandName</a>*/}
-          <div className="app-bar-element">
-              <div className="dropdown-toggle startBtn" onMouseDown={this.handleClickStart}><img src="images/favicon.ico"/> Start</div>
-              <StartMenu />
-          </div>
+          <StartMenu manager={this.props.manager}/>
           <span className="app-bar-divider"></span>
           <ul className="app-bar-menu m-menu">
               {windows}
@@ -210,13 +204,13 @@ class Taskbar extends Component{
               <div><span className="mif-arrow-up"></span><span style={{color:"#00ccff"}}> {this.state.upload}KB/s</span></div>
               <div><span className="mif-arrow-down"></span><span style={{color:"#7ad61d"}}> {this.state.download}KB/s</span></div>
             </span>
-            <span className="app-bar-divider"></span>
+            {/*<span className="app-bar-divider"></span>
             <ul className="app-bar-menu m-menu">
                 <li><a><span className="mif-bubble"></span></a></li>
                 <li><a><span className="mif-user"></span></a></li>
                 <li><a><span className="mif-search"></span></a></li>
                 <li><a><span className="mif-stack2" style={{transform:"rotateY(180deg)"}}></span></a></li>
-            </ul>
+            </ul>*/}
             <span className="app-bar-divider"></span>
             <div className="app-bar-element" style={{width:"15px"}} onClick={this.toggleAllWindows} title={bShowAll ? "Show All Windows" : "Hide All Windows"}>
             </div>

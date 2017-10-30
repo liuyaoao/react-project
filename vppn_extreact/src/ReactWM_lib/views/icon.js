@@ -7,7 +7,8 @@ import ReactDOM from 'react-dom';
 import ManagerModel from '../models/manager';
 // var WindowModel = require('../models/window');
 import IconModel from '../models/icon';
-import Settings from '../../settings';
+// import Settings from '../../settings';
+import WindowContentTpl from './WindowContentTpl';
 
 var INACTIVE = 0;
 var MOVE     = 1;
@@ -29,6 +30,9 @@ class Icon extends Component{
     ReactDOM.findDOMNode(this).addEventListener('mousemove', this.handleIconMouseMove);
     ReactDOM.findDOMNode(this).addEventListener('mouseout', this.handleIconMouseOut);
     ReactDOM.findDOMNode(this).addEventListener('dblclick', this.handleIconDblClick);
+    $('.icon_container').contextmenu(function(){ //在桌面图标上右键时返回，不显示右键菜单。
+      return false;
+    });
   }
 
   // componentDidUpdate: function() {
@@ -516,7 +520,7 @@ class Icon extends Component{
     $(ReactDOM.findDOMNode(this)).removeClass("icons-move");
   }
 
-  handleIconDblClick = ()=>{
+  handleIconDblClick = ()=>{ //双击桌面图标打开窗口。
     // alert("double click " + this.icon.title);
     if(this.icon.id == "phone_disconnect") {
       // $(document.body).css("background-image", "url(../images/bj.jpg)");
@@ -553,7 +557,7 @@ class Icon extends Component{
           break;
       }
       options.x = bodyWidth - options.width / 2, options.y = bodyHeight - options.height / 2;
-      this.props.manager.open(this.icon.id, <Settings id={this.icon.id} manager={this.props.manager}/>, options);
+      this.props.manager.open(this.icon.id, <WindowContentTpl id={this.icon.id} contentComp={this.icon.contentComp} manager={this.props.manager}/>, options);
     }
   }
 
@@ -583,7 +587,7 @@ class Icon extends Component{
     };
     return (
       /* jshint ignore: start */
-      <li id={"icon-"+this.icon.id} style={styles} onMouseDown={this.handleMove}>
+      <li className={"icon_container"} id={"icon-"+this.icon.id} style={styles} onMouseDown={this.handleMove}>
         <img src={this.icon.iconUrl}/>
         <div className="icon-text">{this.icon.title}</div>
       </li>

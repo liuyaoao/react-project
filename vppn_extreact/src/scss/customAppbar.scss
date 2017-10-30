@@ -10,17 +10,35 @@
     padding-left: 0.625rem
   }
 
-  #start-container .image-format-cycle {
-    position: absolute;
-    left: 12px;
-    top: 12.5px;
-    width: 30px !important;
+  #start-container {
+    .start_menu_cnt{
+      position:absolute;
+      left:0;
+      width:250px;
+      height:0;
+      background:#3c3f41;
+      top:0;
+      border-top: 1px solid #303234;
+    }
+    .start_menu_cnt.active{
+      height:600px;
+      transition:height 0.3s ease;
+    }
+    .start_menu_cnt.disActive{
+      height:0;
+      transition:height 0.3s ease;
+    }
+    .image-format-cycle {
+      position: absolute;
+      left: 12px;
+      top: 12.5px;
+      width: 30px !important;
+      .frame {
+        background-color: transparent;
 
-    .frame {
-      background-color: transparent;
-
-      div {
-        height: 30px !important;
+        div {
+          height: 30px !important;
+        }
       }
     }
   }
