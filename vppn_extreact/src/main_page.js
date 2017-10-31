@@ -1,8 +1,9 @@
 import $ from 'jquery';
 import _ from 'lodash';
 import React, { Component } from 'react';
-import Settings from './settings';
+// import Settings from './settings';
 import ManagerModel from './ReactWM_lib/models/manager';
+import WindowContentTpl from './ReactWM_lib/views/WindowContentTpl';
 import ReactWM from './ReactWM_lib/index';
 
 // var bodyWidth = document.documentElement.clientWidth / 2, bodyHeight = (document.documentElement.clientHeight - 50) / 2;
@@ -13,7 +14,7 @@ import ReactWM from './ReactWM_lib/index';
 
 var manager = window.m = new ManagerModel(null, null);
 manager.allWindows().forEach(function (window) {
-  window.setComponent(<Settings id={window.id}/>);
+  window.setComponent(<WindowContentTpl id={window.id} manager={manager} contentComp={window.contentComp}/>);
 });
 
 var save = _.debounce(function () {
@@ -40,8 +41,9 @@ var clickBody = function(e){
 manager.open_icon('vLan', {
   x: 0,
   y: 0,
+  winId:'VlanWindow',
   title: 'vLan',
-  contentComp:'vlanWindow',
+  contentComp:'VlanWindow',
   iconUrl: 'images/icon/photo.png'
 });
 // manager.open_icon('photo', {

@@ -531,14 +531,15 @@ class Icon extends Component{
       //   phoneWindows = this.props.manager.openWindows_phone();
       // }
       showMetroDialog('#phoneDisDialog');
-    }
-    else {
+    }else {
       var options = {
+        id:this.icon.winId,
         title: this.icon.title,
         width: 1000,
         height: 570,
         x: 20,
         y: 20,
+        contentComp: this.icon.contentComp,
         icon: this.icon.iconUrl
       }
       switch (this.icon.id) {
@@ -557,7 +558,7 @@ class Icon extends Component{
           break;
       }
       options.x = bodyWidth - options.width / 2, options.y = bodyHeight - options.height / 2;
-      this.props.manager.open(this.icon.id, <WindowContentTpl id={this.icon.id} contentComp={this.icon.contentComp} manager={this.props.manager}/>, options);
+      this.props.manager.open(options.id, <WindowContentTpl id={options.id} contentComp={this.icon.contentComp} manager={this.props.manager}/>, options);
     }
   }
 

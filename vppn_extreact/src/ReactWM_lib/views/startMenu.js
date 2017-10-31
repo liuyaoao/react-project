@@ -2,7 +2,8 @@
 import $ from 'jquery';
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
-import Settings from '../../settings';
+// import Settings from '../../settings';
+import WindowContentTpl from './WindowContentTpl';
 
 var timer = null, display = "";
 class StartMenu extends Component{
@@ -39,37 +40,48 @@ class StartMenu extends Component{
     let bodyHeight = (document.documentElement.clientHeight - 50) / 2;
     console.log("clickOpenMenuWindow---:",evt);
     let $li = $(evt.target).closest('li');
-    var defaultOptions = {
+    let windowOpts = {
       id: '',
       title: '',
       width: 1000,
       height: 570,
       x: 100,
       y: 100,
+      contentComp:'',
       icon: ''
     }
     switch ($li.attr('id')) {
-      case 'menu-item-1':
-        defaultOptions.id = 'settings-1';
-        defaultOptions.title = 'Network Center';
-        defaultOptions.icon = 'images/icon/Network-Center.png';
+      case 'menu-item-0':
+        windowOpts.id = 'VlanWindow';
+        windowOpts.title = 'vlan';
+        windowOpts.contentComp = 'VlanWindow';
+        windowOpts.icon = 'images/icon/photo.png';
         break;
-      case 'menu-item-2':
-        defaultOptions.id = 'settings-2';
-        defaultOptions.title = 'VPN Center';
-        defaultOptions.icon = 'images/icon/VPN.png';
-        defaultOptions.width = 1015;
-        break;
-      case 'app-center':
-        defaultOptions.id = 'app-center';
-        defaultOptions.title = 'App Center';
-        defaultOptions.icon = 'images/icon/app.png';
-        break;
+      // case 'menu-item-1':
+      //   defaultOptions.id = 'settings-1';
+      //   defaultOptions.title = 'Network Center';
+      //   defaultOptions.icon = 'images/icon/Network-Center.png';
+      //   break;
+      // case 'menu-item-2':
+      //   defaultOptions.id = 'settings-2';
+      //   defaultOptions.title = 'VPN Center';
+      //   defaultOptions.icon = 'images/icon/VPN.png';
+      //   defaultOptions.width = 1015;
+      //   break;
+      // case 'app-center':
+      //   defaultOptions.id = 'app-center';
+      //   defaultOptions.title = 'App Center';
+      //   defaultOptions.icon = 'images/icon/app.png';
+      //   break;
       default:
         break;
     }
-    defaultOptions.x = bodyWidth - defaultOptions.width / 2, defaultOptions.y = bodyHeight - defaultOptions.height / 2;
-    this.props.manager.open(defaultOptions.id, <Settings id={defaultOptions.id}/>, defaultOptions);
+    windowOpts.x = bodyWidth - windowOpts.width / 2;
+    windowOpts.y = bodyHeight - windowOpts.height / 2;
+    this.props.manager.open(windowOpts.id,
+      <WindowContentTpl id={windowOpts.id} contentComp={windowOpts.contentComp} manager={this.props.manager}/>,
+      windowOpts
+    );
 
     if($('.app-bar-element').hasClass('active-container')) {
       $('.app-bar-element').removeClass('active-container');
@@ -94,7 +106,9 @@ class StartMenu extends Component{
                   <ul className="v-menu block-shadow-impact darcula" style={{height:"505px",width:"100%"}}>
                       <li className="divider"></li>
                       <li className="menu-title">Most Frequently Used</li>
-                      
+                      <li id="menu-item-0" data-contentcomp="vlanWindow.js" className="open-menu-win">
+                        <a><img src="images/icon/Network-Center.png" /> Network Center</a>
+                      </li>
                       {/*<li id="menu-item-1" className="open-menu-win">
                         <a><img src="images/icon/Network-Center.png" /> Network Center</a>
                       </li>

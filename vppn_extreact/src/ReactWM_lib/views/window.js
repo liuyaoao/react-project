@@ -1,9 +1,8 @@
 
 var _ = require('lodash');
-// import $ from 'jquery';
+import $ from 'jquery';
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
-// var classSet = require('react/addons').addons.classSet;
 import classSet from 'react-classset';
 import WindowModel from '../models/window';
 var INACTIVE = 0;
@@ -13,6 +12,7 @@ var RESIZE_EW = 3;
 var RESIZE_NS = 4;
 var bodyWidth = document.documentElement.clientWidth / 2, bodyHeight = (document.documentElement.clientHeight - 50) / 2;
 
+//窗口的框架容器
 class Window extends Component{
 
   componentWillMount() {

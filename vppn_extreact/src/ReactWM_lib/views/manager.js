@@ -18,7 +18,7 @@ import ContextMenu from './ContextMenu';  //右键菜单组件
 import CommonDialog from '../../app/components/common/dialog';
 
 var heartbeatTimer = null;
-//整个桌面部分控件
+//整个桌面部分-容器组件
 class Manager extends Component{
   state = {
     offset: {
