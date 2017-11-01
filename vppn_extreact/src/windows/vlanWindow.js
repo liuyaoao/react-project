@@ -14,7 +14,10 @@ import CommonDialog from '../app/components/common/dialog';
 class VlanWindow extends Component{
   state = {
     dialogMsg:'',
+    windowHeight:570,
     contentId: '1_vport',
+    myVirtualIp:'10.100.16.89',
+    vProxyIpArr:['10.100.16.84','10.100.16.9','10.100.16.68'],
   }
   componentDidMount(){
     this.setRightHeight(this.props.id);
@@ -32,7 +35,7 @@ class VlanWindow extends Component{
     var headerHeight = 38;  //49
     $(windowId + ' .sidebar3').css("height", height - headerHeight - 30);
     $(windowId + ' .wi-right').css("height", height - headerHeight);
-
+    this.setState({ windowHeight:height});
   }
   handleMouseMove = ()=>{
     var cl = $("#window-" + this.props.id);
@@ -53,15 +56,28 @@ class VlanWindow extends Component{
           <div className="cell colspan3 wi-right">
             {/*所有的Vport tab的右边内容块*/}
             <div className="wi active" id="wi_right_vport" style={{height:'100%',width:'100%'}}>
-              <VportContent contentId={this.state.contentId}/>
+              <VportContent
+                windowHeight={this.state.windowHeight}
+                myVirtualIp={this.state.myVirtualIp}
+                vProxyIpArr={this.state.vProxyIpArr}
+                contentId={this.state.contentId}
+              />
             </div>
             {/*diagnosis tab的右边内容块*/}
             <div className="wi" id="wi_right_diagnosis" style={{height:'100%',width:'100%'}}>
-              <DiagnosisContent contentId={this.state.contentId}/>
+              <DiagnosisContent
+                windowHeight={this.state.windowHeight}
+                myVirtualIp={this.state.myVirtualIp}
+                contentId={this.state.contentId}
+              />
             </div>
             {/*setting tab的右边内容块*/}
             <div className="wi" id="wi_right_setting" style={{height:'100%',width:'100%'}}>
-              <SettingContent contentId={this.state.contentId}/>
+              <SettingContent
+                windowHeight={this.state.windowHeight}
+                myVirtualIp={this.state.myVirtualIp}
+                contentId={this.state.contentId}
+              />
             </div>
           </div>
         </div>

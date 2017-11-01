@@ -116,6 +116,9 @@ $fontSize: 0.9rem;
   .wi.active {
     display: block;
   }
+  .x-button .x-text-el{
+    text-transform:capitalize;
+  }
 }
 .wi-right-1 {
   color: #333;
@@ -238,5 +241,20 @@ $fontSize: 0.9rem;
     div.x-treelist-item-wrap{
       // color: #fff;
     }
+  }
+}
+.vportContent{
+  .remoter_router{
+    .myVirtualIp{
+      margin-right:20px;
+      font-size:25px;
+      color:green;
+    }
+    .myVirtualIp.no_connected{
+      color:red;
+    }
+  }
+  .v_path{
+
   }
 }

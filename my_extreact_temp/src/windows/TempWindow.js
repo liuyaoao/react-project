@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Window, TitleBar, Text } from 'react-desktop/windows';
+import {FormPanel,Container,ComboBoxField,TextField} from '@extjs/ext-react';
+
+Ext.require('store.chained');
 
 export default class TempWindow extends Component {
   static defaultProps = {
@@ -8,6 +11,11 @@ export default class TempWindow extends Component {
   };
 
   render() {
+    const data = [
+          {"name":"Alabama","abbrev":"AL"},
+          {"name":"Alaska","abbrev":"AK"},
+          {"name":"Arizona","abbrev":"AZ"}
+     ];
     return (
       <Window
         color={this.props.color}
@@ -18,7 +26,22 @@ export default class TempWindow extends Component {
         padding="12px"
       >
         <TitleBar title="My Windows Application" controls/>
-        <Text color={this.props.theme === 'dark' ? 'white' : '#333'}>Hello World</Text>
+        <Container layout="center">
+             <FormPanel shadow>
+                 <ComboBoxField
+                     width={200}
+                     label="State"
+                     options={data}
+                     displayField="name"
+                     valueField="code"
+                     labelAlign="placeholder"
+                     typeAhead
+                 />
+                 <TextField placeholder="Enter..." width="200" label="端口：" required flex={1}/>
+                 <TextField placeholder="Enter..." width="200" label="端口：" required flex={1}/>
+
+             </FormPanel>
+         </Container>
       </Window>
     );
   }

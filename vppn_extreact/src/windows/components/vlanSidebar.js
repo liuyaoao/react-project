@@ -3,6 +3,7 @@ import { TreeList, List } from '@extjs/ext-react';
 import { medium, large } from '../../responsiveFormulas';
 
 Ext.require('Ext.data.TreeStore');
+// Ext.require('Ext.data.store.chained');
 // Ext.require('Ext.data.Store');
 
 class VlanSidebar extends Component{
@@ -11,11 +12,11 @@ class VlanSidebar extends Component{
   treeListData = {
     root: {
         children: [
-            { id: '1_vport', text: 'Vport1', iconCls: 'mif-wifi-connect icon', leaf: true },
-            { id: '2_vport', text: 'Vport2', iconCls: 'mif-earth icon', leaf: true },
-            { id: '3_vport', text: 'Vport3', iconCls: 'mif-local-service icon', leaf: true },
-            { id: '4_vport', text: 'Vport4', iconCls: 'mif-users icon', leaf: true },
-            { id: '5_vport', text: 'Vport5', iconCls: 'mif-equalizer-v icon', leaf: true },
+            { id: '1_vport', text: 'vPort1', iconCls: 'mif-wifi-connect icon', leaf: true },
+            { id: '2_vport', text: 'vPort2', iconCls: 'mif-earth icon', leaf: true },
+            { id: '3_vport', text: 'vPort3', iconCls: 'mif-local-service icon', leaf: true },
+            { id: '4_vport', text: 'vPort4', iconCls: 'mif-users icon', leaf: true },
+            { id: '5_vport', text: 'vPort5', iconCls: 'mif-equalizer-v icon', leaf: true },
             { id: '6_diagnosis', text: 'Diagnosis', iconCls: 'mif-security icon', leaf: true },
             { id: '7_setting', text: 'Setting', iconCls: 'mif-notification icon', leaf: true },
         ]
