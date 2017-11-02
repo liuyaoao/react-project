@@ -5,13 +5,13 @@ import ReactDOM from 'react-dom';
 // var {connect} = require('react-redux');
 // var {bindActionCreators} = require('redux');
 import { Container } from '@extjs/ext-react';
-import VlanSidebar from './components/vlanSidebar';
-import VportContent from './components/vportContent';
-import DiagnosisContent from './components/diagnosisContent';
-import SettingContent from './components/settingContent';
-import CommonDialog from '../app/components/common/dialog';
+import NetworkSidebar from './NetworkSidebar';
+import StateContent from './StateContent';
+import WirelessContent from './WirelessContent';
+import InternetContent from './InternetContent';
+import CommonDialog from '../../app/components/common/dialog';
 
-class VlanWindow extends Component{
+class NetworkCenterWindow extends Component{
   state = {
     dialogMsg:'',
     windowHeight:570,
@@ -48,34 +48,30 @@ class VlanWindow extends Component{
   }
   render () {
     return (
-      <div className="grid condensed net-win" id="cloudVpnWindow" style={{margin:"0 1px"}}>
+      <div className="grid condensed net-win" id="networkWindow" style={{margin:"0 1px"}}>
         <div className="row cells4">
           <div className="cell side">
-            <VlanSidebar onMenuItemClick={this.onMenuItemClick}/>
+            <NetworkSidebar onMenuItemClick={this.onMenuItemClick}/>
           </div>
           <div className="cell colspan3 wi-right">
-            {/*所有的Vport tab的右边内容块*/}
-            <div className="wi active" id="wi_right_vport" style={{height:'100%',width:'100%'}}>
-              <VportContent
+            {/*状态 tab的右边内容块*/}
+            <div className="wi active" id="wi_right_state" style={{height:'100%',width:'100%'}}>
+              <StateContent
                 windowHeight={this.state.windowHeight}
-                myVirtualIp={this.state.myVirtualIp}
-                vProxyIpArr={this.state.vProxyIpArr}
                 contentId={this.state.contentId}
               />
             </div>
-            {/*diagnosis tab的右边内容块*/}
-            <div className="wi" id="wi_right_diagnosis" style={{height:'100%',width:'100%'}}>
-              <DiagnosisContent
+            {/*无线 tab的右边内容块*/}
+            <div className="wi" id="wi_right_wireless" style={{height:'100%',width:'100%'}}>
+              <WirelessContent
                 windowHeight={this.state.windowHeight}
-                myVirtualIp={this.state.myVirtualIp}
                 contentId={this.state.contentId}
               />
             </div>
-            {/*setting tab的右边内容块*/}
-            <div className="wi" id="wi_right_setting" style={{height:'100%',width:'100%'}}>
-              <SettingContent
+            {/*互联网 tab的右边内容块*/}
+            <div className="wi" id="wi_right_Internet" style={{height:'100%',width:'100%'}}>
+              <InternetContent
                 windowHeight={this.state.windowHeight}
-                myVirtualIp={this.state.myVirtualIp}
                 contentId={this.state.contentId}
               />
             </div>
@@ -88,4 +84,4 @@ class VlanWindow extends Component{
 
 }
 
-export default VlanWindow;
+export default NetworkCenterWindow;

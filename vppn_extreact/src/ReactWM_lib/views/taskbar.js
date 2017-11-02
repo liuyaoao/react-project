@@ -67,7 +67,7 @@ class Taskbar extends Component{
           windows[i].show();
           windows[i].requestFocus();
         }
-        else if(windows[i].id == this.props.manager._active.id) {
+        else if(windows[i].id == this.props.manager.getActiveWindow().id) {
           windows[i].minimize_notChangeFocus($('#taskbar-'+windows[i].id).offset().left + 16 + $('#taskbar-'+windows[i].id).width()/2, 0);
         }
         else {
@@ -159,16 +159,16 @@ class Taskbar extends Component{
   }
 
   render () {
-    const { desktopType } = this.props;
+    const { desktopType,manager } = this.props;
     var bShowAll = true;
     var windows;
     if(desktopType == "router") {
-      windows = this.props.manager.openWindows_router().map(function (window) {
+      windows = manager.openWindows_router().map(function (window) {
         if(!window.isMinimize) {
           bShowAll = false;
         }
         return (
-          <li key={window.id} className={this.props.manager._active.id==window.id && !this.props.manager._active.isMinimize ? "active-container":""}>
+          <li key={window.id} className={manager.getActiveWindow().id==window.id && !manager.getActiveWindow().isMinimize ? "active-container":""}>
             <a id={"taskbar-"+window.id} title={window.title} onClick={this.toggleWindow}>
               {window.icon.substr(0, 7)=="images/" ? <img src={window.icon} id={"barIcon-"+window.id}/> : <span className={window.icon} id={"barIcon-"+window.id}></span>}
             </a>
@@ -182,7 +182,7 @@ class Taskbar extends Component{
           bShowAll = false;
         }
         return (
-          <li key={window.id} className={this.props.manager._active.id==window.id && !this.props.manager._active.isMinimize ? "active-container":""}>
+          <li key={window.id} className={manager.getActiveWindow().id==window.id && !manager.getActiveWindow().isMinimize ? "active-container":""}>
             <a id={"taskbar-"+window.id} title={window.title} onClick={this.toggleWindow}>
               {window.icon.substr(0, 7)=="images/" ? <img src={window.icon} id={"barIcon-"+window.id}/> : <span className={window.icon} id={"barIcon-"+window.id}></span>}
             </a>

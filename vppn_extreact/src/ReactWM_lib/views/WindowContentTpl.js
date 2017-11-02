@@ -2,11 +2,12 @@ import $ from 'jquery';
 import React, { Component }  from 'react';
 import ReactDOM from 'react-dom';
 import VlanWindow from '../../windows/vlanWindow';
+import NetworkCenterWindow from '../../windows/network/NetworkCenterWindow';
 
 //窗口内容模板 组件
 class WindowContentTpl extends Component{
   state = {
-    compMap:{"VlanWindow":VlanWindow},
+    compMap:{"VlanWindow":VlanWindow ,"NetworkCenterWindow":NetworkCenterWindow},
     ContentComp:null
   }
   componentDidMount(){

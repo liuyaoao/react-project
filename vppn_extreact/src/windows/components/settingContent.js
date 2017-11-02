@@ -146,7 +146,7 @@ export default class SettingContent extends Component{
                       width={'160'}
                     />
                     <Container flex={1} style={{marginLeft:'20px'}}>
-                      <textarea style={{width:'100%',height:''+(this.props.windowHeight-200),border:'1px solid #a0cdd6'}} />
+                      <textarea style={{width:'100%',height:''+(this.props.windowHeight-200)+'px',border:'1px solid #a0cdd6'}} />
                       <Button text={"保存"} ui={'action raised'} style={{'float':'right',marginTop:'10px'}}></Button>
                     </Container>
                 </FieldSet>

@@ -9,6 +9,7 @@ import ManagerModel from '../models/manager';
 import IconModel from '../models/icon';
 // import Settings from '../../settings';
 import WindowContentTpl from './WindowContentTpl';
+import { Container,ToolTip } from '@extjs/ext-react';
 
 var INACTIVE = 0;
 var MOVE     = 1;
@@ -17,7 +18,8 @@ var RESIZE   = 2;
 var bodyWidth = document.documentElement.clientWidth / 2, bodyHeight = (document.documentElement.clientHeight - 50) / 2;
 
 class Icon extends Component{
-
+  state={
+  }
   componentWillMount () {
     this.icon = this.props.icon;
   }
@@ -29,6 +31,9 @@ class Icon extends Component{
     document.addEventListener('mouseup', this.handleMouseUp);
     ReactDOM.findDOMNode(this).addEventListener('mousemove', this.handleIconMouseMove);
     ReactDOM.findDOMNode(this).addEventListener('mouseout', this.handleIconMouseOut);
+
+    ReactDOM.findDOMNode(this).addEventListener('mouseenter', this.handleIconMouseEnter);
+    ReactDOM.findDOMNode(this).addEventListener('mouseleave', this.handleIconMouseLeave);
     ReactDOM.findDOMNode(this).addEventListener('dblclick', this.handleIconDblClick);
     $('.icon_container').contextmenu(function(){ //在桌面图标上右键时返回，不显示右键菜单。
       return false;
@@ -48,6 +53,9 @@ class Icon extends Component{
     document.removeEventListener('mouseup', this.handleMouseUp);
     ReactDOM.findDOMNode(this).removeEventListener('mousemove', this.handleIconMouseMove);
     ReactDOM.findDOMNode(this).removeEventListener('mouseout', this.handleIconMouseOut);
+
+    ReactDOM.findDOMNode(this).removeEventListener('mouseenter', this.handleIconMouseEnter);
+    ReactDOM.findDOMNode(this).removeEventListener('mouseleave', this.handleIconMouseLeave);
     ReactDOM.findDOMNode(this).removeEventListener('dblclick', this.handleIconDblClick);
   }
 
@@ -516,6 +524,15 @@ class Icon extends Component{
     $(ReactDOM.findDOMNode(this)).addClass("icons-move");
   }
 
+  handleIconMouseEnter = (e)=>{
+    $('.toolTip_container_'+this.icon.id+'.x-tooltip.x-panel').removeClass("x-hidden x-hidden-display");
+    setTimeout(()=>{
+    },300);
+  }
+  handleIconMouseLeave = (e)=>{
+    $('.toolTip_container_'+this.icon.id+'.x-tooltip.x-panel').addClass("x-hidden x-hidden-display");
+  }
+
   handleIconMouseOut = (e)=>{
     $(ReactDOM.findDOMNode(this)).removeClass("icons-move");
   }
@@ -537,7 +554,7 @@ class Icon extends Component{
         title: this.icon.title,
         width: 1000,
         height: 570,
-        x: 20,
+        x: 120,
         y: 20,
         contentComp: this.icon.contentComp,
         icon: this.icon.iconUrl
@@ -557,11 +574,22 @@ class Icon extends Component{
         default:
           break;
       }
-      options.x = bodyWidth - options.width / 2, options.y = bodyHeight - options.height / 2;
+      let activeWindow = this.props.manager.getActiveWindow();
+
+      if(activeWindow){
+        console.log("activeWindow.x:"+activeWindow.x+"; activeWindow.y"+activeWindow.y);
+        options.x = activeWindow.x + 30;
+        options.y = activeWindow.y + 36;
+        //当最后一个活动窗口超出边界时，把该新打开的窗口
+        if( activeWindow.x<-30||(activeWindow.x+options.width)>bodyWidth*2-30 || activeWindow.y<0||(activeWindow.y+options.height)>bodyHeight*2-36 ){
+          options.x = bodyWidth - options.width / 2, options.y = bodyHeight - options.height / 2;
+        }
+      }else{
+        options.x = bodyWidth - options.width / 2, options.y = bodyHeight - options.height / 2;
+      }
       this.props.manager.open(options.id, <WindowContentTpl id={options.id} contentComp={this.icon.contentComp} manager={this.props.manager}/>, options);
     }
   }
-
   focus () {
     // this.window.requestFocus();
     $(".icons li").removeClass("icons-focus");
@@ -589,8 +617,12 @@ class Icon extends Component{
     return (
       /* jshint ignore: start */
       <li className={"icon_container"} id={"icon-"+this.icon.id} style={styles} onMouseDown={this.handleMove}>
-        <img src={this.icon.iconUrl}/>
-        <div className="icon-text">{this.icon.title}</div>
+        <Container>
+
+          <img src={this.icon.iconUrl}/>
+          <div className="icon-text">{this.icon.title}</div>
+          <ToolTip cls={"toolTip_container_"+this.icon.id} showDelay={300} dismissDelay={3000} trackMouse>{this.icon.title}</ToolTip>
+        </Container>
       </li>
       /* jshint ignore: end */
     );

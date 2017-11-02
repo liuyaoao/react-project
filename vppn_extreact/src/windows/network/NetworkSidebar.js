@@ -6,19 +6,21 @@ Ext.require('Ext.data.TreeStore');
 // Ext.require('Ext.data.store.chained');
 // Ext.require('Ext.data.Store');
 
-class VlanSidebar extends Component{
+class NetworkSidebar extends Component{
   state = {
   }
   treeListData = {
     root: {
         children: [
-            { id: '1_vport', text: 'vPort1', iconCls: 'mif-wifi-connect icon', leaf: true },
-            { id: '2_vport', text: 'vPort2', iconCls: 'mif-earth icon', leaf: true },
-            { id: '3_vport', text: 'vPort3', iconCls: 'mif-local-service icon', leaf: true },
-            { id: '4_vport', text: 'vPort4', iconCls: 'mif-users icon', leaf: true },
-            { id: '5_vport', text: 'vPort5', iconCls: 'mif-equalizer-v icon', leaf: true },
-            { id: '6_diagnosis', text: 'Diagnosis', iconCls: 'mif-security icon', leaf: true },
-            { id: '7_setting', text: 'Setting', iconCls: 'mif-notification icon', leaf: true },
+            { id: 'state_1', text: '状态', iconCls: 'mif-wifi-connect icon', leaf: true },
+            { id: 'wireless_2', text: '无线', iconCls: 'mif-earth icon', leaf: true },
+            { id: 'Internet_3', text: '互联网', iconCls: 'mif-local-service icon', leaf: true },
+            { id: 'localNetwork_4', text: '本地网络', iconCls: 'mif-users icon', leaf: true },
+            { id: 'parentalCtrl_5 ', text: '家长控制', iconCls: 'mif-equalizer-v icon', leaf: true },
+            { id: 'flowCtrl_6', text: '流量控制', iconCls: 'mif-security icon', leaf: true },
+            { id: 'security_7', text: '安全性', iconCls: 'mif-notification icon', leaf: true },
+            { id: 'noticeSettings_8', text: '通知设置', iconCls: 'mif-notification icon', leaf: true },
+            { id: 'management_9', text: '管理', iconCls: 'mif-notification icon', leaf: true },
         ]
     }
   }
@@ -26,13 +28,13 @@ class VlanSidebar extends Component{
   }
   onItemClick = (id)=>{
     console.log("onItemClick--:",id);
-    let rightCntType = id.split('_')[1];
-    $('#cloudVpnWindow .wi').each(function(){
+    let rightCntType = id.split('_')[0];
+    $('#networkWindow .wi').each(function(){
       $(this).removeClass('active');
     });
-    $('#cloudVpnWindow #wi_right_' + rightCntType).addClass('active');
+    $('#networkWindow #wi_right_' + rightCntType).addClass('active');
     switch (id) {
-      case '1_vport':
+      case 'state_1':
         // this.props.getWifiSettingsInfo();
         // this.props.getWifiSettingsWPASecurityKeys();
         break;
@@ -66,4 +68,4 @@ class VlanSidebar extends Component{
 
 }
 
-export default VlanSidebar;
+export default NetworkSidebar;

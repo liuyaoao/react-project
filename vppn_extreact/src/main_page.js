@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import ManagerModel from './ReactWM_lib/models/manager';
 import WindowContentTpl from './ReactWM_lib/views/WindowContentTpl';
 import ReactWM from './ReactWM_lib/index';
+import desktopIconDatas from './datas/desktopIconData';
 
 // var bodyWidth = document.documentElement.clientWidth / 2, bodyHeight = (document.documentElement.clientHeight - 50) / 2;
 
@@ -38,45 +39,10 @@ var clickBody = function(e){
 }
 
 //router icons。  添加PC端的桌面图标
-manager.open_icon('vLan', {
-  x: 0,
-  y: 0,
-  winId:'VlanWindow',
-  title: 'vLan',
-  contentComp:'VlanWindow',
-  iconUrl: 'images/icon/photo.png'
+desktopIconDatas.forEach((item,index)=>{
+  let cfgs = Object.assign({},item);
+  manager.open_icon(item.id, cfgs);
 });
-// manager.open_icon('photo', {
-//   x: 0,
-//   y: 0,
-//   title: 'Photo',
-//   iconUrl: 'images/icon/photo.png'
-// });
-// manager.open_icon('video', {
-//   x: 0,
-//   y: 100,
-//   title: 'Video',
-//   iconUrl: 'images/icon/video.png'
-// });
-// manager.open_icon('file', {
-//   x: 0,
-//   y: 200,
-//   title: 'File',
-//   iconUrl: 'images/icon/file.png'
-// });
-// manager.open_icon('music', {
-//   x: 0,
-//   y: 300,
-//   title: 'Music',
-//   iconUrl: 'images/icon/music.png'
-// });
-// manager.open_icon('my-phone', {
-//   x: 0,
-//   y: 400,
-//   title: 'My Phone',
-//   iconUrl: 'images/icon/my-phone.png'
-// });
-
 
 //phone icons.  添加手机端的桌面图标
 // manager.open_icon('phone_disconnect', {

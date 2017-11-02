@@ -44,7 +44,10 @@
     margin: 0px;
     font-size: 12px;
     // font-family: 微软雅黑;
+    word-break: break-all;
     color: white;
+    white-space:nowrap;
+    text-overflow:ellipsis;overflow:hidden;
 }
 
 .icons-move {

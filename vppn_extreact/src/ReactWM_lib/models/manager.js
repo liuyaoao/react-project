@@ -12,7 +12,7 @@ var Manager =  function (windows, icons) {
 
   this._windows = {};
   this._index = INITIAL_INDEX;
-  this._active = false;
+  this._activeWindow = false;
 
   this._icons = {};
   this._contextMenuModel = new ContextMenuModel({id:"contextMenu_1"});
@@ -57,7 +57,7 @@ _.extend(Manager.prototype, {
    * - window (Window|object)
    */
 
-  add: function (window) {
+  add: function (window) { //添加一个窗口模型，传入初始化所需的参数
     if (!(window instanceof Window)) { window = new Window(window); }
     window.manager = this;
 
@@ -149,28 +149,28 @@ _.extend(Manager.prototype, {
 
   focus: function (id) {
     if(id == null) {
-      this._active = false;
+      this._activeWindow = false;
       this.emit('change');
     }else {
       var window = _.isObject(id) ? id : this.get(id);
 
       if (! window) {
         throw new Error('Can not focus on a window it cannot find: ' + id);
-      } else if (window === this._active) {
+      } else if (window === this._activeWindow) {
         // this window already has focus
         return;
       }
 
       window.setIndex(this._index);
       this._index += 1;
-      this._active = window;
+      this._activeWindow = window;
       this.emit('change');
     }
   },
 
   focus_notChangeIndex: function (id) {
     if(id == null) {
-      this._active = false;
+      this._activeWindow = false;
       this.emit('change');
     }
     else {
@@ -178,14 +178,14 @@ _.extend(Manager.prototype, {
 
       if (! window) {
         throw new Error('Can not focus on a window it cannot find: ' + id);
-      } else if (window === this._active) {
+      } else if (window === this._activeWindow) {
         // this window already has focus
         return;
       }
 
       // window.setIndex(this._index);
       // this._index += 1;
-      this._active = window;
+      this._activeWindow = window;
       this.emit('change');
     }
   },
@@ -195,7 +195,10 @@ _.extend(Manager.prototype, {
    */
 
   active: function () {
-    return this._active;
+    return this._activeWindow;
+  },
+  getActiveWindow:function(){
+    return this._activeWindow;
   },
 
 
@@ -205,6 +208,15 @@ _.extend(Manager.prototype, {
 
   allWindows: function () {
     return _.values(this._windows);
+  },
+  getWindowByIndex:function(index){ //根据索引获取窗口模型，可使用负数。如：-1表示最后一个。
+    if(index<0){
+      index = this.allWindows().length + index;
+    }
+    if(index > (this.allWindows().length-1)){
+      return null;
+    }
+    return this.allWindows()[index] || null;
   },
 
 
@@ -224,7 +236,7 @@ _.extend(Manager.prototype, {
    * > array
    */
 
-  openWindows_router: function () {
+  openWindows_router: function () { //打开电脑端的窗口
     return this.allWindows().filter(function (window) {
       return window.isOpen && window.type=="router";
     });
@@ -235,7 +247,7 @@ _.extend(Manager.prototype, {
    * > array
    */
 
-  openWindows_phone: function () {
+  openWindows_phone: function () { //打开移动端的窗口
     return this.allWindows().filter(function (window) {
       return window.isOpen && window.type=="phone";
     });
@@ -389,11 +401,11 @@ _.extend(Manager.prototype, {
     });
   },
 
-  getContextMenu:function(){
+  getContextMenu:function(){ //获取右键菜单数据模型
     return this._contextMenuModel;
   },
 
-  clickDesktopEmit:function(){
+  clickDesktopEmit:function(){ //点击桌面触发一个事件
     this.emit('click:desktop');
   },
 
@@ -439,7 +451,7 @@ _.extend(Manager.prototype, {
       window.setIndex(this._index);
       this._index += 1;
       if(!window.isMinimize) {
-        this._active = window;
+        this._activeWindow = window;
       }
     }, this);
   }
