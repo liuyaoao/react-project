@@ -1,0 +1,99 @@
+// text
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+.text-left {
+  text-align: left;
+}
+
+// padding top
+.p-t-10 {
+  padding-top: 10px;
+}
+
+// padding bottom
+.p-b-10 {
+  padding-bottom: 10px;
+}
+
+// padding left
+.p-l-5 {
+  padding-left: 5px;
+}
+.p-l-10 {
+  padding-left: 10px;
+}
+
+// padding right
+.p-r-10 {
+  padding-right: 10px;
+}
+
+// margin top
+.m-t-15 {
+  margin-top: 15px;
+}
+.m-t-25 {
+  margin-top: 25px;
+}
+
+// margin bottom
+.m-b-10 {
+  margin-bottom: 10px;
+}
+.m-b-15 {
+  margin-bottom: 15px;
+}
+
+// margin left
+.m-l-5 {
+  margin-left: 5px;
+}
+.m-l-10 {
+  margin-left: 10px;
+}
+.m-l-15 {
+  margin-left: 15px;
+}
+.m-l-25 {
+  margin-left: 25px;
+}
+
+// margin right
+.m-r-5 {
+  margin-right: 5px;
+}
+.m-r-10 {
+  margin-right: 10px;
+}
+.m-r-15 {
+  margin-right: 15px;
+}
+
+// display
+.inline {
+  display: inline-block;
+}
+
+.no-display {
+  display: none;
+}
+
+.auto-y {
+  overflow-y: auto;
+}
+
+.button {
+  &.success2 {
+    background: #12d90d;  //00e676
+    border-color: #12d90d;
+  }
+}
+// .popover {
+//   z-index: 5;
+//   padding: 10px;
+//   min-width: 10rem;
+// }

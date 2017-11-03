@@ -75,6 +75,37 @@ class NetworkCenterWindow extends Component{
                 contentId={this.state.contentId}
               />
             </div>
+
+            {/*本地网络 tab的右边内容块*/}
+            <div className="wi" id="wi_right_localNetwork" style={{height:'100%',width:'100%'}}>
+              <span>本地网络内容区...</span>
+            </div>
+
+            {/*家长控制 tab的右边内容块*/}
+            <div className="wi" id="wi_right_parentalCtrl" style={{height:'100%',width:'100%'}}>
+              <span>家长控制内容区...</span>
+            </div>
+
+            {/*流量控制 tab的右边内容块*/}
+            <div className="wi" id="wi_right_flowCtrl" style={{height:'100%',width:'100%'}}>
+              <span>流量控制内容区...</span>
+            </div>
+
+            {/*安全性 tab的右边内容块*/}
+            <div className="wi" id="wi_right_security" style={{height:'100%',width:'100%'}}>
+              <span>安全性内容区...</span>
+            </div>
+
+            {/*通知设置 tab的右边内容块*/}
+            <div className="wi" id="wi_right_noticeSettings" style={{height:'100%',width:'100%'}}>
+              <span>通知设置内容区...</span>
+            </div>
+
+            {/*管理 tab的右边内容块*/}
+            <div className="wi" id="wi_right_management" style={{height:'100%',width:'100%'}}>
+              <span>管理内容区...</span>
+            </div>
+
           </div>
         </div>
         <CommonDialog id="networkDiaglog" dialogMsg={this.state.dialogMsg} />

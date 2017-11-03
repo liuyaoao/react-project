@@ -7,7 +7,6 @@ var MOVE = 1;
 
 let Icon = function (props) {
   signals.convert(this);
-
   _.extend(this, _.defaults(_.clone(props), this.defaults));
   this.mode = INACTIVE;
 
@@ -18,11 +17,7 @@ let Icon = function (props) {
 
 _.extend(Icon.prototype, {
 
-
-  /**
-   * defaults
-   */
-
+  /** defaults*/
   defaults: {
     id: undefined,
     type: 'router',
@@ -35,13 +30,7 @@ _.extend(Icon.prototype, {
     isOpen: true
   },
 
-
-  /**
-   * set position of the icon
-   * - x (number)
-   * - y (number)
-   */
-
+  /** set position of the icon * - x (number) * - y (number) */
   setPosition: function (x, y) {
     this.x = x;
     this.y = y;
@@ -49,13 +38,7 @@ _.extend(Icon.prototype, {
     this.emit('change');
   },
 
-
-  /**
-   * resize the icon
-   * - width (number)
-   * - height (number)
-   */
-
+  /** resize the icon * - width (number) * - height (number) */
   // setSize: function (width, height) {
   //   this.width = width;
   //   this.height = height;

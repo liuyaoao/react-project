@@ -1,0 +1,30 @@
+{
+    "framework": "ext",
+    "toolkit": "modern",
+    "requires": [
+        "ext",
+        "core",
+        "font-awesome",
+        "font-ext",
+        "reactor",
+        "modern"
+    ],
+    "overrides": [
+        "D:\\github_pro\\react-project\\vppn_extreact\\ext-react\\overrides",
+        "jsdom-environment.js"
+    ],
+    "packages": {
+        "dir": [
+            "D:\\github_pro\\react-project\\vppn_extreact\\node_modules\\@extjs",
+            "D:\\github_pro\\react-project\\vppn_extreact\\ext-react\\packages"
+        ]
+    },
+    "output": {
+        "base": ".",
+        "resources": {
+            "path": "./resources",
+            "shared": "./resources"
+        }
+    },
+    "theme": "custom-ext-react-theme"
+}

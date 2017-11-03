@@ -1,0 +1,64 @@
+.dialog {
+  min-width: 300px;
+
+  .dia-title {
+    // margin-top: -1px;
+  }
+}
+
+#audioDialog.dialog {
+  min-width: 800px;
+  padding-top: 28px;
+  // position: fixed;
+  // bottom: 0;
+  // height: 80px!important;
+
+  .title {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 5px 10px;
+    font-weight: bold;
+    &.icon {
+      color: #fff;
+    }
+
+  }
+  .dialog-close-button {
+    background-color: #373d3f;
+    color: #fff;
+    margin-top: -3px;
+
+    &:hover {
+      background-color: #eee;
+      color: #222;
+    }
+  }
+
+  .media-player-wrapper, .media-player {
+    max-width: 100%;
+  }
+  .media-player {
+    // margin-top: -155px;
+
+    & > video {
+      display: none;
+    }
+  }
+  .media-playlist {
+    .media-playlist-header {
+      height: 26px;
+      color: #fff;
+      padding: 0px;
+      top: 0;
+      left: 0;
+      right: 0;
+
+      .media-playlist-title {
+        padding-top: 3px;
+        margin: 0;
+      }
+    }
+  }
+}

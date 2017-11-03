@@ -3,11 +3,16 @@ import React, { Component }  from 'react';
 import ReactDOM from 'react-dom';
 import VlanWindow from '../../windows/vlanWindow';
 import NetworkCenterWindow from '../../windows/network/NetworkCenterWindow';
+import FileStationWindow from '../../windows/fileStation/FileStationWindow';
 
 //窗口内容模板 组件
 class WindowContentTpl extends Component{
   state = {
-    compMap:{"VlanWindow":VlanWindow ,"NetworkCenterWindow":NetworkCenterWindow},
+      compMap:{
+        "VlanWindow":VlanWindow ,
+        "NetworkCenterWindow":NetworkCenterWindow,
+        "FileStationWindow":FileStationWindow
+      },
     ContentComp:null
   }
   componentDidMount(){
