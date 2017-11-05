@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import { TabPanel, Container, FormPanel,TextField,
-  FieldSet, SelectField,Button,Menu,MenuItem,Grid,Column,RendererCell  } from '@extjs/ext-react';
+  FieldSet, SelectField,Button,Menu,MenuItem,Grid,
+  Column,ToggleField  } from '@extjs/ext-react';
 Ext.require('Ext.field.InputMask');
 Ext.require('Ext.Toast');
 
@@ -12,6 +13,8 @@ let bootsNodeOptions = [
 
 export default class StateContent extends Component {
     state={
+      wifi5GSwitch:true,
+      wifi2_4GSwitch:true,
       menuItemVal:'',
       selectedBootsNode:'220.168.30.12',
       selectedVProxyIp:'', //选中的vProxy IP.
@@ -34,70 +37,58 @@ export default class StateContent extends Component {
       this.setState({ selectedVProxyIp:newValue });
       Ext.toast(`You selected the item with value ${newValue}`);
     }
+    onClickWifi5GSwitch = (e)=>{
+      console.log("点击了wifi 5GHz开关：",e);
+      this.setState( {wifi5GSwitch:!this.state.wifi5GSwitch} );
+    }
     render(){
       let {menuItemVal,selectedBootsNode} = this.state;
 
       return (
-        <TabPanel cls='vportContent'
-            flex={1}
-            shadow
-            height={'100%'}
-            defaults={{
-                cls: "card",
-                // layout: "center",
-                tab: {
-                    flex: 0,
-                    minWidth: 100
-                }
-            }}
-            tabBar={{
-                layout: {
-                    pack: 'left'
-                }
-            }}
-        >
-            <Container title="Remote Router" cls="remoter_router">
-              <div style={{margin:'20px'}}>
-                <div>
-                  <Container
-                    layout={{ type: 'hbox', pack: Ext.os.is.Phone ? 'center' : 'left',align:'center'}}
-                    margin="0 0 10 0"
-                    defaults={{ margin: "0 10 0 0" }}
-                  >
-                    <span>引导节点：</span>
-                    <SelectField
-                       width="200"
-                       name={'bootsNode'}
-                       displayField={'value'}
-                       value={selectedBootsNode}
-                       onChange={this.onBootsNodeSelectChanged}
-                       options={bootsNodeOptions}
-                     />
-                    <Button text={"关闭"} ui={'decline alt'}></Button>
-                    <Button text={""} ui={'confirm round alt'} iconCls={'x-fa fa-refresh'} alt="刷新"></Button>
-                  </Container>
-                  <Grid store={this.dataStore} grouped width={'99%'} height={'320px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
-                      <Column text="状态" width="100" dataIndex="name"/>
-                      <Column text="远程虚拟IP" width="120" dataIndex="price"/>
-                      <Column text="远程子网" width="100" dataIndex="priceChange"/>
-                      <Column text="链路状态" width="100" dataIndex="priceChange"/>
-                      <Column text="延时" width="100" dataIndex="priceChange"/>
-                      <Column text="描述" width="100" dataIndex="priceChange"/>
-                  </Grid>
-                  <Container margin="10 0 10 0"
-                    layout={{ type: 'hbox', pack: Ext.os.is.Phone ? 'center' : 'left',align:'bottom'}}
-                  >
-                    <TextField width="300"
-                      labelWidth="60"
-                      labelAlign="left"
-                      labelTextAlign='center'
-                      label="虚拟IP:"
-                    />
-                    <Button text={"添加"} ui={'action raised'} style={{marginLeft:'10px'}}></Button>
-                  </Container>
+        <div className='stateContent'>
+            <Container
+              layout={{ type: 'hbox', pack: Ext.os.is.Phone ? 'center' : 'left',align:'top'}}
+              margin="0 0 10 0"
+              defaults={{ margin: "0 10 0 0",border:'1px solid #fff987',borderRadius:'4px' }}
+            >
+              <Container flex={1} margin="10 10 10 10">
+                <SelectField
+                  value={1}
+                  onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
+                  options={[
+                      { text: 'Option 1', value: 1 },
+                      { text: 'Option 2', value: 2 },
+                      { text: 'Option 3', value: 3 }
+                  ]}
+                />
+                <div style={{height:'24px',color:'green',fontSize:'20px',margin:'8px 0 0 0'}}>
+                  <i className="big check circle outline icon"></i> 已联机
                 </div>
-              </div>
+                <TextField labelAlign="placeholder" label="IP 地址" value="192.168.1.9" editable={false}/>
+                <TextField labelAlign="placeholder" label="网关" value="192.168.1.1" editable={false}/>
+                <TextField labelAlign="placeholder" label="DNS Server" value="192.168.1.1" disabled/>
+              </Container>
+              <Container flex={1} margin="10 10 10 10">
+                  <TextField labelAlign="placeholder" value="Wi-Fi 5GHz" disabled/>
+                  <div className="small ui toggle checkbox" style={{margin:'8px 0 0 0'}}>
+                    <input type="checkbox" name="public"/>
+                    <label> on</label>
+                  </div>
+                  <TextField labelAlign="placeholder" label="名称（SSID）" value="Synology 5G" disabled/>
+                  <TextField labelAlign="placeholder" label="安全模式" value="WAP-个人，AES" disabled/>
+              </Container>
+              <Container flex={1} margin="10 10 10 10">
+                <TextField labelAlign="placeholder" value="Wi-Fi 2.4GHz" disabled/>
+                <div className="small ui toggle checkbox" style={{margin:'8px 0 0 0'}}>
+                  <input type="checkbox" name="public"/>
+                  <label> on</label>
+                </div>
+                <TextField labelAlign="placeholder" label="名称（SSID）" value="Synology" disabled/>
+                <TextField labelAlign="placeholder" label="安全模式" value="WAP-个人，AES" disabled/>
+
+              </Container>
             </Container>
+
             <Container title="vPath" cls="v_path">
                 <div className="action">
                   <FormPanel>
@@ -128,7 +119,7 @@ export default class StateContent extends Component {
                   </Grid>
                 </div>
             </Container>
-        </TabPanel>
+        </div>
     )
   }
 }
