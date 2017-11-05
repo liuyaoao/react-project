@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import { TabPanel, Container, FormPanel,TextField,
-  FieldSet, SelectField,Button,Menu,MenuItem,Grid,Column,RendererCell  } from '@extjs/ext-react';
+  FieldSet, SelectField,Button,Menu,MenuItem,Grid,Column,CheckBoxField  } from '@extjs/ext-react';
 Ext.require('Ext.field.InputMask');
 Ext.require('Ext.Toast');
 
@@ -9,7 +9,7 @@ let bootsNodeOptions = [
     { text: '220.168.30.1', value: '220.168.30.1' },
     { text: '220.168.30.6', value: '220.168.30.6' }
 ];
-
+//无线 tab内容块。
 export default class WirelessContent extends Component {
     state={
       menuItemVal:'',
@@ -38,9 +38,7 @@ export default class WirelessContent extends Component {
       let {menuItemVal,selectedBootsNode} = this.state;
 
       return (
-        <TabPanel cls='vportContent'
-            flex={1}
-            shadow
+        <TabPanel cls='state_tabPanel'
             height={'100%'}
             defaults={{
                 cls: "card",
@@ -56,78 +54,29 @@ export default class WirelessContent extends Component {
                 }
             }}
         >
-            <Container title="Remote Router" cls="remoter_router">
-              <div style={{margin:'20px'}}>
-                <div>
-                  <Container
-                    layout={{ type: 'hbox', pack: Ext.os.is.Phone ? 'center' : 'left',align:'center'}}
-                    margin="0 0 10 0"
-                    defaults={{ margin: "0 10 0 0" }}
-                  >
-                    <span>引导节点：</span>
-                    <SelectField
-                       width="200"
-                       name={'bootsNode'}
-                       displayField={'value'}
-                       value={selectedBootsNode}
-                       onChange={this.onBootsNodeSelectChanged}
-                       options={bootsNodeOptions}
-                     />
-                    <Button text={"关闭"} ui={'decline alt'}></Button>
-                    <Button text={""} ui={'confirm round alt'} iconCls={'x-fa fa-refresh'} alt="刷新"></Button>
-                  </Container>
-                  <Grid store={this.dataStore} grouped width={'99%'} height={'320px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
-                      <Column text="状态" width="100" dataIndex="name"/>
-                      <Column text="远程虚拟IP" width="120" dataIndex="price"/>
-                      <Column text="远程子网" width="100" dataIndex="priceChange"/>
-                      <Column text="链路状态" width="100" dataIndex="priceChange"/>
-                      <Column text="延时" width="100" dataIndex="priceChange"/>
-                      <Column text="描述" width="100" dataIndex="priceChange"/>
-                  </Grid>
-                  <Container margin="10 0 10 0"
-                    layout={{ type: 'hbox', pack: Ext.os.is.Phone ? 'center' : 'left',align:'bottom'}}
-                  >
-                    <TextField width="300"
-                      labelWidth="60"
-                      labelAlign="left"
-                      labelTextAlign='center'
-                      label="虚拟IP:"
-                    />
-                    <Button text={"添加"} ui={'action raised'} style={{marginLeft:'10px'}}></Button>
-                  </Container>
-                </div>
+          <Container title="Wi-Fi" cls="state_Internet">
+            <div style={{margin:'20px'}}>
+            <div>5GHz</div>
+            <div style={{"float":"left"}}>
+              <CheckBoxField boxLabel="启用无线广播"/>
+            </div>
+            </div>
+          </Container>
+          <Container title="WPS" cls="state_equipList">
+              <div className="">
+                WPS块
               </div>
-            </Container>
-            <Container title="vPath" cls="v_path">
-                <div className="action">
-                  <FormPanel>
-                    <FieldSet title={"来自vPort的域名的流量将通过所选的vProxy路由。"}
-                      layout={{type:'hbox',pack:'start',align: 'bottom'}}
-                      defaults={{labelAlign: "placeholder"}}
-                      margin="10 10 10 10"
-                      >
-                        <TextField placeholder="Enter..." width="200" label="请输入关键字或域名或URL" required flex={1}/>
-                        <Container flex={1}>
-                          <Button ui="menu raised" text="Add" style={{marginRight:'10px',marginBottom:'2px'}}>
-                             <Menu defaults={{ handler: this.onAddTypeChange, group: 'buttonstyle' }}>
-                                 <MenuItem text="Add" value="" iconCls={menuItemVal === '' && 'x-font-icon md-icon-check'}/>
-                                 <MenuItem text="Import cloud vPath to 10.100.16.24" value="action" iconCls={menuItemVal === 'action' && 'x-font-icon md-icon-check'}/>
-                                 <MenuItem text="import from China2World pack" value="decline" iconCls={menuItemVal === 'decline' && 'x-font-icon md-icon-check'}/>
-                                 <MenuItem text="import from World2China pack" value="confirm" iconCls={menuItemVal === 'confirm' && 'x-font-icon md-icon-check'}/>
-                             </Menu>
-                          </Button>
-                          <Button text={""} ui={'confirm round alt'} iconCls={'x-fa fa-refresh'}></Button>
-                        </Container>
-                    </FieldSet>
-                  </FormPanel>
-
-                  <Grid store={this.dataStore} grouped width={'98%'} height={'340px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
-                      <Column text="域名" width="150" dataIndex="name"/>
-                      <Column text="代理" width="85" dataIndex="price"/>
-                      <Column text="描述" width="100" dataIndex="priceChange"/>
-                  </Grid>
-                </div>
-            </Container>
+          </Container>
+          <Container title="访客网络" cls="state_CPU">
+              <div className="">
+                访客网络块
+              </div>
+          </Container>
+          <Container title="MAC过滤器" cls="state_memory">
+              <div className="">
+                MAC过滤器块
+              </div>
+          </Container>
         </TabPanel>
     )
   }

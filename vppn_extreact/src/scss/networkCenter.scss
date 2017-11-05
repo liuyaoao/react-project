@@ -258,3 +258,23 @@ $fontSize: 0.9rem;
 
   }
 }
+
+.stateContent{ //状态tab内容区
+  .x-selectfield.x-textfield.state_title,.x-textfield.x-disabled.state_title{
+    .x-body-wrap-el .x-body-el .x-input-el{
+      color:#0731a0;
+      font-weight: 600;
+      font-size: 20px;
+    }
+  }
+  .x-textfield.x-disabled{
+    opacity: 1;
+    color:black;
+    label.x-label-el{
+        color:black;
+    }
+    .x-body-wrap-el .x-body-el .x-input-el{
+      color:#3063ea;
+    }
+  }
+}

@@ -55,21 +55,24 @@ class NetworkCenterWindow extends Component{
           </div>
           <div className="cell colspan3 wi-right">
             {/*状态 tab的右边内容块*/}
-            <div className="wi active" id="wi_right_state" style={{height:'100%',width:'100%'}}>
+            <div className="wi active" id="wi_right_state"
+              style={{height:'100%',width:'100%',overflowY: 'scroll'}}>
               <StateContent
                 windowHeight={this.state.windowHeight}
                 contentId={this.state.contentId}
               />
             </div>
             {/*无线 tab的右边内容块*/}
-            <div className="wi" id="wi_right_wireless" style={{height:'100%',width:'100%'}}>
+            <div className="wi" id="wi_right_wireless"
+              style={{height:'100%',width:'100%',overflowY: 'scroll'}}>
               <WirelessContent
                 windowHeight={this.state.windowHeight}
                 contentId={this.state.contentId}
               />
             </div>
             {/*互联网 tab的右边内容块*/}
-            <div className="wi" id="wi_right_Internet" style={{height:'100%',width:'100%'}}>
+            <div className="wi" id="wi_right_Internet"
+              style={{height:'100%',width:'100%',overflowY: 'scroll'}}>
               <InternetContent
                 windowHeight={this.state.windowHeight}
                 contentId={this.state.contentId}
@@ -77,32 +80,38 @@ class NetworkCenterWindow extends Component{
             </div>
 
             {/*本地网络 tab的右边内容块*/}
-            <div className="wi" id="wi_right_localNetwork" style={{height:'100%',width:'100%'}}>
+            <div className="wi" id="wi_right_localNetwork"
+              style={{height:'100%',width:'100%',overflowY: 'scroll'}}>
               <span>本地网络内容区...</span>
             </div>
 
             {/*家长控制 tab的右边内容块*/}
-            <div className="wi" id="wi_right_parentalCtrl" style={{height:'100%',width:'100%'}}>
+            <div className="wi" id="wi_right_parentalCtrl"
+              style={{height:'100%',width:'100%',overflowY: 'scroll'}}>
               <span>家长控制内容区...</span>
             </div>
 
             {/*流量控制 tab的右边内容块*/}
-            <div className="wi" id="wi_right_flowCtrl" style={{height:'100%',width:'100%'}}>
+            <div className="wi" id="wi_right_flowCtrl"
+              style={{height:'100%',width:'100%',overflowY: 'scroll'}}>
               <span>流量控制内容区...</span>
             </div>
 
             {/*安全性 tab的右边内容块*/}
-            <div className="wi" id="wi_right_security" style={{height:'100%',width:'100%'}}>
+            <div className="wi" id="wi_right_security"
+              style={{height:'100%',width:'100%',overflowY: 'scroll'}}>
               <span>安全性内容区...</span>
             </div>
 
             {/*通知设置 tab的右边内容块*/}
-            <div className="wi" id="wi_right_noticeSettings" style={{height:'100%',width:'100%'}}>
+            <div className="wi" id="wi_right_noticeSettings"
+              style={{height:'100%',width:'100%',overflowY: 'scroll'}}>
               <span>通知设置内容区...</span>
             </div>
 
             {/*管理 tab的右边内容块*/}
-            <div className="wi" id="wi_right_management" style={{height:'100%',width:'100%'}}>
+            <div className="wi" id="wi_right_management"
+              style={{height:'100%',width:'100%',overflowY: 'scroll'}}>
               <span>管理内容区...</span>
             </div>
 
