@@ -1,8 +1,10 @@
 import React,{Component} from 'react';
-import { TabPanel, Container, FormPanel,TextField,
+import { TabPanel,Panel, Container, FormPanel,TextField,
   FieldSet, SelectField,Button,Menu,MenuItem,Grid,Column,CheckBoxField  } from '@extjs/ext-react';
 Ext.require('Ext.field.InputMask');
 Ext.require('Ext.Toast');
+// Ext.require('layout.center');
+// Ext.require('layout.left');
 
 let bootsNodeOptions = [
     { text: '220.168.30.12', value: '220.168.30.12' },
@@ -56,10 +58,34 @@ export default class WirelessContent extends Component {
         >
           <Container title="Wi-Fi" cls="state_Internet">
             <div style={{margin:'20px'}}>
-            <div>5GHz</div>
-            <div style={{"float":"left"}}>
-              <CheckBoxField boxLabel="启用无线广播"/>
-            </div>
+              <div>5GHz</div>
+              <Panel
+                margin='10 0 10 0'
+                layout="vbox"
+              >
+                  <Container flex={1}>
+                    <div style={{'float':'left'}}><CheckBoxField boxLabel="启用无线广播"/></div>
+                  </Container>
+                  <TextField label="名称(SSID)：" labelTextAlign="left" labelAlign="left"/>
+                  <TextField label="安全级别：" labelTextAlign="left" labelAlign="left"/>
+                  <TextField label="密码：" labelTextAlign="left" labelAlign="left"/>
+                  <TextField label="无线模式：" labelTextAlign="left" labelAlign="left"/>
+                  <div style={{color:'#07439e'}}>高级选项<span className="x-fa fa-chevron-down"></span></div>
+              </Panel>
+
+              <Panel
+                margin='10 0 10 0'
+                layout="vbox"
+              >
+                  <Container flex={1}>
+                    <div style={{'float':'left'}}><CheckBoxField boxLabel="启用无线广播"/></div>
+                  </Container>
+                  <TextField label="名称(SSID)：" labelTextAlign="left" labelAlign="left"/>
+                  <TextField label="安全级别：" labelTextAlign="left" labelAlign="left"/>
+                  <TextField label="密码：" labelTextAlign="left" labelAlign="left"/>
+                  <TextField label="无线模式：" labelTextAlign="left" labelAlign="left"/>
+                  <div style={{color:'#07439e'}}>高级选项<span className="x-fa fa-chevron-down"></span></div>
+              </Panel>
             </div>
           </Container>
           <Container title="WPS" cls="state_equipList">
