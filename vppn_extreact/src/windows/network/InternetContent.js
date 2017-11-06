@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
-import { TabPanel, Container, FormPanel,TextField,
-  FieldSet, SelectField,Button,Menu,MenuItem,Grid,Column,RendererCell  } from '@extjs/ext-react';
+import { TabPanel, Container, FormPanel,TextField,Panel,
+  FieldSet, SelectField,Button,Menu,MenuItem,Grid,Column,CheckBoxField   } from '@extjs/ext-react';
 Ext.require('Ext.field.InputMask');
 Ext.require('Ext.Toast');
 
@@ -19,13 +19,6 @@ export default class InternetContent extends Component {
     onAddTypeChange = (item)=>{
       this.setState({menuItemVal:item.value});
     }
-    dataStore = new Ext.data.Store({
-        data: [
-          {index:1, name:' Wireless',price:'342.54', priceChange:'mif-wifi-connect icon'},
-          {index:2, name:' Internet',price:'342.54', priceChange:'mif-earth icon'}
-        ],
-        sorters: 'name'
-    })
     onBootsNodeSelectChanged = (field, newValue)=>{  //引导节点有改变。
       this.setState({ selectedBootsNode:newValue });
       Ext.toast(`You selected the item with value ${newValue}`);
@@ -37,9 +30,7 @@ export default class InternetContent extends Component {
     render(){
       let {menuItemVal,selectedBootsNode} = this.state;
       return (
-        <TabPanel cls='vportContent'
-            flex={1}
-            shadow
+        <TabPanel cls='InternetContent'
             height={'100%'}
             defaults={{
                 cls: "card",
@@ -55,49 +46,57 @@ export default class InternetContent extends Component {
                 }
             }}
         >
-            <Container title="Remote Router" cls="remoter_router">
-              <div style={{margin:'20px'}}>
-                <div>
-                  <Container
-                    layout={{ type: 'hbox', pack: Ext.os.is.Phone ? 'center' : 'left',align:'center'}}
-                    margin="0 0 10 0"
-                    defaults={{ margin: "0 10 0 0" }}
-                  >
-                    <span>引导节点：</span>
-                    <SelectField
-                       width="200"
-                       name={'bootsNode'}
-                       displayField={'value'}
-                       value={selectedBootsNode}
-                       onChange={this.onBootsNodeSelectChanged}
-                       options={bootsNodeOptions}
-                     />
-                    <Button text={"关闭"} ui={'decline alt'}></Button>
-                    <Button text={""} ui={'confirm round alt'} iconCls={'x-fa fa-refresh'} alt="刷新"></Button>
-                  </Container>
-                  <Grid store={this.dataStore} grouped width={'99%'} height={'320px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
-                      <Column text="状态" width="100" dataIndex="name"/>
-                      <Column text="远程虚拟IP" width="120" dataIndex="price"/>
-                      <Column text="远程子网" width="100" dataIndex="priceChange"/>
-                      <Column text="链路状态" width="100" dataIndex="priceChange"/>
-                      <Column text="延时" width="100" dataIndex="priceChange"/>
-                      <Column text="描述" width="100" dataIndex="priceChange"/>
-                  </Grid>
-                  <Container margin="10 0 10 0"
-                    layout={{ type: 'hbox', pack: Ext.os.is.Phone ? 'center' : 'left',align:'bottom'}}
-                  >
-                    <TextField width="300"
-                      labelWidth="60"
-                      labelAlign="left"
-                      labelTextAlign='center'
-                      label="虚拟IP:"
-                    />
-                    <Button text={"添加"} ui={'action raised'} style={{marginLeft:'10px'}}></Button>
-                  </Container>
-                </div>
+            <Container title="链接" cls="connect_tab">
+              <div >
+                <FormPanel>
+                  <FieldSet title={"您可在此设置Internet连接。您的连接类型由网络环境决定。请咨询ISP以获得所需的帮助。"}
+                    layout={{type:'vbox',pack:'left',align: 'left'}}
+                    defaults={{labelAlign: "placeholder"}}
+                    width={'100%'}
+                    margin="10 10 10 10"
+                    >
+                      <SelectField label="连接类型：" width={'100%'}
+                          labelTextAlign="left" labelAlign="left" value={1}
+                          onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
+                          options={[
+                              { text: '高 - WAP2-个人', value: 1 },
+                              { text: 'Option 1', value: 2 }
+                          ]}
+                      />
+                      <SelectField label="设置默认网关：" width={'100%'}
+                          labelTextAlign="left" labelAlign="left" value={1}
+                          onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
+                          options={[
+                              { text: '已启用', value: 1 },
+                              { text: '已停用', value: 2 }
+                          ]}
+                      />
+                      <TextField width={'100%'} label="DNS Server:" labelTextAlign="left" labelAlign="left" value="" />
+                      <SelectField label="启用Jumbo Frame：" width={'100%'}
+                          labelTextAlign="left" labelAlign="left" value={1}
+                          onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
+                          options={[
+                              { text: '已停用', value: 1 },
+                              { text: '已启用', value: 2 }
+                          ]}
+                      />
+                  </FieldSet>
+                </FormPanel>
+                <Container
+                  layout={{ type: 'hbox', pack: 'left'}}
+                  margin="0 0 10 0"
+                  defaults={{ margin: "0 10 10 0" }}
+                >
+                    <Button ui="confirm raised" text="ISP设置"/>
+                    <Button ui="raised" text="ISP设置(IPTV和VoIP)"/>
+                    <Button ui="raised" text="VPN设置"/>
+                    <Button ui="raised" text="IPv6设置"/>
+                </Container>
               </div>
             </Container>
-            <Container title="vPath" cls="v_path">
+
+            {/* QuickConnect & DDNS 内容区 */}
+            <Container title="QuickConnect & DDNS" cls="ddns_tab">
                 <div className="action">
                   <FormPanel>
                     <FieldSet title={"来自vPort的域名的流量将通过所选的vProxy路由。"}
@@ -120,13 +119,51 @@ export default class InternetContent extends Component {
                     </FieldSet>
                   </FormPanel>
 
-                  <Grid store={this.dataStore} grouped width={'98%'} height={'340px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
-                      <Column text="域名" width="150" dataIndex="name"/>
-                      <Column text="代理" width="85" dataIndex="price"/>
-                      <Column text="描述" width="100" dataIndex="priceChange"/>
-                  </Grid>
                 </div>
             </Container>
+
+            {/* 端口转发 tab 内容区 */}
+            <Container title="端口转发" cls="portTransfer_tab">
+                <div style={{background:'',border:'1px solid #9dd4d6',padding:'10px',margin:'10px',background:'#e4f3f5'}}>
+                  <div style={{padding:'1px'}}>随处连接到您的 Synology Router</div>
+                  <div style={{marginLeft:'10px',textAlign:'left'}}>
+                    <div><span style={{width:'100px',display:'inline-block',paddingTop:'10px'}}>网页浏览器：</span><span>已停用</span></div>
+                    <div><span style={{width:'100px',display:'inline-block',paddingTop:'10px'}}>DDNS：</span><span>已停用</span></div>
+                    <div><span style={{width:'100px',display:'inline-block',paddingTop:'10px'}}>移动应用程序：</span><span>已停用</span></div>
+                  </div>
+                </div>
+                <div className="cnt" style={{margin:'20px'}}>
+                  <div className="title">5GHz</div>
+                  <Panel
+                    margin='10 0 10 0'
+                    layout="vbox"
+                  >
+                    <div>QuickConnect能够让您在任何地方轻松连接到Synology Router，只需启动下方的QuickConnect并注册一组Synology账户即可完成。</div>
+                    <Container flex={1}>
+                      <div style={{'float':'left'}}><CheckBoxField boxLabel="启用QuickConnect"/></div>
+                    </Container>
+
+                  </Panel>
+                </div>
+
+            </Container>
+
+            {/* 端口触发 tab 内容区 */}
+            <Container title="端口触发" cls="portTrigger_tab">
+                <Container
+                    layout={{ type: 'hbox', pack: 'left'}}
+                    margin="10 0 10 10"
+                    defaults={{ margin: "10 0 10 10" }}
+                  >
+                    <Button ui="confirm raised" text="新增"/>
+                    <Button ui="raised" text="编辑"/>
+                    <Button ui="raised" text="删除"/>
+                    <Button ui="raised" text="保存"/>
+                    <Button ui="raised" text="设置"/>
+                </Container>
+
+            </Container>
+
         </TabPanel>
     )
   }

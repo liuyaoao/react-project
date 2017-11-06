@@ -278,3 +278,55 @@ $fontSize: 0.9rem;
     }
   }
 }
+
+.wirelessContent{ //无线 tab 的内容区
+  .cnt{
+    .title{
+      font-size:20px;
+      font-weight:600;
+      color:#025b80;
+      border-bottom:2px dotted #a09b9b;
+    }
+  }
+  .wifi_tab{
+
+  }
+  .wps_tab{
+    .wps_tab_checkbox{
+      margin:10px 0;
+      .x-body-el{
+        .x-box-el,.x-box-label-el{
+          color:black;
+          font-size:16px;
+          .x-icon-el:before{
+            font-size:22px;
+
+          }
+        }
+      }
+    }
+    .x-panelheader{
+      background-color:#f1fafe;
+      .x-body-el.x-panelheader-body-el{
+        .x-paneltitle{
+          color:#064992;
+        }
+        .x-paneltool{
+          .x-icon-el{
+            color:#064992;
+          }
+        }
+      }
+    }
+    .x-body-wrap-el{
+      .x-body-el{
+        background-color:#f1fafe;
+      }
+    }
+  }
+
+}
+
+.InternetContent{ //互联网 tab 的内容区
+
+}
