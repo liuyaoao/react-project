@@ -114,6 +114,7 @@ class Window extends Component{
 
   handleMove = (e)=>{
     e.preventDefault();
+    this.window.opacity = 0.3;
     this.focus();
     var mouse = this.convertPoints(e);
     this.window.startMove(mouse.x, mouse.y);
@@ -122,13 +123,18 @@ class Window extends Component{
 
   handleMouseMove = (e)=>{
     if (this.window.mode === INACTIVE) { return true; }
+    $("#window-"+this.window.id+' .content')[0].style.opacity = '0.01';
     var mouse = this.convertPoints(e);
     this.window.update(mouse.x, mouse.y);
     this.quickUpdate();
   }
 
   handleMouseUp = ()=>{
+    this.window.opacity = 1;
     this.window.endChange();
+
+    $("#window-"+this.window.id)[0].style.opacity = '1';
+    $("#window-"+this.window.id+' .content')[0].style.opacity = '1';
     this.props.setWindowSizeChange({windowId: this.window.id, flag: false});
   }
 
@@ -213,7 +219,7 @@ class Window extends Component{
     return (
       /* jshint ignore: start */
       <div id={"window-"+this.window.id} className={classes} style={styles} onMouseDown={this.handleMove}>
-        <header className='window-caption '>
+        <header className='window-caption'>
           <span className="window-caption-icon">{this.window.icon.substr(0,7)=="images/" ? <img src={this.window.icon}/> : <span className={this.window.icon}></span>}</span>
           <span className='window-caption-title' title={this.window.title} style={{maxWidth:this.window.width-11-20-27*3}}>{this.window.title}</span>
           <span className='min' onMouseDown={this.handlePropagation} onClick={this.minimize}>

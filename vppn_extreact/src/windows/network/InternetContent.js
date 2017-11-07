@@ -161,7 +161,21 @@ export default class InternetContent extends Component {
                     <Button ui="raised" text="保存"/>
                     <Button ui="raised" text="设置"/>
                 </Container>
+            </Container>
 
+            {/* DMZ tab 内容区 */}
+            <Container title="端口触发" cls="portTrigger_tab">
+                <Container
+                    layout={{ type: 'hbox', pack: 'left'}}
+                    margin="10 0 10 10"
+                    defaults={{ margin: "10 0 10 10" }}
+                  >
+                    <Button ui="confirm raised" text="新增"/>
+                    <Button ui="raised" text="编辑"/>
+                    <Button ui="raised" text="删除"/>
+                    <Button ui="raised" text="保存"/>
+                    <Button ui="raised" text="设置"/>
+                </Container>
             </Container>
 
         </TabPanel>
