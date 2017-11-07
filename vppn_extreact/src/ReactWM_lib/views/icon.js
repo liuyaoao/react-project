@@ -14,7 +14,6 @@ import { Container,ToolTip } from '@extjs/ext-react';
 var INACTIVE = 0;
 var MOVE     = 1;
 var RESIZE   = 2;
-
 var bodyWidth = document.documentElement.clientWidth / 2, bodyHeight = (document.documentElement.clientHeight - 50) / 2;
 
 class Icon extends Component{

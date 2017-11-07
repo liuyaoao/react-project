@@ -7274,7 +7274,7 @@ input[type="submit"].link:active {
 .window-content {
   position: relative;
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
   padding: .25rem;
 }

@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 // var {bindActionCreators} = require('redux');
 import { Container,Button } from '@extjs/ext-react';
 import NetworkSidebar from './NetworkSidebar';
+import ModuleIconView from './ModuleIconView';
 
 import StateContent from './StateContent';
 import WirelessContent from './WirelessContent';
@@ -22,16 +23,29 @@ import ManagementContent from './ManagementContent';
 class NetworkCenterWindow extends Component{
   state = {
     windowHeight:570,
-    contentId: 'allIcon', //state
-    myVirtualIp:'10.100.16.89',
-    vProxyIpArr:['10.100.16.84','10.100.16.9','10.100.16.68'],
+    contentId: 'ModuleIconView', //首先展示所有的模块图标视图
+    modulesData : {
+      root: {
+          children: [
+              { id: 'state', text: '状态', iconCls: 'mif-meter icon', leaf: true },
+              { id: 'wireless', text: '无线', iconCls: 'mif-wifi-connect icon', leaf: true },
+              { id: 'Internet', text: '互联网', iconCls: 'mif-earth icon', leaf: true },
+              { id: 'localNetwork', text: '本地网络', iconCls: 'mif-home icon', leaf: true },
+              { id: 'parentalCtrl', text: '家长控制', iconCls: 'mif-users icon', leaf: true },
+              { id: 'flowCtrl', text: '流量控制', iconCls: 'mif-equalizer-v icon', leaf: true },
+              { id: 'security', text: '安全性', iconCls: 'mif-security icon', leaf: true },
+              { id: 'noticeSettings', text: '通知设置', iconCls: 'mif-mail-read icon', leaf: true },
+              { id: 'management', text: '管理', iconCls: 'mif-tools icon', leaf: true },
+          ]
+      }
+    },
   }
   componentDidMount(){
     this.setRightHeight(this.props.id);
-    // document.addEventListener('mousemove', this.handleMouseMove);
+    document.addEventListener('mousemove', this.handleMouseMove);
   }
   componentWillUnmount () {
-    // document.removeEventListener('mousemove', this.handleMouseMove);
+    document.removeEventListener('mousemove', this.handleMouseMove);
     // document.removeEventListener('mouseup', this.handleMouseUp);
   }
   setRightHeight = (id)=>{
@@ -39,7 +53,7 @@ class NetworkCenterWindow extends Component{
     var windowId = '#window-' + id;
     var height = $(windowId).height();
     var headerHeight = 38;  //49
-    $(windowId + ' .sidebar3').css("height", height - headerHeight - 30);
+    $(windowId + ' .cell.side').css("height", height - headerHeight);
     $(windowId + ' .wi-right').css("height", height - headerHeight);
     this.setState({ windowHeight:height});
   }
@@ -49,20 +63,36 @@ class NetworkCenterWindow extends Component{
     // if (cl.hasClass('active')) {
     // }
   }
+  onSelectedModule = (contentId)=>{
+    this.setState({contentId:contentId});
+  }
+  onShowModuleIconView = ()=>{
+    this.setState({contentId:'ModuleIconView'});
+  }
   onMenuItemClick = (contentId)=>{
     this.setState({contentId});
   }
   render () {
-    let {contentId} = this.state;
+    let {modulesData,contentId} = this.state;
     return (
-      <div className="grid condensed net-win" id="networkWindow" style={{margin:"0 1px"}}>
-      {contentId=="allIcon" ?
+      <div className="grid condensed win-content" id="networkWindow">
+      {contentId=="ModuleIconView" ?
         <div className='row cells4'>
-          <Button text={"列表模式"} ui={'decline alt'} onTap={()=>{ this.setState({contentId:'state'}); }}></Button>
-        </div>:
+          <ModuleIconView
+            modulesData={modulesData}
+            onSelectedModule={this.onSelectedModule}
+          />
+        </div>: null
+      }
+      {contentId!="ModuleIconView" ?
         <div className="row cells4">
           <div className="cell side">
-            <NetworkSidebar onMenuItemClick={this.onMenuItemClick}/>
+            <NetworkSidebar
+              contentId={contentId}
+              modulesData={modulesData}
+              onShowModuleIconView={this.onShowModuleIconView}
+              onMenuItemClick={this.onMenuItemClick}
+            />
           </div>
           <div className="cell colspan3 wi-right">
             <div className="wi active" id={"wi_right_content"}
@@ -141,7 +171,7 @@ class NetworkCenterWindow extends Component{
             </div>
 
           </div>
-        </div>
+        </div>:null
       }
 
 

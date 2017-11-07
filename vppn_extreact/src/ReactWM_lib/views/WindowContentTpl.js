@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import React, { Component }  from 'react';
 import ReactDOM from 'react-dom';
-import VlanWindow from '../../windows/vlanWindow';
+import VlanWindow from '../../windows/vlan/vlanWindow';
 import NetworkCenterWindow from '../../windows/network/NetworkCenterWindow';
 import FileStationWindow from '../../windows/fileStation/FileStationWindow';
 
@@ -28,7 +28,7 @@ class WindowContentTpl extends Component{
     let {ContentComp} = this.state;
     // let ContentComp = require(""+this.props.contentComp).default;
     return (
-      <div className="window-content" style={{padding:"0 1px"}}>
+      <div className="window-content" style={{padding:"0",height:'100%'}}>
         { ContentComp ? <ContentComp id={this.props.id} manager={this.props.manager}/>:
           <div className="padding10"><label>该窗口还没有添加任何内容:</label>
             <br/>

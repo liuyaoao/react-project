@@ -51,16 +51,13 @@ $fontSize: 0.9rem;
   }
 }
 
-.net-win {
-  background-color: #ecf0f4;
-}
 .side.cell {
   padding: 15px;
-  width: 240px;
   z-index: 1;
 }
 .grid.condensed .row.cells4
 {
+  height: 100%;
   &>.cell.side {
     width: 240px;
   }

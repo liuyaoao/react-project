@@ -5,15 +5,14 @@ import ReactDOM from 'react-dom';
 // var {connect} = require('react-redux');
 // var {bindActionCreators} = require('redux');
 import { Container } from '@extjs/ext-react';
-import VlanSidebar from './components/vlanSidebar';
-import VportContent from './components/vportContent';
-import DiagnosisContent from './components/diagnosisContent';
-import SettingContent from './components/settingContent';
-import CommonDialog from '../app/components/common/dialog';
+import VlanSidebar from './vlanSidebar';
+import VportContent from './vportContent';
+import DiagnosisContent from './diagnosisContent';
+import SettingContent from './settingContent';
+// import CommonDialog from '../app/components/common/dialog';
 
 class VlanWindow extends Component{
   state = {
-    dialogMsg:'',
     windowHeight:570,
     contentId: '1_vport',
     myVirtualIp:'10.100.16.89',
@@ -33,7 +32,7 @@ class VlanWindow extends Component{
     var windowId = '#window-' + id;
     var height = $(windowId).height();
     var headerHeight = 38;  //49
-    $(windowId + ' .sidebar3').css("height", height - headerHeight - 30);
+    $(windowId + ' .cell.side').css("height", height - headerHeight);
     $(windowId + ' .wi-right').css("height", height - headerHeight);
     this.setState({ windowHeight:height});
   }
@@ -48,7 +47,7 @@ class VlanWindow extends Component{
   }
   render () {
     return (
-      <div className="grid condensed net-win" id="cloudVpnWindow" style={{margin:"0 1px"}}>
+      <div className="grid condensed win-content" id="cloudVpnWindow" >
         <div className="row cells4">
           <div className="cell side">
             <VlanSidebar onMenuItemClick={this.onMenuItemClick}/>
@@ -81,7 +80,7 @@ class VlanWindow extends Component{
             </div>
           </div>
         </div>
-        <CommonDialog id="networkDiaglog" dialogMsg={this.state.dialogMsg} />
+
       </div>
     );
   }

@@ -33,7 +33,7 @@ class NetworkCenterWindow extends Component{
     var windowId = '#window-' + id;
     var height = $(windowId).height();
     var headerHeight = 38;  //49
-    $(windowId + ' .sidebar3').css("height", height - headerHeight - 30);
+    $(windowId + ' .row.cells4').css("height", height - headerHeight);
     $(windowId + ' .wi-right').css("height", height - headerHeight);
     this.setState({ windowHeight:height});
   }
@@ -48,7 +48,7 @@ class NetworkCenterWindow extends Component{
   }
   render () {
     return (
-      <div className="grid condensed net-win" id="networkWindow" style={{margin:"0 1px"}}>
+      <div className="grid condensed win-content" id="networkWindow">
         <div className="row cells4">
           <HeaderBarFS />
           <ToolBarFS />
