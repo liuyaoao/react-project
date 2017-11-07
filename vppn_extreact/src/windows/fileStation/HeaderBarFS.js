@@ -15,9 +15,9 @@ class HeaderBarFS extends Component{
       <div style={{margin:'10px auto',clear:'both'}}>
         <div className="left_cnt">
           <Container>
-            <Button cls='iconBtn' ui={'action raised'} iconCls={'x-fa fa-chevron-left'}></Button>
-            <Button cls='iconBtn' ui={'action raised'} iconCls={'x-fa fa-chevron-right'}></Button>
-            <Button cls='iconBtn' ui={'action raised'} iconCls={'x-fa fa-rotate-right'}></Button>
+            <Button cls='iconBtn' ui={'raised'} iconCls={'x-fa fa-chevron-left'}></Button>
+            <Button cls='iconBtn' ui={'raised'} iconCls={'x-fa fa-chevron-right'}></Button>
+            <Button cls='iconBtn' ui={'raised'} iconCls={'x-fa fa-rotate-right'}></Button>
           </Container>
         </div>
         <div className="right_cnt">

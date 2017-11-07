@@ -4,28 +4,34 @@ import ReactDOM from 'react-dom';
 
 // var {connect} = require('react-redux');
 // var {bindActionCreators} = require('redux');
-import { Container } from '@extjs/ext-react';
+import { Container,Button } from '@extjs/ext-react';
 import NetworkSidebar from './NetworkSidebar';
+
 import StateContent from './StateContent';
 import WirelessContent from './WirelessContent';
 import InternetContent from './InternetContent';
-import CommonDialog from '../../app/components/common/dialog';
+import LocalNetworkContent from './LocalNetworkContent';
+import ParentalCtrlContent from './ParentalCtrlContent';
+import FlowCtrlContent from './FlowCtrlContent';
+import SecurityContent from './SecurityContent';
+import NoticeSettingsContent from './NoticeSettingsContent';
+import ManagementContent from './ManagementContent';
+
+// import CommonDialog from '../../app/components/common/dialog';
 
 class NetworkCenterWindow extends Component{
   state = {
-    dialogMsg:'',
     windowHeight:570,
-    contentId: '1_vport',
+    contentId: 'allIcon', //state
     myVirtualIp:'10.100.16.89',
     vProxyIpArr:['10.100.16.84','10.100.16.9','10.100.16.68'],
   }
   componentDidMount(){
     this.setRightHeight(this.props.id);
-    document.addEventListener('mousemove', this.handleMouseMove);
-    $(".ws-select").select2();
+    // document.addEventListener('mousemove', this.handleMouseMove);
   }
   componentWillUnmount () {
-    document.removeEventListener('mousemove', this.handleMouseMove);
+    // document.removeEventListener('mousemove', this.handleMouseMove);
     // document.removeEventListener('mouseup', this.handleMouseUp);
   }
   setRightHeight = (id)=>{
@@ -39,85 +45,107 @@ class NetworkCenterWindow extends Component{
   }
   handleMouseMove = ()=>{
     var cl = $("#window-" + this.props.id);
-    if (cl.hasClass('active')) {
-      this.setRightHeight(this.props.id);
-    }
+    this.setRightHeight(this.props.id);
+    // if (cl.hasClass('active')) {
+    // }
   }
   onMenuItemClick = (contentId)=>{
     this.setState({contentId});
   }
   render () {
+    let {contentId} = this.state;
     return (
       <div className="grid condensed net-win" id="networkWindow" style={{margin:"0 1px"}}>
+      {contentId=="allIcon" ?
+        <div className='row cells4'>
+          <Button text={"列表模式"} ui={'decline alt'} onTap={()=>{ this.setState({contentId:'state'}); }}></Button>
+        </div>:
         <div className="row cells4">
           <div className="cell side">
             <NetworkSidebar onMenuItemClick={this.onMenuItemClick}/>
           </div>
           <div className="cell colspan3 wi-right">
-            {/*状态 tab的右边内容块*/}
-            <div className="wi active" id="wi_right_state"
+            <div className="wi active" id={"wi_right_content"}
               style={{height:'100%',width:'100%',overflowY: 'scroll'}}>
-              <StateContent
-                windowHeight={this.state.windowHeight}
-                contentId={this.state.contentId}
-              />
-            </div>
-            {/*无线 tab的右边内容块*/}
-            <div className="wi" id="wi_right_wireless"
-              style={{height:'100%',width:'100%',overflowY: 'scroll'}}>
-              <WirelessContent
-                windowHeight={this.state.windowHeight}
-                contentId={this.state.contentId}
-              />
-            </div>
-            {/*互联网 tab的右边内容块*/}
-            <div className="wi" id="wi_right_Internet"
-              style={{height:'100%',width:'100%',overflowY: 'scroll'}}>
-              <InternetContent
-                windowHeight={this.state.windowHeight}
-                contentId={this.state.contentId}
-              />
-            </div>
+              {/*状态 tab的右边内容块*/}
+              {contentId=="state" ?
+                <StateContent
+                  windowHeight={this.state.windowHeight}
+                  contentId={this.state.contentId}
+                /> : null
+              }
 
-            {/*本地网络 tab的右边内容块*/}
-            <div className="wi" id="wi_right_localNetwork"
-              style={{height:'100%',width:'100%',overflowY: 'scroll'}}>
-              <span>本地网络内容区...</span>
-            </div>
+              {/*无线 tab的右边内容块*/}
+              {contentId=="wireless" ?
+                <WirelessContent
+                  windowHeight={this.state.windowHeight}
+                  contentId={this.state.contentId}
+                /> : null
+              }
 
-            {/*家长控制 tab的右边内容块*/}
-            <div className="wi" id="wi_right_parentalCtrl"
-              style={{height:'100%',width:'100%',overflowY: 'scroll'}}>
-              <span>家长控制内容区...</span>
-            </div>
+              {/*互联网 tab的右边内容块*/}
+              {contentId=="Internet" ?
+                <InternetContent
+                  windowHeight={this.state.windowHeight}
+                  contentId={this.state.contentId}
+                /> : null
+              }
 
-            {/*流量控制 tab的右边内容块*/}
-            <div className="wi" id="wi_right_flowCtrl"
-              style={{height:'100%',width:'100%',overflowY: 'scroll'}}>
-              <span>流量控制内容区...</span>
-            </div>
+              {/*本地网络 tab的右边内容块*/}
+              {contentId=="localNetwork" ?
+                <LocalNetworkContent
+                  windowHeight={this.state.windowHeight}
+                  contentId={this.state.contentId}
+                /> : null
+              }
 
-            {/*安全性 tab的右边内容块*/}
-            <div className="wi" id="wi_right_security"
-              style={{height:'100%',width:'100%',overflowY: 'scroll'}}>
-              <span>安全性内容区...</span>
-            </div>
+              {/*家长控制 tab的右边内容块*/}
+              {contentId=="parentalCtrl" ?
+                <ParentalCtrlContent
+                  windowHeight={this.state.windowHeight}
+                  contentId={this.state.contentId}
+                /> : null
+              }
 
-            {/*通知设置 tab的右边内容块*/}
-            <div className="wi" id="wi_right_noticeSettings"
-              style={{height:'100%',width:'100%',overflowY: 'scroll'}}>
-              <span>通知设置内容区...</span>
-            </div>
+              {/*流量控制 tab的右边内容块*/}
+              {contentId=="flowCtrl" ?
+                <FlowCtrlContent
+                  windowHeight={this.state.windowHeight}
+                  contentId={this.state.contentId}
+                /> : null
+              }
 
-            {/*管理 tab的右边内容块*/}
-            <div className="wi" id="wi_right_management"
-              style={{height:'100%',width:'100%',overflowY: 'scroll'}}>
-              <span>管理内容区...</span>
+              {/*安全性 tab的右边内容块*/}
+              {contentId=="security" ?
+                <SecurityContent
+                  windowHeight={this.state.windowHeight}
+                  contentId={this.state.contentId}
+                /> : null
+              }
+
+              {/*通知设置 tab的右边内容块*/}
+              {contentId=="noticeSettings" ?
+                <NoticeSettingsContent
+                  windowHeight={this.state.windowHeight}
+                  contentId={this.state.contentId}
+                /> : null
+              }
+              {/*管理 tab的右边内容块*/}
+              {contentId=="management" ?
+                <ManagementContent
+                  windowHeight={this.state.windowHeight}
+                  contentId={this.state.contentId}
+                /> : null
+              }
+
             </div>
 
           </div>
         </div>
-        <CommonDialog id="networkDiaglog" dialogMsg={this.state.dialogMsg} />
+      }
+
+
+
       </div>
     );
   }

@@ -46,166 +46,168 @@ export default class WirelessContent extends Component {
       let {nameType,menuItemVal,selectedBootsNode} = this.state;
 
       return (
-        <TabPanel cls='wirelessContent'
-            height={'700px'}
-            defaults={{
-                cls: "card",
-                // layout: "center",
-                tab: {
-                    flex: 0,
-                    minWidth: 100
-                }
-            }}
-            tabBar={{
-                layout: {
-                    pack: 'left'
-                }
-            }}
-        >
-          <Container title="Wi-Fi" cls="wifi_tab">
-            <div className="cnt" style={{margin:'20px'}}>
-              <div className="title">5GHz</div>
-              <Panel
-                margin='10 0 10 0'
-                layout="vbox"
-              >
-                  <Container flex={1}>
-                    <div style={{'float':'left'}}><CheckBoxField boxLabel="启用无线广播"/></div>
-                  </Container>
-                  <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
-                    <TextField label="名称(SSID)：" labelTextAlign="left" labelAlign="left" value="Synology_5G" width="80%"/>
-                    <Button ui="menu raised" text="显示" style={{marginRight:'10px'}}>
-                       <Menu defaults={{ handler: this.onNameMenuChange, group: 'buttonstyle' }}>
-                           <MenuItem text="显示" value="show" iconCls={nameType === 'show' && 'x-font-icon md-icon-check'}/>
-                           <MenuItem text="隐藏" value="hide" iconCls={nameType === 'hide' && 'x-font-icon md-icon-check'}/>
-                       </Menu>
-                    </Button>
-                  </Container>
-                  <SelectField label="安全级别："
-                      labelTextAlign="left" labelAlign="left" value={1}
-                      onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
-                      options={[
-                          { text: '高 - WAP2-个人', value: 1 },
-                          { text: 'Option 1', value: 2 }
-                      ]}
-                  />
-                  <TextField label="密码：" labelTextAlign="left" labelAlign="left" value="siteview"/>
-                  <SelectField label="无线模式："
-                      labelTextAlign="left" labelAlign="left" value={1}
-                      onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
-                      options={[
-                          { text: 'an+ac', value: 1 },
-                          { text: 'Option 1', value: 2 }
-                      ]}
-                  />
-                  <div style={{color:'#07439e'}}>高级选项<span className="x-fa fa-chevron-down"></span></div>
-              </Panel>
+        <div className='wireless_content' style={{height:'100%'}}>
+          <TabPanel cls='wireless_tabPanel'
+              height={'700px'}
+              defaults={{
+                  cls: "card",
+                  // layout: "center",
+                  tab: {
+                      flex: 0,
+                      minWidth: 100
+                  }
+              }}
+              tabBar={{
+                  layout: {
+                      pack: 'left'
+                  }
+              }}
+          >
+            <Container title="Wi-Fi" cls="wifi_tab">
+              <div className="cnt" style={{margin:'20px'}}>
+                <div className="title">5GHz</div>
+                <Panel
+                  margin='10 0 10 0'
+                  layout="vbox"
+                >
+                    <Container flex={1}>
+                      <div style={{'float':'left'}}><CheckBoxField boxLabel="启用无线广播"/></div>
+                    </Container>
+                    <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
+                      <TextField label="名称(SSID)：" labelTextAlign="left" labelAlign="left" value="Synology_5G" width="80%"/>
+                      <Button ui="menu raised" text="显示" style={{marginRight:'10px'}}>
+                         <Menu defaults={{ handler: this.onNameMenuChange, group: 'buttonstyle' }}>
+                             <MenuItem text="显示" value="show" iconCls={nameType === 'show' && 'x-font-icon md-icon-check'}/>
+                             <MenuItem text="隐藏" value="hide" iconCls={nameType === 'hide' && 'x-font-icon md-icon-check'}/>
+                         </Menu>
+                      </Button>
+                    </Container>
+                    <SelectField label="安全级别："
+                        labelTextAlign="left" labelAlign="left" value={1}
+                        onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
+                        options={[
+                            { text: '高 - WAP2-个人', value: 1 },
+                            { text: 'Option 1', value: 2 }
+                        ]}
+                    />
+                    <TextField label="密码：" labelTextAlign="left" labelAlign="left" value="siteview"/>
+                    <SelectField label="无线模式："
+                        labelTextAlign="left" labelAlign="left" value={1}
+                        onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
+                        options={[
+                            { text: 'an+ac', value: 1 },
+                            { text: 'Option 1', value: 2 }
+                        ]}
+                    />
+                    <div style={{color:'#07439e'}}>高级选项<span className="x-fa fa-chevron-down"></span></div>
+                </Panel>
 
-              <div className="title">2.4GHz</div>
-              <Panel
-                margin='10 0 10 0'
-                layout="vbox"
-              >
-                  <Container flex={1}>
-                    <div style={{'float':'left'}}><CheckBoxField boxLabel="启用无线广播"/></div>
-                  </Container>
-                  <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
-                    <TextField label="名称(SSID)：" labelTextAlign="left" labelAlign="left" value="Synology" width="80%"/>
-                    <Button ui="menu raised" text="显示" style={{marginRight:'10px'}}>
-                       <Menu defaults={{ handler: this.onNameMenuChange, group: 'buttonstyle' }}>
-                           <MenuItem text="显示" value="show" iconCls={nameType === 'show' && 'x-font-icon md-icon-check'}/>
-                           <MenuItem text="隐藏" value="hide" iconCls={nameType === 'hide' && 'x-font-icon md-icon-check'}/>
-                       </Menu>
-                    </Button>
-                  </Container>
-                  <SelectField label="安全级别："
-                      labelTextAlign="left" labelAlign="left" value={1}
-                      onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
-                      options={[
-                          { text: '高 - WAP2-个人', value: 1 },
-                          { text: 'Option 1', value: 2 }
-                      ]}
-                  />
-                  <TextField label="密码：" labelTextAlign="left" labelAlign="left" value="siteview"/>
-                  <SelectField label="无线模式："
-                      labelTextAlign="left" labelAlign="left" value={1}
-                      onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
-                      options={[
-                          { text: 'b+g+n', value: 1 },
-                          { text: 'Option 1', value: 2 }
-                      ]}
-                  />
-                  <div style={{color:'#07439e'}}>高级选项<span className="x-fa fa-chevron-down"></span></div>
-              </Panel>
-            </div>
-          </Container>
+                <div className="title">2.4GHz</div>
+                <Panel
+                  margin='10 0 10 0'
+                  layout="vbox"
+                >
+                    <Container flex={1}>
+                      <div style={{'float':'left'}}><CheckBoxField boxLabel="启用无线广播"/></div>
+                    </Container>
+                    <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
+                      <TextField label="名称(SSID)：" labelTextAlign="left" labelAlign="left" value="Synology" width="80%"/>
+                      <Button ui="menu raised" text="显示" style={{marginRight:'10px'}}>
+                         <Menu defaults={{ handler: this.onNameMenuChange, group: 'buttonstyle' }}>
+                             <MenuItem text="显示" value="show" iconCls={nameType === 'show' && 'x-font-icon md-icon-check'}/>
+                             <MenuItem text="隐藏" value="hide" iconCls={nameType === 'hide' && 'x-font-icon md-icon-check'}/>
+                         </Menu>
+                      </Button>
+                    </Container>
+                    <SelectField label="安全级别："
+                        labelTextAlign="left" labelAlign="left" value={1}
+                        onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
+                        options={[
+                            { text: '高 - WAP2-个人', value: 1 },
+                            { text: 'Option 1', value: 2 }
+                        ]}
+                    />
+                    <TextField label="密码：" labelTextAlign="left" labelAlign="left" value="siteview"/>
+                    <SelectField label="无线模式："
+                        labelTextAlign="left" labelAlign="left" value={1}
+                        onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
+                        options={[
+                            { text: 'b+g+n', value: 1 },
+                            { text: 'Option 1', value: 2 }
+                        ]}
+                    />
+                    <div style={{color:'#07439e'}}>高级选项<span className="x-fa fa-chevron-down"></span></div>
+                </Panel>
+              </div>
+            </Container>
 
-          {/* WPS tab块内容*/}
-          <Container title="WPS" cls="wps_tab">
-              <div className="">
-                <div style={{margin:'10px'}}>
-                  <div>您可以使用WPS(Wi-Fi Protected Setup)以在Synology Router 与无线客户端之间共享无线密钥，并通过以下方法之一安全地建立无线网络。</div>
-                  <div style={{'float':'left'}}>
-                    <CheckBoxField boxLabel="启用无线广播" cls="wps_tab_checkbox"/>
+            {/* WPS tab块内容*/}
+            <Container title="WPS" cls="wps_tab">
+                <div className="">
+                  <div style={{margin:'10px'}}>
+                    <div>您可以使用WPS(Wi-Fi Protected Setup)以在Synology Router 与无线客户端之间共享无线密钥，并通过以下方法之一安全地建立无线网络。</div>
+                    <div style={{'float':'left'}}>
+                      <CheckBoxField boxLabel="启用无线广播" cls="wps_tab_checkbox"/>
+                    </div>
+                    <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
+                      <div>连接状态：<span>已就绪</span></div>
+                      <div style={{marginLeft:'20px'}}>连接类型：<span>2.4GHz</span></div>
+                    </Container>
                   </div>
-                  <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
-                    <div>连接状态：<span>已就绪</span></div>
-                    <div style={{marginLeft:'20px'}}>连接类型：<span>2.4GHz</span></div>
+                  <Container layout={{type:'vbox',pack:'center',align:'left'}}>
+                    <Panel
+                      title="通过推送按钮"
+                      width={'100%'}
+                      bodyPadding={20}
+                      collapsible={{
+                          direction: 'top',
+                          dynamic: true
+                      }}
+                      bodyPadding={10}
+                    >
+                    <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
+                      <Container flex={1}>
+                        <p>按Synology Router 上的WPS按钮。</p>
+                        <div style={{padding:'20px'}}><img src='images/network/pushBtn_1.png'/></div>
+                      </Container>
+                      <Container flex={1}>
+                        <p>按下无线设备上的WPS按钮。</p>
+                        <div style={{padding:'20px'}}><img src='images/network/pushBtn_2.png'/></div>
+                      </Container>
+                      <Container flex={1}>
+                        <p>这些设备已连接。</p>
+                        <div style={{padding:'20px'}}><img src='images/network/pushBtn_3.png'/></div>
+                      </Container>
+                    </Container>
+                    </Panel>
+                    <Panel
+                      title="设备PIN码"
+                      width={'100%'}
+                      bodyPadding={20}
+                      collapsible={{
+                          direction: 'top',
+                          dynamic: true
+                      }}
+                      bodyPadding={10}
+                    >
+                      <Container>
+                        设备PIN码 内容区
+                      </Container>
+                    </Panel>
                   </Container>
                 </div>
-                <Container layout={{type:'vbox',pack:'center',align:'left'}}>
-                  <Panel
-                    title="通过推送按钮"
-                    width={'100%'}
-                    bodyPadding={20}
-                    collapsible={{
-                        direction: 'top',
-                        dynamic: true
-                    }}
-                    bodyPadding={10}
-                  >
-                  <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
-                    <Container flex={1}>
-                      <p>按Synology Router 上的WPS按钮。</p>
-                      <div style={{padding:'20px'}}><img src='images/network/pushBtn_1.png'/></div>
-                    </Container>
-                    <Container flex={1}>
-                      <p>按下无线设备上的WPS按钮。</p>
-                      <div style={{padding:'20px'}}><img src='images/network/pushBtn_2.png'/></div>
-                    </Container>
-                    <Container flex={1}>
-                      <p>这些设备已连接。</p>
-                      <div style={{padding:'20px'}}><img src='images/network/pushBtn_3.png'/></div>
-                    </Container>
-                  </Container>
-                  </Panel>
-                  <Panel
-                    title="设备PIN码"
-                    width={'100%'}
-                    bodyPadding={20}
-                    collapsible={{
-                        direction: 'top',
-                        dynamic: true
-                    }}
-                    bodyPadding={10}
-                  >
-                    <Container>
-                      设备PIN码 内容区
-                    </Container>
-                  </Panel>
-                </Container>
-              </div>
-          </Container>
+            </Container>
 
-          {/*访客网络 tab 内容区*/}
-          <Container title="访客网络" cls="guest_tab">
-              <GuestNetworkTab />
-          </Container>
-          {/*MAc 过滤器 tab的内容区*/}
-          <Container title="MAC过滤器" cls="MAC_filter_tab">
-              <MACFilterTab />
-          </Container>
-        </TabPanel>
+            {/*访客网络 tab 内容区*/}
+            <Container title="访客网络" cls="guest_tab">
+                <GuestNetworkTab />
+            </Container>
+            {/*MAc 过滤器 tab的内容区*/}
+            <Container title="MAC过滤器" cls="MAC_filter_tab">
+                <MACFilterTab />
+            </Container>
+          </TabPanel>
+        </div>
     )
   }
 }
@@ -213,7 +215,6 @@ export default class WirelessContent extends Component {
 //访客网络 tab 的内容区 子组件
 class GuestNetworkTab extends Component{
   state={
-
   }
   render(){
     return (

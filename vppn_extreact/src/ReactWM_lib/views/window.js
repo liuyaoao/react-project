@@ -4,12 +4,10 @@ import $ from 'jquery';
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import classSet from 'react-classset';
+
+import {WIN_MODE} from '../models/Constants';
 import WindowModel from '../models/window';
-var INACTIVE = 0;
-var MOVE     = 1;
-var RESIZE   = 2;
-var RESIZE_EW = 3;
-var RESIZE_NS = 4;
+
 var bodyWidth = document.documentElement.clientWidth / 2, bodyHeight = (document.documentElement.clientHeight - 50) / 2;
 
 //窗口的框架容器
@@ -69,7 +67,8 @@ class Window extends Component{
         case "phone_music":
         case "phone_file":
         case "settings-2":
-          if(!self.window.isMinimize && (self.window.mode == RESIZE || self.window.mode == RESIZE_EW || self.window.mode == RESIZE_NS)) {
+          let isResize = (self.window.mode == WIN_MODE.RESIZE || self.window.mode == WIN_MODE.RESIZE_EW || self.window.mode == WIN_MODE.RESIZE_NS);
+          if(!self.window.isMinimize && isResize) {
             self.props.setWindowSizeChange({windowId: self.window.id, flag: true});
           }
           break;
@@ -114,7 +113,7 @@ class Window extends Component{
 
   handleMove = (e)=>{
     e.preventDefault();
-    this.window.opacity = 0.3;
+    this.window.opacity = 0.4;
     this.focus();
     var mouse = this.convertPoints(e);
     this.window.startMove(mouse.x, mouse.y);
@@ -122,8 +121,8 @@ class Window extends Component{
   }
 
   handleMouseMove = (e)=>{
-    if (this.window.mode === INACTIVE) { return true; }
-    $("#window-"+this.window.id+' .content')[0].style.opacity = '0.01';
+    if (this.window.mode === WIN_MODE.INACTIVE) { return true; }
+    this.window.mode == WIN_MODE.MOVE ? $("#window-"+this.window.id+' .content')[0].style.opacity = '0.01' : null;
     var mouse = this.convertPoints(e);
     this.window.update(mouse.x, mouse.y);
     this.quickUpdate();

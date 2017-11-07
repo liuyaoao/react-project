@@ -1,18 +1,13 @@
 
 import _ from 'lodash';
 var signals = require('signals');
-
-var INACTIVE = 0;
-var MOVE = 1;
-var RESIZE = 2;
-var RESIZE_EW = 3;
-var RESIZE_NS = 4;
+import {WIN_MODE} from './Constants';
 
 export default function Window(props) {
   signals.convert(this);
 
   _.extend(this, _.defaults(_.clone(props), this.defaults));
-  this.mode = INACTIVE;
+  this.mode = WIN_MODE.INACTIVE;
 
   // JSON converts Infinity to null
   if (this.maxWidth === null) { this.maxWidth = Infinity; }
@@ -24,7 +19,6 @@ export default function Window(props) {
 };
 
 _.extend(Window.prototype, {
-
 
   /**
    * defaults
@@ -108,7 +102,7 @@ _.extend(Window.prototype, {
    */
 
   startMove: function (x, y) {
-    this.mode = MOVE;
+    this.mode = WIN_MODE.MOVE;
     this._offsetX = x - this.x;
     this._offsetY = y - this.y;
   },
@@ -121,7 +115,7 @@ _.extend(Window.prototype, {
    */
 
   startResize: function (x, y) {
-    this.mode = RESIZE;
+    this.mode = WIN_MODE.RESIZE;
     this._quad = this._quadrant(x, y);
     this._startX = this.x;
     this._startY = this.y;
@@ -132,7 +126,7 @@ _.extend(Window.prototype, {
   },
 
   startResize_ew: function (x, y) {
-    this.mode = RESIZE_EW;
+    this.mode = WIN_MODE.RESIZE_EW;
     this._quad = this._quadrant(x, y);
     this._startX = this.x;
     // this._startY = this.y;
@@ -143,7 +137,7 @@ _.extend(Window.prototype, {
   },
 
   startResize_ns: function (x, y) {
-    this.mode = RESIZE_NS;
+    this.mode = WIN_MODE.RESIZE_NS;
     this._quad = this._quadrant(x, y);
     // this._startX = this.x;
     this._startY = this.y;
@@ -161,10 +155,10 @@ _.extend(Window.prototype, {
    */
 
   update: function (x, y) {
-    if (this.mode === MOVE) { return this._move(x, y); }
-    if (this.mode === RESIZE) { return this._resize(x, y); }
-    if (this.mode === RESIZE_EW) { return this._resize_ew(x, y); }
-    if (this.mode === RESIZE_NS) { return this._resize_ns(x, y); }
+    if (this.mode === WIN_MODE.MOVE) { return this._move(x, y); }
+    if (this.mode === WIN_MODE.RESIZE) { return this._resize(x, y); }
+    if (this.mode === WIN_MODE.RESIZE_EW) { return this._resize_ew(x, y); }
+    if (this.mode === WIN_MODE.RESIZE_NS) { return this._resize_ns(x, y); }
   },
 
 
@@ -173,15 +167,15 @@ _.extend(Window.prototype, {
    */
 
   endChange: function () {
-    if (this.mode === INACTIVE) { return; }
-    this.mode = INACTIVE;
+    if (this.mode === WIN_MODE.INACTIVE) { return; }
+    this.mode = WIN_MODE.INACTIVE;
 
-    if (this.mode === MOVE) {
+    if (this.mode === WIN_MODE.MOVE) {
       delete this._offsetX;
       delete this._offsetY;
     }
 
-    else if (this.mode === RESIZE || this.mode === RESIZE_EW || this.mode === RESIZE_NS) {
+    else if (this.mode === WIN_MODE.RESIZE || this.mode === WIN_MODE.RESIZE_EW || this.mode === WIN_MODE.RESIZE_NS) {
       delete this._quad;
       delete this._startX;
       delete this._startY;

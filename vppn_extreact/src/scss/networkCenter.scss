@@ -117,7 +117,7 @@ $fontSize: 0.9rem;
     display: block;
   }
   .x-button .x-text-el{
-    text-transform:capitalize;
+    text-transform:none;
   }
 }
 .wi-right-1 {
@@ -279,7 +279,7 @@ $fontSize: 0.9rem;
   }
 }
 
-.wirelessContent{ //无线 tab 的内容区
+.wireless_content{ //无线 tab 的内容区
   .cnt{
     .title{
       font-size:20px;
@@ -327,6 +327,6 @@ $fontSize: 0.9rem;
 
 }
 
-.InternetContent{ //互联网 tab 的内容区
+.Internet_content{ //互联网 tab 的内容区
 
 }
