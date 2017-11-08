@@ -6,7 +6,7 @@
 @import "./audio/audio.scss";
 @import "./css/audioplayer.css";
 @import "helper.scss";
-@import "customAppbar.scss";
+@import "customStartMenu.scss";
 @import "windows.scss";
 @import "desktopIcon.scss";
 @import "networkCenter.scss";
@@ -355,10 +355,39 @@ $fade: opacity 1s ease-in;
   height: 1.3rem;
   margin-top: -3px;
 }
-// .v-menu li a .icon, .v-menu li a img {
-//   max-height: 1.5rem;
-//   font-size: 1.5rem;
-// }
-// .d-menu.darcula li>a, .v-menu.darcula li>a {
-//   padding-left: 2.8rem;
-// }
+.modules_container{
+  .module_icon{
+    .x-panel-body-el{
+      background-color: #f3f2f2;
+    }
+    .ic_view{
+      display:block;
+      width:90%;
+      margin:10px auto;
+      font-size:40px;
+      color:#48b7e2;
+    }
+    .text_view{
+      color: #505A64;
+      font-family: verdana,arial,tahoma,helvetica,sans-serif;
+    }
+    &:hover{
+      .x-panel-body-el{
+        background-color:#33b8cc;
+        transition: background-color 0.5s;
+        .ic_view{
+          width:96%;
+          margin:8px auto;
+          font-size:42px;
+          color:#FFF !important;
+          transition: width 0.5s,margin 0.5s,font-size 0.5s,color 0.5s;
+        }
+        .text_view{
+          color:#fff;
+          transition: color 0.5s;
+        }
+      }
+    }
+  }
+
+}

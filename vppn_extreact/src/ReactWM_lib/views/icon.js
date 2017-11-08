@@ -15,7 +15,7 @@ var INACTIVE = 0;
 var MOVE     = 1;
 var RESIZE   = 2;
 var bodyWidth = document.documentElement.clientWidth / 2, bodyHeight = (document.documentElement.clientHeight - 50) / 2;
-
+//桌面图标组件
 class Icon extends Component{
   state={
   }
@@ -558,29 +558,14 @@ class Icon extends Component{
         contentComp: this.icon.contentComp,
         icon: this.icon.iconUrl
       }
-      switch (this.icon.id) {
-        case 'my-phone':
-          options.width = 480, options.height = 320;
-          // options.minWidth = 480, options.minHeight = 320;
-          // options.maxWidth = 480, options.minHeight = 320;
-          break;
-        case 'phone_file':
-        case 'phone_photo':
-        case 'phone_music':
-        case 'phone_video':
-          options.type = 'phone';
-          break;
-        default:
-          break;
-      }
-      let activeWindow = this.props.manager.getActiveWindow();
 
-      if(activeWindow){
-        console.log("activeWindow.x:"+activeWindow.x+"; activeWindow.y"+activeWindow.y);
-        options.x = activeWindow.x + 30;
-        options.y = activeWindow.y + 36;
+      let focusWindow = this.props.manager.getLastFocusWindow();
+      if(focusWindow){
+        // console.log("focusWindow.x:"+focusWindow.x+"; focusWindow.y"+focusWindow.y);
+        options.x = focusWindow.x + 30;
+        options.y = focusWindow.y + 36;
         //当最后一个活动窗口超出边界时，把该新打开的窗口
-        if( activeWindow.x<-30||(activeWindow.x+options.width)>bodyWidth*2-30 || activeWindow.y<0||(activeWindow.y+options.height)>bodyHeight*2-36 ){
+        if( focusWindow.x<-30||(focusWindow.x+options.width)>bodyWidth*2-30 || focusWindow.y<0||(focusWindow.y+options.height)>bodyHeight*2-36 ){
           options.x = bodyWidth - options.width / 2, options.y = bodyHeight - options.height / 2;
         }
       }else{

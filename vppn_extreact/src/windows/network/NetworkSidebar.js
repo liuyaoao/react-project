@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import { TreeList, List } from '@extjs/ext-react';
+import { Container, TreeList, List, Button, SearchField } from '@extjs/ext-react';
 import { medium, large } from '../../responsiveFormulas';
 
 Ext.require('Ext.data.TreeStore');
@@ -9,7 +9,7 @@ Ext.require('Ext.data.TreeStore');
 class NetworkSidebar extends Component{
   state = {
   }
-  
+
   componentWillMount(){
   }
   onItemClick = (sender, info, opts)=>{
@@ -20,7 +20,14 @@ class NetworkSidebar extends Component{
   }
   render(){
     return (
-      <TreeList cls="sidebar3 ext_treeList_container"
+      <div className='sidebar3'>
+        <Container width="200px" layout={{type:'hbox',pack:'left',align:'left'}} margin="0 0 10 0">
+          <Button cls='iconBtn' ui={'confirm alt'} iconCls={'x-fa fa-th'} onTap={this.props.onShowModuleIconView}></Button>
+          <SearchField style={{marginLeft:'10px'}}
+              ui="faded"
+              placeholder="Search"/>
+        </Container>
+        <TreeList cls="ext_treeList_container"
             ui="nav"
             expanderFirst={false}
             onItemClick={this.onItemClick}
@@ -37,6 +44,7 @@ class NetworkSidebar extends Component{
                 }
             }}
         />
+      </div>
     )
   }
 

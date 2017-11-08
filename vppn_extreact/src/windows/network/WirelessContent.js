@@ -88,8 +88,7 @@ export default class WirelessContent extends Component {
                         options={[
                             { text: '高 - WAP2-个人', value: 1 },
                             { text: 'Option 1', value: 2 }
-                        ]}
-                    />
+                        ]} />
                     <TextField label="密码：" labelTextAlign="left" labelAlign="left" value="siteview"/>
                     <SelectField label="无线模式："
                         labelTextAlign="left" labelAlign="left" value={1}
@@ -97,8 +96,7 @@ export default class WirelessContent extends Component {
                         options={[
                             { text: 'an+ac', value: 1 },
                             { text: 'Option 1', value: 2 }
-                        ]}
-                    />
+                        ]} />
                     <div style={{color:'#07439e'}}>高级选项<span className="x-fa fa-chevron-down"></span></div>
                 </Panel>
 

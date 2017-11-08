@@ -13,6 +13,7 @@ var Manager =  function (windows, icons) {
   this._windows = {};
   this._index = INITIAL_INDEX;
   this._activeWindow = false;
+  this._lastFocusWindow = false;
 
   this._icons = {};
   this._contextMenuModel = new ContextMenuModel({id:"contextMenu_1"});
@@ -164,6 +165,7 @@ _.extend(Manager.prototype, {
       window.setIndex(this._index);
       this._index += 1;
       this._activeWindow = window;
+      this._lastFocusWindow = window;
       this.emit('change');
     }
   },
@@ -172,20 +174,18 @@ _.extend(Manager.prototype, {
     if(id == null) {
       this._activeWindow = false;
       this.emit('change');
-    }
-    else {
+    }else {
       var window = _.isObject(id) ? id : this.get(id);
-
       if (! window) {
         throw new Error('Can not focus on a window it cannot find: ' + id);
       } else if (window === this._activeWindow) {
         // this window already has focus
         return;
       }
-
       // window.setIndex(this._index);
       // this._index += 1;
       this._activeWindow = window;
+      this._lastFocusWindow = window;
       this.emit('change');
     }
   },
@@ -199,6 +199,9 @@ _.extend(Manager.prototype, {
   },
   getActiveWindow:function(){
     return this._activeWindow;
+  },
+  getLastFocusWindow: function(){
+    return this._lastFocusWindow;
   },
 
 

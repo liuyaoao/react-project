@@ -1,9 +1,12 @@
 .windows{
-  
-  .win-content{
+
+  .win-content{ //所有窗口公用的
     height: 100%;
     background-color: #ecf0f4;
     padding:0;
     margin:0;
+  }
+  .net-win{ //针对特定窗口的
+    background-color: #f3f2f2;
   }
 }
