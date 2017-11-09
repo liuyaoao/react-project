@@ -123,7 +123,7 @@ class StartMenu extends Component{
 
             <div className="tile-area fg-white" style={{}}>
                 <div className="tile-group double">
-                    <span className="tile-group-title">Used</span>
+                    <span className="tile-group-title">Networking</span>
 
                     <div className="tile-container">
 
@@ -162,7 +162,7 @@ class StartMenu extends Component{
                 </div>
 
                 <div className="tile-group double">
-                    <span className="tile-group-title">General</span>
+                    <span className="tile-group-title">ReadySHARE</span>
                     <div className="tile-container">
                         <div className="tile-wide" data-role="tile" data-effect="slideLeft">
                             <div className="tile-content">

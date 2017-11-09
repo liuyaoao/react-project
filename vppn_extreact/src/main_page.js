@@ -81,6 +81,7 @@ desktopIconDatas.forEach((item,index)=>{
 //   iconUrl: 'images/video_80.png'
 // });
 
+//pc端根容器组件
 class ReactWMHome extends Component{
   componentDidMount(){
     $('body').on('click', clickBody);
