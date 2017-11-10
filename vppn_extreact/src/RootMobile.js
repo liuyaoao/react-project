@@ -5,13 +5,13 @@ import ReactDOM from 'react-dom';
 // var {bindActionCreators} = require('redux');
 import { Container,Sheet,TitleBar,Button,SegmentedButton, Label,FormPanel, Panel } from '@extjs/ext-react';
 
-Ext.require('Ext.viewport.Viewport');
+import SidebarMobile from './mobiles/SidebarMobile';
+// Ext.require('Ext.viewport.Viewport');
 
-class RootContainer extends Component{
+class RootMobile extends Component{
   state = {
       bodyHeight:500,
       bodyWidth:'100%',
-      side: 'left', //侧边栏显示在哪一边。
       modal: true, //右边内容是否有遮罩层。
       reveal: false, //是否是侧窗的形式，就是是否同时把右边的内容往右推。
       displayed: false
@@ -32,7 +32,7 @@ class RootContainer extends Component{
   }
 
   render () {
-    const { displayed, side, modal, reveal } = this.state;
+    const { displayed, modal, reveal } = this.state;
 
     return (
       <div className="phone_root_container" style={{width:this.state.bodyWidth+'px',height:this.state.bodyHeight+'px'}}>
@@ -50,9 +50,9 @@ class RootContainer extends Component{
                   zIndex='100'
                   padding="15 0"
               >
-                  <Button text="Settings" iconCls="x-fa fa-gear" onTap={this.toggleMenu}/>
-                  <Button text="New Item" iconCls="x-fa fa-pencil" onTap={this.toggleMenu} />
-                  <Button text="Star" iconCls="x-fa fa-star" onTap={this.toggleMenu}/>
+                <SidebarMobile
+                  toggleMenu={this.toggleMenu}
+                />
               </Container>
 
               <Container
@@ -81,4 +81,4 @@ class RootContainer extends Component{
 
 }
 
-export default RootContainer;
+export default RootMobile;

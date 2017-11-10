@@ -5,7 +5,7 @@ import {Provider} from 'react-redux';
 import {Router,browserHistory} from 'react-router/es6';
 
 import { renderWhenReady,Container } from '@extjs/reactor';
-// import ReactWMHome from './main_page'; //pc端微软桌面风格页面。
+// import RootPc from './RootPc'; //pc端微软桌面风格页面。
 import "./scss/screen.scss";
 
   import configureStore from './app/store/configureStore';
@@ -21,9 +21,9 @@ Ext.require('Ext.plugin.Responsive');
     onEnter: this.preEnterMainRoot,
     getComponents: (location, callback) => {
          if(Ext.os.is.Phone){
-           System.import('./mobiles/RootContainer.js').then(this.importComponentSuccess(callback));
+           System.import('./RootMobile.js').then(this.importComponentSuccess(callback));
          }else{
-           System.import('./main_page.js').then(this.importComponentSuccess(callback));
+           System.import('./RootPc.js').then(this.importComponentSuccess(callback));
          }
        }
    }

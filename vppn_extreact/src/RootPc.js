@@ -82,7 +82,7 @@ desktopIconDatas.forEach((item,index)=>{
 // });
 
 //pc端根容器组件
-class ReactWMHome extends Component{
+class RootPc extends Component{
   componentDidMount(){
     $('body').on('click', clickBody);
     // $('body').on('mousedown', bodyMousedown);
@@ -97,4 +97,4 @@ class ReactWMHome extends Component{
   }
 }
 
-export default ReactWMHome;
+export default RootPc;
