@@ -3,7 +3,7 @@ import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 // var {connect} = require('react-redux');
 // var {bindActionCreators} = require('redux');
-import { Container,TitleBar,List,Button, Label,FormPanel, Panel } from '@extjs/ext-react';
+import { Container,List,Button, TreeList, Panel } from '@extjs/ext-react';
 
 Ext.require('Ext.Toast');
 
@@ -11,17 +11,17 @@ class SidebarMobile extends Component{
   state = {
       bodyHeight:500,
       bodyWidth:'100%',
-      popupsDisplayed:false,
+      contentId:'VlanWindow',
   }
-  store = Ext.create('Ext.data.Store', {
-      data: [
-          {title: '找到我'},
-          {title: '重启'},
-          {title: '关机'},
-          {title: '设置'},
-          {title: '取消'}
-      ]
-    })
+  treeListData = {
+    root: {
+        children: [
+            { id: 'mSide_VlanWindow', text: '<div class="">Cloud VPN</div>', iconCls: 'mif-wifi-connect icon', leaf: true },
+            { id: 'mSide_NetworkCenterWindow', text: '<div class="">Network Center</div>', iconCls: 'mif-earth icon', leaf: true },
+            { id: 'mSide_FileStationWindow', text: 'ReadySHARE', iconCls: 'mif-local-service icon', leaf: true },
+        ]
+    }
+  }
   componentDidMount(){
     this.setState({
       bodyHeight:document.documentElement.clientHeight,
@@ -30,33 +30,29 @@ class SidebarMobile extends Component{
   }
   componentWillUnmount () {
   }
-  onClickHeaderSetting = ()=>{
-    this.props.toggleMenu();
-    this.setState({
-      popupsDisplayed:!this.state.popupsDisplayed
-    });
-  }
-  onClickPopupMask = ()=>{
-    this.setState({
-      popupsDisplayed:!this.state.popupsDisplayed
-    });
-  }
-  tpl = data => (
-        <div>
-            <div style={{fontSize: '21px',color:'#0087ff',textAlign:'center' }}>{data.title} {data.last_name}</div>
-        </div>
-    )
-    onPopupSelect = (list, record) => {
+  componentWillReceiveProps(nextProps){
+    if(!nextProps.contentId && nextProps.contentId != this.props.contentId){
       this.setState({
-        popupsDisplayed:!this.state.popupsDisplayed
+        contentId:nextProps.contentId
       });
-        Ext.toast(`You selected ${record.get('title')}.`)
     }
+  }
+  onShowHeaderPopup = ()=>{
+    this.props.toggleSidebar();
+    this.props.onShowHeaderPopup();
+  }
+  onItemClick = (itemId)=>{
+    this.props.toggleSidebar();
+    this.setState({
+      contentId:itemId.split('_')[1]
+    });
+    this.props.onSelectMenuItem(itemId.split('_')[1]); //只截取了下划线后面的一段。
+  }
   render () {
-    let {popupsDisplayed} = this.state;
+    let {contentId} = this.state;
     let {displayed} = this.props;
     return (
-      <div className="" style={{width:'100%',height:'100%'}}>
+      <div className="" style={{width:'100%',height:'100%',position:'relative'}}>
         <Container
             width='100%'
             height='100%'
@@ -70,27 +66,18 @@ class SidebarMobile extends Component{
                 <div style={{}}><span style={{color:'#fff'}}>Administrator</span></div>
                 <div style={{}}><span style={{color:'#dad5d5'}}>192.168.9.67</span></div>
               </div>
-              <div><Button ui="alt" cls="icon_big" iconCls="x-fa fa-gear" onTap={this.onClickHeaderSetting}/></div>
+              <div><Button ui="alt" cls="icon_big" iconCls="x-fa fa-gear" onTap={this.onShowHeaderPopup}/></div>
             </Container>
-            <Button text="Settings" iconCls="x-fa fa-gear" onTap={this.props.toggleMenu}/>
-            <Button text="New Item" iconCls="x-fa fa-pencil" onTap={this.props.toggleMenu} />
-            <Button text="Star" iconCls="x-fa fa-star" onTap={this.props.toggleMenu}/>
+            <TreeList cls="ext_treeList_container"
+                  ui="nav"
+                  expanderFirst={false}
+                  onItemClick={(tree, item) => this.onItemClick(item.node.getId())}
+                  selection={"mSide_"+contentId}
+                  store={this.treeListData}
+                  width={'100%'}
+              />
         </Container>
 
-        <div className={popupsDisplayed?"header-popups-mask active":"header-popups-mask"} onClick={this.onClickPopupMask}></div>
-        <Container cls={popupsDisplayed?"popup_content active":"popup_content"}
-          zIndex={'100'}
-          height={'auto'}
-          padding="0 10"
-          style={{backgroundColor:'#fff',borderBottom: '1px solid #bfbbbb',position:'fixed'}}
-          >
-            <List cls="list_container"
-              selfAlign="center"
-              itemTpl={this.tpl}
-              onSelect={this.onPopupSelect}
-              store={this.store}
-            />
-        </Container>
       </div>
     );
   }

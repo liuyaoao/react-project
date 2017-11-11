@@ -22,13 +22,10 @@ class FileStationPageMobile extends Component{
   render () {
     let {displayed} = this.props;
     return (
-      <div className="" style={{width:'100%',height:'100%'}}>
+      <div className="page_content" style={{}}>
         <Container
-            width='100%'
-            height='100%'
-            padding="10 10"
-            style={{backgroundColor: 'white'}}
             layout='vbox'
+            padding="10 10"
         >
             <SearchField ui="faded" placeholder="Search"/>
             <Container layout={{type:"vbox",pack:'center'}} height='100%' margin="20 10">

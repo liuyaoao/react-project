@@ -22,28 +22,35 @@ class MainContentMobile extends Component{
       bodyWidth:document.documentElement.clientWidth
     });
   }
+
   componentWillUnmount () {
   }
 
   render () {
-    let {displayed} = this.props;
+    let {contentId,displayed} = this.props;
     return (
-      <div className="" style={{width:'100%',height:'100%',position:'relative'}}>
-        <TitleBar cls="titlebar-mobile" title="主内容区" docked="top" height="45px"
+      <div className="main_content">
+        <TitleBar
+            cls="titlebar-mobile"
+            title="主内容区"
+            docked="top"
+            height="45px"
+            zIndex="108"
             platformConfig={{
                 phone: {
                     titleAlign: 'center'
                 }
             }}
+            style={{position:'fixed',top:'0'}}
         >
-          <Button align="left" ui="default" iconCls="x-fa fa-bars" onTap={this.props.toggleMenu}/>
+          <Button align="left" ui="default" iconCls="x-fa fa-bars" onTap={this.props.toggleSidebar}/>
           {this.state.titlebarRightText?
             <Button align="right" ui="default" text={this.state.titlebarRightText}/>:null
           }
         </TitleBar>
-        {this.state.moduleName=="fileStation"?<FileStationPageMobile /> : null}
-        {this.state.moduleName=="network"?<NetworkPageMobile /> : null}
-        {this.state.moduleName=="vlan"?<VlanPageMobile /> : null}
+        {contentId=="FileStationWindow"||contentId==""?<FileStationPageMobile /> : null}
+        {contentId=="NetworkCenterWindow"?<NetworkPageMobile /> : null}
+        {contentId=="VlanWindow"?<VlanPageMobile /> : null}
       </div>
     );
   }

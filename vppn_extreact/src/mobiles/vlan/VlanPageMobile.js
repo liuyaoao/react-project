@@ -22,15 +22,31 @@ class VlanPageMobile extends Component{
   render () {
     let {displayed} = this.props;
     return (
-      <div className="" style={{width:'100%',height:'100%'}}>
+      <div className="page_content" style={{}}>
         <Container
-            width='100%'
-            height='100%'
+            scrollable={true}
             layout='vbox'
+            padding="10 10"
         >
-            <Button text="Settings" iconCls="x-fa fa-gear" onTap={this.props.toggleMenu}/>
-            <Button text="New Item" iconCls="x-fa fa-pencil" onTap={this.props.toggleMenu} />
-            <Button text="Star" iconCls="x-fa fa-star" onTap={this.props.toggleMenu}/>
+            <div>vlan 的内容区</div>
+            <div>vlan 的内容区</div><div>vlan 的内容区</div><div>vlan 的内容区</div>
+            <div>vlan 的内容区</div><div>vlan 的内容区</div><div>vlan 的内容区</div>
+            <div>vlan 的内容区</div><div>vlan 的内容区</div><div>vlan 的内容区</div>
+            <div>vlan 的内容区</div><div>vlan 的内容区</div><div>vlan 的内容区</div>
+            <div>vlan 的内容区</div><div>vlan 的内容区</div><div>vlan 的内容区</div>
+            <div>vlan 的内容区</div><div>vlan 的内容区</div><div>vlan 的内容区</div>
+            <div>vlan 的内容区</div><div>vlan 的内容区</div><div>vlan 的内容区</div>
+            <div>vlan 的内容区</div><div>vlan 的内容区</div><div>vlan 的内容区</div>
+            <div>vlan 的内容区</div><div>vlan 的内容区</div><div>vlan 的内容区</div>
+            <div>vlan 的内容区</div><div>vlan 的内容区</div><div>vlan 的内容区</div>
+            <div>vlan 的内容区</div><div>vlan 的内容区</div><div>vlan 的内容区</div>
+            <div>vlan 的内容区</div><div>vlan 的内容区</div><div>vlan 的内容区</div>
+            <div>vlan 的内容区</div><div>vlan 的内容区</div><div>vlan 的内容区</div>
+            <div>vlan 的内容区</div><div>vlan 的内容区</div><div>vlan 的内容区</div>
+            <div>vlan 的内容区</div><div>vlan 的内容区</div><div>vlan 的内容区</div>
+            <div>vlan 的内容区</div><div>vlan 的内容区</div><div>vlan 的内容区</div>
+            <div>vlan 的内容区</div><div>vlan 的内容区</div><div>vlan 的内容区</div>
+            <div>vlan 的内容区</div><div>vlan 的内容区</div><div>vlan 的内容区</div>
         </Container>
       </div>
     );
