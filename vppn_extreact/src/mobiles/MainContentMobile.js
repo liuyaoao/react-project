@@ -30,27 +30,23 @@ class MainContentMobile extends Component{
     let {contentId,displayed} = this.props;
     return (
       <div className="main_content">
-        <TitleBar
-            cls="titlebar-mobile"
-            title="主内容区"
-            docked="top"
-            height="45px"
-            zIndex="108"
-            platformConfig={{
-                phone: {
-                    titleAlign: 'center'
-                }
-            }}
-            style={{position:'fixed',top:'0'}}
-        >
-          <Button align="left" ui="default" iconCls="x-fa fa-bars" onTap={this.props.toggleSidebar}/>
-          {this.state.titlebarRightText?
-            <Button align="right" ui="default" text={this.state.titlebarRightText}/>:null
-          }
-        </TitleBar>
-        {contentId=="FileStationWindow"||contentId==""?<FileStationPageMobile /> : null}
-        {contentId=="NetworkCenterWindow"?<NetworkPageMobile /> : null}
-        {contentId=="VlanWindow"?<VlanPageMobile /> : null}
+
+        {contentId=="FileStationWindow"||contentId==""?
+          <FileStationPageMobile
+            toggleSidebar={this.props.toggleSidebar}
+          /> : null
+        }
+        {contentId=="NetworkCenterWindow"?
+          <NetworkPageMobile
+            toggleSidebar={this.props.toggleSidebar}
+          /> : null
+        }
+        {contentId=="VlanWindow"?
+          <VlanPageMobile
+            toggleSidebar={this.props.toggleSidebar}
+
+          /> : null
+        }
       </div>
     );
   }

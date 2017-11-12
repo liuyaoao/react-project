@@ -145,7 +145,7 @@ export default class WirelessContent extends Component {
                   <div style={{margin:'10px'}}>
                     <div>您可以使用WPS(Wi-Fi Protected Setup)以在Synology Router 与无线客户端之间共享无线密钥，并通过以下方法之一安全地建立无线网络。</div>
                     <div style={{'float':'left'}}>
-                      <CheckBoxField boxLabel="启用无线广播" cls="wps_tab_checkbox"/>
+                      <CheckBoxField boxLabel="启用WPS" cls="wps_tab_checkbox"/>
                     </div>
                     <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
                       <div>连接状态：<span>已就绪</span></div>

@@ -1,4 +1,16 @@
 
+.x-button .x-text-el{
+  text-transform:none;
+}
+.x-dock{
+  overflow: inherit;
+}
+.x-container{
+  overflow: inherit;
+  .x-container-body-el{
+    overflow: inherit;
+  }
+}
 .phone_root_container{
   & > div{
     overflow-x: hidden;
@@ -63,6 +75,9 @@
     min-height: 45px;
     color:#2a588c;
     border-bottom:3px solid #2a588c;
+    .x-innerhtml{
+      color:#2a588c;
+    }
   }
 }
 
@@ -105,4 +120,25 @@
     bottom: 0;
     transition: bottom 0.3s;
   }
+}
+.tabpanel_m{
+  .x-tab.x-has-text .x-inner-el{
+    padding:10px 4px;
+    background-color: #e8e8e8;
+    color:#025b80;
+  }
+  .cnt{
+    .title{
+      font-size:20px;
+      font-weight:600;
+      color:#025b80;
+      border-bottom:2px dotted #a09b9b;
+    }
+  }
+}
+.tabpanel_bottom_m{
+  .x-active-indicator-el{
+    top:0;
+  }
+
 }

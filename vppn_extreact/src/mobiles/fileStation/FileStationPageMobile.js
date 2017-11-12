@@ -9,6 +9,7 @@ class FileStationPageMobile extends Component{
   state = {
       bodyHeight:500,
       bodyWidth:'100%',
+      titlebarRightText:''
   }
   componentDidMount(){
     this.setState({
@@ -23,6 +24,21 @@ class FileStationPageMobile extends Component{
     let {displayed} = this.props;
     return (
       <div className="page_content" style={{}}>
+        <TitleBar
+            cls="titlebar-mobile"
+            title="ReadySHARE"
+            height="45px"
+            zIndex="108"
+            platformConfig={{
+                phone: {titleAlign: 'center'}
+            }}
+            style={{position:'fixed',top:'0'}}
+        >
+          <Button align="left" ui="default" iconCls="x-fa fa-bars" onTap={this.props.toggleSidebar}/>
+          {this.state.titlebarRightText?
+            <Button align="right" ui="default" text={this.state.titlebarRightText}/>:null
+          }
+        </TitleBar>
         <Container
             layout='vbox'
             padding="10 10"
