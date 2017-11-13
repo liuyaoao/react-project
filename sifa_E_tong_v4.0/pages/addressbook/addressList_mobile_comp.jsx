@@ -142,7 +142,7 @@ class AddressListMobileComp extends React.Component {
                 onClick={ (evt)=>{this.state.hasOperaPermission ? this.onClickEditItem(evt,record,index) : ''} }>
                 <div className="addressbook_row">
                   <span className="addressbook_avator">
-                    <img className="member_icon" width="54" height="54" src={this.props.iconArr[index]}/>
+                    <img className="member_icon" width="54" height="64" src={this.props.iconArr[index]}/>
                   </span>
                   <div className="addressbook_detail">
                     <div className="member_name">

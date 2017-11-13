@@ -170,21 +170,29 @@ class DocDetailDefault extends React.Component {
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem label="出生地">
+                    <FormItem {...formItemLayout1} label="出生地">
                       {getFieldDecorator('createParty', {initialValue: memberInfo.createParty || '-'})(
                         <Input type="text" placeholder="" disabled/>
                       )}
                     </FormItem>
                   </Col>
                   <Col span={24}>
-                    <FormItem label="健康状况">
+                    <FormItem {...formItemLayout1} label="健康状况">
                       {getFieldDecorator('healthStatus', {initialValue: memberInfo.healthStatus || '-'})(
                         <Input type="text" placeholder="" disabled/>
                       )}
                     </FormItem>
                   </Col>
+                  <Col span={24}>
+                    <FormItem {...formItemLayout} label="职级:">
+                        {getFieldDecorator('approvalOpinion', {initialValue:memberInfo.approvalOpinion || '-'})(
+                          <Input type="text" disabled/>
+                        )}
+                    </FormItem>
+                  </Col>
                 </Row>
               </Col>
+
               <Col span={24} className="tag-list">
                 <p className="info-title">
                   <label>学历学位</label>
@@ -215,19 +223,6 @@ class DocDetailDefault extends React.Component {
                 </Row>
               </Col>
 
-              <Col span={24} className="tag-list">
-                <p className="info-title">
-                  <label>说明:</label>
-                  <a href="javascript:;" className="pull-right p-r-10" onClick={this.handleToggleTag}><Icon type="up" /></a>
-                </p>
-                <div className="info-body">
-                  <FormItem label="">
-                    {getFieldDecorator('approvalOpinion', {initialValue:memberInfo.approvalOpinion || '-'})(
-                      <Input type="textarea" placeholder="" autosize disabled/>
-                    )}
-                  </FormItem>
-                </div>
-              </Col>
 
               <Col span={24} className="tag-list">
                 <p className="info-title">
@@ -237,7 +232,7 @@ class DocDetailDefault extends React.Component {
                 <div className="info-body">
                   <FormItem label="">
                     {getFieldDecorator('resume', {initialValue: memberInfo.resume || '-'})(
-                      <Input type="textarea" autosize disabled/>
+                      <Input type="textarea" autosize disabled style={{textAlign:'left'}}/>
                     )}
                   </FormItem>
                 </div>
@@ -250,22 +245,22 @@ class DocDetailDefault extends React.Component {
                 <div className="info-body">
                   <FormItem label="奖惩情况">
                     {getFieldDecorator('certificateOfMerit', {initialValue: memberInfo.certificateOfMerit || '-'})(
-                      <Input type="textarea" autosize disabled/>
+                      <Input type="textarea" autosize disabled style={{textAlign:'left'}}/>
                     )}
                   </FormItem>
                   <FormItem label="近三年年度考核结果">
                     {getFieldDecorator('annualAssessment', {initialValue: memberInfo.annualAssessment || '-'})(
-                      <Input type="textarea" disabled autosize />
+                      <Input type="textarea" disabled autosize style={{textAlign:'left'}}/>
                     )}
                   </FormItem>
                   <FormItem label="家庭主要成员情况">
                     {getFieldDecorator('family', {initialValue: memberInfo.family || '-'})(
-                      <Input type="textarea" placeholder="" autosize disabled/>
+                      <Input type="textarea" placeholder="" autosize disabled style={{textAlign:'left'}}/>
                     )}
                   </FormItem>
                   <FormItem label="主要社会关系">
                     {getFieldDecorator('appointAndRemoveOpinion', {initialValue: memberInfo.appointAndRemoveOpinion || '-'})(
-                      <Input type="textarea" placeholder="" autosize disabled/>
+                      <Input type="textarea" placeholder="" autosize disabled style={{textAlign:'left'}}/>
                     )}
                   </FormItem>
 

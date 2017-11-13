@@ -109,7 +109,7 @@ class DocumentListMobile extends React.Component {
           {data.map((item, index) => (
             <SwipeAction key={index} style={{ backgroundColor: '#f3f3f3' }}
                 autoClose
-                disabled={hasOperaPermission ? false : true}
+                disabled={hasOperaPermission ? true : true}
                 right={[
                   {
                     text: '取消',

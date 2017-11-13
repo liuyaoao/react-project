@@ -43,11 +43,11 @@ export default class ParentalCtrlContent extends Component {
                 }
             }}
           >
-              <Container title="计划" cls="plan_tab">
+              <Container title="计划" cls="plan_tab" scrollable={true}>
                 <div style={{margin:'20px'}}>计划
                 </div>
               </Container>
-              <Container title="网页过滤器" cls="pageFilter_tab">
+              <Container title="网页过滤器" cls="pageFilter_tab" scrollable={true}>
                   <div className="">
                     网页过滤器
                   </div>

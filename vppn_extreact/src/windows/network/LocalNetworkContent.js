@@ -43,33 +43,33 @@ export default class LocalNetworkContent extends Component {
                 }
             }}
           >
-              <Container title="常规" cls="state_Internet">
+              <Container title="常规" cls="state_Internet" scrollable={true}>
                 <div style={{margin:'20px'}}>常规
                 </div>
               </Container>
-              <Container title="IPv6" cls="state_equipList">
+              <Container title="IPv6" cls="state_equipList" scrollable={true}>
                   <div className="">
                     IPv6
                   </div>
               </Container>
-              <Container title="静态路由" cls="state_CPU">
+              <Container title="静态路由" cls="state_CPU" scrollable={true}>
                   <div className="">
                     静态路由
                   </div>
               </Container>
-              <Container title="DHCP客户端" cls="state_memory">
+              <Container title="DHCP客户端" cls="state_memory" scrollable={true}>
                   <div className="">
                     DHCP客户端
                   </div>
               </Container>
 
-              <Container title="DHCP保留" cls="state_memory">
+              <Container title="DHCP保留" cls="state_memory" scrollable={true}>
                   <div className="">
                     DHCP客户端
                   </div>
               </Container>
 
-              <Container title="IPTV和VoIP" cls="state_memory">
+              <Container title="IPTV和VoIP" cls="state_memory" scrollable={true}>
                   <div className="">
                     IPTV和VoIP
                   </div>

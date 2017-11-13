@@ -20,7 +20,7 @@ class CommonSendComp extends React.Component {
         checkedPersonNames:[], //选中的要发送的人员的用户名列表
         checkedPersonPhones:[], //选中的要发送的人员的手机号列表
         networkMsg:false, //是否勾选发送网络消息
-        phoneMsg:false, //是否勾选发送手机短信
+        phoneMsg:true, //是否勾选发送手机短信
       };
   }
   componentWillMount(){
@@ -98,9 +98,10 @@ class CommonSendComp extends React.Component {
   sendTelephoneMessage(){ //发送手机短信
     if(!this.state.phoneMsg || this.state.checkedPersonPhones.length<=0){ return;}
     let tempFormData = this.props.form.getFieldsValue();
+    let loginInfo = localStorage.getItem(OAUtils.OA_LOGIN_INFO_KEY);
     MyWebClient.sendTelephoneMessage({
       "destaddr" : this.state.checkedPersonPhones.join(';'),
-      "messagecontent" : "标题："+this.props.fileTitle+";  内容："+tempFormData.messagecontent
+      "messagecontent" : "[待办事项]["+this.props.moduleNameCn+"] 标题："+this.props.fileTitle+";发送人："+JSON.parse(loginInfo)['commonname']+"。" //+"  内容："+tempFormData.messagecontent
     },(data)=>{
       // let parseData = (typeof data == "string")? JSON.parse(data):{};
       console.log("sendTelephoneMessage---response-----:",data);
@@ -210,7 +211,7 @@ class CommonSendComp extends React.Component {
           <List.Item
             extra={<Switch
               {...getFieldProps('phoneMsg', {
-                initialValue: false,
+                initialValue: this.state.phoneMsg,
                 valuePropName: 'checked',
               })}
               onClick={(checked) => { this.onClickCheckedMsgType(checked,"phoneMsg"); }}
@@ -258,7 +259,7 @@ class CommonSendComp extends React.Component {
                 />
               </Flex.Item>
             </Flex>
-            <Flex>
+            {/*<Flex>
               <Flex.Item>
                 <div style={{margin:'0.2rem 0 0 0.2rem',color:'black',fontSize: '0.34rem'}}>短信内容：</div>
                 <TextareaItem
@@ -269,7 +270,7 @@ class CommonSendComp extends React.Component {
                   labelNumber={0}
                 />
               </Flex.Item>
-            </Flex>
+            </Flex>*/}
           </div>):null
         }
         <Button className="btn" type="primary" onClick={this.onClickSend}>发送</Button>

@@ -43,37 +43,37 @@ export default class ManagementContent extends Component {
                 }
             }}
           >
-              <Container title="工作模式" cls="state_Internet">
+              <Container title="工作模式" cls="state_Internet" scrollable={true}>
                 <div style={{margin:'20px'}}>工作模式
                 </div>
               </Container>
-              <Container title="更新和还原" cls="state_equipList">
+              <Container title="更新和还原" cls="state_equipList" scrollable={true}>
                   <div className="">
                     更新和还原
                   </div>
               </Container>
-              <Container title="SRM设置" cls="state_CPU">
+              <Container title="SRM设置" cls="state_CPU" scrollable={true}>
                   <div className="">
                     SRM设置
                   </div>
               </Container>
-              <Container title="服务" cls="state_memory">
+              <Container title="服务" cls="state_memory" scrollable={true}>
                   <ServiceTab />
               </Container>
 
-              <Container title="区域选项" cls="state_memory">
+              <Container title="区域选项" cls="state_memory" scrollable={true}>
                   <div className="">
                     区域选项
                   </div>
               </Container>
 
-              <Container title="LED" cls="state_memory">
+              <Container title="LED" cls="state_memory" scrollable={true}>
                   <div className="">
                     LED
                   </div>
               </Container>
 
-              <Container title="使用状况" cls="state_memory">
+              <Container title="使用状况" cls="state_memory" scrollable={true}>
                   <div className="">
                     使用状况
                   </div>

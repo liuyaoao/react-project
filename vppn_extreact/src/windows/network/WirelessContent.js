@@ -47,11 +47,10 @@ export default class WirelessContent extends Component {
 
       return (
         <div className='wireless_content' style={{height:'100%'}}>
-          <TabPanel cls='wireless_tabPanel'
-              height={'700px'}
+          <TabPanel cls='tabpanel_pc wireless_tabPanel'
+              height={'100%'}
               defaults={{
                   cls: "card",
-                  // layout: "center",
                   tab: {
                       flex: 0,
                       minWidth: 100
@@ -63,8 +62,8 @@ export default class WirelessContent extends Component {
                   }
               }}
           >
-            <Container title="Wi-Fi" cls="wifi_tab">
-              <div className="cnt" style={{margin:'20px'}}>
+            <Container title="Wi-Fi" cls="wifi_tab" scrollable={true}>
+              <div className="cnt" style={{margin:'10px'}}>
                 <div className="title">5GHz</div>
                 <Panel
                   margin='10 0 10 0'
@@ -140,7 +139,7 @@ export default class WirelessContent extends Component {
             </Container>
 
             {/* WPS tab块内容*/}
-            <Container title="WPS" cls="wps_tab">
+            <Container title="WPS" cls="wps_tab" scrollable={true}>
                 <div className="">
                   <div style={{margin:'10px'}}>
                     <div>您可以使用WPS(Wi-Fi Protected Setup)以在Synology Router 与无线客户端之间共享无线密钥，并通过以下方法之一安全地建立无线网络。</div>
@@ -197,11 +196,11 @@ export default class WirelessContent extends Component {
             </Container>
 
             {/*访客网络 tab 内容区*/}
-            <Container title="访客网络" cls="guest_tab">
+            <Container title="访客网络" cls="guest_tab" scrollable={true}>
                 <GuestNetworkTab />
             </Container>
             {/*MAc 过滤器 tab的内容区*/}
-            <Container title="MAC过滤器" cls="MAC_filter_tab">
+            <Container title="MAC过滤器" cls="MAC_filter_tab" scrollable={true}>
                 <MACFilterTab />
             </Container>
           </TabPanel>

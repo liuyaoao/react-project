@@ -48,7 +48,7 @@ export default class InternetContent extends Component {
                   }
               }}
           >
-              <Container title="链接" cls="connect_tab">
+              <Container title="链接" cls="connect_tab" scrollable={true}>
                 <div >
                   <FormPanel>
                     <FieldSet title={"您可在此设置Internet连接。您的连接类型由网络环境决定。请咨询ISP以获得所需的帮助。"}
@@ -98,7 +98,7 @@ export default class InternetContent extends Component {
               </Container>
 
               {/* QuickConnect & DDNS 内容区 */}
-              <Container title="QuickConnect & DDNS" cls="ddns_tab">
+              <Container title="QuickConnect & DDNS" cls="ddns_tab" scrollable={true}>
                   <div className="action">
                     <FormPanel>
                       <FieldSet title={"来自vPort的域名的流量将通过所选的vProxy路由。"}
@@ -125,7 +125,7 @@ export default class InternetContent extends Component {
               </Container>
 
               {/* 端口转发 tab 内容区 */}
-              <Container title="端口转发" cls="portTransfer_tab">
+              <Container title="端口转发" cls="portTransfer_tab" scrollable={true}>
                   <div style={{background:'',border:'1px solid #9dd4d6',padding:'10px',margin:'10px',background:'#e4f3f5'}}>
                     <div style={{padding:'1px'}}>随处连接到您的 Synology Router</div>
                     <div style={{marginLeft:'10px',textAlign:'left'}}>
@@ -151,7 +151,7 @@ export default class InternetContent extends Component {
               </Container>
 
               {/* 端口触发 tab 内容区 */}
-              <Container title="端口触发" cls="portTrigger_tab">
+              <Container title="端口触发" cls="portTrigger_tab" scrollable={true}>
                   <Container
                       layout={{ type: 'hbox', pack: 'left'}}
                       margin="10 0 10 10"
@@ -166,12 +166,12 @@ export default class InternetContent extends Component {
               </Container>
 
               {/* DMZ tab 内容区 */}
-              <Container title="DMZ" cls="DMZ_tab">
+              <Container title="DMZ" cls="DMZ_tab" scrollable={true}>
                   <div></div>
               </Container>
 
               {/* IPv6隧道 tab 内容区 */}
-              <Container title="IPv6隧道" cls="IPv6_tab">
+              <Container title="IPv6隧道" cls="IPv6_tab" scrollable={true}>
                 <div style={{margin:'10px'}}>
                   <div>启动Tunnel来在IPv4网络环境里使用IPv6通讯协议。</div>
                   <div style={{'float':'left'}}>
@@ -193,7 +193,7 @@ export default class InternetContent extends Component {
               </Container>
 
               {/* 3G和4G tab 内容区 */}
-              <Container title="3G和4G" cls="threeFourG_tab">
+              <Container title="3G和4G" cls="threeFourG_tab" scrollable={true}>
                   <Container
                       layout={{ type: 'hbox', pack: 'left'}}
                       margin="10 0 10 10"

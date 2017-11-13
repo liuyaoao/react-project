@@ -27,7 +27,7 @@ export default class SecurityContent extends Component {
 
       return (
         <div className='security_content' style={{height:'100%'}}>
-          <TabPanel cls='security_tabPanel'
+          <TabPanel cls='tabpanel_pc security_tabPanel'
             height={'100%'}
             defaults={{
                 cls: "card",
@@ -43,33 +43,33 @@ export default class SecurityContent extends Component {
                 }
             }}
           >
-              <Container title="安全性" cls="security_tab">
+              <Container title="安全性" cls="security_tab" scrollable={true}>
                 <div style={{margin:'20px'}}>安全性
                 </div>
               </Container>
-              <Container title="防火墙" cls="firewall_tab">
+              <Container title="防火墙" cls="firewall_tab" scrollable={true}>
                   <div className="">
                     防火墙
                   </div>
               </Container>
-              <Container title="自动封锁" cls="autoLock_tab">
+              <Container title="自动封锁" cls="autoLock_tab" scrollable={true}>
                   <div className="">
                     自动封锁
                   </div>
               </Container>
-              <Container title="证书" cls="license_tab">
+              <Container title="证书" cls="license_tab" scrollable={true}>
                   <div className="">
                     证书
                   </div>
               </Container>
 
-              <Container title="DHCP保留" cls="DHCP_tab">
+              <Container title="DHCP保留" cls="DHCP_tab" scrollable={true}>
                   <div className="">
                     DHCP客户端
                   </div>
               </Container>
 
-              <Container title="IPTV和VoIP" cls="IPTV_tab">
+              <Container title="IPTV和VoIP" cls="IPTV_tab" scrollable={true}>
                   <div className="">
                     IPTV和VoIP
                   </div>

@@ -43,21 +43,21 @@ export default class NoticeSettingsContent extends Component {
                 }
             }}
           >
-              <Container title="电子邮件" cls="email_tab">
+              <Container title="电子邮件" cls="email_tab" scrollable={true}>
                 <div style={{margin:'20px'}}>电子邮件
                 </div>
               </Container>
-              <Container title="短信" cls="message_tab">
+              <Container title="短信" cls="message_tab" scrollable={true}>
                   <div className="">
                     短信
                   </div>
               </Container>
-              <Container title="推送服务" cls="pushService_tab">
+              <Container title="推送服务" cls="pushService_tab" scrollable={true}>
                   <div className="">
                     推送服务
                   </div>
               </Container>
-              <Container title="高级设置" cls="superSetting_tab">
+              <Container title="高级设置" cls="superSetting_tab" scrollable={true}>
                   <div className="">
                     高级设置
                   </div>

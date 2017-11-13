@@ -43,13 +43,11 @@ export default class VportContent extends Component {
         return {text:val,value:val};
       });
       return (
+        <div className="" style={{height:'100%'}}>
         <TabPanel cls='vportContent'
-            flex={1}
-            shadow
             height={'100%'}
             defaults={{
                 cls: "card",
-                // layout: "center",
                 tab: {
                     flex: 0,
                     minWidth: 100
@@ -61,7 +59,7 @@ export default class VportContent extends Component {
                 }
             }}
         >
-            <Container title="Remote Router" cls="remoter_router">
+            <Container title="Remote Router" cls="remoter_router" scrollable={true}>
               <div style={{margin:'20px'}}>
                 <div>
                   <Container
@@ -82,14 +80,16 @@ export default class VportContent extends Component {
                     <Button text={"关闭"} ui={'decline alt'}></Button>
                     <Button text={""} ui={'confirm round alt'} iconCls={'x-fa fa-refresh'} alt="刷新"></Button>
                   </Container>
-                  <Grid store={this.dataStore} grouped width={'99%'} height={'320px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
-                      <Column text="状态" width="100" dataIndex="name"/>
-                      <Column text="远程虚拟IP" width="120" dataIndex="price"/>
-                      <Column text="远程子网" width="100" dataIndex="priceChange"/>
-                      <Column text="链路状态" width="100" dataIndex="priceChange"/>
-                      <Column text="延时" width="100" dataIndex="priceChange"/>
-                      <Column text="描述" width="100" dataIndex="priceChange"/>
-                  </Grid>
+                  <Container>
+                    <Grid store={this.dataStore} grouped width={'99%'} height={'320px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
+                        <Column text="状态" width="100" dataIndex="name"/>
+                        <Column text="远程虚拟IP" width="120" dataIndex="price"/>
+                        <Column text="远程子网" width="100" dataIndex="priceChange"/>
+                        <Column text="链路状态" width="100" dataIndex="priceChange"/>
+                        <Column text="延时" width="100" dataIndex="priceChange"/>
+                        <Column text="描述" width="100" dataIndex="priceChange"/>
+                    </Grid>
+                  </Container>
                   <Container margin="10 0 10 0"
                     layout={{ type: 'hbox', pack: Ext.os.is.Phone ? 'center' : 'left',align:'bottom'}}
                   >
@@ -104,7 +104,7 @@ export default class VportContent extends Component {
                 </div>
               </div>
             </Container>
-            <Container title="vPath" cls="v_path">
+            <Container title="vPath" cls="v_path" scrollable={true}>
                 <div className="action">
                   <FormPanel>
                     <FieldSet title={"来自vPort"+ idNum+"的域名的流量将通过所选的vProxy路由。"}
@@ -134,15 +134,18 @@ export default class VportContent extends Component {
                         </Container>
                     </FieldSet>
                   </FormPanel>
+                  <Container>
+                    <Grid store={this.dataStore} grouped width={'98%'} height={'340px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
+                        <Column text="域名" width="150" dataIndex="name"/>
+                        <Column text="代理" width="85" dataIndex="price"/>
+                        <Column text="描述" width="100" dataIndex="priceChange"/>
+                    </Grid>
+                  </Container>
 
-                  <Grid store={this.dataStore} grouped width={'98%'} height={'340px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
-                      <Column text="域名" width="150" dataIndex="name"/>
-                      <Column text="代理" width="85" dataIndex="price"/>
-                      <Column text="描述" width="100" dataIndex="priceChange"/>
-                  </Grid>
                 </div>
             </Container>
         </TabPanel>
+        </div>
     )
   }
 }

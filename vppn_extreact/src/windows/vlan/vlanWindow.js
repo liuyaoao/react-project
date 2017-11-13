@@ -9,23 +9,26 @@ import VlanSidebar from './vlanSidebar';
 import VportContent from './vportContent';
 import DiagnosisContent from './diagnosisContent';
 import SettingContent from './settingContent';
+import VlanModuleIconView from './VlanModuleIconView';
 // import CommonDialog from '../app/components/common/dialog';
 
 class VlanWindow extends Component{
   state = {
     windowHeight:570,
-    contentId: '1_vport',
+    contentId: 'ModuleIconView',
     myVirtualIp:'10.100.16.89',
     vProxyIpArr:['10.100.16.84','10.100.16.9','10.100.16.68'],
   }
   componentDidMount(){
     this.setRightHeight(this.props.id);
     document.addEventListener('mousemove', this.handleMouseMove);
-    $(".ws-select").select2();
   }
   componentWillUnmount () {
     document.removeEventListener('mousemove', this.handleMouseMove);
     // document.removeEventListener('mouseup', this.handleMouseUp);
+  }
+  onShowModuleIconView = ()=>{  //展示功能模块的图标视图
+    this.setState({contentId:'ModuleIconView'});
   }
   setRightHeight = (id)=>{
     // console.log(id);
@@ -37,49 +40,72 @@ class VlanWindow extends Component{
     this.setState({ windowHeight:height});
   }
   handleMouseMove = ()=>{
-    var cl = $("#window-" + this.props.id);
-    if (cl.hasClass('active')) {
-      this.setRightHeight(this.props.id);
-    }
+    this.setRightHeight(this.props.id);
   }
   onMenuItemClick = (contentId)=>{
     this.setState({contentId});
   }
+
+  onSelectedModule = (contentId)=>{
+    if(contentId.indexOf('setting')!=-1){
+    }
+    this.setState({contentId:contentId});
+  }
+
   render () {
+    let {contentId} = this.state;
     return (
       <div className="grid condensed win-content" id="cloudVpnWindow" >
-        <div className="row cells4">
-          <div className="cell side">
-            <VlanSidebar onMenuItemClick={this.onMenuItemClick}/>
-          </div>
-          <div className="cell colspan3 wi-right">
-            {/*所有的Vport tab的右边内容块*/}
-            <div className="wi active" id="wi_right_vport" style={{height:'100%',width:'100%'}}>
-              <VportContent
-                windowHeight={this.state.windowHeight}
-                myVirtualIp={this.state.myVirtualIp}
-                vProxyIpArr={this.state.vProxyIpArr}
-                contentId={this.state.contentId}
+        {contentId=="ModuleIconView" ?
+          <div className='row cells4'>
+            <VlanModuleIconView
+              onSelectedModule={this.onSelectedModule}
+            />
+          </div>: null
+        }
+        {contentId!="ModuleIconView" ?
+          <div className="row cells4">
+            <div className="cell side">
+              <VlanSidebar
+                contentId={contentId}
+                onShowModuleIconView={this.onShowModuleIconView}
+                onMenuItemClick={this.onMenuItemClick}
               />
             </div>
-            {/*diagnosis tab的右边内容块*/}
-            <div className="wi" id="wi_right_diagnosis" style={{height:'100%',width:'100%'}}>
-              <DiagnosisContent
-                windowHeight={this.state.windowHeight}
-                myVirtualIp={this.state.myVirtualIp}
-                contentId={this.state.contentId}
-              />
+            <div className="cell colspan3 wi-right">
+              <div className="wi active" id="wi_right_content" style={{height:'100%',width:'100%',overflow: 'hidden'}}>
+                {/*所有的Vport tab的右边内容块*/}
+                {(contentId.indexOf('vport')!=-1)?
+                  <VportContent
+                    windowHeight={this.state.windowHeight}
+                    myVirtualIp={this.state.myVirtualIp}
+                    vProxyIpArr={this.state.vProxyIpArr}
+                    contentId={this.state.contentId}
+                  />:null
+                }
+
+                {/*diagnosis tab的右边内容块*/}
+                {(contentId.indexOf('diagnosis')!=-1)?
+                  <DiagnosisContent
+                    windowHeight={this.state.windowHeight}
+                    myVirtualIp={this.state.myVirtualIp}
+                    contentId={this.state.contentId}
+                  />:null
+                }
+
+                {/*setting tab的右边内容块*/}
+                {(contentId.indexOf('setting')!=-1)?
+                  <SettingContent
+                    windowHeight={this.state.windowHeight}
+                    myVirtualIp={this.state.myVirtualIp}
+                    contentId={this.state.contentId}
+                  />:null
+                }
+              </div>
+
             </div>
-            {/*setting tab的右边内容块*/}
-            <div className="wi" id="wi_right_setting" style={{height:'100%',width:'100%'}}>
-              <SettingContent
-                windowHeight={this.state.windowHeight}
-                myVirtualIp={this.state.myVirtualIp}
-                contentId={this.state.contentId}
-              />
-            </div>
-          </div>
-        </div>
+          </div>:null
+        }
 
       </div>
     );

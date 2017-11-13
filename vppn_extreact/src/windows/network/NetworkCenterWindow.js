@@ -66,7 +66,7 @@ class NetworkCenterWindow extends Component{
   onSelectedModule = (contentId)=>{
     this.setState({contentId:contentId});
   }
-  onShowModuleIconView = ()=>{
+  onShowModuleIconView = ()=>{  //展示图标视图
     this.setState({contentId:'ModuleIconView'});
   }
   onMenuItemClick = (contentId)=>{
@@ -96,7 +96,7 @@ class NetworkCenterWindow extends Component{
           </div>
           <div className="cell colspan3 wi-right">
             <div className="wi active" id={"wi_right_content"}
-              style={{height:'100%',width:'100%',overflowY: 'scroll'}}>
+              style={{height:'100%',width:'100%',overflow: 'hidden'}}>
               {/*状态 tab的右边内容块*/}
               {contentId=="state" ?
                 <StateContent

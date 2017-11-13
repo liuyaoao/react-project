@@ -20,30 +20,22 @@ class NetworkSidebar extends Component{
   }
   render(){
     return (
-      <div className='sidebar3'>
-        <Container width="200px" layout={{type:'hbox',pack:'left',align:'left'}} margin="0 0 10 0">
-          <Button cls='iconBtn' ui={'confirm alt'} iconCls={'x-fa fa-th'} onTap={this.props.onShowModuleIconView}></Button>
-          <SearchField style={{marginLeft:'10px'}}
-              ui="faded"
-              placeholder="Search"/>
+      <div className='sidebar3' style={{height:'100%',background:'#fff'}}>
+        <Container layout="vbox">
+          <Container layout={{type:'hbox',pack:'left',align:'left'}} padding="0 0 10 0" style={{backgroundColor:'#ecf0f4'}}>
+            <Button cls='iconBtn' ui={'confirm alt'} iconCls={'x-fa fa-th'} onTap={this.props.onShowModuleIconView}></Button>
+            <SearchField width="80%" margin="0 0 0 10"
+                ui="faded"
+                placeholder="Search"/>
+          </Container>
+          <TreeList cls="ext_treeList_container"
+              ui="nav"
+              expanderFirst={false}
+              onItemClick={this.onItemClick}
+              selection={this.props.contentId}
+              store={this.props.modulesData}
+          />
         </Container>
-        <TreeList cls="ext_treeList_container"
-            ui="nav"
-            expanderFirst={false}
-            onItemClick={this.onItemClick}
-            selection={this.props.contentId}
-            store={this.props.modulesData}
-            responsiveConfig={{
-                [medium]: {
-                    micro: true,
-                    width: 56
-                },
-                [large]: {
-                    micro: false,
-                    width: 200
-                }
-            }}
-        />
       </div>
     )
   }

@@ -192,6 +192,10 @@ class ModulesMobileComp extends React.Component {
       }
       if(moduleName == "群聊"){
         this.props.handleGoMatter();
+      }else if(moduleName == "关注公众号"){
+        window.location.href = 'weixin://profile/gh_a488ffff155c';
+        // window.location.href = 'http://mp.weixin.qq.com/s?__biz=MzAwNDYzNDQ0Mg==&mid=504104996&idx=1&sn=38aa3a0267df4bc94dd4c207bc963057&chksm=00d04a0137a7c31705a4336b9476b9e3b5e14a83d8afdda41e7600f068e898407ae9d8b3909d#rd';
+        // window.open('http://mp.weixin.qq.com/s?__biz=MzAwNDYzNDQ0Mg==&mid=504104996&idx=1&sn=38aa3a0267df4bc94dd4c207bc963057&chksm=00d04a0137a7c31705a4336b9476b9e3b5e14a83d8afdda41e7600f068e898407ae9d8b3909d#rd');
       }else if(moduleName == "添加"){
         // message.success("你点击了添加模块按钮了！");
         this.showPopup();

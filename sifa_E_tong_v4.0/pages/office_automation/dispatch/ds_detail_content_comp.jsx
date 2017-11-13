@@ -132,8 +132,10 @@ class DS_DetailContentComp extends React.Component {
       name: 'inputName',
       action: this.state.uploadAttachmentUrl,
       showUploadList:false, //是否展示上传文件列表。
+      withCredentials:true,
       headers: {
         authorization: 'authorization-text',
+        'X-Requested-With':'XMLHttpRequest',
       },
       beforeUpload:(file,fileList)=>{
         this.onFileUploadChange(file);

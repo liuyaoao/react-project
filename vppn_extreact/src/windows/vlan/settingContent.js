@@ -17,6 +17,9 @@ export default class SettingContent extends Component{
   componentWillMount(){
 
   }
+  componentWillUnmount(){
+    // $('.tab_settingContent').remove();
+  }
   handleShow(key, e){
   }
   onListSelect = (records,opts)=>{
@@ -28,13 +31,11 @@ export default class SettingContent extends Component{
   render(){
     let data= [{name:'127.0.0.1',abbrev:'999'}];
     return (
-        <TabPanel
-            flex={1}
-            shadow
+      <div className="" style={{height:'100%'}}>
+        <TabPanel cls="tab_settingContent"
             height={'100%'}
             defaults={{
                 cls: "card",
-                // layout: "center",
                 tab: {
                     flex: 0,
                     minWidth: 100
@@ -46,7 +47,7 @@ export default class SettingContent extends Component{
                 }
             }}
         >
-            <Container title="setting">
+            <Container title="setting" scrollable={true}>
               <FormPanel>
                 <FieldSet title={"管理服务器1"}
                   layout={{type:'hbox',pack:'start',align: 'bottom'}}
@@ -130,7 +131,7 @@ export default class SettingContent extends Component{
               </FormPanel>
             </Container>
 
-            <Container title="vPath packs">
+            <Container title="vPath packs" scrollable={true}>
               <FormPanel>
                 <FieldSet title={"vPathPacks:请选择一个要编辑的vPathPack"}
                   layout={{type:'hbox',pack:'start',align: 'top'}}
@@ -153,11 +154,12 @@ export default class SettingContent extends Component{
               </FormPanel>
             </Container>
 
-            <Container title="payment">
+            <Container title="payment" scrollable={true}>
                 <div className="action" style={{margin:'10px'}}>到期时间：2020-11-09</div>
                 <div style={{margin:'10px'}}>支付请点击：<span> PayPal</span></div>
             </Container>
         </TabPanel>
+      </div>
     )
   }
 

@@ -93,7 +93,11 @@ class AddContentCompRaw extends React.Component {
     const uploadField = {
       name: 'inputName',
       action: '',
-      headers:myWebClient.defaultHeaders,
+      withCredentials:true,
+      headers: {
+        authorization: 'authorization-text',
+        'X-Requested-With':'XMLHttpRequest',
+      },
       showUploadList:false,
       accept: 'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       beforeUpload: this.beforeUploadCall,

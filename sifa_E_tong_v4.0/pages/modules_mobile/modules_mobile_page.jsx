@@ -13,6 +13,7 @@ import modify_icon from 'images/modules_img/modify_icon.png';
 // import settings_icon from 'images/modules_img/settings_icon.png';
 import signin_icon from 'images/modules_img/signin_icon.png';
 import userSetting_icon from 'images/modules_img/userSetting_icon.png';
+import wechatName_icon from 'images/modules_img/wechatName_icon.png';
 
 import ModulesMobileComp  from 'pages/modules_mobile/modules_mobile_comp.jsx';
 
@@ -183,6 +184,14 @@ export default class ChooseModulesMobilePage extends React.Component {
           iconName : userSetting_icon,
           tagName:'Link',
           linkTo : "user_setting"
+        },
+        {
+          id:"1009",
+          name : "关注公众号",
+          singleclassName:"userSettingModule",
+          iconName : wechatName_icon,
+          tagName:'a',
+          linkTo : "wechatName"
         }
       ];
       this.setState({"allModulesData":modulesData});

@@ -43,16 +43,16 @@ export default class FlowCtrlContent extends Component {
                 }
             }}
           >
-              <Container title="常规设置" cls="state_Internet">
+              <Container title="常规设置" cls="state_Internet" scrollable={true}>
                 <div style={{margin:'20px'}}>常规设置
                 </div>
               </Container>
-              <Container title="高级设置" cls="state_equipList">
+              <Container title="高级设置" cls="state_equipList" scrollable={true}>
                   <div className="">
                     高级设置
                   </div>
               </Container>
-              <Container title="监控" cls="state_CPU">
+              <Container title="监控" cls="state_CPU" scrollable={true}>
                   <div className="">
                     监控
                   </div>
