@@ -91,15 +91,15 @@ export default class WirelessContent extends Component {
                             { text: '高 - WAP2-个人', value: 1 },
                             { text: 'Option 1', value: 2 }
                         ]} />
-                    <TextField label="密码：" labelTextAlign="left" labelAlign="left" value="siteview"/>
-                    <SelectField label="无线模式："
+                    <TextField label={Intl.get('Password')+'：'} labelTextAlign="left" labelAlign="left" value="siteview"/>
+                    <SelectField label={Intl.get('Wireless Mode')+'：'}
                         labelTextAlign="left" labelAlign="left" value={1}
                         onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
                         options={[
                             { text: 'an+ac', value: 1 },
                             { text: 'Option 1', value: 2 }
                         ]} />
-                    <div style={{color:'#07439e'}}>高级选项<span className="x-fa fa-chevron-down"></span></div>
+                    <div style={{color:'#07439e'}}>{Intl.get('Advanced Options')}<span className="x-fa fa-chevron-down"></span></div>
                 </Panel>
 
                 <div className="title">2.4GHz</div>
