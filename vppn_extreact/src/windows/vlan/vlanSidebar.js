@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import { Container,TreeList, List,SearchField,Button } from '@extjs/ext-react';
 import { medium, large } from '../../responsiveFormulas';
+import Intl from '../../intl/Intl';
 
 Ext.require('Ext.data.TreeStore');
 // Ext.require('Ext.data.store.chained');
@@ -12,13 +13,13 @@ class VlanSidebar extends Component{
   treeListData = {
     root: {
         children: [
-            { id: '1_vport', text: 'vPort1', iconCls: 'mif-list2 icon', leaf: true },
-            { id: '2_vport', text: 'vPort2', iconCls: 'mif-list2 icon', leaf: true },
-            { id: '3_vport', text: 'vPort3', iconCls: 'mif-list2 icon', leaf: true },
-            { id: '4_vport', text: 'vPort4', iconCls: 'mif-list2 icon', leaf: true },
-            { id: '5_vport', text: 'vPort5', iconCls: 'mif-list2 icon', leaf: true },
-            { id: '6_diagnosis', text: 'Diagnosis', iconCls: 'mif-tools icon', leaf: true },
-            { id: '7_setting', text: 'Setting', iconCls: 'x-fa fa-gear icon', leaf: true },
+            { id: '1_vport', text: Intl.get('vPort','vPort')+'1', iconCls: 'mif-list2 icon', leaf: true },
+            { id: '2_vport', text: Intl.get('vPort','vPort')+'2', iconCls: 'mif-list2 icon', leaf: true },
+            { id: '3_vport', text: Intl.get('vPort','vPort')+'3', iconCls: 'mif-list2 icon', leaf: true },
+            { id: '4_vport', text: Intl.get('vPort','vPort')+'4', iconCls: 'mif-list2 icon', leaf: true },
+            { id: '5_vport', text: Intl.get('vPort','vPort')+'5', iconCls: 'mif-list2 icon', leaf: true },
+            { id: '6_diagnosis', text: Intl.get('Diagnosis','Diagnosis'), iconCls: 'mif-tools icon', leaf: true },
+            { id: '7_setting', text: Intl.get('Setting','Setting'), iconCls: 'x-fa fa-gear icon', leaf: true },
         ]
     }
   }

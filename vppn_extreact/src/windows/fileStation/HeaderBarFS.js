@@ -1,4 +1,6 @@
 import React,{Component} from 'react';
+import Intl from '../../intl/Intl';
+
 import { Container,Button,TextField,SearchField } from '@extjs/ext-react';
 
 class HeaderBarFS extends Component{

@@ -1,4 +1,5 @@
 import React,{Component} from 'react';
+import Intl from '../../intl/Intl';
 import { TabPanel, Container,FormPanel,FieldSet,TextField,Button,
   SelectField,ComboBoxField,List,TextAreaField } from '@extjs/ext-react';
 
@@ -47,44 +48,44 @@ export default class SettingContent extends Component{
                 }
             }}
         >
-            <Container title="setting" scrollable={true}>
+            <Container title={Intl.get('setting')} scrollable={true}>
               <FormPanel>
-                <FieldSet title={"管理服务器1"}
+                <FieldSet title={Intl.get('Manage Server')+" 1"}
                   layout={{type:'hbox',pack:'start',align: 'bottom'}}
                   defaults={{labelAlign: "placeholder"}}
                   margin="5 10 0 10"
                   >
-                    <TextField placeholder="Enter..." labelAlign={'placeholder'} width="200" label="地址：" required flex={1}/>
-                    <TextField placeholder="Enter..." width="200" label="端口：" required flex={1}/>
+                    <TextField placeholder="Enter..." labelAlign={'placeholder'} width="200" label={Intl.get('Address')+"："} required flex={1}/>
+                    <TextField placeholder="Enter..." width="200" label={Intl.get('Port')+"："} required flex={1}/>
                     <Container flex={1}>
-                      <Button text={"测试"} ui={'confirm  raised'} style={{marginLeft:'10px',marginRight:'10px'}}></Button>
-                      <Button text={"保存"} ui={'action raised'}></Button>
+                      <Button text={Intl.get('test')} ui={'confirm  raised'} style={{marginLeft:'10px',marginRight:'10px'}}></Button>
+                      <Button text={Intl.get('save')} ui={'action raised'}></Button>
                     </Container>
                 </FieldSet>
               </FormPanel>
               <FormPanel>
-                <FieldSet title={"管理服务器2"}
+                <FieldSet title={Intl.get('Manage Server')+" 2"}
                   layout={{type:'hbox',pack:'start',align: 'bottom'}}
                   defaults={{labelAlign: "placeholder"}}
                   margin="5 10 0 10"
                   >
-                    <TextField placeholder="Enter..." width="200" label="地址：" required flex={1}/>
-                    <TextField placeholder="Enter..." width="200" label="端口：" required flex={1}/>
+                    <TextField placeholder="Enter..." width="200" label={Intl.get('Address')+"："} required flex={1}/>
+                    <TextField placeholder="Enter..." width="200" label={Intl.get('Port')+"："} required flex={1}/>
                     <Container flex={1}>
-                      <Button text={"测试"} ui={'confirm raised'} style={{marginLeft:'10px',marginRight:'10px'}}></Button>
-                      <Button text={"保存"} ui={'action raised'}></Button>
+                      <Button text={Intl.get('test')} ui={'confirm raised'} style={{marginLeft:'10px',marginRight:'10px'}}></Button>
+                      <Button text={Intl.get('save')} ui={'action raised'}></Button>
                     </Container>
                 </FieldSet>
               </FormPanel>
               <FormPanel>
-                <FieldSet title={"管理目标"}
+                <FieldSet title={Intl.get("Management Goal")}
                   layout={{type:'hbox',pack:'start',align: 'bottom'}}
                   defaults={{labelAlign: "placeholder"}}
                   margin="5 10 0 10"
                   >
                     <ComboBoxField
                       width={200}
-                      label="地址："
+                      label={Intl.get('Address')+"："}
                       store={data}
                       displayField="name"
                       valueField="abbrev"
@@ -93,19 +94,19 @@ export default class SettingContent extends Component{
                       clearable
                     />
                     <Container flex={1}>
-                      <Button text={"保存"} ui={'action raised'} style={{marginLeft:'10px'}}></Button>
+                      <Button text={Intl.get('save')} ui={'action raised'} style={{marginLeft:'10px'}}></Button>
                     </Container>
                 </FieldSet>
               </FormPanel>
               <FormPanel>
-                <FieldSet title={"Syslog"}
+                <FieldSet title={Intl.get('Syslog')}
                   layout={{type:'hbox',pack:'start',align: 'bottom'}}
                   defaults={{labelAlign: "placeholder"}}
                   margin="5 10 0 10"
                   >
                     <ComboBoxField
                       width={200}
-                      label="地址："
+                      label={Intl.get('Address')+"："}
                       store={data}
                       displayField="name"
                       valueField="abbrev"
@@ -114,7 +115,7 @@ export default class SettingContent extends Component{
                       clearable
                     />
                     <SelectField
-                       label="Level:"
+                       label={Intl.get('Level')+"："}
                        width="200"
                        onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
                        options={[
@@ -125,15 +126,15 @@ export default class SettingContent extends Component{
                        ]}
                      />
                     <Container flex={1}>
-                      <Button text={"Enable"} ui={'action raised'} style={{marginLeft:'10px'}}></Button>
+                      <Button text={Intl.get('Enable')} ui={'action raised'} style={{marginLeft:'10px'}}></Button>
                     </Container>
                 </FieldSet>
               </FormPanel>
             </Container>
 
-            <Container title="vPath packs" scrollable={true}>
+            <Container title={Intl.get('vPath packs')} scrollable={true}>
               <FormPanel>
-                <FieldSet title={"vPathPacks:请选择一个要编辑的vPathPack"}
+                <FieldSet title={Intl.get('vPathPacks_title')}
                   layout={{type:'hbox',pack:'start',align: 'top'}}
                   defaults={{labelAlign: "placeholder"}}
                   margin="5 5 5 5"
@@ -148,15 +149,15 @@ export default class SettingContent extends Component{
                     />
                     <Container flex={1} style={{marginLeft:'20px'}}>
                       <textarea style={{width:'100%',height:''+(this.props.windowHeight-200)+'px',border:'1px solid #a0cdd6'}} />
-                      <Button text={"保存"} ui={'action raised'} style={{'float':'right',marginTop:'10px'}}></Button>
+                      <Button text={Intl.get('save')} ui={'action raised'} style={{'float':'right',marginTop:'10px'}}></Button>
                     </Container>
                 </FieldSet>
               </FormPanel>
             </Container>
 
-            <Container title="payment" scrollable={true}>
-                <div className="action" style={{margin:'10px'}}>到期时间：2020-11-09</div>
-                <div style={{margin:'10px'}}>支付请点击：<span> PayPal</span></div>
+            <Container title={Intl.get('payment','payment')} scrollable={true}>
+                <div className="action" style={{margin:'10px'}}>{Intl.get("Expiration date")}：2020-11-09</div>
+                <div style={{margin:'10px'}}>{Intl.get("Please click to pay")}：<span> PayPal</span></div>
             </Container>
         </TabPanel>
       </div>

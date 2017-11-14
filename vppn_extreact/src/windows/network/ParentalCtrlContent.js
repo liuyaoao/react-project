@@ -1,4 +1,5 @@
 import React,{Component} from 'react';
+import Intl from '../../intl/Intl';
 import { TabPanel, Container, FormPanel,TextField,
   FieldSet, SelectField,Button,Menu,MenuItem,Grid,
   Column,ToggleField   } from '@extjs/ext-react';

@@ -1,4 +1,7 @@
+
 import React,{Component} from 'react';
+import Intl from '../../intl/Intl';
+
 import { TabPanel, Container, FormPanel,TextField,
   FieldSet, SelectField,Button,Menu,MenuItem,Grid,
   Column,ToggleField   } from '@extjs/ext-react';
@@ -63,11 +66,11 @@ export default class StateContent extends Component {
                   ]}
                 />
                 <div style={{height:'24px',color:'green',fontSize:'20px',margin:'8px 0 0 0'}}>
-                  <i className="big check circle outline icon"></i> 已联机
+                  <i className="big check circle outline icon"></i> {Intl.get('Already Online')}
                 </div>
-                <TextField ui="disabled-ui" label="IP 地址" value="192.168.1.9" disabled/>
-                <TextField ui="disabled-ui" label="网关" value="192.168.1.1" disabled/>
-                <TextField ui="disabled-ui" label="DNS Server" value="192.168.1.1" disabled/>
+                <TextField ui="disabled-ui" label={"IP "+Intl.get('Address')} value="192.168.1.9" disabled/>
+                <TextField ui="disabled-ui" label={Intl.get('Gateway')} value="192.168.1.1" disabled/>
+                <TextField ui="disabled-ui" label={"DNS "+Intl.get('Server')} value="192.168.1.1" disabled/>
               </Container>
               <Container flex={1} margin="10 10 10 10">
                   <TextField cls="state_title" value="Wi-Fi 5GHz" disabled/>
@@ -75,9 +78,9 @@ export default class StateContent extends Component {
                     <input type="checkbox" name="public"/>
                     <label> on</label>
                   </div>
-                  <TextField label="名称（SSID）" value="Synology 5G" disabled/>
-                  <TextField label="安全模式" value="WAP-个人，AES" disabled/>
-                  <TextField label="MAC地址" value="00:11:32:53:bd:50" disabled/>
+                  <TextField label={Intl.get('Name')+"（SSID）"} value="Synology 5G" disabled/>
+                  <TextField label={Intl.get('Safe Mode')} value="WAP-个人，AES" disabled/>
+                  <TextField label={"MAC "+Intl.get('Address')} value="00:11:32:53:bd:50" disabled/>
               </Container>
               <Container flex={1} margin="10 10 10 10">
                 <TextField cls="state_title" value="Wi-Fi 2.4GHz" disabled/>
@@ -85,9 +88,9 @@ export default class StateContent extends Component {
                   <input type="checkbox" name="public"/>
                   <label> on</label>
                 </div>
-                <TextField label="名称（SSID）" value="Synology" disabled/>
-                <TextField label="安全模式" value="WAP-个人，AES" disabled/>
-                <TextField label="MAC地址" value="00:11:32:53:bd:50" disabled/>
+                <TextField label={Intl.get('Name')+"（SSID）"} value="Synology" disabled/>
+                <TextField label={Intl.get('Safe Mode')} value="WAP-个人，AES" disabled/>
+                <TextField label={"MAC "+Intl.get('Address')} value="00:11:32:53:bd:50" disabled/>
               </Container>
             </Container>
 
@@ -108,24 +111,24 @@ export default class StateContent extends Component {
                     }
                 }}
             >
-              <Container title="互联网" cls="state_Internet">
+              <Container title={Intl.get('Internet')} cls="state_Internet">
                 <div style={{margin:'20px'}}>
 
                 </div>
               </Container>
-              <Container title="设备列表" cls="state_equipList">
+              <Container title={Intl.get('Device List')} cls="state_equipList">
                   <div className="">
-                    设备列表块
+                    {Intl.get('Device List')}
                   </div>
               </Container>
               <Container title="CPU" cls="state_CPU">
                   <div className="">
-                    CPU块
+                    CPU
                   </div>
               </Container>
-              <Container title="内存" cls="state_memory">
+              <Container title={Intl.get('Memory')} cls="state_memory">
                   <div className="">
-                    内存块
+                    {Intl.get('Memory')}
                   </div>
               </Container>
             </TabPanel>

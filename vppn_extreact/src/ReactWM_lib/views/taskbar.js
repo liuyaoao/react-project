@@ -4,6 +4,7 @@ import $ from 'jquery';
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 
+import {intl_language_key} from '../models/Constants';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as HomeActions from '../../app/actions/home_action';
@@ -19,7 +20,7 @@ class Taskbar extends Component{
   state = {
     upload: 0,
     download: 0,
-    setout: null
+    setout: null,
   }
   statics= {
     Manager: ManagerModel,
@@ -157,10 +158,45 @@ class Taskbar extends Component{
       }
     }
   }
+  toggleFullSreen = ()=>{ //开启或者退出全屏
+    if(document.body.scrollHeight == window.screen.height){
+      this.exitFullscreen(document.documentElement);
+    }else{
+      this.launchFullscreen(document.documentElement);
+    }
+  }
+  launchFullscreen=(element)=>{
+   if(element.requestFullscreen) {
+    element.requestFullscreen();
+   } else if(element.mozRequestFullScreen) {
+    element.mozRequestFullScreen();
+   } else if(element.webkitRequestFullscreen) {
+    element.webkitRequestFullscreen();
+   } else if(element.msRequestFullscreen) {
+    element.msRequestFullscreen();
+   }
+  }
+  exitFullscreen = ()=>{
+     if(document.exitFullscreen) {
+      document.exitFullscreen();
+     } else if(document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+     } else if(document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+     }
+  }
 
+  onClickChangeLanguage = (evt)=>{
+    let btnText = $(evt.target).text();
+    console.log("btnText:",btnText);
+    let changeToLang = btnText=="English"?"en":"zh";
+    localStorage.setItem(intl_language_key, changeToLang);
+    document.location.reload();
+  }
   render () {
+    let {} = this.state;
     const { desktopType,manager } = this.props;
-    var bShowAll = true;
+    var bShowAll = true, fullScreen = document.body.scrollHeight == window.screen.height;
     var windows;
     if(desktopType == "router") {
       windows = manager.openWindows_router().map(function (window) {
@@ -191,19 +227,27 @@ class Taskbar extends Component{
       }, this);
     }
 
+    let curLang = localStorage.getItem(intl_language_key) || "en";
     return (
       <div className="app-bar fixed-top darcula" data-role="appbar" onClick={this.onClickAppBar}>
           {/*<a className="app-bar-element branding">BrandName</a>*/}
+          <div className="app-bar-element" style={{width:"15px"}} onClick={this.toggleAllWindows} title={bShowAll ? "Show All Windows" : "Hide All Windows"}></div>
+          <span className="app-bar-divider"></span>
           <StartMenu manager={this.props.manager}/>
           <span className="app-bar-divider"></span>
           <ul className="app-bar-menu m-menu">
               {windows}
           </ul>
           <div className="place-right">
-            <span style={{float:"left", padding:"8px 1rem"}}>
+            <span style={{'float':"left", padding:"8px 1rem"}}>
               <div><span className="mif-arrow-up"></span><span style={{color:"#00ccff"}}> {this.state.upload}KB/s</span></div>
               <div><span className="mif-arrow-down"></span><span style={{color:"#7ad61d"}}> {this.state.download}KB/s</span></div>
             </span>
+            <span className="app-bar-divider"></span>
+            <div className='' style={{'float':'left',height:'3.125rem',lineHeight:'3.125rem',margin:"0 auto",textAlign:'center',width:'66px'}}>
+              <button style={{borderRadius:'4px',opacity:'0.7',color:'#fff',backgroundColor:'#484545'}} onClick={this.onClickChangeLanguage}>{curLang=="zh"?"English":"中文"}</button>
+            </div>
+
             {/*<span className="app-bar-divider"></span>
             <ul className="app-bar-menu m-menu">
                 <li><a><span className="mif-bubble"></span></a></li>
@@ -212,8 +256,7 @@ class Taskbar extends Component{
                 <li><a><span className="mif-stack2" style={{transform:"rotateY(180deg)"}}></span></a></li>
             </ul>*/}
             <span className="app-bar-divider"></span>
-            <div className="app-bar-element" style={{width:"15px"}} onClick={this.toggleAllWindows} title={bShowAll ? "Show All Windows" : "Hide All Windows"}>
-            </div>
+            <div className="app-bar-element" style={{width:"15px"}} onClick={this.toggleFullSreen} title={fullScreen ? "normal screen" : "full screen"}></div>
           </div>
       </div>
     );

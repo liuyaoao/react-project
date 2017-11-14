@@ -1,6 +1,7 @@
 
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
+import Intl from '../../intl/Intl';
 
 // var {connect} = require('react-redux');
 // var {bindActionCreators} = require('redux');

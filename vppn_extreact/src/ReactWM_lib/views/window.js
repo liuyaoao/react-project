@@ -7,6 +7,7 @@ import classSet from 'react-classset';
 
 import {WIN_MODE} from '../models/Constants';
 import WindowModel from '../models/window';
+import Intl from '../../intl/Intl';
 
 var bodyWidth = document.documentElement.clientWidth / 2, bodyHeight = (document.documentElement.clientHeight - 50) / 2;
 
@@ -220,7 +221,7 @@ class Window extends Component{
       <div id={"window-"+this.window.id} className={classes} style={styles} onMouseDown={this.handleMove}>
         <header className='window-caption'>
           <span className="window-caption-icon">{this.window.icon.substr(0,7)=="images/" ? <img src={this.window.icon}/> : <span className={this.window.icon}></span>}</span>
-          <span className='window-caption-title' title={this.window.title} style={{maxWidth:this.window.width-11-20-27*3}}>{this.window.title}</span>
+          <span className='window-caption-title' title={this.window.title} style={{maxWidth:this.window.width-11-20-27*3}}>{Intl.get(this.window.title)}</span>
           <span className='min' onMouseDown={this.handlePropagation} onClick={this.minimize}>
             <svg x="0px" y="0px" viewBox="0 0 10.2 1" data-radium="true" style={{width: "10px", height: "10px"}}><rect width="10.2" height="1"></rect></svg>
           </span>

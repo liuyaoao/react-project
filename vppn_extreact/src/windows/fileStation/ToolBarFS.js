@@ -1,4 +1,6 @@
 import React,{Component} from 'react';
+import Intl from '../../intl/Intl';
+
 import { Container,Button,Menu,MenuItem } from '@extjs/ext-react';
 
 class ToolBarFS extends Component{

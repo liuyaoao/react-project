@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import { Container, TreeList, List, Button, SearchField } from '@extjs/ext-react';
 import { medium, large } from '../../responsiveFormulas';
-
+import Intl from '../../intl/Intl';
 Ext.require('Ext.data.TreeStore');
 // Ext.require('Ext.data.store.chained');
 // Ext.require('Ext.data.Store');

@@ -18,6 +18,8 @@ import SecurityContent from './SecurityContent';
 import NoticeSettingsContent from './NoticeSettingsContent';
 import ManagementContent from './ManagementContent';
 
+import Intl from '../../intl/Intl';
+
 // import CommonDialog from '../../app/components/common/dialog';
 
 class NetworkCenterWindow extends Component{
@@ -27,15 +29,15 @@ class NetworkCenterWindow extends Component{
     modulesData : {
       root: {
           children: [
-              { id: 'state', text: '状态', iconCls: 'mif-meter icon', leaf: true, iconColor:'#3db10f' },
-              { id: 'wireless', text: '无线', iconCls: 'mif-wifi-connect icon', leaf: true ,iconColor:'#0f74b1'},
-              { id: 'Internet', text: '互联网', iconCls: 'mif-earth icon', leaf: true, iconColor:'#6f48e2' },
-              { id: 'localNetwork', text: '本地网络', iconCls: 'mif-home icon', leaf: true, iconColor:'#e29048' },
-              { id: 'parentalCtrl', text: '家长控制', iconCls: 'mif-users icon', leaf: true, iconColor:'#b12b2b' },
-              { id: 'flowCtrl', text: '流量控制', iconCls: 'mif-equalizer-v icon', leaf: true,iconColor:'#66b323'  },
-              { id: 'security', text: '安全性', iconCls: 'mif-security icon', leaf: true,iconColor:'#efc908' },
-              { id: 'noticeSettings', text: '通知设置', iconCls: 'mif-mail-read icon', leaf: true,iconColor:'#19b150' },
-              { id: 'management', text: '管理', iconCls: 'mif-tools icon', leaf: true,iconColor:'#1576b1' },
+              { id: 'state', text: Intl.get('state'), iconCls: 'mif-meter icon', leaf: true, iconColor:'#3db10f' },
+              { id: 'wireless', text: Intl.get('wireless'), iconCls: 'mif-wifi-connect icon', leaf: true ,iconColor:'#0f74b1'},
+              { id: 'Internet', text: Intl.get('Internet'), iconCls: 'mif-earth icon', leaf: true, iconColor:'#6f48e2' },
+              { id: 'localNetwork', text: Intl.get('localNetwork'), iconCls: 'mif-home icon', leaf: true, iconColor:'#e29048' },
+              { id: 'parentalCtrl', text: Intl.get('parentalCtrl'), iconCls: 'mif-users icon', leaf: true, iconColor:'#b12b2b' },
+              { id: 'flowCtrl', text: Intl.get('flowCtrl'), iconCls: 'mif-equalizer-v icon', leaf: true,iconColor:'#66b323'  },
+              { id: 'security', text: Intl.get('security'), iconCls: 'mif-security icon', leaf: true,iconColor:'#efc908' },
+              { id: 'noticeSettings', text: Intl.get('noticeSettings'), iconCls: 'mif-mail-read icon', leaf: true,iconColor:'#19b150' },
+              { id: 'management', text: Intl.get('management'), iconCls: 'mif-tools icon', leaf: true,iconColor:'#1576b1' },
           ]
       }
     },

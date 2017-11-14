@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import { Container, Panel } from '@extjs/ext-react';
 import { medium, large } from '../../responsiveFormulas';
+import Intl from '../../intl/Intl';
 
 class VlanModuleIconView extends Component{
     state = {
@@ -27,7 +28,7 @@ class VlanModuleIconView extends Component{
             <div onClick={()=>{this.onClickIcon(obj)}}>
               <Container height="100px" width="100px" style={{}} layout="center">
                 <span className={obj.iconCls+" ic_view"} style={{color:obj.iconColor}}></span>
-                <div className="text_view">{obj.text}</div>
+                <div className="text_view">{ Intl.get(obj.text,obj.text,{}) }</div>
               </Container>
               </div>
           </Panel>

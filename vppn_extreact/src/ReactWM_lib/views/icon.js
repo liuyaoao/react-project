@@ -10,6 +10,7 @@ import IconModel from '../models/icon';
 // import Settings from '../../settings';
 import WindowContentTpl from './WindowContentTpl';
 import { Container,ToolTip } from '@extjs/ext-react';
+import Intl from '../../intl/Intl';
 
 var INACTIVE = 0;
 var MOVE     = 1;
@@ -602,10 +603,9 @@ class Icon extends Component{
       /* jshint ignore: start */
       <li className={"icon_container"} id={"icon-"+this.icon.id} style={styles} onMouseDown={this.handleMove}>
         <Container>
-
           <img src={this.icon.iconUrl}/>
-          <div className="icon-text">{this.icon.title}</div>
-          <ToolTip cls={"toolTip_container_"+this.icon.id} showDelay={300} dismissDelay={3000} trackMouse>{this.icon.title}</ToolTip>
+          <div className="icon-text">{ Intl.get(this.icon.title,this.icon.title,{}) }</div>
+          <ToolTip cls={"toolTip_container_"+this.icon.id} showDelay={300} dismissDelay={3000} trackMouse>{ Intl.get(this.icon.title,this.icon.title,{}) }</ToolTip>
         </Container>
       </li>
       /* jshint ignore: end */

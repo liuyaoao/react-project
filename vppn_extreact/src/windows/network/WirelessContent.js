@@ -1,4 +1,7 @@
+
 import React,{Component} from 'react';
+import Intl from '../../intl/Intl';
+
 import { TabPanel,Panel, Container, FormPanel,TextField,
   FieldSet, SelectField,Button,Menu,MenuItem,Grid,Column,CheckBoxField,RadioField } from '@extjs/ext-react';
 Ext.require('Ext.field.InputMask');
@@ -70,18 +73,18 @@ export default class WirelessContent extends Component {
                   layout="vbox"
                 >
                     <Container flex={1}>
-                      <div style={{'float':'left'}}><CheckBoxField boxLabel="启用无线广播"/></div>
+                      <div style={{'float':'left'}}><CheckBoxField boxLabel={Intl.get('Enable wireless broadcast')}/></div>
                     </Container>
                     <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
-                      <TextField label="名称(SSID)：" labelTextAlign="left" labelAlign="left" value="Synology_5G" width="80%"/>
-                      <Button ui="menu raised" text="显示" style={{marginRight:'10px'}}>
+                      <TextField label={Intl.get('Name')+" (SSID)："} labelTextAlign="left" labelAlign="left" value="Synology_5G" width="80%"/>
+                      <Button ui="menu raised" text={Intl.get('Show')} style={{marginRight:'10px'}}>
                          <Menu defaults={{ handler: this.onNameMenuChange, group: 'buttonstyle' }}>
-                             <MenuItem text="显示" value="show" iconCls={nameType === 'show' && 'x-font-icon md-icon-check'}/>
-                             <MenuItem text="隐藏" value="hide" iconCls={nameType === 'hide' && 'x-font-icon md-icon-check'}/>
+                             <MenuItem text={Intl.get('Show')} value="show" iconCls={nameType === 'show' && 'x-font-icon md-icon-check'}/>
+                             <MenuItem text={Intl.get('Hide')} value="hide" iconCls={nameType === 'hide' && 'x-font-icon md-icon-check'}/>
                          </Menu>
                       </Button>
                     </Container>
-                    <SelectField label="安全级别："
+                    <SelectField label={Intl.get('Security Level')+':'}
                         labelTextAlign="left" labelAlign="left" value={1}
                         onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
                         options={[
@@ -105,7 +108,7 @@ export default class WirelessContent extends Component {
                   layout="vbox"
                 >
                     <Container flex={1}>
-                      <div style={{'float':'left'}}><CheckBoxField boxLabel="启用无线广播"/></div>
+                      <div style={{'float':'left'}}><CheckBoxField boxLabel={Intl.get('Enable wireless broadcast')}/></div>
                     </Container>
                     <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
                       <TextField label="名称(SSID)：" labelTextAlign="left" labelAlign="left" value="Synology" width="80%"/>
@@ -196,11 +199,11 @@ export default class WirelessContent extends Component {
             </Container>
 
             {/*访客网络 tab 内容区*/}
-            <Container title="访客网络" cls="guest_tab" scrollable={true}>
+            <Container title={Intl.get('Guest Network')} cls="guest_tab" scrollable={true}>
                 <GuestNetworkTab />
             </Container>
             {/*MAc 过滤器 tab的内容区*/}
-            <Container title="MAC过滤器" cls="MAC_filter_tab" scrollable={true}>
+            <Container title={"MAC "+Intl.get('Filter')} cls="MAC_filter_tab" scrollable={true}>
                 <MACFilterTab />
             </Container>
           </TabPanel>

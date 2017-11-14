@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container } from '@extjs/ext-react';
+import Intl from '../../intl/Intl';
 
 export default function DesktopTabsExample() {
     return (

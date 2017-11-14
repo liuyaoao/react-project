@@ -1,4 +1,6 @@
 import React,{Component} from 'react';
+import Intl from '../../intl/Intl';
+
 import { TabPanel, Container, FormPanel,TextField,Panel,
   FieldSet, SelectField,Button,Menu,MenuItem,Grid,Column,CheckBoxField,RadioField   } from '@extjs/ext-react';
 Ext.require('Ext.field.InputMask');

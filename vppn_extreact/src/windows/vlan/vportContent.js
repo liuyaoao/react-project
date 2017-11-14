@@ -1,4 +1,5 @@
 import React,{Component} from 'react';
+import Intl from '../../intl/Intl';
 import { TabPanel, Container, FormPanel,TextField,
   FieldSet, SelectField,Button,Menu,MenuItem,Grid,Column,RendererCell  } from '@extjs/ext-react';
 Ext.require('Ext.field.InputMask');
@@ -59,7 +60,7 @@ export default class VportContent extends Component {
                 }
             }}
         >
-            <Container title="Remote Router" cls="remoter_router" scrollable={true}>
+            <Container title={Intl.get('Remote Router','Remote Router')} cls="remoter_router" scrollable={true}>
               <div style={{margin:'20px'}}>
                 <div>
                   <Container
@@ -68,7 +69,7 @@ export default class VportContent extends Component {
                     defaults={{ margin: "0 10 0 0" }}
                   >
                     <span className={myVirtualIp?'myVirtualIp':'myVirtualIp no_connected'}>{myVirtualIp?myVirtualIp:'Connect Error!'}</span>
-                    <span>引导节点：</span>
+                    <span>{Intl.get("Boot Nodes")}：</span>
                     <SelectField
                        width="200"
                        name={'bootsNode'}
@@ -77,17 +78,17 @@ export default class VportContent extends Component {
                        onChange={this.onBootsNodeSelectChanged}
                        options={bootsNodeOptions}
                      />
-                    <Button text={"关闭"} ui={'decline alt'}></Button>
-                    <Button text={""} ui={'confirm round alt'} iconCls={'x-fa fa-refresh'} alt="刷新"></Button>
+                    <Button text={Intl.get("close")} ui={'decline alt'}></Button>
+                    <Button text={""} ui={'confirm round alt'} iconCls={'x-fa fa-refresh'} alt={Intl.get("refresh")}></Button>
                   </Container>
                   <Container>
                     <Grid store={this.dataStore} grouped width={'99%'} height={'320px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
-                        <Column text="状态" width="100" dataIndex="name"/>
-                        <Column text="远程虚拟IP" width="120" dataIndex="price"/>
-                        <Column text="远程子网" width="100" dataIndex="priceChange"/>
-                        <Column text="链路状态" width="100" dataIndex="priceChange"/>
-                        <Column text="延时" width="100" dataIndex="priceChange"/>
-                        <Column text="描述" width="100" dataIndex="priceChange"/>
+                        <Column text={Intl.get('state')} width="100" dataIndex="name"/>
+                        <Column text={Intl.get('Remote Virtual IP')} width="120" dataIndex="price"/>
+                        <Column text={Intl.get('Remote Subnet')} width="100" dataIndex="priceChange"/>
+                        <Column text={Intl.get('Link State')} width="100" dataIndex="priceChange"/>
+                        <Column text={Intl.get('delay')} width="100" dataIndex="priceChange"/>
+                        <Column text={Intl.get('description')} width="100" dataIndex="priceChange"/>
                     </Grid>
                   </Container>
                   <Container margin="10 0 10 0"
@@ -97,22 +98,23 @@ export default class VportContent extends Component {
                       labelWidth="60"
                       labelAlign="left"
                       labelTextAlign='center'
-                      label="虚拟IP:"
+                      label={Intl.get("Virtual")+" IP:"}
                     />
-                    <Button text={"添加"} ui={'action raised'} style={{marginLeft:'10px'}}></Button>
+                    <Button text={Intl.get("Add New")} ui={'action raised'} style={{marginLeft:'10px'}}></Button>
                   </Container>
                 </div>
               </div>
             </Container>
-            <Container title="vPath" cls="v_path" scrollable={true}>
+
+            <Container title={Intl.get('vPath','vPath')} cls="v_path" scrollable={true}>
                 <div className="action">
                   <FormPanel>
-                    <FieldSet title={"来自vPort"+ idNum+"的域名的流量将通过所选的vProxy路由。"}
+                    <FieldSet title={ Intl.get('vPath_title',null,{idNum}) }
                       layout={{type:'hbox',pack:'start',align: 'bottom'}}
                       defaults={{labelAlign: "placeholder"}}
                       margin="10 10 10 10"
                       >
-                        <TextField placeholder="Enter..." width="200" label="请输入关键字或域名或URL" required flex={1}/>
+                        <TextField placeholder="Enter..." width="200" label={Intl.get('Please input keywords or domain or URL')+'：'} required flex={1}/>
                         <SelectField
                             label="vProxy"
                             flex={1}
@@ -122,7 +124,7 @@ export default class VportContent extends Component {
                             options={vProxyIpOptions}
                         />
                         <Container flex={1}>
-                          <Button ui="menu raised" text="Add" style={{marginRight:'10px',marginBottom:'2px'}}>
+                          <Button ui="menu raised" text={Intl.get("Add")} style={{marginRight:'10px',marginBottom:'2px'}}>
                              <Menu defaults={{ handler: this.onAddTypeChange, group: 'buttonstyle' }}>
                                  <MenuItem text="Add" value="" iconCls={menuItemVal === '' && 'x-font-icon md-icon-check'}/>
                                  <MenuItem text="Import cloud vPath to 10.100.16.24" value="action" iconCls={menuItemVal === 'action' && 'x-font-icon md-icon-check'}/>
@@ -130,15 +132,15 @@ export default class VportContent extends Component {
                                  <MenuItem text="import from World2China pack" value="confirm" iconCls={menuItemVal === 'confirm' && 'x-font-icon md-icon-check'}/>
                              </Menu>
                           </Button>
-                          <Button text={""} ui={'confirm round alt'} iconCls={'x-fa fa-refresh'}></Button>
+                          <Button ui={'confirm round alt'} iconCls={'x-fa fa-refresh'}></Button>
                         </Container>
                     </FieldSet>
                   </FormPanel>
                   <Container>
-                    <Grid store={this.dataStore} grouped width={'98%'} height={'340px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
-                        <Column text="域名" width="150" dataIndex="name"/>
-                        <Column text="代理" width="85" dataIndex="price"/>
-                        <Column text="描述" width="100" dataIndex="priceChange"/>
+                    <Grid store={this.dataStore} grouped width={'98%'} height={'320px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
+                        <Column text={Intl.get('domain')} width="150" dataIndex="name"/>
+                        <Column text={Intl.get('proxy')} width="85" dataIndex="price"/>
+                        <Column text={Intl.get('description')} width="100" dataIndex="priceChange"/>
                     </Grid>
                   </Container>
 

@@ -16,6 +16,7 @@ import Window from './window'; //窗口组件
 import Icon from './icon';  //图标组件
 import ContextMenu from './ContextMenu';  //右键菜单组件
 import CommonDialog from '../../app/components/common/dialog';
+import Intl from '../../intl/Intl';
 
 var heartbeatTimer = null;
 //整个桌面部分-容器组件
