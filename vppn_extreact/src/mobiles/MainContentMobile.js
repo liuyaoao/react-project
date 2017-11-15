@@ -8,6 +8,10 @@ import { Container,Sheet,TitleBar,Button,SegmentedButton, Label,FormPanel, Panel
 import FileStationPageMobile from './fileStation/FileStationPageMobile';
 import NetworkPageMobile from './network/NetworkPageMobile';
 import VlanPageMobile from './vlan/VlanPageMobile';
+import ParentalCtrlPageMobile from './parentCtrl/ParentalCtrlPageMobile'; //家长控制
+import SecurityPageMobile from './security/SecurityPageMobile'; //安全性
+import NoticeSettingPageMobile from './noticeSetting/NoticeSettingPageMobile'; //通知设置
+import ManagementPageMobile from './management/ManagementPageMobile'; //管理
 
 class MainContentMobile extends Component{
   state = {
@@ -43,6 +47,33 @@ class MainContentMobile extends Component{
         }
         {contentId=="VlanWindow"?
           <VlanPageMobile
+            toggleSidebar={this.props.toggleSidebar}
+
+          /> : null
+        }
+
+        {contentId=="ParentCtrlPage"?
+          <ParentalCtrlPageMobile
+            toggleSidebar={this.props.toggleSidebar}
+
+          /> : null
+        }
+
+        {contentId=="SecurityPage"?
+          <SecurityPageMobile
+            toggleSidebar={this.props.toggleSidebar}
+
+          /> : null
+        }
+        {contentId=="NoticeSettingsPage"?
+          <NoticeSettingPageMobile
+            toggleSidebar={this.props.toggleSidebar}
+
+          /> : null
+        }
+
+        {contentId=="ManagementPage"?
+          <ManagementPageMobile
             toggleSidebar={this.props.toggleSidebar}
 
           /> : null

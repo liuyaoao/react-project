@@ -140,5 +140,25 @@
   .x-active-indicator-el{
     top:0;
   }
+  .x-toolbar{
+    position:fixed;
+    bottom:0;left:0;
+    width:100%;
+  }
+}
+.work_mode_cnt{
+  .setting_zone{
+    height:100px;
+    border:1px solid #b9b8b8;
+    width:98%;
+    margin:10px auto;
+    padding:10px;
+    border-radius:6px;
+  }
+  .setting_zone.active{
+    border:2px solid #4e94af;
+    box-shadow:0px 0px 8px 3px #82cad6;
+    transition: border 0.5s,box-shadow 0.5s;
+  }
 
 }

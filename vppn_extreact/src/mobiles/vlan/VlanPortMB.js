@@ -44,19 +44,18 @@ class VlanPortMB extends Component{
                       <span className={myVirtualIp?'myVirtualIp':'myVirtualIp no_connected'}>{myVirtualIp?myVirtualIp:'Connect Error!'}</span>
                     </Container>
                     <ContainerField label="引导节点：" width="100%" layout={'hbox'} labelAlign="left" labelTextAlign="left" defaults={{labelAlign: 'left'}}>
-                      <Button ui="menu" text="220.168.30.12" style={{borderBottom:'1px solid gray',width:'100%'}}>
+                      <Button ui="menu" text="220.168.30.12" style={{borderBottom:'1px solid gray',width:'100%','float':'left'}}>
                          <Menu defaults={{ handler: this.onBootsNodeSelectChanged, group: 'buttonstyle' }}>
                              <MenuItem text="220.168.30.12" value="1" iconCls={selectedBootsNode === '1' && 'x-font-icon md-icon-check'}/>
                              <MenuItem text="220.168.30.1" value="2" iconCls={selectedBootsNode === '2' && 'x-font-icon md-icon-check'}/>
                          </Menu>
                       </Button>
                     </ContainerField>
-                    <Container flex={1} layout="hbox">
-                      <Button text={"关闭"} flex={1} ui={'decline alt'}></Button>
-                      <Button text={""} ui={'confirm round alt'} iconCls={'x-fa fa-refresh'} alt="刷新"></Button>
-                    </Container>
                   </Container>
-
+                  <Container layout={{type:'hbox',pack:'center',align:'bottom'}} margin="10 10 10 10">
+                      <Button text={"关闭"} ui={'decline alt'} style={{marginRight:'10px'}}></Button>
+                      <Button text={"刷新"} ui={'confirm alt'} style={{marginLeft:'10px'}}></Button>
+                  </Container>
 
                 </div>
             </Container>

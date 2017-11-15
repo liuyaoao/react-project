@@ -111,15 +111,15 @@ export default class WirelessContent extends Component {
                       <div style={{'float':'left'}}><CheckBoxField boxLabel={Intl.get('Enable wireless broadcast')}/></div>
                     </Container>
                     <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
-                      <TextField label="名称(SSID)：" labelTextAlign="left" labelAlign="left" value="Synology" width="80%"/>
-                      <Button ui="menu raised" text="显示" style={{marginRight:'10px'}}>
+                      <TextField label={Intl.get('Name')+" (SSID)："} labelTextAlign="left" labelAlign="left" value="Synology" width="80%"/>
+                      <Button ui="menu raised" text={Intl.get('Show')} style={{marginRight:'10px'}}>
                          <Menu defaults={{ handler: this.onNameMenuChange, group: 'buttonstyle' }}>
-                             <MenuItem text="显示" value="show" iconCls={nameType === 'show' && 'x-font-icon md-icon-check'}/>
-                             <MenuItem text="隐藏" value="hide" iconCls={nameType === 'hide' && 'x-font-icon md-icon-check'}/>
+                             <MenuItem text={Intl.get('Show')} value="show" iconCls={nameType === 'show' && 'x-font-icon md-icon-check'}/>
+                             <MenuItem text={Intl.get('Hide')} value="hide" iconCls={nameType === 'hide' && 'x-font-icon md-icon-check'}/>
                          </Menu>
                       </Button>
                     </Container>
-                    <SelectField label="安全级别："
+                    <SelectField label={Intl.get('Security Level')+"："}
                         labelTextAlign="left" labelAlign="left" value={1}
                         onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
                         options={[
@@ -127,8 +127,8 @@ export default class WirelessContent extends Component {
                             { text: 'Option 1', value: 2 }
                         ]}
                     />
-                    <TextField label="密码：" labelTextAlign="left" labelAlign="left" value="siteview"/>
-                    <SelectField label="无线模式："
+                    <TextField label={Intl.get('Password')+"："} labelTextAlign="left" labelAlign="left" value="siteview"/>
+                    <SelectField label={Intl.get('Wireless Mode')+"："}
                         labelTextAlign="left" labelAlign="left" value={1}
                         onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
                         options={[
@@ -136,7 +136,7 @@ export default class WirelessContent extends Component {
                             { text: 'Option 1', value: 2 }
                         ]}
                     />
-                    <div style={{color:'#07439e'}}>高级选项<span className="x-fa fa-chevron-down"></span></div>
+                    <div style={{color:'#07439e'}}>{Intl.get('Advanced Options')}<span className="x-fa fa-chevron-down"></span></div>
                 </Panel>
               </div>
             </Container>
@@ -145,18 +145,18 @@ export default class WirelessContent extends Component {
             <Container title="WPS" cls="wps_tab" scrollable={true}>
                 <div className="">
                   <div style={{margin:'10px'}}>
-                    <div>您可以使用WPS(Wi-Fi Protected Setup)以在Synology Router 与无线客户端之间共享无线密钥，并通过以下方法之一安全地建立无线网络。</div>
+                    <div>{Intl.get('wps_tab_desc')}</div>
                     <div style={{'float':'left'}}>
-                      <CheckBoxField boxLabel="启用WPS" cls="wps_tab_checkbox"/>
+                      <CheckBoxField boxLabel={Intl.get('Enable')+" WPS"} cls="wps_tab_checkbox"/>
                     </div>
                     <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
-                      <div>连接状态：<span>已就绪</span></div>
-                      <div style={{marginLeft:'20px'}}>连接类型：<span>2.4GHz</span></div>
+                      <div>{Intl.get('Connection State')}：<span>{Intl.get('Ready')}</span></div>
+                      <div style={{marginLeft:'20px'}}>{Intl.get('Connection Type')}：<span>2.4GHz</span></div>
                     </Container>
                   </div>
                   <Container layout={{type:'vbox',pack:'center',align:'left'}}>
                     <Panel
-                      title="通过推送按钮"
+                      title={Intl.get('By Push Button')}
                       width={'100%'}
                       bodyPadding={20}
                       collapsible={{

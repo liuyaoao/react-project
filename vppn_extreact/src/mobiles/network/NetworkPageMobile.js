@@ -52,7 +52,7 @@ class NetworkPageMobile extends Component{
           {this.state.titlebarRightText?
             <Button align="right" ui="default" text={this.state.titlebarRightText}/>:null
           }
-          {/*showMenu?
+          {showMenu?
             <Button align="right" ui="default" iconCls="x-fa fa-ellipsis-h" arrow={false}>
               <Menu defaults={{ handler: this.onTabTypeChange, group: 'buttonstyle' }}>
                   <MenuItem text="状态" value="state" iconCls={tabType === 'state' && 'x-font-icon md-icon-check'}/>
@@ -66,26 +66,26 @@ class NetworkPageMobile extends Component{
                   <MenuItem text="管理" value="management" iconCls={tabType === 'management' && 'x-font-icon md-icon-check'}/>
               </Menu>
             </Button>:null
-          */}
+          }
         </TitleBar>
         <div className="page_content" style={{}}>
-          {/*tabType=='state'?
+          {tabType=='state'?
             <NetStateMB
               tabType={tabType}
             />:null
-          */}
+          }
 
-          {/*tabType=='wireless'?
+          {tabType=='wireless'?
             <NetWirelessMB
               tabType={tabType}
             />:null
-          */}
+          }
 
-          {/*tabType=='Internet'?
+          {tabType=='Internet'?
             <NetInternetMB
               tabType={tabType}
             />:null
-          */}
+          }
 
         </div>
       </div>
