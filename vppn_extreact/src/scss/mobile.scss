@@ -11,6 +11,37 @@
     overflow: inherit;
   }
 }
+.x-textfield.disable_text{
+  border-bottom: 1px solid #bdb7b7;
+  padding-top:0;
+  padding-bottom:0;
+  .x-label-el{
+    color:black;
+    opacity: 1;
+  }
+  .x-underline-el{
+    height: 0;
+    background-color:#fff;
+  }
+  &.x-disabled .x-input-wrap-el{
+    color:#236a9c;
+  }
+  &.x-field:not(.x-field-solo).x-layout-auto-item{
+    padding-top:0;
+    padding-bottom:0;
+  }
+}
+.auto_width.x-field > .x-label-el{
+  width:auto;
+}
+.black_label.x-field{
+  .x-label-el{
+    color:black;
+  }
+}
+
+
+
 .phone_root_container{
   & > div{
     overflow-x: hidden;

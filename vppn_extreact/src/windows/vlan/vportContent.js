@@ -106,7 +106,7 @@ export default class VportContent extends Component {
               </div>
             </Container>
 
-            <Container title={Intl.get('vPath','vPath')} cls="v_path" scrollable={true}>
+            <Container title={Intl.get('vPath')} cls="v_path" scrollable={true}>
                 <div className="action">
                   <FormPanel>
                     <FieldSet title={ Intl.get('vPath_title',null,{idNum}) }

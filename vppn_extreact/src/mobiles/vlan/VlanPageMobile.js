@@ -1,6 +1,7 @@
 
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
+import Intl from '../../intl/Intl';
 // var {connect} = require('react-redux');
 // var {bindActionCreators} = require('redux');
 import { Container,Sheet,TitleBar,Button,Menu,MenuItem, Label,FormPanel, Panel } from '@extjs/ext-react';
@@ -13,6 +14,7 @@ class VlanPageMobile extends Component{
   state = {
       bodyHeight:500,
       bodyWidth:'100%',
+      vProxyIpArr:['10.100.16.84','10.100.16.9','10.100.16.68'],
       titlebarRightText:'',
       tabName:'vPort',
       tabType:'vPort_1',
@@ -70,17 +72,18 @@ class VlanPageMobile extends Component{
         <div className="page_content" style={{}}>
           {tabName=='vPort'?
             <VlanPortMB
-              vPortType={tabType}
+              vProxyIpArr={this.state.vProxyIpArr}
+              tabType={tabType}
             />:null
           }
           {tabName=='setting'?
             <VlanSettingMB
-              vPortType={tabType}
+              tabType={tabType}
             />:null
           }
           {tabName=='diagnosis'?
             <VlanDiagnosisMB
-              vPortType={tabType}
+              tabType={tabType}
             />:null
           }
         </div>

@@ -51,9 +51,9 @@ class NetStateMB extends Component{
             <div style={{height:'24px',color:'green',fontSize:'20px',margin:'8px 0 0 0'}}>
               <i className="big check circle outline icon"></i> 已联机
             </div>
-            <TextField labelAlign="left" ui="disabled-ui" label="IP 地址" value="192.168.1.9" disabled/>
-            <TextField labelAlign="left" ui="disabled-ui" label="网关" value="192.168.1.1" disabled/>
-            <TextField labelAlign="left" ui="disabled-ui" label="DNS Server" value="192.168.1.1" disabled/>
+            <TextField labelAlign="left" cls="disable_text" label="IP 地址" value="192.168.1.9" disabled/>
+            <TextField labelAlign="left" cls="disable_text" label="网关" value="192.168.1.1" disabled/>
+            <TextField labelAlign="left" cls="disable_text" label="DNS Server" value="192.168.1.1" disabled/>
           </Container>
           {/* wifi 类型*/}
           <Container layout="vbox" margin="10 0 0 0">
@@ -73,9 +73,9 @@ class NetStateMB extends Component{
               <input type="checkbox" name="public"/>
               <label> on</label>
             </div>
-            <TextField labelAlign="left" label="名称（SSID）" value="Synology 5G" disabled/>
-            <TextField labelAlign="left" label="安全模式" value="WAP-个人，AES" disabled/>
-            <TextField labelAlign="left" label="MAC地址" value="00:11:32:53:bd:50" disabled/>
+            <TextField labelAlign="left" cls="disable_text" label="名称（SSID）" value="Synology 5G" disabled/>
+            <TextField labelAlign="left" cls="disable_text" label="安全模式" value="WAP-个人，AES" disabled/>
+            <TextField labelAlign="left" cls="disable_text" label="MAC地址" value="00:11:32:53:bd:50" disabled/>
           </Container>
 
           <TabPanel cls="tabpanel_m"

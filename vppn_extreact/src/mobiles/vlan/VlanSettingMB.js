@@ -27,44 +27,53 @@ class VlanSettingMB extends Component{
             tabBar={{ docked: 'bottom' }} scrollable={true}
         >
             <Container title={Intl.get('Setting')} padding="10 10 60 10">
-                <FieldSet title={Intl.get('Manage Server')+'1'}>
-                    <TextField labelAlign="left" ui="disabled-ui" label={Intl.get('Address')+':'} value="" disabled/>
-                    <TextField labelAlign="left" ui="disabled-ui" label={Intl.get('Port')+':'} value="8001" disabled/>
-                </FieldSet>
-                <Container layout={{type:'hbox',pack:'center',align:'bottom'}} margin="10 10 10 10">
-                    <Button text={Intl.get('test')} ui={'confirm raised'} style={{marginRight:'10px'}}></Button>
-                    <Button text={Intl.get('save')} ui={'action alt'} style={{marginLeft:'10px'}}></Button>
+                <Container shadow padding="10 10 10 10">
+                  <FieldSet title={Intl.get('Manage Server')+'1'}>
+                      <TextField labelAlign="left" cls="disable_text" label={Intl.get('Address')+':'} value="" disabled/>
+                      <TextField labelAlign="left" cls="disable_text" label={Intl.get('Port')+':'} value="8001" disabled/>
+                  </FieldSet>
+                  <Container layout={{type:'hbox',pack:'center',align:'bottom'}} margin="10 10 10 10">
+                      <Button text={Intl.get('test')} ui={'confirm raised'} style={{marginRight:'10px'}}></Button>
+                      <Button text={Intl.get('save')} ui={'action alt'} style={{marginLeft:'10px'}}></Button>
+                  </Container>
                 </Container>
 
-                <FieldSet title={Intl.get('Manage Server')+'2'}>
-                    <TextField labelAlign="left" ui="disabled-ui" label={Intl.get('Address')+':'} value="" disabled/>
-                    <TextField labelAlign="left" ui="disabled-ui" label={Intl.get('Port')+':'} value="8001" disabled/>
-                </FieldSet>
-                <Container layout={{type:'hbox',pack:'center',align:'bottom'}} margin="10 10 10 10">
-                    <Button text={Intl.get('test')} ui={'confirm raised'} style={{marginRight:'10px'}}></Button>
-                    <Button text={Intl.get('save')} ui={'action alt'} style={{marginLeft:'10px'}}></Button>
+                <Container shadow padding="10 10 10 10" margin="10 0 0 0">
+                  <FieldSet title={Intl.get('Manage Server')+'2'}>
+                      <TextField labelAlign="left" cls="disable_text" label={Intl.get('Address')+':'} value="" disabled/>
+                      <TextField labelAlign="left" cls="disable_text" label={Intl.get('Port')+':'} value="8001" disabled/>
+                  </FieldSet>
+                  <Container layout={{type:'hbox',pack:'center',align:'bottom'}} margin="10 10 10 10">
+                      <Button text={Intl.get('test')} ui={'confirm raised'} style={{marginRight:'10px'}}></Button>
+                      <Button text={Intl.get('save')} ui={'action alt'} style={{marginLeft:'10px'}}></Button>
+                  </Container>
                 </Container>
 
-                <FieldSet title={Intl.get('Manage Goal')}>
-                    <TextField labelAlign="left" ui="disabled-ui" label={Intl.get('Address')+':'} value="" disabled/>
-                </FieldSet>
-                <Container layout={{type:'hbox',pack:'center',align:'bottom'}} margin="10 10 10 10">
-                    <Button text={Intl.get('save')} ui={'action alt'}></Button>
+                <Container shadow padding="10 10 10 10" margin="10 0 0 0">
+                  <FieldSet title={Intl.get('Manage Goal')}>
+                      <TextField labelAlign="left" cls="disable_text" label={Intl.get('Address')+':'} value="" disabled/>
+                  </FieldSet>
+                  <Container layout={{type:'hbox',pack:'center',align:'bottom'}} margin="10 10 10 10">
+                      <Button text={Intl.get('save')} ui={'action alt'}></Button>
+                  </Container>
                 </Container>
 
-                <FieldSet title={Intl.get('System log')}>
-                    <TextField labelAlign="left" ui="disabled-ui" label={Intl.get('Address')+':'} value="" disabled/>
-                    <TextField labelAlign="left" ui="disabled-ui" label={Intl.get('Level')+':'} value="" disabled/>
-                </FieldSet>
-                <Container layout={{type:'hbox',pack:'center',align:'bottom'}} margin="10 10 10 10">
-                    <Button text={Intl.get('Enable')} ui={'action alt'}></Button>
+                <Container shadow padding="10 10 10 10" margin="10 0 0 0">
+                  <FieldSet title={Intl.get('System log')}>
+                      <TextField labelAlign="left" cls="disable_text" label={Intl.get('Address')+':'} value="" disabled/>
+                      <TextField labelAlign="left" cls="disable_text" label={Intl.get('Level')+':'} value="" disabled/>
+                  </FieldSet>
+                  <Container layout={{type:'hbox',pack:'center',align:'bottom'}} margin="10 10 10 10">
+                      <Button text={Intl.get('Enable')} ui={'action alt'}></Button>
+                  </Container>
                 </Container>
+
             </Container>
             {/* 可设置右上角的标记文本：badgeText="4" */}
             <Container title={Intl.get("vPath packs")} padding="10 10 60 10">
 
             </Container>
-            <Container title="payment" padding="10 10 10 10">
+            <Container title="payment" padding="10 10 60 10">
                 <div>Badges <em>(like the 4, below)</em> can be added by setting the <code>badgeText</code> prop.</div>
             </Container>
         </TabPanel>

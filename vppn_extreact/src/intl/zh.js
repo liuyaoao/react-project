@@ -32,7 +32,7 @@ export default ({
    "Enable":"启动",
    "Expiration date":"到期时间",
    "Please click to pay":"支付请点击",
-   "close":"关闭",
+   "close":"关闭",        "Close":"关闭",
    "refresh":"刷新",
    "Virtual":"虚拟", "virtual":"虚拟",
    "Add New":"添加",
@@ -91,6 +91,18 @@ export default ({
    "Message":"短信",
    "Push Service":"推送服务",
    "Advanced Setting":"高级设置",
+
+   "Link":"链接",
+   "QuickConnect & DDNS":"快速连接和DDNS",
+   "Port Forwarding":"端口转发",
+   "Port Trigger":"端口触发",
+   "Tunnel":"隧道",
+   "3G And 4G":"3G和4G",
+   "":"",
+   "":"",
+   "":"",
+
+   "":"",
 
 
  });
