@@ -1,11 +1,13 @@
 
-import React,{Component} from 'React';
+import React,{Component} from 'react';
+import ReactDOM from 'react-dom';
 import Intl from '../../intl/Intl';
-
+// var {connect} = require('react-redux');
+// var {bindActionCreators} = require('redux');
 import { Container,TitleBar,Button,Menu,MenuItem, TabPanel,FormPanel, Panel } from '@extjs/ext-react';
 
-class WorkModeMB extends Component{
-  state={
+class WorkModeComp extends Component{
+  state = {
     bodyHeight:500,
     bodyWidth:'100%',
     workMode:'wirelessRouter',
@@ -19,7 +21,10 @@ class WorkModeMB extends Component{
   onChoseWorkMode = (workMode)=>{
     this.setState({workMode});
   }
-  render(){
+  componentWillUnmount () {
+  }
+
+  render () {
     let {workMode} = this.state;
 
     return (
@@ -64,4 +69,5 @@ class WorkModeMB extends Component{
   }
 
 }
-export default WorkModeMB;
+
+export default WorkModeComp;

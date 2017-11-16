@@ -6,13 +6,13 @@ import Intl from '../../intl/Intl';
 // var {bindActionCreators} = require('redux');
 import { Container,TitleBar,Button,Menu,MenuItem, TabPanel,FormPanel, Panel } from '@extjs/ext-react';
 
-import WorkModeMB from './workModeMB';
-import UpdateAndResetMB from './updateAndResetMB';
-import SRMSettingMB from './sRMSettingMB';
-import ServiceMB from './serviceMB';
-import RegionOptionsMB from './regionOptionsMB';
-import LED_MB from './lED_MB';
-import UsingStateMB from './usingStateMB';
+import WorkModeComp from './WorkModeComp';
+import UpdateAndResetComp from './UpdateAndResetComp';
+import SRMSettingComp from './SRMSettingComp';
+import ServiceComp from './ServiceComp';
+import RegionOptionsComp from './RegionOptionsComp';
+import LED_Comp from './LED_Comp';
+import UsingStateComp from './UsingStateComp';
 
 class ManagementPageMobile extends Component{
   state = {
@@ -72,35 +72,38 @@ class ManagementPageMobile extends Component{
           }
         </TitleBar>
         <div className="page_content" style={{}}>
-          {tabType=='workMode'?
-            <WorkModeMB
-              tabType={tabType} />:null
-          }
-          {tabType=='updateAndReset'?
-            <UpdateAndResetMB tabType={tabType}/>:null
-          }
-          {tabType=='SRMSetting'?
-            <SRMSettingMB
-              tabType={tabType}/>:null
-          }
-          {tabType=='service'?
-            <ServiceMB
-              tabType={tabType}/>:null
-          }
-          {tabType=='regionOptions'?
-            <RegionOptionsMB
-              tabType={tabType}/>:null
-          }
+            {tabType=='workMode'?
+              <WorkModeComp
+                tabType={tabType} />:null
+            }
+            {tabType=='updateAndReset'?
+              <UpdateAndResetComp tabType={tabType}/>:null
+            }
 
-          {tabType=='LED'?
-            <LED_MB
-              tabType={tabType}/>:null
-          }
+            {tabType=='SRMSetting'?
+              <SRMSettingComp tabType={tabType}/>:null
+            }
 
-          {tabType=='usingState'?
-            <UsingStateMB
-              tabType={tabType}/>:null
-          }
+             {tabType=='service'?
+               <ServiceComp
+                 tabType={tabType}/>:null
+             }
+             {tabType=='regionOptions'?
+               <RegionOptionsComp
+                 tabType={tabType}/>:null
+             }
+
+             {tabType=='LED'?
+               <LED_Comp
+                 tabType={tabType}/>:null
+             }
+
+             {tabType=='usingState'?
+               <UsingStateComp
+                 tabType={tabType}/>:null
+             }
+
+
 
         </div>
       </div>

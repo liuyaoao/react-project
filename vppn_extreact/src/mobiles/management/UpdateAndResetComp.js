@@ -1,11 +1,13 @@
-import React,{Component} from 'React';
+
+import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import Intl from '../../intl/Intl';
-import { Container,Sheet,TitleBar,Button,Menu,MenuItem, TabPanel,FormPanel, Panel } from '@extjs/ext-react';
+// var {connect} = require('react-redux');
+// var {bindActionCreators} = require('redux');
+import { Container,TitleBar,Button,Menu,MenuItem, TabPanel,FormPanel, Panel } from '@extjs/ext-react';
 
-
-class UpdateAndResetMB extends Component{
-  state={
+class UpdateAndResetComp extends Component{
+  state = {
     bodyHeight:500,
     bodyWidth:'100%',
   }
@@ -15,7 +17,11 @@ class UpdateAndResetMB extends Component{
       bodyWidth:document.documentElement.clientWidth
     });
   }
-  render(){
+  componentWillUnmount () {
+  }
+
+  render () {
+    
     return (
       <div className='' style={{height:(this.state.bodyHeight-45)+"px"}}>
         <Container layout="vbox" padding="10 10 10 10">
@@ -33,4 +39,5 @@ class UpdateAndResetMB extends Component{
   }
 
 }
-export default UpdateAndResetMB;
+
+export default UpdateAndResetComp;

@@ -1,11 +1,13 @@
-import React,{Component} from 'React';
+
+import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import Intl from '../../intl/Intl';
-import { Container,Sheet,CheckBoxField,Button,Menu,MenuItem,FieldSet, TabPanel,FormPanel, Panel,TextField } from '@extjs/ext-react';
+// var {connect} = require('react-redux');
+// var {bindActionCreators} = require('redux');
+import { Container,TitleBar,Button,Menu,MenuItem,FieldSet,TextField, CheckBoxField,TabPanel,FormPanel, Panel } from '@extjs/ext-react';
 
-
-class SRMSettingMB extends Component{
-  state={
+class SRMSettingComp extends Component{
+  state = {
     bodyHeight:500,
     bodyWidth:'100%',
   }
@@ -15,7 +17,11 @@ class SRMSettingMB extends Component{
       bodyWidth:document.documentElement.clientWidth
     });
   }
-  render(){
+  componentWillUnmount () {
+  }
+
+  render () {
+
     return (
       <div className='' style={{height:(this.state.bodyHeight-45)+"px"}}>
         <Container layout="vbox" padding="10 10 10 10">
@@ -37,4 +43,5 @@ class SRMSettingMB extends Component{
   }
 
 }
-export default SRMSettingMB;
+
+export default SRMSettingComp;
