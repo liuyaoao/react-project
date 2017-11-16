@@ -6,9 +6,6 @@ import Intl from '../../intl/Intl';
 // var {bindActionCreators} = require('redux');
 import { Container,Sheet,TitleBar,Button,Menu,MenuItem, TabPanel,FormPanel, Panel } from '@extjs/ext-react';
 
-import ParentPlanMB from '../parentCtrl/ParentPlanMB'
-import ParentFilterMB from '../parentCtrl/ParentFilterMB'
-
 class NoticeSettingPageMobile extends Component{
   state = {
       bodyHeight:500,

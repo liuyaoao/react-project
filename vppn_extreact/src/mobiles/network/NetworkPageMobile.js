@@ -8,7 +8,7 @@ import { Container,Sheet,TitleBar,Button,Menu,MenuItem, Label,FormPanel, Panel }
 import NetStateMB from './NetStateMB'
 import NetWirelessMB from './NetWirelessMB'
 import NetInternetMB from './NetInternetMB'
-import NetLocalMB from './NetLocalMB'
+// import NetLocalMB from './NetLocalMB'
 
 class NetworkPageMobile extends Component{
   state = {
@@ -71,20 +71,17 @@ class NetworkPageMobile extends Component{
         <div className="page_content" style={{}}>
           {tabType=='state'?
             <NetStateMB
-              tabType={tabType}
-            />:null
+              tabType={tabType}/>:null
           }
 
           {tabType=='wireless'?
             <NetWirelessMB
-              tabType={tabType}
-            />:null
+              tabType={tabType}/>:null
           }
 
           {tabType=='Internet'?
             <NetInternetMB
-              tabType={tabType}
-            />:null
+              tabType={tabType} />:null
           }
 
         </div>

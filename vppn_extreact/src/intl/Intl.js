@@ -1,5 +1,5 @@
 import IntlMessageFormat from 'intl-messageformat';
-import {intl_language_key} from '../ReactWM_lib/models/Constants';
+import {intl_language_key} from '../reactWM_lib/models/Constants';
 import zh from './zh';
 import en from './en';
 const MESSAGES = { en, zh };

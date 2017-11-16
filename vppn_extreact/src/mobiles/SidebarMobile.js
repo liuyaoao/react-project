@@ -2,7 +2,7 @@
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import Intl from '../intl/Intl';
-import {intl_language_key} from '../ReactWM_lib/models/Constants';
+import {intl_language_key} from '../reactWM_lib/models/Constants';
 // var {connect} = require('react-redux');
 // var {bindActionCreators} = require('redux');
 import { Container,List,Button, TreeList, Panel } from '@extjs/ext-react';

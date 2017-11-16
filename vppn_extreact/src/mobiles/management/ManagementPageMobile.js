@@ -4,15 +4,15 @@ import ReactDOM from 'react-dom';
 import Intl from '../../intl/Intl';
 // var {connect} = require('react-redux');
 // var {bindActionCreators} = require('redux');
-import { Container,Sheet,TitleBar,Button,Menu,MenuItem, TabPanel,FormPanel, Panel } from '@extjs/ext-react';
+import { Container,TitleBar,Button,Menu,MenuItem, TabPanel,FormPanel, Panel } from '@extjs/ext-react';
 
-import WorkModeMB from './WorkModeMB';
-import UpdateAndResetMB from './UpdateAndResetMB';
-import SRMSettingMB from './SRMSettingMB';
-import ServiceMB from './ServiceMB';
-import RegionOptionsMB from './RegionOptionsMB';
-import LED_MB from './LED_MB';
-import UsingStateMB from './UsingStateMB';
+import WorkModeMB from './workModeMB';
+import UpdateAndResetMB from './updateAndResetMB';
+import SRMSettingMB from './sRMSettingMB';
+import ServiceMB from './serviceMB';
+import RegionOptionsMB from './regionOptionsMB';
+import LED_MB from './lED_MB';
+import UsingStateMB from './usingStateMB';
 
 class ManagementPageMobile extends Component{
   state = {
@@ -74,40 +74,32 @@ class ManagementPageMobile extends Component{
         <div className="page_content" style={{}}>
           {tabType=='workMode'?
             <WorkModeMB
-              tabType={tabType}
-            />:null
+              tabType={tabType} />:null
           }
           {tabType=='updateAndReset'?
-            <UpdateAndResetMB
-              tabType={tabType}
-            />:null
+            <UpdateAndResetMB tabType={tabType}/>:null
           }
           {tabType=='SRMSetting'?
             <SRMSettingMB
-              tabType={tabType}
-            />:null
+              tabType={tabType}/>:null
           }
           {tabType=='service'?
             <ServiceMB
-              tabType={tabType}
-            />:null
+              tabType={tabType}/>:null
           }
           {tabType=='regionOptions'?
             <RegionOptionsMB
-              tabType={tabType}
-            />:null
+              tabType={tabType}/>:null
           }
 
           {tabType=='LED'?
             <LED_MB
-              tabType={tabType}
-            />:null
+              tabType={tabType}/>:null
           }
 
           {tabType=='usingState'?
             <UsingStateMB
-              tabType={tabType}
-            />:null
+              tabType={tabType}/>:null
           }
 
         </div>

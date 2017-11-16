@@ -118,7 +118,7 @@ class NetWirelessMB extends Component{
                   <div>连接状态：<span>已就绪</span></div>
                   <div style={{marginLeft:'20px'}}>连接类型：<span>2.4GHz</span></div>
                 </Container>
-                
+
               </div>
             </Container>
             {/* 访客网络*/}

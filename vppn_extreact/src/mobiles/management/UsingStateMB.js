@@ -1,7 +1,6 @@
 import React,{Component} from 'React';
-import ReactDOM from 'react-dom';
 import Intl from '../../intl/Intl';
-import { Container,Sheet,TitleBar,Button,Menu,MenuItem,FieldSet, TabPanel,FormPanel, Panel,TextField } from '@extjs/ext-react';
+import { Container,TitleBar,Button,Menu,MenuItem,FieldSet, TabPanel,FormPanel, Panel,TextField } from '@extjs/ext-react';
 
 
 class UsingStateMB extends Component{

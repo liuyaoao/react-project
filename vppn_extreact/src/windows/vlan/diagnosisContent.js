@@ -1,8 +1,9 @@
-import React from 'react';
+import React,{Component} from 'react';
 import { Container } from '@extjs/ext-react';
 import Intl from '../../intl/Intl';
 
-export default function DesktopTabsExample() {
+class DiagnosisContent extends Component {
+  render(){
     return (
       <div>
         <Container>
@@ -10,4 +11,7 @@ export default function DesktopTabsExample() {
         </Container>
       </div>
     )
+  }
+
 }
+export default DiagnosisContent;

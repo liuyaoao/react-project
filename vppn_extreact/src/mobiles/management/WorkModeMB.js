@@ -1,7 +1,8 @@
+
 import React,{Component} from 'React';
-import ReactDOM from 'react-dom';
 import Intl from '../../intl/Intl';
-import { Container,Sheet,TitleBar,Button,Menu,MenuItem, TabPanel,FormPanel, Panel } from '@extjs/ext-react';
+
+import { Container,TitleBar,Button,Menu,MenuItem, TabPanel,FormPanel, Panel } from '@extjs/ext-react';
 
 
 class WorkModeMB extends Component{

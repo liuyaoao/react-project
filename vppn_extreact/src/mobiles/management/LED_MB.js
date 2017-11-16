@@ -15,6 +15,7 @@ class LED_MB extends Component{
       bodyWidth:document.documentElement.clientWidth
     });
   }
+
   render(){
     return (
       <div className='' style={{height:(this.state.bodyHeight-45)+"px"}}>
