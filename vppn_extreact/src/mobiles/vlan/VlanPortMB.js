@@ -63,8 +63,8 @@ class VlanPortMB extends Component{
                     <Container flex={1}>
                       <span className={myVirtualIp?'myVirtualIp':'myVirtualIp no_connected'}>{myVirtualIp?myVirtualIp:'Connect Error!'}</span>
                     </Container>
-                    <ContainerField label={Intl.get('Boot Nodes')+'：'} cls="black_label auto_width" width="100%" layout={'hbox'} labelAlign="left" labelTextAlign="left" defaults={{labelAlign: 'left'}}>
-                      <Button ui="menu" text="220.168.30.12" style={{borderBottom:'1px solid gray',width:'100%','float':'left'}}>
+                    <ContainerField label={Intl.get('Boot Nodes')+'：'} cls="black_label auto_width disable_text" width="100%" layout={'hbox'} labelAlign="left" labelTextAlign="left">
+                      <Button ui="menu" text="220.168.30.12" style={{width:'100%','float':'left'}} textAlign="right" menuAlign="tr-br">
                          <Menu defaults={{ handler: this.onBootsNodeSelectChanged, group: 'buttonstyle' }}>
                              <MenuItem text="220.168.30.12" value="1" iconCls={selectedBootsNode === '1' && 'x-font-icon md-icon-check'}/>
                              <MenuItem text="220.168.30.1" value="2" iconCls={selectedBootsNode === '2' && 'x-font-icon md-icon-check'}/>
@@ -103,15 +103,15 @@ class VlanPortMB extends Component{
                     defaults={{labelAlign: "placeholder"}}
                     >
                       <TextField placeholder="Enter..." cls="black_label" width="100%" label={Intl.get('Please input keywords or domain or URL')+'：'} required />
-                      <ContainerField label={Intl.get('vProxy')} cls="black_label auto_width" width="100%" labelTextAlign="left" >
-                        <Button ui="menu" text="220.168.30.12" style={{borderBottom:'1px solid gray',width:'100%','float':'left'}}>
+                      <ContainerField label={Intl.get('vProxy')+'：'} cls="black_label auto_width disable_text" width="100%" labelAlign="left" >
+                        <Button ui="menu" text="220.168.30.12" style={{width:'100%','float':'left'}} textAlign="right" menuAlign="tr-br">
                            <Menu defaults={{ handler: this.onVProxySelectChanged, group: 'buttonstyle' }}>
                                <MenuItem text="220.168.30.12" value="1" iconCls={selectedVProxyIp === '1' && 'x-font-icon md-icon-check'}/>
                                <MenuItem text="220.168.30.1" value="2" iconCls={selectedVProxyIp === '2' && 'x-font-icon md-icon-check'}/>
                            </Menu>
                         </Button>
                       </ContainerField>
-                      <Container layout={{type:'hbox',pack:'center',align: 'bottom'}} width="100%">
+                      <Container layout={{type:'hbox',pack:'center',align: 'bottom'}} width="100%" margin="10 10 10 10">
                         <Button ui="menu raised" text={Intl.get("Add")} style={{marginRight:'10px',marginBottom:'2px'}}>
                            <Menu defaults={{ handler: this.onAddTypeChange, group: 'buttonstyle' }}>
                                <MenuItem text="Add" value="" iconCls={menuItemVal === '' && 'x-font-icon md-icon-check'}/>

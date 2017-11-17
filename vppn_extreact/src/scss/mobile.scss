@@ -11,7 +11,7 @@
     overflow: inherit;
   }
 }
-.x-textfield.disable_text{
+.x-field.disable_text{
   border-bottom: 1px solid #bdb7b7;
   padding-top:0;
   padding-bottom:0;
@@ -26,17 +26,29 @@
   &.x-disabled .x-input-wrap-el{
     color:#236a9c;
   }
-  &.x-field:not(.x-field-solo).x-layout-auto-item{
-    padding-top:0;
+  &:not(.x-field-solo).x-layout-auto-item{
+    padding-top:5px;
+    margin-top:0;
+    padding-bottom:0;
+  }
+  &:not(.x-field-solo).x-layout-vbox-item{
+    padding-top:5px;
+    margin-top:0;
     padding-bottom:0;
   }
 }
+
 .auto_width.x-field > .x-label-el{
   width:auto;
 }
 .black_label.x-field{
   .x-label-el{
     color:black;
+  }
+  &.x-checkboxfield{
+    .x-box-label-el{
+      color:black;
+    }
   }
 }
 
@@ -159,12 +171,22 @@
     color:#025b80;
   }
   .cnt{
+    width:100%;
     .title{
       font-size:20px;
       font-weight:600;
       color:#025b80;
       border-bottom:2px dotted #a09b9b;
     }
+  }
+}
+.cnt{
+  width:100%;
+  .title{
+    font-size:20px;
+    font-weight:600;
+    color:#025b80;
+    border-bottom:2px dotted #a09b9b;
   }
 }
 .tabpanel_bottom_m{

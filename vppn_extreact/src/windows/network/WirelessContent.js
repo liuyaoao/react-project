@@ -76,7 +76,7 @@ export default class WirelessContent extends Component {
                       <div style={{'float':'left'}}><CheckBoxField boxLabel={Intl.get('Enable wireless broadcast')}/></div>
                     </Container>
                     <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
-                      <TextField label={Intl.get('Name')+" (SSID)："} labelTextAlign="left" labelAlign="left" value="Synology_5G" width="80%"/>
+                      <TextField label={Intl.get('Name')+" (SSID)："} labelTextAlign="left" labelAlign="left" value="5G" width="80%"/>
                       <Button ui="menu raised" text={Intl.get('Show')} style={{marginRight:'10px'}}>
                          <Menu defaults={{ handler: this.onNameMenuChange, group: 'buttonstyle' }}>
                              <MenuItem text={Intl.get('Show')} value="show" iconCls={nameType === 'show' && 'x-font-icon md-icon-check'}/>
@@ -111,7 +111,7 @@ export default class WirelessContent extends Component {
                       <div style={{'float':'left'}}><CheckBoxField boxLabel={Intl.get('Enable wireless broadcast')}/></div>
                     </Container>
                     <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
-                      <TextField label={Intl.get('Name')+" (SSID)："} labelTextAlign="left" labelAlign="left" value="Synology" width="80%"/>
+                      <TextField label={Intl.get('Name')+" (SSID)："} labelTextAlign="left" labelAlign="left" value="" width="80%"/>
                       <Button ui="menu raised" text={Intl.get('Show')} style={{marginRight:'10px'}}>
                          <Menu defaults={{ handler: this.onNameMenuChange, group: 'buttonstyle' }}>
                              <MenuItem text={Intl.get('Show')} value="show" iconCls={nameType === 'show' && 'x-font-icon md-icon-check'}/>
@@ -167,7 +167,7 @@ export default class WirelessContent extends Component {
                     >
                     <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
                       <Container flex={1}>
-                        <p>按Synology Router 上的WPS按钮。</p>
+                        <p>按 Router 上的WPS按钮。</p>
                         <div style={{padding:'20px'}}><img src='images/network/pushBtn_1.png'/></div>
                       </Container>
                       <Container flex={1}>
@@ -227,7 +227,7 @@ class GuestNetworkTab extends Component{
             <Container flex={1}>
               <div style={{'float':'left'}}><CheckBoxField boxLabel="启用访客网络"/></div>
             </Container>
-            <TextField label="名称(SSID)：" labelTextAlign="left" labelAlign="left" value="SynologyRouterGuest" />
+            <TextField label="名称(SSID)：" labelTextAlign="left" labelAlign="left" value="RouterGuest" />
             <SelectField label="安全级别："
                 labelTextAlign="left" labelAlign="left" value={1}
                 onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
@@ -265,7 +265,7 @@ class GuestNetworkTab extends Component{
             <Container flex={1}>
               <div style={{'float':'left'}}><CheckBoxField boxLabel="启用无线广播"/></div>
             </Container>
-            <TextField label="名称(SSID)：" labelTextAlign="left" labelAlign="left" value="SynologyRouterGuest_2.4GHz" />
+            <TextField label="名称(SSID)：" labelTextAlign="left" labelAlign="left" value="RouterGuest_2.4GHz" />
             <SelectField label="安全级别："
                 labelTextAlign="left" labelAlign="left" value={1}
                 onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}

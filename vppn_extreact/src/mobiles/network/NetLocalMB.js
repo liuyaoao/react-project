@@ -1,6 +1,7 @@
 
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
+import Intl from '../../intl/Intl';
 // var {connect} = require('react-redux');
 // var {bindActionCreators} = require('redux');
 import { Container,Sheet,TitleBar,Button, TabPanel,FormPanel, Panel } from '@extjs/ext-react';
@@ -21,16 +22,11 @@ class NetLocalMB extends Component{
     let {bodyHeight} = this.state;
     return (
       <div className='' style={{height:(bodyHeight-45)+"px"}}>
-        <TabPanel cls='tabpanel_bottom_m'
-            shadow
+        <TabPanel cls='tabpanel_m tabpanel_bottom_m'
             height={'100%'}
-            tabBar={{ docked: 'bottom' }}
-            defaults={{
-                cls: "card",
-                layout: "center"
-            }}
+            tabBar={{ docked: 'bottom' }} scrollable={true}
         >
-            <Container title="Remote Router" >
+            <Container title="Routine And IPv6" >
                 <div>Docking tabs to the bottom will automatically change their style.</div>
             </Container>
             {/* 可设置右上角的标记文本：badgeText="4" */}

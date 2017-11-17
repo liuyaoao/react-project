@@ -8,8 +8,8 @@ import { Container,Sheet,TitleBar,Button,Menu,MenuItem, Label,FormPanel, Panel }
 
 import NetStateMB from './NetStateMB'
 import NetWirelessMB from './NetWirelessMB'
-import NetInternetMB from './NetInternetMB'
-// import NetLocalMB from './NetLocalMB'
+import NetLocalMB from './NetLocalMB'
+import NetFlowCtrlMB from './NetFlowCtrlMB'
 
 class NetworkPageMobile extends Component{
   state = {
@@ -41,7 +41,7 @@ class NetworkPageMobile extends Component{
       <div className="page_content" style={{}}>
         <TitleBar
             cls="titlebar-mobile"
-            title="Network Center"
+            title={Intl.get('Network Center')}
             height="45px"
             zIndex="108"
             platformConfig={{
@@ -75,8 +75,13 @@ class NetworkPageMobile extends Component{
               tabType={tabType}/>:null
           }
 
-          {tabType=='Internet'?
-            <NetInternetMB
+          {tabType=='localNetwork'?
+            <NetLocalMB
+              tabType={tabType} />:null
+          }
+
+          {tabType=='flowCtrl'?
+            <NetFlowCtrlMB
               tabType={tabType} />:null
           }
 

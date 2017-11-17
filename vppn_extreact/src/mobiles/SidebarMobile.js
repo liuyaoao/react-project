@@ -22,6 +22,7 @@ class SidebarMobile extends Component{
             { id: 'mSide_NetworkCenterWindow', text: '<div class="">'+Intl.get('Network Center')+'</div>', iconCls: 'mif-earth icon', leaf: true },
             { id: 'mSide_FileStationWindow', text: Intl.get('ReadySHARE'), iconCls: 'mif-local-service icon', leaf: true },
             { id: 'mSide_InternetPage', text: Intl.get('Internet'), iconCls: 'mif-earth icon', leaf: true },
+            { id: 'mSide_LocalNetworkPage', text: Intl.get('localNetwork'), iconCls: 'mif-home icon', leaf: true },
             { id: 'mSide_ParentCtrlPage', text: Intl.get('parentalCtrl'), iconCls: 'mif-users icon', leaf: true },
             { id: 'mSide_SecurityPage', text: Intl.get('security'), iconCls: 'mif-security icon', leaf: true },
             { id: 'mSide_NoticeSettingsPage', text: Intl.get('noticeSettings'), iconCls: 'mif-mail-read icon', leaf: true },

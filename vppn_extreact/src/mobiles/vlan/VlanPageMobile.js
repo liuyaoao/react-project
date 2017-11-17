@@ -63,8 +63,8 @@ class VlanPageMobile extends Component{
                   <MenuItem text="vPort3" value="vPort_3" iconCls={tabType === 'vPort_3' && 'x-font-icon md-icon-check'}/>
                   <MenuItem text="vPort4" value="vPort_4" iconCls={tabType === 'vPort_4' && 'x-font-icon md-icon-check'}/>
                   <MenuItem text="vPort5" value="vPort_5" iconCls={tabType === 'vPort_5' && 'x-font-icon md-icon-check'}/>
-                  <MenuItem text="Diagnosis" value="diagnosis" iconCls={tabType === 'diagnosis' && 'x-font-icon md-icon-check'}/>
-                  <MenuItem text="Setting" value="setting" iconCls={tabType === 'setting' && 'x-font-icon md-icon-check'}/>
+                  <MenuItem text={Intl.get('Diagnosis')} value="diagnosis" iconCls={tabType === 'diagnosis' && 'x-font-icon md-icon-check'}/>
+                  <MenuItem text={Intl.get('Setting')} value="setting" iconCls={tabType === 'setting' && 'x-font-icon md-icon-check'}/>
               </Menu>
             </Button>:null
           }
@@ -73,18 +73,15 @@ class VlanPageMobile extends Component{
           {tabName=='vPort'?
             <VlanPortMB
               vProxyIpArr={this.state.vProxyIpArr}
-              tabType={tabType}
-            />:null
+              tabType={tabType}/>:null
           }
           {tabName=='setting'?
             <VlanSettingMB
-              tabType={tabType}
-            />:null
+              tabType={tabType}/>:null
           }
           {tabName=='diagnosis'?
             <VlanDiagnosisMB
-              tabType={tabType}
-            />:null
+              tabType={tabType}/>:null
           }
         </div>
       </div>

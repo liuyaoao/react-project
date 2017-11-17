@@ -1,6 +1,7 @@
 
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
+import Intl from '../../intl/Intl';
 // var {connect} = require('react-redux');
 // var {bindActionCreators} = require('redux');
 import { Container,Menu,MenuItem,TextField,TitleBar,Button,
@@ -49,11 +50,11 @@ class NetStateMB extends Component{
               </Menu>
             </Button>
             <div style={{height:'24px',color:'green',fontSize:'20px',margin:'8px 0 0 0'}}>
-              <i className="big check circle outline icon"></i> 已联机
+              <i className="big check circle outline icon"></i> {Intl.get('Already Online')}
             </div>
-            <TextField labelAlign="left" cls="disable_text" label="IP 地址" value="192.168.1.9" disabled/>
-            <TextField labelAlign="left" cls="disable_text" label="网关" value="192.168.1.1" disabled/>
-            <TextField labelAlign="left" cls="disable_text" label="DNS Server" value="192.168.1.1" disabled/>
+            <TextField labelAlign="left" cls="disable_text" label={"IP "+Intl.get('Address')+':'} value="192.168.1.9" disabled textAlign="right"/>
+            <TextField labelAlign="left" cls="disable_text" label={Intl.get('Gateway')+":"} value="192.168.1.1" disabled textAlign="right"/>
+            <TextField labelAlign="left" cls="disable_text" label={"DNS "+Intl.get('Server')+':'} value="192.168.1.1" disabled textAlign="right"/>
           </Container>
           {/* wifi 类型*/}
           <Container layout="vbox" margin="10 0 0 0">
@@ -61,28 +62,26 @@ class NetStateMB extends Component{
               <Menu defaults={{ handler: this.onWifiTypeChange, group: 'buttonstyle' }}>
                   <MenuItem text="Wi-Fi 5GHz"
                     value="Wi-Fi 5GHz"
-                    iconCls={wifiType === "Wi-Fi 5GHz" && 'x-font-icon md-icon-check'}
-                  />
+                    iconCls={wifiType === "Wi-Fi 5GHz" && 'x-font-icon md-icon-check'}/>
                   <MenuItem text="Wi-Fi 2.4GHz"
                     value="Wi-Fi 2.4GHz"
-                    iconCls={wifiType === 'Wi-Fi 2.4GHz' && 'x-font-icon md-icon-check'}
-                  />
+                    iconCls={wifiType === 'Wi-Fi 2.4GHz' && 'x-font-icon md-icon-check'}/>
               </Menu>
             </Button>
             <div className="small ui toggle checkbox" style={{margin:'8px 0 0 0'}}>
               <input type="checkbox" name="public"/>
               <label> on</label>
             </div>
-            <TextField labelAlign="left" cls="disable_text" label="名称（SSID）" value="Synology 5G" disabled/>
-            <TextField labelAlign="left" cls="disable_text" label="安全模式" value="WAP-个人，AES" disabled/>
-            <TextField labelAlign="left" cls="disable_text" label="MAC地址" value="00:11:32:53:bd:50" disabled/>
+            <TextField labelAlign="left" cls="disable_text" label={Intl.get('Name')+" (SSID):"} value="5G" disabled textAlign="right"/>
+            <TextField labelAlign="left" cls="disable_text" label={Intl.get('Security Mode')+":"} value="WAP-个人，AES" disabled textAlign="right"/>
+            <TextField labelAlign="left" cls="disable_text" label={"MAC "+Intl.get('Address')+":"} value="00:11:32:53:bd:50" disabled textAlign="right"/>
           </Container>
 
           <TabPanel cls="tabpanel_m"
               height={'100%'}
               margin="10 0 0 0"
           >
-              <Container title="互联网" >
+              <Container title={Intl.get('Internet')} >
                 <div>上传.</div>
                 <div>下载.</div>
               </Container>

@@ -145,17 +145,16 @@ export default class SettingContent extends Component{
                       onSelect={this.onListSelect}
                       zIndex={999}
                       height={''+(this.props.windowHeight-169)}
-                      width={'160'}
-                    />
-                    <Container flex={1} style={{marginLeft:'20px'}}>
-                      <textarea style={{width:'100%',height:''+(this.props.windowHeight-200)+'px',border:'1px solid #a0cdd6'}} />
-                      <Button text={Intl.get('save')} ui={'action raised'} style={{'float':'right',marginTop:'10px'}}></Button>
-                    </Container>
+                      width={'160'}/>
+                  <Container flex={1} style={{marginLeft:'20px'}}>
+                    <textarea style={{width:'100%',height:''+(this.props.windowHeight-200)+'px',border:'1px solid #a0cdd6'}} />
+                    <Button text={Intl.get('save')} ui={'action raised'} style={{'float':'right',marginTop:'10px'}}></Button>
+                  </Container>
                 </FieldSet>
               </FormPanel>
             </Container>
 
-            <Container title={Intl.get('payment','payment')} scrollable={true}>
+            <Container title={Intl.get('payment')} scrollable={true}>
                 <div className="action" style={{margin:'10px'}}>{Intl.get("Expiration date")}：2020-11-09</div>
                 <div style={{margin:'10px'}}>{Intl.get("Please click to pay")}：<span> PayPal</span></div>
             </Container>

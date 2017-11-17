@@ -11,6 +11,7 @@
   }
 
   #start-container {
+    margin-left:-15px;
     .start_menu_cnt{
       position:absolute;
       left:0;
@@ -80,7 +81,7 @@
     }
     .start_menu_cnt.disActive, .start_menu_cnt.disActive .side_menu, .start_menu_cnt.disActive .tile-area{
       height:0;
-      transition:height 0.3s ease;
+      transition:height 0.3s ease, margin-left 1s ease;
     }
   }
   //.app-bar .app-bar-element --end

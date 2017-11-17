@@ -76,8 +76,7 @@ export default class VportContent extends Component {
                        displayField={'value'}
                        value={selectedBootsNode}
                        onChange={this.onBootsNodeSelectChanged}
-                       options={bootsNodeOptions}
-                     />
+                       options={bootsNodeOptions} />
                     <Button text={Intl.get("close")} ui={'decline alt'}></Button>
                     <Button text={""} ui={'confirm round alt'} iconCls={'x-fa fa-refresh'} alt={Intl.get("refresh")}></Button>
                   </Container>
