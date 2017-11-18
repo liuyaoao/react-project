@@ -18,7 +18,8 @@ class RootMobile extends Component{
       reveal: false, //是否是侧窗的形式，就是是否同时把右边的内容往右推。
       displayed: false,
       popupsDisplayed:false,
-      contentId:'VlanWindow', //默认显示的模块Id.
+      //默认显示的模块Id.(VlanWindow,NetworkCenterWindow,FileStationWindow,InternetPage,LocalNetworkPage,ParentCtrlPage,SecurityPage,NoticeSettingsPage,ManagementPage)
+      contentId:'NetworkCenterWindow', 
   }
   componentDidMount(){
     $("body").css("overflow-y","hidden");

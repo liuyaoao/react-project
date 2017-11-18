@@ -64,7 +64,15 @@ class VlanSettingMB extends Component{
 
                 <Container shadow padding="10 10 10 10" margin="10 0 0 0">
                   <FieldSet title={Intl.get('Management Goal')}>
-                      <TextField labelAlign="left" cls="disable_text" label={Intl.get('Address')+':'} value="" textAlign="right"/>
+                      <ContainerField label={Intl.get('Address')+':'} cls="black_label auto_width disable_text" width="100%" labelAlign="left" textAlign="right">
+                        <Button ui="menu" text="1" style={{width:'100%','float':'left'}} textAlign="right" menuAlign="tr-br">
+                           <Menu defaults={{ handler: this.onSyslogLevelChanged, group: 'buttonstyle' }}>
+                               <MenuItem text="1" value="1" iconCls={syslogLevel === '1' && 'x-font-icon md-icon-check'}/>
+                               <MenuItem text="2" value="2" iconCls={syslogLevel === '2' && 'x-font-icon md-icon-check'}/>
+                               <MenuItem text="3" value="3" iconCls={syslogLevel === '3' && 'x-font-icon md-icon-check'}/>
+                           </Menu>
+                        </Button>
+                      </ContainerField>
                   </FieldSet>
                   <Container layout={{type:'hbox',pack:'center',align:'bottom'}} margin="10 10 10 10">
                       <Button text={Intl.get('save')} ui={'action alt'}></Button>

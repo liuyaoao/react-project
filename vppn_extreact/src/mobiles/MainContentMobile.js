@@ -19,8 +19,6 @@ class MainContentMobile extends Component{
   state = {
       bodyHeight:500,
       bodyWidth:'100%',
-      titlebarRightText:'完成',
-      moduleName:'fileStation',
   }
   componentDidMount(){
     this.setState({

@@ -59,8 +59,8 @@ class WorkModeComp extends Component{
             </Panel>
           </div>
           <Container layout={{type:'hbox',pack:'center',align:'bottom'}} margin="10 10 10 10">
-              <Button text={"应用"} ui={'confirm alt'} style={{marginRight:'10px'}}></Button>
-              <Button text={"重置"} ui={'decline alt'} style={{marginLeft:'10px'}}></Button>
+              <Button text={Intl.get('Apply')} ui={'confirm alt'} style={{marginRight:'10px'}}/>
+              <Button text={Intl.get('Reset')} ui={'decline alt'} style={{marginLeft:'10px'}}/>
           </Container>
 
         </div>

@@ -1,4 +1,7 @@
 
+.fl_lf{
+  float:left;
+}
 .x-button .x-text-el{
   text-transform:none;
 }
@@ -176,6 +179,7 @@
       font-size:20px;
       font-weight:600;
       color:#025b80;
+      marginBottom:10px;
       border-bottom:2px dotted #a09b9b;
     }
   }
@@ -186,6 +190,7 @@
     font-size:20px;
     font-weight:600;
     color:#025b80;
+    margin-bottom:10px;
     border-bottom:2px dotted #a09b9b;
   }
 }

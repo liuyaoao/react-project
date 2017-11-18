@@ -4,7 +4,8 @@ import ReactDOM from 'react-dom';
 import Intl from '../../intl/Intl';
 // var {connect} = require('react-redux');
 // var {bindActionCreators} = require('redux');
-import { Container,TitleBar,Button,Menu,MenuItem,FieldSet, TabPanel,FormPanel, Panel,TextField } from '@extjs/ext-react';
+import { Container,TitleBar,Button,Menu,MenuItem,FieldSet, TabPanel,FormPanel,
+   Panel,TextField,CheckBoxField } from '@extjs/ext-react';
 
 class ServiceComp extends Component{
   state = {
@@ -24,16 +25,66 @@ class ServiceComp extends Component{
 
     return (
       <div className='' style={{height:(this.state.bodyHeight-45)+"px"}}>
-        <Container layout="vbox" padding="10 10 10 10">
-          <FormPanel>
-            <TextField labelAlign="left" ui="disabled-ui" label={Intl.get('System Name')+':'} value="SynologyRouter" disabled/>
-            <FieldSet title={Intl.get('Default Port Number')}>
-                <TextField labelAlign="left" ui="disabled-ui" label={Intl.get('HTTP')+':'} value="8000" disabled/>
-                <TextField labelAlign="left" ui="disabled-ui" label={Intl.get('HTTPS')+':'} value="8001" disabled/>
-            </FieldSet>
-          </FormPanel>
+        <div style={{padding:'10px'}}>
+          <div className="cnt">
+            <div className="title">{Intl.get('Terminal')}</div>
+            <Container layout={{type:'vbox',pack:'start',align:'left'}} width="100%">
+              <CheckBoxField boxLabel={Intl.get('Enable SSH Functionality')} cls="black_label"/>
+              <TextField label={"IP "+Intl.get('Address')+"："}
+                labelTextAlign="text" labelAlign="left" width="100%"
+                value="192.168.1.1"
+                cls="black_label auto_width disable_text"
+                textAlign="right"/>
+            </Container>
+          </div>
+          {/* SNMP*/}
+          <div className="cnt" style={{marginTop:'10px'}}>
+            <div className="title">{Intl.get('SNMP')}</div>
+            <Container layout={{type:'vbox',pack:'start',align:'left'}} width="100%">
+              <CheckBoxField boxLabel={Intl.get('Enable SNMP Service')} cls="black_label"/>
+              <Container style={{width:'90%',marginLeft:'10%'}}>
+                <TextField label={Intl.get('Device Name')+"："}
+                  labelTextAlign="text" labelAlign="left" width="100%"
+                  value="192.168.1.1"
+                  cls="black_label auto_width disable_text"
+                  textAlign="right"/>
+                <TextField label={Intl.get('Device Location')+"："}
+                  labelTextAlign="text" labelAlign="left" width="100%"
+                  value="192.168.1.1"
+                  cls="black_label auto_width disable_text"
+                  textAlign="right"/>
+                <TextField label={Intl.get('Contact Way')+"："}
+                  labelTextAlign="text" labelAlign="left" width="100%"
+                  value="192.168.1.1"
+                  cls="black_label auto_width disable_text"
+                  textAlign="right"/>
+                <CheckBoxField boxLabel={"SNMPv1、SNMPv2c "+Intl.get('Service')} cls="black_label fl_lf"/>
+                <TextField label={Intl.get('Community')+"："}
+                  labelTextAlign="text" labelAlign="left" width="100%"
+                  value="192.168.1.1"
+                  cls="black_label auto_width disable_text"
+                  textAlign="right"/>
+                <CheckBoxField boxLabel={"SNMPv3 "+Intl.get('Service')} cls="black_label fl_lf"/>
+                <TextField label={Intl.get('User Account')+"："}
+                  labelTextAlign="text" labelAlign="left" width="100%"
+                  value="192.168.1.1"
+                  cls="black_label auto_width disable_text"
+                  textAlign="right"/>
+                <TextField label={Intl.get('Password')+"："}
+                  labelTextAlign="text" labelAlign="left" width="100%"
+                  value="192.168.1.1"
+                  cls="black_label auto_width disable_text"
+                  textAlign="right"/>
+              </Container>
 
-        </Container>
+            </Container>
+          </div>
+
+          <Container layout={{type:'hbox',pack:'center',aglin:'bottom'}} margin="10 10 10 10">
+            <Button text={Intl.get('Apply')} ui="confirm alt" style={{marginRight:'10px'}}/>
+            <Button text={Intl.get('Reset')} ui="decline alt" style={{marginLeft:'10px'}}/>
+          </Container>
+        </div>
       </div>
     );
   }

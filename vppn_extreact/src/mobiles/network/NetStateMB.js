@@ -35,7 +35,7 @@ class NetStateMB extends Component{
     let {networkType,wifiType,bodyHeight} = this.state;
     return (
       <div className='' style={{height:(bodyHeight-45)+"px"}}>
-        <Container layout="vbox" padding="10 10 10 10">
+        <Container layout="vbox">
           <Container layout="vbox">
             <Button textAlign="left" ui="raised" text={networkType}>
               <Menu defaults={{ handler: this.onNetworkTypeChange, group: 'buttonstyle' }}>

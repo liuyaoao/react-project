@@ -32,6 +32,21 @@ export default ({
   "":"",
   "":"",
   "":"",
+
+  //管理
+  "choose_country_desc":"Please select your current location to make sure that the router has full functionality.",
+  "choose_country_hint":"<span style='color:red;'>Important</span>:Wrong country setting may lead to legal problems.",
+  "choose_language_desc":"Select the default interface display language.(The user can change the individual display language in the options page.)",
+  "":"",
+  "":"",
+
+  "Version can be downloaded":"{version} Version can be downloaded,(Latest function)",
+  "email_desc":"When the state changes or system errors occur,the email notification service is started to receive notification messages via e-mail.",
+
+  //安全性
+  //安全性
+  "security_desc":"Setting SRM contains automatic logout time for web applications on the browser.",
+  "":"",
   "":"",
   "":"",
   "":"",

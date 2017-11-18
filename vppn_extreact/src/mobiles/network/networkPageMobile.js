@@ -8,7 +8,6 @@ import { Container,Sheet,TitleBar,Button,Menu,MenuItem, Label,FormPanel, Panel }
 
 import NetStateMB from './NetStateMB'
 import NetWirelessMB from './NetWirelessMB'
-import NetLocalMB from './NetLocalMB'
 import NetFlowCtrlMB from './NetFlowCtrlMB'
 
 class NetworkPageMobile extends Component{
@@ -58,13 +57,12 @@ class NetworkPageMobile extends Component{
               <Menu defaults={{ handler: this.onTabTypeChange, group: 'buttonstyle' }}>
                   <MenuItem text={Intl.get('State')} value="state" iconCls={tabType === 'state' && 'x-font-icon md-icon-check'}/>
                   <MenuItem text={Intl.get('Wireless')} value="wireless" iconCls={tabType === 'wireless' && 'x-font-icon md-icon-check'}/>
-                  <MenuItem text={Intl.get('Local Network')} value="localNetwork" iconCls={tabType === 'localNetwork' && 'x-font-icon md-icon-check'}/>
                   <MenuItem text={Intl.get('Flow Control')} value="flowCtrl" iconCls={tabType === 'flowCtrl' && 'x-font-icon md-icon-check'}/>
               </Menu>
             </Button>:null
           }
         </TitleBar>
-        <div className="page_content" style={{}}>
+        <div className="page_content" style={{padding:'10px'}}>
           {tabType=='state'?
             <NetStateMB
               tabType={tabType}/>:null
@@ -73,11 +71,6 @@ class NetworkPageMobile extends Component{
           {tabType=='wireless'?
             <NetWirelessMB
               tabType={tabType}/>:null
-          }
-
-          {tabType=='localNetwork'?
-            <NetLocalMB
-              tabType={tabType} />:null
           }
 
           {tabType=='flowCtrl'?

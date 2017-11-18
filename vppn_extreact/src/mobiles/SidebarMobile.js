@@ -13,7 +13,7 @@ class SidebarMobile extends Component{
   state = {
       bodyHeight:500,
       bodyWidth:'100%',
-      contentId:'VlanWindow',
+      contentId:'',
   }
   treeListData = {
     root: {
@@ -29,6 +29,11 @@ class SidebarMobile extends Component{
             { id: 'mSide_ManagementPage', text: Intl.get('management'), iconCls: 'mif-tools icon', leaf: true },
         ]
     }
+  }
+  componentWillMount(){
+    this.setState({
+      contentId:this.props.contentId
+    });
   }
   componentDidMount(){
     this.setState({
