@@ -47,7 +47,7 @@ class ParentalCtrlPageMobile extends Component{
         <div className="page_content" style={{}}>
           <div className='' style={{height:(bodyHeight-45)+"px"}}>
             <TabPanel cls='tabpanel_m tabpanel_bottom_m'
-                height={'100%'}
+                height={'100%'} margin='0 0 60 0'
                 tabBar={{ docked: 'bottom' }}
             >
                 <Container title={Intl.get('Plan')} padding="10 10 10 10">
