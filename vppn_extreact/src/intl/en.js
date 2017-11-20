@@ -19,7 +19,9 @@ export default ({
   "":"",
   "":"",
   "":"",
-  "":"",
+
+  //互联网 Internet
+  "Internet_DDNS_desc":"QuickConnect allows you to easily connect to a router anywhere, just start the QuickConnect below and register a group of accounts.",
   "":"",
   "":"",
   "":"",
