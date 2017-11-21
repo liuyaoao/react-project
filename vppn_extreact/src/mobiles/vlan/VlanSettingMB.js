@@ -3,7 +3,7 @@ import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import Intl from '../../intl/Intl';
 // var {connect} = require('react-redux');
-// var {bindActionCreators} = require('redux');
+// var {bindconfirmCreators} = require('redux');
 import { Container,FieldSet,TitleBar,Button, TabPanel,FormPanel, Panel,TextField,
         Menu,MenuItem,ContainerField } from '@extjs/ext-react';
 
@@ -47,7 +47,7 @@ class VlanSettingMB extends Component{
                   </FieldSet>
                   <Container layout={{type:'hbox',pack:'center',align:'bottom'}} margin="10 10 10 10">
                       <Button text={Intl.get('test')} ui={'confirm raised'} style={{marginRight:'10px'}}></Button>
-                      <Button text={Intl.get('save')} ui={'action alt'} style={{marginLeft:'10px'}}></Button>
+                      <Button text={Intl.get('save')} ui={'confirm alt'} style={{marginLeft:'10px'}}></Button>
                   </Container>
                 </Container>
 
@@ -58,7 +58,7 @@ class VlanSettingMB extends Component{
                   </FieldSet>
                   <Container layout={{type:'hbox',pack:'center',align:'bottom'}} margin="10 10 10 10">
                       <Button text={Intl.get('test')} ui={'confirm raised'} style={{marginRight:'10px'}}></Button>
-                      <Button text={Intl.get('save')} ui={'action alt'} style={{marginLeft:'10px'}}></Button>
+                      <Button text={Intl.get('save')} ui={'confirm raised'} style={{marginLeft:'10px'}}></Button>
                   </Container>
                 </Container>
 
@@ -74,8 +74,8 @@ class VlanSettingMB extends Component{
                         </Button>
                       </ContainerField>
                   </FieldSet>
-                  <Container layout={{type:'hbox',pack:'center',align:'bottom'}} margin="10 10 10 10">
-                      <Button text={Intl.get('save')} ui={'action alt'}></Button>
+                  <Container layout={{type:'hbox',pack:'left',align:'bottom'}} margin="10 10 10 10">
+                      <Button text={Intl.get('save')} ui={'confirm raised'}></Button>
                   </Container>
                 </Container>
 
@@ -99,8 +99,8 @@ class VlanSettingMB extends Component{
                         </Button>
                       </ContainerField>
                   </FieldSet>
-                  <Container layout={{type:'hbox',pack:'center',align:'bottom'}} margin="10 10 10 10">
-                      <Button text={Intl.get('Enable')} ui={'action alt'}></Button>
+                  <Container layout={{type:'hbox',pack:'left',align:'bottom'}} margin="10 10 10 10">
+                      <Button text={Intl.get('Enable')} ui={'confirm raised'}></Button>
                   </Container>
                 </Container>
 
@@ -120,12 +120,12 @@ class VlanSettingMB extends Component{
                   </ContainerField>
                   <Container style={{marginTop:'20px'}}>
                     <textarea style={{width:'100%',minHeight:'200px',border:'1px solid #a0cdd6'}} />
-                    <Button text={Intl.get('save')} ui={'action raised'} style={{'textAlign':'center',marginTop:'10px'}}></Button>
+                    <Button text={Intl.get('save')} ui={'confirm raised'} style={{'textAlign':'center',marginTop:'10px'}}></Button>
                   </Container>
                 </FieldSet>
             </Container>
             <Container title={Intl.get('payment')} padding="10 10 60 10">
-                <div className="action" style={{margin:'10px'}}>{Intl.get("Expiration date")}：2020-11-09</div>
+                <div className="confirm" style={{margin:'10px'}}>{Intl.get("Expiration date")}：2020-11-09</div>
                 <div style={{margin:'10px'}}>{Intl.get("Please click to pay")}：<span> PayPal</span></div>
             </Container>
         </TabPanel>
