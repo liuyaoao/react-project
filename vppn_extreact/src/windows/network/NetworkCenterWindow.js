@@ -96,9 +96,9 @@ class NetworkCenterWindow extends Component{
               onMenuItemClick={this.onMenuItemClick}
             />
           </div>
-          <div className="cell colspan3 wi-right">
+          <div className="cell colspan3 wi-right" style={{overflowY:'auto'}}>
             <div className="wi active" id={"wi_right_content"}
-              style={{height:'100%',width:'100%',overflow: 'hidden'}}>
+              style={{height:'100%',width:'100%',overflowX: 'hidden'}}>
               {/*状态 tab的右边内容块*/}
               {contentId=="state" ?
                 <StateContent
