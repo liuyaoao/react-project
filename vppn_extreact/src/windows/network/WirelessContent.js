@@ -66,7 +66,7 @@ export default class WirelessContent extends Component {
               }}
           >
             <Container title="Wi-Fi" cls="wifi_tab" scrollable={true}>
-              <div className="cnt" style={{margin:'10px'}}>
+              <div className="cnt" style={{margin:'10px',width:'96%'}}>
                 <div className="title">5GHz</div>
                 <Panel
                   margin='10 0 10 0'

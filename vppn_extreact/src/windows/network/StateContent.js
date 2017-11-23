@@ -30,8 +30,8 @@ export default class StateContent extends Component {
       this.memoryCharts = echarts.init(document.getElementById('memoryCharts'));
       this.nowTime = new Date();
       this.initLineChartsData();
-      this.cpuCharts.setOption(this.getCpuMemoryChartsOptions({title:"cpu 使用率",data:this.cpuUseData}));
-      this.memoryCharts.setOption(this.getCpuMemoryChartsOptions({title:"memory 使用率",data:this.memoryUseData}));
+      this.cpuCharts.setOption(this.getCpuMemoryChartsOptions({title:"CPU 使用率",data:this.cpuUseData}));
+      this.memoryCharts.setOption(this.getCpuMemoryChartsOptions({title:"Memory 使用率",data:this.memoryUseData}));
       this.cpuTimeInterval = setInterval(()=>{
         this.getCpuAndMemoryData();
         this.nowTime = new Date(+this.nowTime + 2000);
