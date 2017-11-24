@@ -6,7 +6,10 @@ import Intl from '../../intl/Intl';
 // var {bindActionCreators} = require('redux');
 import { Container,Sheet,TitleBar,Button,Menu,MenuItem, TabPanel,FormPanel, Panel } from '@extjs/ext-react';
 
-import SecurityComp from './SecurityComp';
+import SecurityComp from './SecurityComp';  //安全性
+import FirewallComp from './FirewallComp';   //防火墙
+import AutoBlockComp from './AutoBlockComp';  //自动封锁
+import CertificateComp from './CertificateComp'; //证书
 
 class SecurityPageMobile extends Component{
   state = {
@@ -54,13 +57,13 @@ class SecurityPageMobile extends Component{
                 </Container>
                 {/* 可设置右上角的标记文本：badgeText="4" */}
                 <Container title={Intl.get('Firewall')} >
-                    防火墙
+                    <FirewallComp />
                 </Container>
                 <Container title={Intl.get('Auto Block')} >
-                    自动封锁
+                    <AutoBlockComp/>
                 </Container>
                 <Container title={Intl.get('Certificate')} >
-                    证书
+                    <CertificateComp/>
                 </Container>
             </TabPanel>
           </div>

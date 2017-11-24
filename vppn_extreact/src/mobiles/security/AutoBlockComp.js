@@ -7,7 +7,7 @@ import Intl from '../../intl/Intl';
 import { Container,TitleBar,Button,Menu,MenuItem,FieldSet, TabPanel,FormPanel, Panel,
   TextField,CheckBoxField,ContainerField,RadioField } from '@extjs/ext-react';
 
-class IPv6Comp extends Component{
+class AutoBlockComp extends Component{
   state = {
     bodyHeight:500,
     bodyWidth:'100%',
@@ -31,51 +31,37 @@ class IPv6Comp extends Component{
     return (
       <div className='' style={{height:(this.state.bodyHeight-45)+"px"}}>
         <div style={{padding:'10px'}}>
+          <div style={{marginBottom:'10px'}}>{Intl.get('Enable this option to block IP addresses (including through SSH, FTP, WebDAV, mobile applications, File Station and SRM) when login fails several times.')}</div>
           <Container layout="vbox" >
               <Container flex={1}>
                 <div style={{'float':'left'}}>
-                  <CheckBoxField boxLabel={Intl.get('Enable ')+'IPv6'} cls="black_label"/>
+                  <CheckBoxField boxLabel={Intl.get('Enable Auto Black')} cls="black_label"/>
                 </div>
               </Container>
-              <ContainerField label={Intl.get('Prefix')+"："}
-                cls="black_label auto_width disable_text"
-                width="100%"
-                layout={'hbox'}
-                labelAlign="left" labelTextAlign="left">
-                <Button ui="menu" text={Intl.get('123.456.213')}
-                  style={{width:'100%','float':'left'}}
-                  textAlign="right" menuAlign="tr-br">
-                   <Menu defaults={{ handler: this.onDHCPServerChange, group: 'buttonstyle' }}>
-                       <MenuItem text={Intl.get('123.456.213')} value="1" iconCls={DHCPServerOn === '1' && 'x-font-icon md-icon-check'}/>
-                       <MenuItem text={Intl.get('123.456.213')} value="0" iconCls={DHCPServerOn === '0' && 'x-font-icon md-icon-check'}/>
-                   </Menu>
-                </Button>
-              </ContainerField>
-              <TextField label={Intl.get('Main')+" DNS："}
+              <div>{Intl.get('If the number of logon failures reaches the following settings in the following setup time, the system will automatically block the login IP.')}</div>
+              <TextField label={Intl.get('Try login times')+"："}
                 labelTextAlign="text" labelAlign="left"
                 value="192.168.1.1"
                 cls="black_label auto_width disable_text"
                 textAlign="right"/>
-              <TextField label={Intl.get('Sub')+" DNS："}
+              <TextField label={Intl.get('Within a few minutes')+"："}
                 labelTextAlign="text" labelAlign="left"
                 value="192.168.1.1"
                 cls="black_label auto_width disable_text"
                 textAlign="right"/>
-              <FormPanel layout={{type:'vbox',pack:'center',align:'left'}} padding="0">
-                <RadioField {...radioProps} cls="black_label" boxLabel={Intl.get('Stateless mode')} value="checked1" checked/>
-                <RadioField {...radioProps} cls="black_label" boxLabel={Intl.get('Stateless DHCPv6 mode')} value="checked2"/>
-                <RadioField {...radioProps} cls="black_label" boxLabel={Intl.get('State mode')} value="checked3"/>
-              </FormPanel>
-              <TextField label={Intl.get('Start IP Address')+"："}
+              <div style={{'float':'left'}}>
+                <CheckBoxField boxLabel={Intl.get('Enable Black Expire')} cls="black_label"/>
+              </div>
+              <div>{Intl.get('When the expiration function is blocked, the blocked IP will be blocked after the following days.')}</div>
+
+              <TextField label={Intl.get('Blockade Days')+"："}
                 labelTextAlign="text" labelAlign="left"
                 value="225.225.225.0"
                 cls="black_label auto_width disable_text"
                 textAlign="right"/>
-              <TextField label={Intl.get('End IP Address')+"："}
-                labelTextAlign="text" labelAlign="left"
-                value=""
-                cls="black_label auto_width disable_text"
-                textAlign="right"/>
+              <div style={{margin:'10px 0'}}>{Intl.get('Create and manage the permission list to add your trusted IP address, or create a blocked list to prevent login of a specific IP address.')}</div>
+
+              <Button text={Intl.get('Allow/Block List')} ui={'confirm raised'} style={{marginRight:'10px'}}/>
 
           </Container>
           <Container layout={{type:'hbox',pack:'center',align:'bottom'}} margin="10 10 10 10">
@@ -90,4 +76,4 @@ class IPv6Comp extends Component{
 
 }
 
-export default IPv6Comp;
+export default AutoBlockComp;
