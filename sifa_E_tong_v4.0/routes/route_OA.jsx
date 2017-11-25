@@ -47,8 +47,17 @@ export default {
                     path: 'incoming_list', //收文管理
                     // onEnter: onChannelEnter,
                     getComponents: (location, callback) => {
-                        System.import('pages/office_automation/incomingList.jsx').then(RouteUtils.importComponentSuccess(callback));
-                    }
+                        System.import('pages/office_automation/incoming/incomingList.jsx').then(RouteUtils.importComponentSuccess(callback));
+                    },
+                    childRoutes:[
+                      {
+                        path: 'detail', //收文管理的详情页
+                        // onEnter: onChannelEnter,
+                        getComponents: (location, callback) => {
+                          System.import('pages/office_automation/incoming/incoming_detail_comp.jsx').then(RouteUtils.importComponentSuccess(callback));
+                        }
+                      }
+                    ]
                 },
                 {
                     path: 'dispatch', // 发文管理

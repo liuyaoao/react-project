@@ -32,7 +32,6 @@ class DispatchList extends React.Component {
         listData:[],
         detailInfo:null,
         dataSource: dataSource.cloneWithRows([]),
-        refreshing: true,
         showDetail:false,
         showAdd:false,
         tokenunid:'',

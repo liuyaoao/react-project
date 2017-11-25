@@ -6,7 +6,7 @@ import React from 'react';
 import moment from 'moment';
 import myWebClient from 'client/my_web_client.jsx';
 import {Icon,message} from 'antd';
-import {List,Button} from 'antd-mobile';
+import {List,Button,Toast} from 'antd-mobile';
 
 import LoginRecordTimeSelect from './recordTime_select.jsx';
 
@@ -16,6 +16,7 @@ class AdminLoginMobileComp extends React.Component {
         this.state = {
           todayDate:moment(new Date()),
           loginData:[],
+          allLoginData:[],
           totalCount:1,
           curPageNum:1,
           aMonthAgo:moment(new Date()).subtract(10,'days'),
@@ -24,10 +25,13 @@ class AdminLoginMobileComp extends React.Component {
     componentWillMount(){
     }
     componentDidMount(){
-      let timeObj = {
+      let timeObj = { //初始要查询的时间段。
         startTime:(moment(new Date()).subtract(10,'days')).format('x'),
         endTime:moment(new Date()).format('x')
       };
+      // this.setState({
+      //   startTime:
+      // });
       this.getSearchLoginRecord(timeObj);
     }
     getSearchLoginRecord(time) {
@@ -37,6 +41,7 @@ class AdminLoginMobileComp extends React.Component {
         endTime: (time && time.endTime) ? time.endTime : this.state.todayDate.format('x')
       };
       // console.log("today:",this.state.todayDate);
+      Toast.info(<div><Icon type={'loading'} /><span>  loading....</span></div>, 5, null, true);
       myWebClient.getUserLoginRecordData(params,
         (data,res)=>{
           let objArr = JSON.parse(res.text);
@@ -51,9 +56,16 @@ class AdminLoginMobileComp extends React.Component {
             objArr[i]['name'] = item.username||'';
           }
           let loginData = objArr.slice(0,10);
-          this.setState({ loginData });
+          this.setState({
+              loginData,
+              allLoginData:objArr,
+              totalCount:objArr.length,
+              curPageNum:1,
+             });
+          Toast.hide();
         },
         (e,err,res)=>{
+          Toast.hide();
           message.error("获取用户登录记录数据失败！");
         }
       );
@@ -61,30 +73,24 @@ class AdminLoginMobileComp extends React.Component {
     onClickPrePage = ()=>{ //上一页
       let currentPage = this.state.curPageNum;
       if(currentPage > 1){
-        let otherParams = {
-          "from":(currentPage-2)*10,
-          "to":(currentPage-1)*10,
-        };
-        // this.props.getAddressBookCnt({
-        //   organization:this.props.organization,
-        //   secondaryDirectory:this.props.secondaryDirectory,
-        //   level3Catalog:this.props.level3Catalog,
-        // },otherParams);
+        let fromIndex = (currentPage-2)*10;
+        let toIndex = (currentPage-1)*10;
+        this.setState({
+          curPageNum:currentPage-1,
+          loginData:this.state.allLoginData.slice(fromIndex,toIndex)
+        });
       }
     }
     onClickNextPage = ()=>{ //下一页
       let currentPage = this.state.curPageNum;
       const pageCount = Math.ceil(this.state.totalCount/10);
       if(currentPage < pageCount){
-        let otherParams = {
-          "from":(currentPage)*10,
-          "to":(currentPage+1)*10,
-        };
-        // this.props.getAddressBookCnt({
-        //   organization:this.props.organization,
-        //   secondaryDirectory:this.props.secondaryDirectory,
-        //   level3Catalog:this.props.level3Catalog,
-        // },otherParams);
+        let fromIndex = (currentPage)*10;
+        let toIndex = (currentPage+1)*10;
+        this.setState({
+          curPageNum:currentPage+1,
+          loginData:this.state.allLoginData.slice(fromIndex,toIndex)
+        });
       }
     }
 

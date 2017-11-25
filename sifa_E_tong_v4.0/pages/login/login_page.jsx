@@ -1,8 +1,7 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See License.txt for license information.
 
-// import ErrorBar from 'components/error_bar.jsx';
-import FormError from 'components/form_error.jsx';
+import FormError from 'pages/components/form_error.jsx';
 
 // import { webLogin} from 'actions/user_actions.jsx';
 import myWebClient from 'client/my_web_client.jsx';

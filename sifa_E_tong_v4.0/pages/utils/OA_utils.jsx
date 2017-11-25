@@ -460,7 +460,7 @@ export function getFormAttachmentList(params){
     "ver" : "2",
     "params" : {
       "docunid" : options.docunid,
-      "filetablename" : moduleName2filetablename[options.moduleName] //该值来源于请求的表单数据：flowsessionid
+      "filetablename" : moduleName2filetablename[options.moduleName] 
     }
   }));
   finalRequestServer(options,param);

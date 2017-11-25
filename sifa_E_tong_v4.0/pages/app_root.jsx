@@ -6,7 +6,6 @@ import $ from 'jquery';
 
 import {browserHistory} from 'react-router/es6';
 import UserStore from 'stores/user_store.jsx';
-// import BrowserStore from 'stores/browser_store.jsx';
 
 export default class AppRoot extends React.Component {
     constructor(props) {

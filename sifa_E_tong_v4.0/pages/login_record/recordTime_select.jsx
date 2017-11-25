@@ -14,8 +14,8 @@ import {Icon, DatePicker } from 'antd';
 
 class LoginRecordTimeSelect extends React.Component {
   state = {
-    startValue: null,
-    endValue: null,
+    startValue: moment(new Date()).subtract(10,'days'),
+    endValue: moment(new Date()),
     endOpen: false,
   };
 
@@ -36,6 +36,7 @@ class LoginRecordTimeSelect extends React.Component {
   }
 
   onChange = (field, value) => {
+    console.log('select time change:',field,value);
     this.setState({
       [field]: value,
     });
@@ -62,7 +63,6 @@ class LoginRecordTimeSelect extends React.Component {
   handleSearchLoginRecord = () => {
     const {startValue, endValue} = this.state;
     // console.log(startValue, endValue);
-    const startTime = null, endTime = null;
     const time = {};
     if (startValue) {
       time.startTime = moment(startValue).valueOf();
@@ -82,7 +82,7 @@ class LoginRecordTimeSelect extends React.Component {
     const { startValue, endValue, endOpen } = this.state;
     return (
       <div className="range-time">
-        <div className="row" style={{marginTop:'10px'}}>
+        <div className="row" style={{paddingTop:'10px'}}>
           <div className="col-xs-6 col-md-4" style={{padding:'0',textAlign: 'center'}}>
             <DatePicker
               style={{width: '90%',marginRight:'0'}}

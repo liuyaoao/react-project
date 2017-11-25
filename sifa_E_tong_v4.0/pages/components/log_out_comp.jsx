@@ -25,13 +25,16 @@ export default class LogOutComp extends React.Component {
     onClickExitBtn(e){
       // console.log("click 退出按钮：",e);
       let loginInfo = localStorage.getItem(OAUtils.OA_LOGIN_INFO_KEY);
-      let loginInfoObj = JSON.parse(loginInfo);
+      let loginInfoObj = JSON.parse(loginInfo) || {};
       let tokenunid = loginInfoObj['tockenunid'];
       Toast.info(<div><Icon type={'loading'} /><span>  正在退出...</span></div>, 2, null, true);
       myWebClient.removeToken();
       localStorage.removeItem(OAUtils.OA_LOGIN_INFO_KEY);
       localStorage.removeItem(OAUtils.OA_TODO_LIST_KEY);
       sessionStorage.clear();
+      if(!tokenunid){
+        browserHistory.push('/login'); return;
+      }
       myWebClient.logout(
           () => {
             Toast.hide();
