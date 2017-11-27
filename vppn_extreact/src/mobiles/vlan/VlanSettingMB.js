@@ -34,12 +34,12 @@ class VlanSettingMB extends Component{
   render () {
     let {bodyHeight,packsType,syslogAddress,syslogLevel} = this.state;
     return (
-      <div className='' style={{height:(bodyHeight-45)+"px"}}>
+      <div>
         <TabPanel cls='tabpanel_m tabpanel_bottom_m'
             height={'100%'}
             tabBar={{ docked: 'bottom' }} scrollable={true}
         >
-            <Container title={Intl.get('Setting')} padding="10 10 60 10">
+            <Container title={Intl.get('Setting')} cls='fix_bottom'>
                 <Container shadow padding="10 10 10 10">
                   <FieldSet title={Intl.get('Manage Server')+'1'}>
                       <TextField labelAlign="left" cls="disable_text" label={Intl.get('Address')+':'} value="192.168.9.67" textAlign="right"/>
@@ -106,7 +106,8 @@ class VlanSettingMB extends Component{
 
             </Container>
             {/* 可设置右上角的标记文本：badgeText="4" */}
-            <Container title={Intl.get("vPath packs")} padding="10 10 60 10">
+            <Container title={Intl.get("vPath packs")} cls='fix_bottom'>
+              <div style={{padding:'10px'}}>
                 <FieldSet title={Intl.get('vPathPacks_title')}
                   layout={{type:'vbox',pack:'center',align: 'stretch'}}
                   defaults={{labelAlign: "placeholder"}}>
@@ -123,10 +124,13 @@ class VlanSettingMB extends Component{
                     <Button text={Intl.get('save')} ui={'confirm raised'} style={{'textAlign':'center',marginTop:'10px'}}></Button>
                   </Container>
                 </FieldSet>
+              </div>
             </Container>
-            <Container title={Intl.get('payment')} padding="10 10 60 10">
+            <Container title={Intl.get('payment')} cls='fix_bottom'>
+              <div style={{padding:'10px'}}>
                 <div className="confirm" style={{margin:'10px'}}>{Intl.get("Expiration date")}：2020-11-09</div>
                 <div style={{margin:'10px'}}>{Intl.get("Please click to pay")}：<span> PayPal</span></div>
+              </div>
             </Container>
         </TabPanel>
       </div>

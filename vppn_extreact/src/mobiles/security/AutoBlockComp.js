@@ -29,7 +29,6 @@ class AutoBlockComp extends Component{
     };
 
     return (
-      <div className='' style={{height:(this.state.bodyHeight-45)+"px"}}>
         <div style={{padding:'10px'}}>
           <div style={{marginBottom:'10px'}}>{Intl.get('Enable this option to block IP addresses (including through SSH, FTP, WebDAV, mobile applications, File Station and SRM) when login fails several times.')}</div>
           <Container layout="vbox" >
@@ -70,7 +69,6 @@ class AutoBlockComp extends Component{
           </Container>
 
         </div>
-      </div>
     );
   }
 

@@ -32,16 +32,17 @@ class FirewallComp extends Component{
   render () {
     let {DHCPServerOn} = this.state;
     return (
-      <div className='' style={{height:(this.state.bodyHeight-45)+"px"}}>
         <div style={{padding:'10px'}}>
-          <Container layout={{type:'hbox',pack:'space-between',aglin:'bottom'}}>
-            <Button text={Intl.get('Add')} ui="confirm raised" />
-            <Button text={Intl.get('Edit')} ui="decline raised" />
-            <Button text={Intl.get('Delete')} ui="decline raised" />
+          <Container layout={{type:'hbox',pack:'space-between',aglin:'bottom'}} >
+            <Button text={Intl.get('Add')} ui="confirm raised" style={{marginRight:'10px'}}/>
+            <Button text={Intl.get('Edit')} ui="decline raised" style={{marginRight:'10px'}}/>
+            <Button text={Intl.get('Delete')} ui="decline raised" style={{marginRight:'10px'}}/>
             <Button text={Intl.get('Save')} ui="decline raised" />
-            <Button text={Intl.get('Up')} ui="decline raised" />
-            <Button text={Intl.get('Down')} ui="decline raised" />
-            <Button text={Intl.get('Setting')} ui="decline raised" />
+          </Container>
+          <Container layout={{type:'hbox',pack:'left',aglin:'bottom'}} margin="10 0 0 0">
+            <Button text={Intl.get('Up')} ui="decline raised" style={{marginRight:'10px'}}/>
+            <Button text={Intl.get('Down')} ui="decline raised" style={{marginRight:'10px'}}/>
+            <Button text={Intl.get('Setting')} ui="decline raised" style={{marginRight:'10px'}}/>
           </Container>
           <Container width="100%" margin="10 0 10 0">
             <Grid shadow grouped
@@ -58,7 +59,6 @@ class FirewallComp extends Component{
             </Grid>
           </Container>
         </div>
-      </div>
     );
   }
 

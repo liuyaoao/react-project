@@ -23,7 +23,7 @@ class ParentPlanMB extends Component{
     let {} = this.state;
     let {contentId} = this.props;
     return (
-      <div style={{margin:'0'}}>
+      <div style={{margin:'0',padding:'10px'}}>
         <Container
           layout={{ type: 'vbox', pack: 'left',align:'left'}}
         >

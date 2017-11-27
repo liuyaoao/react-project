@@ -6,7 +6,10 @@ import Intl from '../../intl/Intl';
 // var {bindActionCreators} = require('redux');
 import { Container,Sheet,TitleBar,Button,Menu,MenuItem, TabPanel,FormPanel, Panel } from '@extjs/ext-react';
 
-import EmailComp from './EmailComp';
+import EmailComp from './EmailComp'; //电子邮件服务
+import MessageComp from './MessageComp'; //短信通知
+import PushServiceComp from './PushServiceComp'; //推送服务
+import AdvancedSettingComp from './AdvancedSettingComp'; //高级设置
 
 class NoticeSettingPageMobile extends Component{
   state = {
@@ -43,27 +46,25 @@ class NoticeSettingPageMobile extends Component{
             <Button align="right" ui="default" text={this.state.titlebarRightText}/>:null
           }
         </TitleBar>
-        <div className="page_content" style={{}}>
-          <div className='' style={{height:(bodyHeight-45)+"px"}}>
+        <div>
             <TabPanel cls='tabpanel_m tabpanel_bottom_m'
-                height={'100%'} margin='0 0 60 0'
+                height={'100%'}
                 tabBar={{ docked: 'bottom' }}
             >
-                <Container title={Intl.get('Email')} padding="10 10 60 10">
+                <Container title={Intl.get('Email')} cls='fix_bottom'>
                     <EmailComp />
                 </Container>
                 {/* 可设置右上角的标记文本：badgeText="4" */}
-                <Container title={Intl.get('Message')} >
-                    短信
+                <Container title={Intl.get('Message')} cls='fix_bottom'>
+                    <MessageComp/>
                 </Container>
-                <Container title={Intl.get('Push Service')} >
-                    推送服务
+                <Container title={Intl.get('Push Service')} cls='fix_bottom'>
+                    <PushServiceComp/>
                 </Container>
-                <Container title={Intl.get('Advanced Setting')} >
-                    高级设置
+                <Container title={Intl.get('Advanced Setting')} cls='fix_bottom'>
+                    <AdvancedSettingComp/>
                 </Container>
             </TabPanel>
-          </div>
         </div>
       </div>
 

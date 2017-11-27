@@ -43,8 +43,13 @@ export default ({
   "":"",
 
   "Version can be downloaded":"{version} Version can be downloaded,(Latest function)",
+  //通知设置
   "email_desc":"When the state changes or system errors occur,the email notification service is started to receive notification messages via e-mail.",
+  "message_desc":"When the state changes or system errors occur, the SMS notification service is started to receive notification messages through sms.",
 
+  "pushSevice_desc":"Start the mobile device and browser notification service, notify you when the status changes or system errors.",
+
+  
   //安全性
   //安全性
   "security_desc":"Setting SRM contains automatic logout time for web applications on the browser.",

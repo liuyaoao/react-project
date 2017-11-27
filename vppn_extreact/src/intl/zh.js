@@ -63,7 +63,7 @@ export default ({
    "Security Mode":"安全模式",
    "Guest Network":"访客网络",      "Guest":"访客",
    "Filter":"过滤器",
-   "Password":"密码","password":"密码",
+   "Password":"密码",   "password":"密码",     "Confirm Password":"确认密码",
    "Wireless Mode":"无线模式",
    "Advanced Options":"高级选项",
 
@@ -203,7 +203,7 @@ export default ({
    "Restore Configuration":"还原配置",
    "Restore Factory Settings":"恢复出厂设置值",
 
-   //电子邮件
+   //通知设置-电子邮件
    "email_desc":"当状态改变或系统发生错误时，启动电子邮件通知服务通过电子邮件接收通知消息。",
    "Enable email notification":"启动电子右键通知",
    "Recipient":"收件人",
@@ -212,6 +212,28 @@ export default ({
    "Send welcome messages to new users":"向新用户发送欢迎消息",
    "Log in to Gmail":"登录到Gmail",
    "Send test email":"发送测试电子邮件",
+
+   "message_desc":"当状态改变或系统发生错误时，启动短信通知服务通过短信接收通知信息。",
+   "Enable message notification":"启动短信通知",
+   "SMS provider":"短信服务提供商",
+   "Add New SMS Provider":"新增短信服务提供商",
+   "Main Phone Number":"主要电话号码",
+   "Secondary Phone Number":"次要电话号码",
+   "Set SMS spacing restrictions":"设置短信间隔限制",
+   "Each message is at least a few minutes apart":"每条短信至少间隔几分钟",
+   "Send test message":"发送测试短信",
+
+   "pushSevice_desc":"启动移动设备和浏览器通知服务，当状态改变或系统发生错误时发送信息通知您。",
+   "Sending notifications about system status via e-mail server":"通过电子邮件服务器发送有关系统状态的通知",
+   "Start mobile device notifications":"启动移动设备通知",
+   "Management paired device":"管理配对设备",
+   "Enable browser notifications":"启用浏览器通知",
+   "Edit Message":"编辑信息",
+   "Edit Variables":"编辑变量",
+   "":"",
+   "":"",
+   "":"",
+   "":"",
 
    //安全性
    "security_desc":"设置SRM包含网页应用程序在浏览器上的自动注销时间。",

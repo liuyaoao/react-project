@@ -29,7 +29,6 @@ class CertificateComp extends Component{
     };
 
     return (
-      <div className='' style={{height:(this.state.bodyHeight-45)+"px"}}>
         <div style={{padding:'10px'}}>
           <div className="cnt">
             <div className="title">{Intl.get('Action')}</div>
@@ -78,7 +77,6 @@ class CertificateComp extends Component{
           </Container>
 
         </div>
-      </div>
     );
   }
 

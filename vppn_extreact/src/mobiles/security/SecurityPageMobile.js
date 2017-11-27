@@ -46,28 +46,26 @@ class SecurityPageMobile extends Component{
             <Button align="right" ui="default" text={this.state.titlebarRightText}/>:null
           }
         </TitleBar>
-        <div className="page_content" style={{}}>
-          <div className='' style={{height:(bodyHeight-45)+"px"}}>
+        <div className="">
             <TabPanel cls='tabpanel_m tabpanel_bottom_m'
-                height={'100%'} margin='0 0 60 0'
+                height={'100%'}
                 tabBar={{ docked: 'bottom' }}
             >
-                <Container title={Intl.get('Security')} padding="10 10 60 10">
+                <Container title={Intl.get('Security')} cls='fix_bottom'>
                     <SecurityComp />
                 </Container>
                 {/* 可设置右上角的标记文本：badgeText="4" */}
-                <Container title={Intl.get('Firewall')} >
+                <Container title={Intl.get('Firewall')} cls='fix_bottom'>
                     <FirewallComp />
                 </Container>
-                <Container title={Intl.get('Auto Block')} >
-                    <AutoBlockComp/>
+                <Container title={Intl.get('Auto Block')} cls='fix_bottom'>
+                    <AutoBlockComp />
                 </Container>
-                <Container title={Intl.get('Certificate')} >
+                <Container title={Intl.get('Certificate')} cls='fix_bottom'>
                     <CertificateComp/>
                 </Container>
             </TabPanel>
           </div>
-        </div>
       </div>
 
     );

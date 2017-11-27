@@ -205,10 +205,14 @@
   .x-active-indicator-el{
     top:0;
   }
+  .fix_bottom > .x-container-body-el{
+    margin-bottom: 60px;
+  }
   .x-toolbar{
     position:fixed;
     bottom:0;left:0;
     width:100%;
+    z-index:96;
   }
 }
 .work_mode_cnt{

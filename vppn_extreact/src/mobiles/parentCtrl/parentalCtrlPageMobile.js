@@ -44,21 +44,19 @@ class ParentalCtrlPageMobile extends Component{
             <Button align="right" ui="default" text={this.state.titlebarRightText}/>:null
           }
         </TitleBar>
-        <div className="page_content" style={{}}>
-          <div className='' style={{height:(bodyHeight-45)+"px"}}>
+        <div>
             <TabPanel cls='tabpanel_m tabpanel_bottom_m'
                 height={'100%'} margin='0 0 60 0'
                 tabBar={{ docked: 'bottom' }}
             >
-                <Container title={Intl.get('Plan')} padding="10 10 10 10">
+                <Container title={Intl.get('Plan')} cls='fix_bottom'>
                     <ParentPlanMB />
                 </Container>
                 {/* 可设置右上角的标记文本：badgeText="4" */}
-                <Container title={Intl.get('Website Filter')} >
+                <Container title={Intl.get('Website Filter')} cls='fix_bottom'>
                     <ParentFilterMB/>
                 </Container>
             </TabPanel>
-          </div>
         </div>
       </div>
 

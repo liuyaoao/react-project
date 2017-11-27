@@ -51,13 +51,13 @@ class VlanPortMB extends Component{
     });
 
     return (
-      <div className='' style={{height:(bodyHeight-45)+"px"}}>
+      <div>
         <TabPanel cls='tabpanel_m tabpanel_bottom_m'
             height={'100%'}
             tabBar={{ docked: 'bottom' }} scrollable={true}
         >
-            <Container title={Intl.get('Remote Router')} padding="10 10 60 10">
-                <div style={{margin:'0'}}>
+            <Container title={Intl.get('Remote Router')} cls='fix_bottom'>
+                <div style={{margin:'0',padding:'10px'}}>
                   <Container
                     layout={{ type: 'vbox', pack: 'left',align:'left'}}>
                     <Container flex={1}>
@@ -93,8 +93,8 @@ class VlanPortMB extends Component{
                 </div>
             </Container>
             {/* 可设置右上角的标记文本：badgeText="4" */}
-            <Container title={Intl.get('vPath')} padding="10 10 60 10">
-                <div className="action">
+            <Container title={Intl.get('vPath')} cls='fix_bottom'>
+                <div className="action" style={{padding:'10px'}}>
                   <div style={{marginBottom:'10px'}}>
                     { Intl.get('vPath_title',null,{idNum}) }
                   </div>

@@ -28,7 +28,7 @@ class VlanDiagnosisMB extends Component{
   render () {
     let {bodyHeight} = this.state;
     return (
-      <div className='' style={{height:(bodyHeight-45)+"px"}}>
+      <div>
         <Container height="100%">
           <Grid
             title="Routing Table:"

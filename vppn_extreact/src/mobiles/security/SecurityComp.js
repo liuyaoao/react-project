@@ -24,7 +24,7 @@ class SecurityComp extends Component{
     let {} = this.state;
     let {contentId} = this.props;
     return (
-      <div style={{margin:'0'}}>
+      <div style={{padding:'10px'}}>
         <div>{Intl.get('security_desc')}</div>
         <Container layout={{type:'vbox',pack:'start',align:'left'}} width="100%">
           <TextField label={Intl.get('Wait timeout(min)')+"："}
@@ -57,7 +57,7 @@ class SecurityComp extends Component{
             <div>{Intl.get('Please select the option according to the VPN protocol used by the VPN client, so that the VPN client traffic can be passed through the router.')}</div>
             <CheckBoxField boxLabel={Intl.get('PPTP Pass-through')} cls="black_label"/>
 
-            
+
           </Container>
         </div>
 
