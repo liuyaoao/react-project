@@ -443,6 +443,30 @@ export function getMainDocumentUrl(params){
   return url;
 }
 
+//获取收文管理的正文的下载url.
+export function getIncomingDocumentUrl(params){
+  let url='';
+  url = "http://218.77.44.11:10081/openagent?agent=hcit.project.moa.transform.agent.GetZwData&fileunid=" +params.fileunid+
+        "&modulename=" + params.modulename;
+  return url;
+}
+
+//获取表单 正文 附件列表。
+export function getDocumentAttachmentList(params){
+  let options = Object.assign({},{
+    url: 'http://'+window.OAserverUrl+':'+window.OAserverPort+'/openagent?agent=hcit.project.moa.transform.agent.OpenMobilePage',
+    moduleUrl:'/openagent?agent=hcit.project.moa.transform.agent.GetZwList',
+  },params);
+  let param = encodeURIComponent(JSON.stringify({
+    "ver" : "2",
+    "params" : {
+      "docunid" : options.docunid,
+      "modulename" : options.modulename  //英文的模块名
+    }
+  }));
+  finalRequestServer(options,param);
+}
+
 //获取表单公文附件列表。
 export function getFormAttachmentList(params){
   const moduleName2filetablename = {
@@ -460,11 +484,12 @@ export function getFormAttachmentList(params){
     "ver" : "2",
     "params" : {
       "docunid" : options.docunid,
-      "filetablename" : moduleName2filetablename[options.moduleName] 
+      "filetablename" : moduleName2filetablename[options.moduleName]
     }
   }));
   finalRequestServer(options,param);
 }
+
 //获取表单公文附件的下载地址。 download
 export function getAttachmentUrl(params){
   let url='';

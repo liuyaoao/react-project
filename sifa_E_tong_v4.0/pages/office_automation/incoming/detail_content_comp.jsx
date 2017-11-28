@@ -9,6 +9,8 @@ import { Icon, Upload } from 'antd';
 import { createForm } from 'rc-form';
 import CommonNotionComp from '../common/common_notion_comp.jsx';
 
+import PDF_Viewer from  './PDF_Viewer.jsx';
+
 class DetailContentComp extends React.Component {
   constructor(props) {
       super(props);
@@ -16,7 +18,9 @@ class DetailContentComp extends React.Component {
         historyNotionType2List:[],
         uploadAttachmentUrl:'',  //上传公文附件的url.
         attachmentList:[],  //附件列表
+        documentList:[], //正文文档列表
         mj_value:'', //密级
+        viewPDFUrl:'', //
       };
   }
   componentDidMount(){
@@ -25,6 +29,7 @@ class DetailContentComp extends React.Component {
     if(this.props.unid){
       this.getFormVerifyNotion();
       this.getFormAttachmentList();
+      this.getDocumentAttachmentList();
     }
   }
   componentWillReceiveProps(nextProps){
@@ -85,7 +90,20 @@ class DetailContentComp extends React.Component {
       }
     });
   }
-  getAttachmentListEle = (attachmentList)=>{
+  getDocumentAttachmentList = ()=>{ //收文管理的正文列表
+    OAUtils.getDocumentAttachmentList({
+      tokenunid:this.props.tokenunid,
+      docunid:this.props.unid,
+      modulename:this.props.modulename,
+      successCall: (data)=>{
+        console.log("收文管理的正文列表:",data);
+        this.setState({
+          documentList:data.values.filelist || [],
+        });
+      }
+    });
+  }
+  getAttachmentListEle = (attachmentList)=>{ //附件文档列表 dom 元素
     return attachmentList.map((item,index)=>{
       let downloadUrl = OAUtils.getAttachmentUrl({
         fileunid:item.unid,
@@ -94,6 +112,26 @@ class DetailContentComp extends React.Component {
       return (
         <div key={index} style={{marginLeft:'0.3rem'}}><a href={downloadUrl} data-unid={item.unid}>{item.attachname}</a><br/></div>
       );
+    });
+  }
+
+  getDocumentListEle = (documentList)=>{ //正文文档列表 dom 元素
+    return documentList.map((item,index)=>{
+      let downloadUrl = OAUtils.getIncomingDocumentUrl({
+        fileunid:item.unid,
+        modulename:this.props.modulename
+      });
+      return (
+        <div key={index} style={{marginLeft:'0.3rem'}}>
+          <span data-href={downloadUrl} data-unid={item.unid} onClick={()=>this.onClickViewPDF(downloadUrl)}>{item.attachname}</span><br/>
+        </div>
+      );
+    });
+  }
+
+  onClickViewPDF = (downloadUrl)=>{
+    this.setState({
+      viewPDFUrl:downloadUrl
     });
   }
   onPickerSecrecyTypeOk = (val)=>{ //选择 密级
@@ -111,7 +149,7 @@ class DetailContentComp extends React.Component {
   }
 
   render() {
-    const {attachmentList,mj_value } = this.state;
+    const {attachmentList,mj_value,documentList } = this.state;
     const { unid, formData, formDataRaw , tokenunid, modulename } = this.props;
     const { getFieldProps, getFieldError } = this.props.form;
     let uploadProps = {
@@ -149,6 +187,10 @@ class DetailContentComp extends React.Component {
     let acceptNum = formData.wjnd+'-'+formData.lsh;
     return (
       <div style={{marginBottom: "60px"}}>
+        {
+          this.state.viewPDFUrl?
+          <PDF_Viewer fileUrl={this.state.viewPDFUrl}/>:null
+        }
         <div className={'oa_detail_cnt'}>
           <div className={'oa_detail_title'} style={{width:'100%',textAlign:'center'}}>长沙市司法局公文处理笺</div>
           <Flex>
@@ -203,10 +245,13 @@ class DetailContentComp extends React.Component {
           </Flex>
           <Flex>
             <Flex.Item>
-              <Button type="default" style={{margin:'0.1rem auto',width:'90%',color:'#0ab0d6'}}
-                onClick={()=>{
-                  location.href = OAUtils.getMainDocumentUrl({ docunid:unid });
-                }}>下载正文</Button>
+              <div className={'oaEdit_item_title'}>正文列表：
+                {documentList.length<=0?
+                  (<span>无正文</span>):null}
+              </div>
+              { documentList.length>0?
+                (this.getDocumentListEle(documentList)):null
+              }
             </Flex.Item>
           </Flex>
 
