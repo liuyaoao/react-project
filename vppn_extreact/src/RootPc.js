@@ -44,42 +44,6 @@ desktopIconDatas.forEach((item,index)=>{
   manager.open_icon(item.id, cfgs);
 });
 
-//phone icons.  添加手机端的桌面图标
-// manager.open_icon('phone_disconnect', {
-//   type: 'phone',
-//   x: 0,
-//   y: 0,
-//   title: 'Disconnect',
-//   iconUrl: 'images/disconnect_80.png'
-// });
-// manager.open_icon('phone_file', {
-//   type: 'phone',
-//   x: 0,
-//   y: 100,
-//   title: 'File',
-//   iconUrl: 'images/file_80.png'
-// });
-// manager.open_icon('phone_photo', {
-//   type: 'phone',
-//   x: 0,
-//   y: 200,
-//   title: 'Photo',
-//   iconUrl: 'images/photo_80.png'
-// });
-// manager.open_icon('phone_music', {
-//   type: 'phone',
-//   x: 0,
-//   y: 300,
-//   title: 'Music',
-//   iconUrl: 'images/music_80.png'
-// });
-// manager.open_icon('phone_video', {
-//   type: 'phone',
-//   x: 0,
-//   y: 400,
-//   title: 'Video',
-//   iconUrl: 'images/video_80.png'
-// });
 
 //pc端根容器组件
 class RootPc extends Component{

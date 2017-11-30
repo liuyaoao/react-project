@@ -1,4 +1,5 @@
 
+//整合了对localStorage的各种操作
 var Store = {
 
 	get: function(key) {

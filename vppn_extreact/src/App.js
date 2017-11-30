@@ -2,6 +2,8 @@
 import React,{Component} from 'react'
 import {Provider} from 'react-redux';
 
+//这里最好是用hashHistory.这样build出来的整个项目放在tomcat等其他服务器下也可以运行。
+//如果使用browserHistory的话，放tomcat下会有路由处理的问题。
 import {Router,browserHistory,hashHistory } from 'react-router/es6';
 
 import { renderWhenReady,Container } from '@extjs/reactor';
@@ -41,11 +43,6 @@ Ext.require('Ext.plugin.Responsive');
 
    }
     render() {
-        // return (
-        //   <Provider store={store}>
-        //     <RootPc />
-        //   </Provider>
-        // );
         return (
           <Provider store={store}>
             <Router
