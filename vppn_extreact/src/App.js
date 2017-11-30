@@ -2,10 +2,12 @@
 import React,{Component} from 'react'
 import {Provider} from 'react-redux';
 
-import {Router,browserHistory} from 'react-router/es6';
+import {Router,browserHistory,hashHistory } from 'react-router/es6';
 
 import { renderWhenReady,Container } from '@extjs/reactor';
+
 // import RootPc from './RootPc'; //pc端微软桌面风格页面。
+
 import "./scss/screen.scss";
 
   import configureStore from './app/store/configureStore';
@@ -39,11 +41,15 @@ Ext.require('Ext.plugin.Responsive');
 
    }
     render() {
-
+        // return (
+        //   <Provider store={store}>
+        //     <RootPc />
+        //   </Provider>
+        // );
         return (
           <Provider store={store}>
             <Router
-                history={browserHistory}
+                history={hashHistory}
                 routes={this.rootComp}
             />
           </Provider>
