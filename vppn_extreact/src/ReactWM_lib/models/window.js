@@ -19,11 +19,6 @@ export default function Window(props) {
 };
 
 _.extend(Window.prototype, {
-
-  /**
-   * defaults
-   */
-
   defaults: {
     id: undefined,
     type: 'router',
@@ -54,13 +49,11 @@ _.extend(Window.prototype, {
     icon: ''
   },
 
-
   /**
    * set position of the window
    * - x (number)
    * - y (number)
    */
-
   setPosition: function (x, y) {
     this.x = x;
     this.y = y;
@@ -68,13 +61,11 @@ _.extend(Window.prototype, {
     this.emit('change');
   },
 
-
   /**
    * resize the window
    * - width (number)
    * - height (number)
    */
-
   setSize: function (width, height) {
     this.width = width;
     this.height = height;

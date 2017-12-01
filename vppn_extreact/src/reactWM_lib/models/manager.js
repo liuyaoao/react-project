@@ -16,7 +16,7 @@ var Manager =  function (windows, icons) {
   this._lastFocusWindow = false;
 
   this._icons = {};
-  this._contextMenuModel = new ContextMenuModel({id:"contextMenu_1"});
+  this._contextMenuModel = new ContextMenuModel({id:"contextMenuId"});
 
   if (_.isArray(windows)) {
     windows.forEach(this.add, this);
@@ -416,7 +416,6 @@ _.extend(Manager.prototype, {
    * export as a standard JS array
    * > object
    */
-
   toJSON: function () {
     // return this.allWindows().map(function (window) {
     //   return window.toJSON();
@@ -433,21 +432,12 @@ _.extend(Manager.prototype, {
     })
   },
 
-
-  /**
-   * export as a JSON string
-   * > string
-   */
-
+  /**export as a JSON string * > string */
   toString: function () {
     return JSON.stringify(this);
   },
 
-
-  /**
-   * private: reset window index to 0
-   */
-
+  /*** private: reset window index to 0 */
   _resetIndex: function () {
     this._index = INITIAL_INDEX;
     _.sortBy(this.allWindows(), 'index').forEach(function (window) {

@@ -16,11 +16,12 @@ class Window extends Component{
 
   componentWillMount() {
     this.hasMounted = true;
-    this.window = this.props.window;
+    this.window = this.props.windowModel;
+    this.windowModel = this.props.windowModel;
   }
 
   componentDidMount() {
-    this.window.on('change', this.forceUpdate, this);
+    this.windowModel.on('change', this.forceUpdate, this);
     document.addEventListener('mousemove', this.handleMouseMove);
     document.addEventListener('mouseup', this.handleMouseUp);
   }
@@ -36,14 +37,14 @@ class Window extends Component{
 
   componentWillUpdate(nextProps, nextState) {
     var _this = this;
-    if(_this.window.isMinimize) {
+    if(_this.windowModel.isMinimize) {
       ReactDOM.findDOMNode(_this).style.transition = 'all 0.3s ease';
     }
   }
 
   componentWillUnmount() {
     this.hasMounted = false;
-    this.window.off('change', this.forceUpdate);
+    this.windowModel.off('change', this.forceUpdate);
     document.removeEventListener('mousemove', this.handleMouseMove);
     document.removeEventListener('mouseup', this.handleMouseUp);
   }
@@ -52,13 +53,13 @@ class Window extends Component{
     var self = this;
     requestAnimationFrame(function () {
       var el = ReactDOM.findDOMNode(self);
-      el.style.width  = self.window.width + 'px';
-      el.style.height = self.window.height + 'px';
-      el.style.top    = self.window.y + 'px';
-      el.style.left   = self.window.x + 'px';
-      el.style.opacity= self.window.opacity;
+      el.style.width  = self.windowModel.width + 'px';
+      el.style.height = self.windowModel.height + 'px';
+      el.style.top    = self.windowModel.y + 'px';
+      el.style.left   = self.windowModel.x + 'px';
+      el.style.opacity= self.windowModel.opacity;
       self.props.setWindowSize({width: el.style.width, height:el.style.height});
-      switch (self.window.id) {
+      switch (self.windowModel.id) {
         case "photo":
         case "video":
         case "music":
@@ -218,7 +219,7 @@ class Window extends Component{
 
     return (
       /* jshint ignore: start */
-      <div id={"window-"+this.window.id} className={classes} style={styles} onMouseDown={this.handleMove}>
+      <div id={"window-"+this.windowModel.id} className={classes} style={styles} onMouseDown={this.handleMove}>
         <header className='window-caption'>
           <span className="window-caption-icon">{this.window.icon.substr(0,7)=="images/" ? <img src={this.window.icon}/> : <span className={this.window.icon}></span>}</span>
           <span className='window-caption-title' title={this.window.title} style={{maxWidth:this.window.width-11-20-27*3}}>{Intl.get(this.window.title)}</span>
@@ -234,7 +235,7 @@ class Window extends Component{
           </span>
         </header>
         <div className='content' onMouseDown={this.handlePropagation} ref='content'>
-          {this.window.component}
+          {this.windowModel.component}
         </div>
         <div className='resize n-resize' onMouseDown={this.handleResize_ns} />
         <div className='resize s-resize' onMouseDown={this.handleResize_ns} />
@@ -251,7 +252,7 @@ class Window extends Component{
 }
 
 Window.propTypes= {
-  window: React.PropTypes.instanceOf(WindowModel).isRequired,
+  windowModel: React.PropTypes.instanceOf(WindowModel).isRequired,
   offset: React.PropTypes.object.isRequired
 }
 
