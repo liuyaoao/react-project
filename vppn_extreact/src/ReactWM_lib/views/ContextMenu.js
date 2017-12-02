@@ -69,21 +69,12 @@ class ContextMenu extends Component{
   }
 
   render () {
-    let {desktopType} = this.props;
     let bShowAll = true;
-    if(desktopType=="router"){
-      this.props.manager.openWindows_router().map(function (window) {
-        if(!window.isMinimize) {
-          bShowAll = false;
-        }
-      },this);
-    }else if(desktopType == "phone") {  //移动端的图标
-      this.props.manager.openWindows_phone().map(function (window) {
-        if(!window.isMinimize) {
-          bShowAll = false;
-        }
-      },this);
-    }
+    this.props.manager.openWindows_router().map((window)=>{
+      if(!window.isMinimize) {
+        bShowAll = false;
+      }
+    });
     return (
       <div ref="contextMenu" className="content-menu">
         <ul onClick={this.onClickMenuItem}>

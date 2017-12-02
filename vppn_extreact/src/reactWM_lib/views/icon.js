@@ -10,18 +10,17 @@ import IconModel from '../models/icon';
 // import Settings from '../../settings';
 import WindowContentTpl from './WindowContentTpl';
 import { Container,ToolTip } from '@extjs/ext-react';
+import {WIN_MODE} from '../models/Constants';
 import Intl from '../../intl/Intl';
 
-var INACTIVE = 0;
-var MOVE     = 1;
-var RESIZE   = 2;
 var bodyWidth = document.documentElement.clientWidth / 2, bodyHeight = (document.documentElement.clientHeight - 50) / 2;
 //桌面图标组件
 class Icon extends Component{
   state={
   }
   componentWillMount () {
-    this.icon = this.props.icon;
+    this.icon = this.props.iconModel;
+    this.iconModel = this.props.iconModel;
   }
 
   componentDidMount () {
@@ -70,16 +69,9 @@ class Icon extends Component{
     });
 
     var position=this.getPosition();
-
     if($("#icon_check_lineUptoGrid")[0].style.display == "block" || $("#icon_check_lineUptoGrid")[0].style.display == "inline") {
       // var icons = this.props.manager.allIcons();
-      var icons;
-      if(this.props.desktopType == "router") {
-        icons = this.props.manager.allIcons_router();
-      }
-      else if(this.props.desktopType == "phone") {
-        icons = this.props.manager.allIcons_phone();
-      }
+      let icons = this.props.manager.allIcons_router();
       for(var i = 0; i < icons.length; i++) {
         if(this.icon.id != icons[i].id) {
           if(this.icon.x+position.width/2 >= icons[i].x-position.padding.left/2 && this.icon.x+position.width/2 < icons[i].x+position.width+position.padding.left/2
@@ -124,13 +116,7 @@ class Icon extends Component{
 
     var bAboveOrUnderIcon = false;
     // var icons = this.props.manager.allIcons();
-    var icons;
-    if(this.props.desktopType == "router") {
-      icons = this.props.manager.allIcons_router();
-    }
-    else if(this.props.desktopType == "phone") {
-      icons = this.props.manager.allIcons_phone();
-    }
+    var icons = this.props.manager.allIcons_router();
     for(var i = 0; i < icons.length; i++) {
       if(this.icon.id != icons[i].id) {
         if(this.icon.x+position.width/2 >= icons[i].x-position.padding.left/2 && this.icon.x+position.width/2 < icons[i].x+position.width+position.padding.left/2
@@ -378,13 +364,7 @@ class Icon extends Component{
     var position=this.getPosition();
 
     // var icons = this.props.manager.allIcons();
-    var icons;
-    if(this.props.desktopType == "router") {
-      icons = this.props.manager.allIcons_router();
-    }
-    else if(this.props.desktopType == "phone") {
-      icons = this.props.manager.allIcons_phone();
-    }
+    var icons = this.props.manager.allIcons_router();
     for(var i = 0; i < icons.length; i++) {
       if(icon.id != icons[i].id && icons[i].x == x && icons[i].y == y) {
         position.x=x;
@@ -428,13 +408,7 @@ class Icon extends Component{
   getIconMoveDirection(icon, x, y) {
     var position=this.getPosition();
     // var icons = this.props.manager.allIcons();
-    var icons;
-    if(this.props.desktopType == "router") {
-      icons = this.props.manager.allIcons_router();
-    }
-    else if(this.props.desktopType == "phone") {
-      icons = this.props.manager.allIcons_phone();
-    }
+    var icons = this.props.manager.allIcons_router();
 
     var bForward = false;
     for(var i = x/(position.width+position.padding.left); ; i++) {
@@ -502,7 +476,7 @@ class Icon extends Component{
   }
 
   handleMouseMove = (e)=>{
-    if (this.icon.mode === INACTIVE) { return true; }
+    if (this.icon.mode === WIN_MODE.INACTIVE) { return true; }
     $(ReactDOM.findDOMNode(this))[0].style.zIndex = "1";
     var mouse = this.convertPoints(e);
     this.icon.update(mouse.x, mouse.y);
@@ -510,7 +484,7 @@ class Icon extends Component{
   }
 
   handleMouseUp = (e)=>{
-    if(this.icon.mode != INACTIVE) {
+    if(this.icon.mode != WIN_MODE.INACTIVE) {
       $(ReactDOM.findDOMNode(this))[0].style.zIndex = "";
       $("#icon_position_line").hide();
       if($("#icon_check_lineUptoGrid")[0].style.display == "block" || $("#icon_check_lineUptoGrid")[0].style.display == "inline") {
@@ -538,42 +512,30 @@ class Icon extends Component{
   }
 
   handleIconDblClick = ()=>{ //双击桌面图标打开窗口。
-    // alert("double click " + this.icon.title);
-    if(this.icon.id == "phone_disconnect") {
-      // $(document.body).css("background-image", "url(../images/bj.jpg)");
-      // this.props.setDesktopType("router");
-      // var phoneWindows = this.props.manager.openWindows_phone();
-      // while (phoneWindows.length) {
-      //   this.props.manager.remove(phoneWindows[0]);
-      //   phoneWindows = this.props.manager.openWindows_phone();
-      // }
-      showMetroDialog('#phoneDisDialog');
-    }else {
-      var options = {
-        id:this.icon.winId,
-        title: this.icon.title,
-        width: 1000,
-        height: 570,
-        x: 120,
-        y: 20,
-        contentComp: this.icon.contentComp,
-        icon: this.icon.iconUrl
-      }
+    var options = {
+      id:this.icon.winId,
+      title: this.icon.title,
+      width: 1000,
+      height: 570,
+      x: 120,
+      y: 20,
+      contentComp: this.icon.contentComp,
+      icon: this.icon.iconUrl
+    }
 
-      let focusWindow = this.props.manager.getLastFocusWindow();
-      if(focusWindow){
-        // console.log("focusWindow.x:"+focusWindow.x+"; focusWindow.y"+focusWindow.y);
-        options.x = focusWindow.x + 30;
-        options.y = focusWindow.y + 36;
-        //当最后一个活动窗口超出边界时，把该新打开的窗口
-        if( focusWindow.x<-30||(focusWindow.x+options.width)>bodyWidth*2-30 || focusWindow.y<0||(focusWindow.y+options.height)>bodyHeight*2-36 ){
-          options.x = bodyWidth - options.width / 2, options.y = bodyHeight - options.height / 2;
-        }
-      }else{
+    let focusWindow = this.props.manager.getLastFocusWindow();
+    if(focusWindow){
+      // console.log("focusWindow.x:"+focusWindow.x+"; focusWindow.y"+focusWindow.y);
+      options.x = focusWindow.x + 30;
+      options.y = focusWindow.y + 36;
+      //当最后一个活动窗口超出边界时，把该新打开的窗口
+      if( focusWindow.x<-30||(focusWindow.x+options.width)>bodyWidth*2-30 || focusWindow.y<0||(focusWindow.y+options.height)>bodyHeight*2-36 ){
         options.x = bodyWidth - options.width / 2, options.y = bodyHeight - options.height / 2;
       }
-      this.props.manager.open(options.id, <WindowContentTpl id={options.id} contentComp={this.icon.contentComp} manager={this.props.manager}/>, options);
+    }else{
+      options.x = bodyWidth - options.width / 2, options.y = bodyHeight - options.height / 2;
     }
+    this.props.manager.open(options.id, <WindowContentTpl id={options.id} contentComp={this.icon.contentComp} manager={this.props.manager}/>, options);
   }
   focus () {
     // this.window.requestFocus();
@@ -617,7 +579,7 @@ class Icon extends Component{
 Icon.propTypes= {
   manager: React.PropTypes.instanceOf(ManagerModel).isRequired,
   // window: React.PropTypes.instanceOf(WindowModel).isRequired,
-  icon: React.PropTypes.instanceOf(IconModel).isRequired,
+  iconModel: React.PropTypes.instanceOf(IconModel).isRequired,
   offset: React.PropTypes.object.isRequired
 }
 

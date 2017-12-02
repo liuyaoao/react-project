@@ -99,15 +99,9 @@ class Manager extends Component{
     }
 
     var _this = this;
-      ul.find("li").each(function(index) {
+    ul.find("li").each(function(index) {
       // var icons = _this.props.manager.allIcons();
-      var icons;
-      if(_this.props.desktopType == "router") {
-        icons = _this.props.manager.allIcons_router();
-      }
-      else if(_this.props.desktopType == "phone") {
-        icons = _this.props.manager.allIcons_phone();
-      }
+      var icons = _this.props.manager.allIcons_router();
       for(var k = 0; k < icons.length; k++) {
         if(("icon-"+icons[k].id) == $(this).attr("id")) {
           for(var i = 0; ; i++) {
@@ -121,13 +115,12 @@ class Manager extends Component{
                 if(position.y>=position.parent.height-position.bottom){
                   if(position.x+position.width+position.padding.left <= maxX) {
                     position.y=0;
-                          position.x=position.x+position.width+position.padding.left;
-                  }
-                        else {
+                    position.x=position.x+position.width+position.padding.left;
+                  }else {
                     position.y=maxY;
-                          position.x=maxX;
+                    position.x=maxX;
                   }
-                    }
+                }
                 icons[k].setPosition(position.x, position.y);
                 $(this).css("top",position.y+"px");
                     $(this).css("left",position.x+"px");
@@ -139,22 +132,15 @@ class Manager extends Component{
           }
         }
       }
-      });
+    });
   }
 
   // 被覆盖的图标按规定方式顺移, bForward为true时按从上至下、从左至右的方向，为false时按从下至上从右至左的方向
   quickUpdate_overlapped(icon, x, y, bForward) {
-    var position=this.getPosition();
-
+    let position=this.getPosition();
     // var icons = this.props.manager.allIcons();
-    var icons;
-    if(this.props.desktopType == "router") {
-      icons = this.props.manager.allIcons_router();
-    }
-    else if(this.props.desktopType == "phone") {
-      icons = this.props.manager.allIcons_phone();
-    }
-    for(var i = 0; i < icons.length; i++) {
+    let icons = this.props.manager.allIcons_router();
+    for(let i = 0; i < icons.length; i++) {
       if(icon.id != icons[i].id && icons[i].x == x && icons[i].y == y) {
         position.x=x;
         if(bForward) {
@@ -165,8 +151,8 @@ class Manager extends Component{
               }
         }
         else {
-          var maxY = 0;
-          for(var j = 0; ; j++) {
+          let maxY = 0;
+          for(let j = 0; ; j++) {
             if(j*(position.height+position.padding.top+position.padding.bottom) > position.parent.height-position.bottom) {
               maxY = (j-1)*(position.height+position.padding.top+position.padding.bottom);
               break;
@@ -195,17 +181,10 @@ class Manager extends Component{
 
   // 获取图标顺移方式
   getIconMoveDirection(icon, x, y) {
-    var position=this.getPosition();
+    let position=this.getPosition();
     // var icons = this.props.manager.allIcons();
-    var icons;
-    if(this.props.desktopType == "router") {
-      icons = this.props.manager.allIcons_router();
-    }
-    else if(this.props.desktopType == "phone") {
-      icons = this.props.manager.allIcons_phone();
-    }
-
-    var bForward = false;
+    let icons = this.props.manager.allIcons_router();
+    let bForward = false;
     for(var i = x/(position.width+position.padding.left); ; i++) {
       if(i*(position.width+position.padding.left) > position.parent.width-(position.width+position.padding.left)) break;
       if(i == x/(position.width+position.padding.left)) {
@@ -258,15 +237,8 @@ class Manager extends Component{
   }
 
   toggleAllWindows = ()=>{
-    const { desktopType } = this.props;
-    var windows;
-    if(desktopType == "router") {
-      windows = this.props.manager.openWindows_router();
-    }
-    else if(desktopType == "phone") {
-      windows = this.props.manager.openWindows_phone();
-    }
-    var bShowAll = true;
+    let windows = this.props.manager.openWindows_router();
+    let bShowAll = true;
     for(var i = 0; i < windows.length; i++) {
       if(!windows[i].isMinimize) {
         bShowAll = false;
@@ -340,32 +312,36 @@ class Manager extends Component{
   render () {
     const { desktopType, cySize, vpntopologyData, vpntopologyStatus } = this.props;
     var bShowAll = true;
-    var windows, icons;
-    if(desktopType == "router") { //pc端的图标
-      windows = this.props.manager.openWindows_router().map(function (window) {
-        if(!window.isMinimize) {
-          bShowAll = false;
-        }
-        return <Window key={window.id} offset={this.state.offset} window={window} setCySize={this.props.actions.setCySize} setVpnTopologyData={this.props.actions.setVpnTopologyData}
-        setVpnTopologyStatus={this.props.actions.setVpnTopologyStatus} cySize={cySize} vpntopologyData={vpntopologyData} vpntopologyStatus={vpntopologyStatus} setWindowSizeChange={this.props.actions.setWindowSizeChange}
-        setWindowSize={this.props.actions.setWindowSize}/>
-      }, this);
-      icons = this.props.manager.allIcons_router().map(function (icon) {
-        return <Icon key={icon.id} offset={this.state.offset} icon={icon} manager={this.props.manager} desktopType={desktopType} setDesktopType={this.props.actions.setDesktopType}/>
-      }, this);
-    }else if(desktopType == "phone") {  //移动端的图标
-      windows = this.props.manager.openWindows_phone().map(function (window) {
-        if(!window.isMinimize) {
-          bShowAll = false;
-        }
-        return <Window key={window.id} offset={this.state.offset} window={window} setCySize={this.props.actions.setCySize} setVpnTopologyData={this.props.actions.setVpnTopologyData}
-        setVpnTopologyStatus={this.props.actions.setVpnTopologyStatus} cySize={cySize} vpntopologyData={vpntopologyData} vpntopologyStatus={vpntopologyStatus} setWindowSizeChange={this.props.actions.setWindowSizeChange}
-        setWindowSize={this.props.actions.setWindowSize}/>
-      }, this);
-      icons = this.props.manager.allIcons_phone().map(function (icon) {
-        return <Icon key={icon.id} offset={this.state.offset} icon={icon} manager={this.props.manager} desktopType={desktopType} setDesktopType={this.props.actions.setDesktopType}/>
-      }, this);
-    }
+    //所有窗口组件
+    let windowsView = this.props.manager.openWindows_router().map((windowModel)=>{
+      if(!windowModel.isMinimize) {
+        bShowAll = false;
+      }
+      return (
+        <Window key={windowModel.id}
+          manager={this.props.manager}
+          offset={this.state.offset}
+          windowModel={windowModel}
+          setCySize={this.props.actions.setCySize}
+          setVpnTopologyData={this.props.actions.setVpnTopologyData}
+          setVpnTopologyStatus={this.props.actions.setVpnTopologyStatus}
+          cySize={cySize}
+          vpntopologyData={vpntopologyData}
+          vpntopologyStatus={vpntopologyStatus}
+          setWindowSizeChange={this.props.actions.setWindowSizeChange}
+          setWindowSize={this.props.actions.setWindowSize}/>
+      );
+    });
+    //所有桌面图标组件
+    let iconsView = this.props.manager.allIcons_router().map((iconModel)=>{
+      return (
+        <Icon key={iconModel.id}
+          offset={this.state.offset}
+          iconModel={iconModel}
+          manager={this.props.manager}
+        />
+      );
+    });
 
     return (
       /* jshint ignore: start */
@@ -373,18 +349,17 @@ class Manager extends Component{
         {/*桌面上的图标*/}
         <div ref="desktopManager" id="desktop" className="desktopIcon-manager">
           <ul id="icons" className="icons">
-            {icons}
+            {iconsView}
             <div id="icon_position_line" className="icon-position-line"></div>
           </ul>
         </div>
         <div className='window-manager'>
           {/*所有已打开窗口*/}
-          <div className='windows'>{windows}</div>
+          <div className='windows'>{windowsView}</div>
         </div>
         {/*右键菜单*/}
         <ContextMenu
           manager={this.props.manager}
-          desktopType={desktopType}
           desktopManagerCls={'desktopIcon-manager'}
           arrange={this.arrange}
           toggleAllWindows={this.toggleAllWindows}

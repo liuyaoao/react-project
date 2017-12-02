@@ -11,7 +11,6 @@ import * as HomeActions from '../../app/actions/home_action';
 
 import WindowModel from '../models/window';
 import ManagerModel from '../models/manager';
-// var TaskbarModel = require('../models/taskbar');
 import Window from './window';
 import StartMenu from './startMenu'; //开始菜单。
 
@@ -24,15 +23,12 @@ class Taskbar extends Component{
   }
   statics= {
     Manager: ManagerModel,
-    // Taskbar: TaskbarModel,
     Window: WindowModel
   }
 
   componentDidMount () {
     this.manager = this.props.manager;
     this.manager.on('change', this.forceUpdate, this);
-    // this.taskbar = this.props.taskbar;
-    // this.taskbar.on('change', this.forceUpdate, this);
     var _this = this;
     var setout = setInterval(function() {
       _this.setState({
@@ -45,21 +41,13 @@ class Taskbar extends Component{
 
   componentWillUnmount () {
     this.manager.off('change', this.forceUpdate);
-    // this.taskbar.off('change', this.forceUpdate);
     if (this.state.setout) {
       clearInterval(this.state.setout)
     }
   }
 
   toggleWindow = (e)=>{
-    const { desktopType } = this.props;
-    var windows;
-    if(desktopType == "router") {
-      windows = this.props.manager.openWindows_router();
-    }
-    else if(desktopType == "phone") {
-      windows = this.props.manager.openWindows_phone();
-    }
+    var windows = this.props.manager.openWindows_router();
     for(var i = 0; i < windows.length; i++) {
       if(e.target.id.substr(8) == windows[i].id) {
         var el = document.getElementById('window-'+windows[i].id);
@@ -95,14 +83,7 @@ class Taskbar extends Component{
   }
 
   toggleAllWindows = ()=>{
-    const { desktopType } = this.props;
-    var windows;
-    if(desktopType == "router") {
-      windows = this.props.manager.openWindows_router();
-    }
-    else if(desktopType == "phone") {
-      windows = this.props.manager.openWindows_phone();
-    }
+    var windows = this.props.manager.openWindows_router();
     var bShowAll = true;
     for(var i = 0; i < windows.length; i++) {
       if(!windows[i].isMinimize) {
@@ -195,39 +176,28 @@ class Taskbar extends Component{
   }
   render () {
     let {} = this.state;
-    const { desktopType,manager } = this.props;
+    const { manager } = this.props;
     var bShowAll = true, fullScreen = document.body.scrollHeight == window.screen.height;
-    var windows;
-    if(desktopType == "router") {
-      windows = manager.openWindows_router().map(function (window) {
-        if(!window.isMinimize) {
-          bShowAll = false;
-        }
-        return (
-          <li key={window.id} className={manager.getActiveWindow().id==window.id && !manager.getActiveWindow().isMinimize ? "active-container":""}>
-            <a id={"taskbar-"+window.id} title={window.title} onClick={this.toggleWindow}>
-              {window.icon.substr(0, 7)=="images/" ? <img src={window.icon} id={"barIcon-"+window.id}/> : <span className={window.icon} id={"barIcon-"+window.id}></span>}
-            </a>
-          </li>
-        );
-      }, this);
-    }
-    else if(desktopType == "phone") {
-      windows = this.props.manager.openWindows_phone().map(function (window) {
-        if(!window.isMinimize) {
-          bShowAll = false;
-        }
-        return (
-          <li key={window.id} className={manager.getActiveWindow().id==window.id && !manager.getActiveWindow().isMinimize ? "active-container":""}>
-            <a id={"taskbar-"+window.id} title={window.title} onClick={this.toggleWindow}>
-              {window.icon.substr(0, 7)=="images/" ? <img src={window.icon} id={"barIcon-"+window.id}/> : <span className={window.icon} id={"barIcon-"+window.id}></span>}
-            </a>
-          </li>
-        );
-      }, this);
-    }
+    let windowsIcon = manager.openWindows_router().map((window)=>{
+      if(!window.isMinimize) {
+        bShowAll = false;
+      }
+      return (
+        <li key={window.id}
+          className={manager.getActiveWindow().id==window.id && !manager.getActiveWindow().isMinimize ? "active-container":""}>
+          <a id={"taskbar-"+window.id}
+            title={window.title}
+            onClick={this.toggleWindow}>
+            {window.icon.substr(0, 7)=="images/" ?
+              <img src={window.icon} id={"barIcon-"+window.id}/> :
+              <span className={window.icon} id={"barIcon-"+window.id}></span>
+            }
+          </a>
+        </li>
+      );
+    });
 
-    let curLang = localStorage.getItem(intl_language_key) || "en";
+    let curLang = localStorage.getItem(intl_language_key) || "en"; //当前使用的语言
     return (
       <div className="app-bar fixed-top darcula" data-role="appbar" onClick={this.onClickAppBar}>
           {/*<a className="app-bar-element branding">BrandName</a>*/}
@@ -236,7 +206,7 @@ class Taskbar extends Component{
           <StartMenu manager={this.props.manager}/>
           <span className="app-bar-divider"></span>
           <ul className="app-bar-menu m-menu">
-              {windows}
+            {windowsIcon}
           </ul>
           <div className="place-right">
             <span style={{'float':"left", padding:"8px 1rem"}}>
@@ -269,11 +239,8 @@ Taskbar.propTypes={
   // taskbar: React.PropTypes.instanceOf(TaskbarModel).isRequired
 }
 
-// module.exports = Taskbar;
 const mapStateToProps = (state)=>{
-  const { desktopType } = state.homeReducer;
   return {
-    desktopType
   }
 }
 
