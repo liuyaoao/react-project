@@ -1,17 +1,36 @@
 import {combineReducers} from 'redux';
-import * as ACTIONS from '../actions/home_action';
+import * as ACTIONS from '../actions/vpn_action';
 
-var windowSizeChange2 = function(state = {windowId:'', flag:false}, action){
+const myVirtualIP = function(state = '', action){
   switch (action.type) {
-    case ACTIONS.SET_WINDOW_SIZE_CHANGE:
-      return action.windowSizeChange;
+    case ACTIONS.SET_MY_VIRTUAL_IP:
+      return action.myVirtualIP;
+    default:
+      return state;
+  }
+}
+
+const remoteRouterList = function(state = [], action){
+  switch (action.type) {
+    case ACTIONS.SET_REMOTE_ROUTER_LIST:
+      return action.remoteRouterList;
+    default:
+      return state;
+  }
+}
+const vPortBootNodesList = function(state = [], action){
+  switch (action.type) {
+    case ACTIONS.SET_VPORT_BOOT_NODES_LIST:
+      return action.bootNodesList;
     default:
       return state;
   }
 }
 
 const vpnReducer = combineReducers({
-    windowSizeChange2,
+  myVirtualIP,
+  remoteRouterList,
+  vPortBootNodesList,
 })
 
 export default vpnReducer;

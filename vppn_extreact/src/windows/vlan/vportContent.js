@@ -1,21 +1,29 @@
 import React,{Component} from 'react';
 import Intl from '../../intl/Intl';
+
 import { TabPanel, Container, FormPanel,TextField,
   FieldSet, SelectField,Button,Menu,MenuItem,Grid,Column,RendererCell  } from '@extjs/ext-react';
 Ext.require('Ext.field.InputMask');
 Ext.require('Ext.Toast');
-
-let bootsNodeOptions = [
-    { text: '220.168.30.12', value: '220.168.30.12' },
-    { text: '220.168.30.1', value: '220.168.30.1' },
-    { text: '220.168.30.6', value: '220.168.30.6' }
-];
 
 export default class VportContent extends Component {
     state={
       menuItemVal:'',
       selectedBootsNode:'220.168.30.12',
       selectedVProxyIp:'', //选中的vProxy IP.
+      routerList:[],
+    }
+    componentDidMount(){
+    }
+    componentWillReceiveProps(nextProps){
+      if(nextProps.remoteRouterList){
+        this.setState({
+          routerList:new Ext.data.Store({
+            data: nextProps.remoteRouterList,
+            sorters: 'name'
+          })
+        });
+      }
     }
     onAddTypeChange = (item)=>{
       this.setState({menuItemVal:item.value});
@@ -36,8 +44,8 @@ export default class VportContent extends Component {
       Ext.toast(`You selected the item with value ${newValue}`);
     }
     render(){
-      let {menuItemVal,selectedBootsNode} = this.state;
-      let {contentId,myVirtualIp} = this.props;
+      let {routerList,menuItemVal,selectedBootsNode} = this.state;
+      let {contentId,myVirtualIP,vPortBootNodesList} = this.props;
       let idNum = contentId.split('_')[0];
 
       let vProxyIpOptions = this.props.vProxyIpArr.map((val)=>{
@@ -68,7 +76,7 @@ export default class VportContent extends Component {
                     margin="0 0 10 0"
                     defaults={{ margin: "0 10 0 0" }}
                   >
-                    <span className={myVirtualIp?'myVirtualIp':'myVirtualIp no_connected'}>{myVirtualIp?myVirtualIp:'Connect Error!'}</span>
+                    <span className={myVirtualIP?'myVirtualIP':'myVirtualIP no_connected'}>{myVirtualIP?myVirtualIP:'Connect Error!'}</span>
                     <span>{Intl.get("Boot Nodes")}：</span>
                     <SelectField
                        width="200"
@@ -76,25 +84,25 @@ export default class VportContent extends Component {
                        displayField={'value'}
                        value={selectedBootsNode}
                        onChange={this.onBootsNodeSelectChanged}
-                       options={bootsNodeOptions} />
+                       options={vPortBootNodesList} />
                     <Button text={Intl.get("close")} ui={'decline alt'}></Button>
                     <Button text={""} ui={'confirm round alt'} iconCls={'x-fa fa-refresh'} alt={Intl.get("refresh")}></Button>
                   </Container>
                   <Container>
-                    <Grid store={this.dataStore} grouped width={'99%'} height={'320px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
-                        <Column text={Intl.get('state')} width="100" dataIndex="name"/>
-                        <Column text={Intl.get('Remote Virtual IP')} width="120" dataIndex="price"/>
-                        <Column text={Intl.get('Remote Subnet')} width="100" dataIndex="priceChange"/>
-                        <Column text={Intl.get('Link State')} width="100" dataIndex="priceChange"/>
-                        <Column text={Intl.get('delay')} width="100" dataIndex="priceChange"/>
-                        <Column text={Intl.get('description')} width="100" dataIndex="priceChange"/>
+                    <Grid store={routerList} grouped width={'99%'} height={'320px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
+                        <Column text={Intl.get('state')} width="100" dataIndex="status"/>
+                        <Column text={Intl.get('Remote Virtual IP')} width="120" dataIndex="virtualIp"/>
+                        <Column text={Intl.get('Remote Subnet')} width="100" dataIndex="subnet"/>
+                        <Column text={Intl.get('Link State')} width="100" dataIndex="link"/>
+                        <Column text={Intl.get('delay')} width="100" dataIndex="latency"/>
+                        <Column text={Intl.get('description')} width="100" dataIndex="latency"/>
                     </Grid>
                   </Container>
                   <Container margin="10 0 10 0"
                     layout={{ type: 'hbox', pack: Ext.os.is.Phone ? 'center' : 'left',align:'bottom'}}
                   >
                     <TextField width="300"
-                      labelWidth="60"
+                      labelWidth="80"
                       labelAlign="left"
                       labelTextAlign='center'
                       label={Intl.get("Virtual")+" IP:"}

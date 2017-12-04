@@ -2,8 +2,11 @@
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import Intl from '../../intl/Intl';
-// var {connect} = require('react-redux');
-// var {bindActionCreators} = require('redux');
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as VpnActions from '../../app/actions/vpn_action';
+
 import { Container } from '@extjs/ext-react';
 import VlanSidebar from './vlanSidebar';
 import VportContent from './vportContent';
@@ -16,10 +19,10 @@ class VlanWindow extends Component{
   state = {
     windowHeight:570,
     contentId: 'ModuleIconView',
-    myVirtualIp:'10.100.16.89',
     vProxyIpArr:['10.100.16.84','10.100.16.9','10.100.16.68'],
   }
   componentDidMount(){
+    this.props.vpnActions.getVPortInitalDatasById('1');
     this.setRightHeight(this.props.id);
     document.addEventListener('mousemove', this.handleMouseMove);
   }
@@ -44,6 +47,9 @@ class VlanWindow extends Component{
   }
   onMenuItemClick = (contentId)=>{
     this.setState({contentId});
+    if(contentId.indexOf('vport') != -1){
+      this.props.vpnActions.getVPortInitalDatasById(contentId.split('_')[0]);
+    }
   }
 
   onSelectedModule = (contentId)=>{
@@ -78,8 +84,10 @@ class VlanWindow extends Component{
                 {(contentId.indexOf('vport')!=-1)?
                   <VportContent
                     windowHeight={this.state.windowHeight}
-                    myVirtualIp={this.state.myVirtualIp}
+                    myVirtualIP={this.props.myVirtualIP}
                     vProxyIpArr={this.state.vProxyIpArr}
+                    remoteRouterList={this.props.remoteRouterList}
+                    vPortBootNodesList={this.props.vPortBootNodesList}
                     contentId={this.state.contentId}
                   />:null
                 }
@@ -88,7 +96,7 @@ class VlanWindow extends Component{
                 {(contentId.indexOf('diagnosis')!=-1)?
                   <DiagnosisContent
                     windowHeight={this.state.windowHeight}
-                    myVirtualIp={this.state.myVirtualIp}
+                    myVirtualIP={this.props.myVirtualIP}
                     contentId={this.state.contentId}
                   />:null
                 }
@@ -97,7 +105,7 @@ class VlanWindow extends Component{
                 {(contentId.indexOf('setting')!=-1)?
                   <SettingContent
                     windowHeight={this.state.windowHeight}
-                    myVirtualIp={this.state.myVirtualIp}
+                    myVirtualIP={this.props.myVirtualIP}
                     contentId={this.state.contentId}
                   />:null
                 }
@@ -113,4 +121,20 @@ class VlanWindow extends Component{
 
 }
 
-export default VlanWindow;
+const mapStateToProps = (state) => {
+  let {myVirtualIP,remoteRouterList,vPortBootNodesList} = state.vpnReducer;
+  return {
+    myVirtualIP,
+    remoteRouterList,
+    vPortBootNodesList
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    vpnActions:bindActionCreators(VpnActions,dispatch)
+  }
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(VlanWindow)
