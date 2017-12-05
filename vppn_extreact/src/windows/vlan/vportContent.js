@@ -11,7 +11,8 @@ export default class VportContent extends Component {
       menuItemVal:'',
       selectedBootsNode:'220.168.30.12',
       selectedVProxyIp:'', //选中的vProxy IP.
-      routerList:[],
+      routerList:[],//远程路由器列表
+      vPathList:[],//vPath列表
     }
     componentDidMount(){
     }
@@ -21,6 +22,10 @@ export default class VportContent extends Component {
           routerList:new Ext.data.Store({
             data: nextProps.remoteRouterList,
             sorters: 'name'
+          }),
+          vPathList:new Ext.data.Store({
+            data:nextProps.vPathList,
+            sorters:'domain'
           })
         });
       }
@@ -28,13 +33,6 @@ export default class VportContent extends Component {
     onAddTypeChange = (item)=>{
       this.setState({menuItemVal:item.value});
     }
-    dataStore = new Ext.data.Store({
-        data: [
-          {index:1, name:' Wireless',price:'342.54', priceChange:'mif-wifi-connect icon'},
-          {index:2, name:' Internet',price:'342.54', priceChange:'mif-earth icon'}
-        ],
-        sorters: 'name'
-    })
     onBootsNodeSelectChanged = (field, newValue)=>{  //引导节点有改变。
       this.setState({ selectedBootsNode:newValue });
       Ext.toast(`You selected the item with value ${newValue}`);
@@ -44,13 +42,17 @@ export default class VportContent extends Component {
       Ext.toast(`You selected the item with value ${newValue}`);
     }
     render(){
-      let {routerList,menuItemVal,selectedBootsNode} = this.state;
+      let {routerList,vPathList,menuItemVal,selectedBootsNode} = this.state;
       let {contentId,myVirtualIP,vPortBootNodesList} = this.props;
-      let idNum = contentId.split('_')[0];
-
-      let vProxyIpOptions = this.props.vProxyIpArr.map((val)=>{
-        return {text:val,value:val};
+      let idNum = contentId.split('_')[0]; //端口号索引
+      let bootsNodeOptions = [];
+      vPortBootNodesList.map((item)=>{ //获取某个端口的启动节点列表
+        if(item.ServerType == ('vppn'+idNum)){
+          bootsNodeOptions.push({ text:item.IP, value:item.IP });
+        }
       });
+
+      let vProxyIpOptions = this.props.vProxyList;
       return (
         <div className="" style={{height:'100%'}}>
         <TabPanel cls='vportContent'
@@ -84,13 +86,15 @@ export default class VportContent extends Component {
                        displayField={'value'}
                        value={selectedBootsNode}
                        onChange={this.onBootsNodeSelectChanged}
-                       options={vPortBootNodesList} />
+                       options={bootsNodeOptions} />
                     <Button text={Intl.get("close")} ui={'decline alt'}></Button>
                     <Button text={""} ui={'confirm round alt'} iconCls={'x-fa fa-refresh'} alt={Intl.get("refresh")}></Button>
                   </Container>
                   <Container>
                     <Grid store={routerList} grouped width={'99%'} height={'320px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
-                        <Column text={Intl.get('state')} width="100" dataIndex="status"/>
+                        <Column text={Intl.get('state')}
+                          width="100"
+                          dataIndex="status"/>
                         <Column text={Intl.get('Remote Virtual IP')} width="120" dataIndex="virtualIp"/>
                         <Column text={Intl.get('Remote Subnet')} width="100" dataIndex="subnet"/>
                         <Column text={Intl.get('Link State')} width="100" dataIndex="link"/>
@@ -144,10 +148,10 @@ export default class VportContent extends Component {
                     </FieldSet>
                   </FormPanel>
                   <Container>
-                    <Grid store={this.dataStore} grouped width={'98%'} height={'320px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
-                        <Column text={Intl.get('domain')} width="150" dataIndex="name"/>
-                        <Column text={Intl.get('proxy')} width="85" dataIndex="price"/>
-                        <Column text={Intl.get('description')} width="100" dataIndex="priceChange"/>
+                    <Grid store={vPathList} grouped width={'98%'} height={'320px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
+                        <Column text={Intl.get('domain')} width="150" dataIndex="domain"/>
+                        <Column text={Intl.get('proxy')} width="85" dataIndex="proxy"/>
+                        <Column text={Intl.get('description')} width="100" dataIndex="desc"/>
                     </Grid>
                   </Container>
 

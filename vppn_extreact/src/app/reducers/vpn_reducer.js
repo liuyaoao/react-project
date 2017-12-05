@@ -26,11 +26,38 @@ const vPortBootNodesList = function(state = [], action){
       return state;
   }
 }
+const vPathList = function(state = [], action){
+  switch (action.type) {
+    case ACTIONS.SET_VPORT_VPATH_LIST:
+      return action.vPathList;
+    default:
+      return state;
+  }
+}
+const vProxyList = function(state = [], action){
+  switch (action.type) {
+    case ACTIONS.SET_VPORT_VPROXY_LIST:
+      return action.vProxyList;
+    default:
+      return state;
+  }
+}
+const paymentInfo = function(state = {}, action){
+  switch (action.type) {
+    case ACTIONS.SET_PAYMENT_INFO:
+      return action.paymentInfo;
+    default:
+      return state;
+  }
+}
 
 const vpnReducer = combineReducers({
   myVirtualIP,
   remoteRouterList,
   vPortBootNodesList,
+  vPathList,
+  vProxyList,
+  paymentInfo,
 })
 
 export default vpnReducer;

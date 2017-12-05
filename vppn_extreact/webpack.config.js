@@ -57,7 +57,8 @@ module.exports = function (env) {
           }),
           new CopyWebpackPlugin([ //直接复制某单个文件或整个文件夹到编译后的目录下。
             {from: 'images', to: path.resolve(__dirname, './build/images')},
-            {from: 'scss', to: path.resolve(__dirname, './build/scss')}
+            {from: 'scss', to: path.resolve(__dirname, './build/scss')},
+            {from: 'app/mockDatas', to: path.resolve(__dirname, './build/app/mockDatas')},
           ])
         );
 

@@ -19,7 +19,6 @@ class VlanWindow extends Component{
   state = {
     windowHeight:570,
     contentId: 'ModuleIconView',
-    vProxyIpArr:['10.100.16.84','10.100.16.9','10.100.16.68'],
   }
   componentDidMount(){
     this.props.vpnActions.getVPortInitalDatasById('1');
@@ -85,11 +84,11 @@ class VlanWindow extends Component{
                   <VportContent
                     windowHeight={this.state.windowHeight}
                     myVirtualIP={this.props.myVirtualIP}
-                    vProxyIpArr={this.state.vProxyIpArr}
                     remoteRouterList={this.props.remoteRouterList}
                     vPortBootNodesList={this.props.vPortBootNodesList}
-                    contentId={this.state.contentId}
-                  />:null
+                    vPathList={this.props.vPathList}
+                    vProxyList={this.props.vProxyList}
+                    contentId={this.state.contentId} />:null
                 }
 
                 {/*diagnosis tab的右边内容块*/}
@@ -97,8 +96,7 @@ class VlanWindow extends Component{
                   <DiagnosisContent
                     windowHeight={this.state.windowHeight}
                     myVirtualIP={this.props.myVirtualIP}
-                    contentId={this.state.contentId}
-                  />:null
+                    contentId={this.state.contentId}/>:null
                 }
 
                 {/*setting tab的右边内容块*/}
@@ -107,6 +105,8 @@ class VlanWindow extends Component{
                     windowHeight={this.state.windowHeight}
                     myVirtualIP={this.props.myVirtualIP}
                     contentId={this.state.contentId}
+                    paymentInfo={this.props.paymentInfo}
+                    vpnActions={this.props.vpnActions}
                   />:null
                 }
               </div>
@@ -122,11 +122,14 @@ class VlanWindow extends Component{
 }
 
 const mapStateToProps = (state) => {
-  let {myVirtualIP,remoteRouterList,vPortBootNodesList} = state.vpnReducer;
+  let {myVirtualIP,remoteRouterList,vPortBootNodesList,vPathList,vProxyList,paymentInfo} = state.vpnReducer;
   return {
     myVirtualIP,
     remoteRouterList,
-    vPortBootNodesList
+    vPortBootNodesList,
+    vPathList,
+    vProxyList,
+    paymentInfo,
   }
 }
 const mapDispatchToProps = (dispatch) => {

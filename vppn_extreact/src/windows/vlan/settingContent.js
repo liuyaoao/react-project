@@ -18,6 +18,9 @@ export default class SettingContent extends Component{
   componentWillMount(){
 
   }
+  componentDidMount(){
+    this.props.vpnActions.getPaymentInfo();
+  }
   componentWillUnmount(){
     // $('.tab_settingContent').remove();
   }
