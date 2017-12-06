@@ -21,7 +21,7 @@ class VlanWindow extends Component{
     contentId: 'ModuleIconView',
   }
   componentDidMount(){
-    this.props.vpnActions.getVPortInitalDatasById('1');
+    this.props.vpnActions.getVLanStatusInfo('0'); //获取所有端口信息
     this.setRightHeight(this.props.id);
     document.addEventListener('mousemove', this.handleMouseMove);
   }
@@ -47,7 +47,7 @@ class VlanWindow extends Component{
   onMenuItemClick = (contentId)=>{
     this.setState({contentId});
     if(contentId.indexOf('vport') != -1){
-      this.props.vpnActions.getVPortInitalDatasById(contentId.split('_')[0]);
+      this.props.vpnActions.getVLanStatusInfo(contentId.split('_')[0]);
     }
   }
 
@@ -84,10 +84,13 @@ class VlanWindow extends Component{
                   <VportContent
                     windowHeight={this.state.windowHeight}
                     myVirtualIP={this.props.myVirtualIP}
-                    remoteRouterList={this.props.remoteRouterList}
+                    running_status={this.props.running_status}
+                    peersRouterList={this.props.peersRouterList}
                     vPortBootNodesList={this.props.vPortBootNodesList}
+                    curBootNodeIP={this.props.curBootNodeIP}
                     vPathList={this.props.vPathList}
                     vProxyList={this.props.vProxyList}
+                    vpnActions={this.props.vpnActions}
                     contentId={this.state.contentId} />:null
                 }
 
@@ -96,6 +99,7 @@ class VlanWindow extends Component{
                   <DiagnosisContent
                     windowHeight={this.state.windowHeight}
                     myVirtualIP={this.props.myVirtualIP}
+                    diagnosisRouteList={this.props.diagnosisRouteList}
                     contentId={this.state.contentId}/>:null
                 }
 
@@ -105,6 +109,7 @@ class VlanWindow extends Component{
                     windowHeight={this.state.windowHeight}
                     myVirtualIP={this.props.myVirtualIP}
                     contentId={this.state.contentId}
+                    managerServer={this.props.managerServer}
                     paymentInfo={this.props.paymentInfo}
                     vpnActions={this.props.vpnActions}
                   />:null
@@ -122,14 +127,19 @@ class VlanWindow extends Component{
 }
 
 const mapStateToProps = (state) => {
-  let {myVirtualIP,remoteRouterList,vPortBootNodesList,vPathList,vProxyList,paymentInfo} = state.vpnReducer;
+  let { myVirtualIP,running_status,peersRouterList,curBootNodeIP,vPortBootNodesList,
+      vPathList,vProxyList,paymentInfo,managerServer,diagnosisRouteList } = state.vpnReducer;
   return {
     myVirtualIP,
-    remoteRouterList,
+    running_status,
+    peersRouterList,
     vPortBootNodesList,
+    curBootNodeIP,
     vPathList,
     vProxyList,
     paymentInfo,
+    managerServer,
+    diagnosisRouteList,
   }
 }
 const mapDispatchToProps = (dispatch) => {

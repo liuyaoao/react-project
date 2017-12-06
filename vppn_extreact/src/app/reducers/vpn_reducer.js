@@ -9,11 +9,19 @@ const myVirtualIP = function(state = '', action){
       return state;
   }
 }
-
-const remoteRouterList = function(state = [], action){
+const running_status = (state='disable', action) => {
   switch (action.type) {
-    case ACTIONS.SET_REMOTE_ROUTER_LIST:
-      return action.remoteRouterList;
+    case ACTIONS.SET_RUNNING_STATUS:
+      return action.running_status;
+    default:
+      return state;
+  }
+}
+
+const peersRouterList = function(state = [], action){
+  switch (action.type) {
+    case ACTIONS.SET_REMOTE_PEERS_ROUTER_LIST:
+      return action.peersRouterList;
     default:
       return state;
   }
@@ -26,6 +34,16 @@ const vPortBootNodesList = function(state = [], action){
       return state;
   }
 }
+
+const curBootNodeIP = (state = '', action) => {
+  switch (action.type) {
+    case ACTIONS.SET_CUR_BOOT_NODE_IP:
+      return action.curBootNodeIP;
+    default:
+      return state;
+  }
+}
+
 const vPathList = function(state = [], action){
   switch (action.type) {
     case ACTIONS.SET_VPORT_VPATH_LIST:
@@ -42,7 +60,7 @@ const vProxyList = function(state = [], action){
       return state;
   }
 }
-const paymentInfo = function(state = {}, action){
+const paymentInfo = (state = {}, action) => {
   switch (action.type) {
     case ACTIONS.SET_PAYMENT_INFO:
       return action.paymentInfo;
@@ -51,13 +69,35 @@ const paymentInfo = function(state = {}, action){
   }
 }
 
+const managerServer = (state={'cloud_host':'','cloud_port':''}, action) => {
+  switch (action.type) {
+    case ACTIONS.SET_MANAGER_SERVER:
+      return action.managerServer;
+    default:
+      return state;
+  }
+}
+//诊断模块里的路由器列表。
+const diagnosisRouteList = (state=[], action) => {
+  switch (action.type) {
+    case ACTIONS.SET_DIAGNOSIS_ROUTE_LIST:
+      return action.diagnosisRouteList;
+    default:
+      return state;
+  }
+}
+
 const vpnReducer = combineReducers({
   myVirtualIP,
-  remoteRouterList,
+  running_status,
+  peersRouterList,
+  curBootNodeIP,
   vPortBootNodesList,
   vPathList,
   vProxyList,
   paymentInfo,
+  managerServer,
+  diagnosisRouteList,
 })
 
 export default vpnReducer;

@@ -1,18 +1,23 @@
 
-import WebClient from '../script/web_client';
+import WebClient from '../script/web_client'
+import * as VpnUtils from '../script/vpn_utils'
 
 import {allRemoteRouterList,
   allMyVirtualIP,
   allVPathList,
   allVProxyList} from '../mockDatas/vportDatas'
 export const SET_MY_VIRTUAL_IP = 'SET_MY_VIRTUAL_IP';
-export const SET_REMOTE_ROUTER_LIST = 'SET_REMOTE_ROUTER_LIST'; //设置vPort的Remote Router数据
+export const SET_REMOTE_PEERS_ROUTER_LIST = 'SET_REMOTE_PEERS_ROUTER_LIST'; //设置vPort的Remote Router数据
 export const SET_VPORT_BOOT_NODES_LIST = 'SET_VPORT_BOOT_NODES_LIST'; //设置启动节点
 export const SET_VPORT_VPATH_LIST = 'SET_VPORT_VPATH_LIST'; //设置vPath列表
 export const SET_VPORT_VPROXY_LIST = 'SET_VPORT_VPROXY_LIST';  //设置vProxy下拉列表
 export const SET_PAYMENT_INFO = 'SET_PAYMENT_INFO';
-// export const SET_PAYMENT_INFO = 'SET_PAYMENT_INFO';
-// export const SET_PAYMENT_INFO = 'SET_PAYMENT_INFO';
+export const SET_MANAGER_SERVER = 'SET_MANAGER_SERVER'; //setting 模块的manager server.
+export const SET_DIAGNOSIS_ROUTE_LIST = 'SET_DIAGNOSIS_ROUTE_LIST';
+export const SET_CUR_BOOT_NODE_IP = 'SET_CUR_BOOT_NODE_IP';
+export const SET_RUNNING_STATUS = 'SET_RUNNING_STATUS';  //端口是否启动的状态
+// export const SET_RUNNING_STATUS = 'SET_RUNNING_STATUS';
+// export const SET_RUNNING_STATUS = 'SET_RUNNING_STATUS';
 
 
 //当前我连接的虚拟IP地址。
@@ -22,12 +27,25 @@ export function setMyVirtualIP(myVirtualIP){
     myVirtualIP
   }
 }
-
-//当前所选端口的remote router 列表数据。
-export function setRemoteRouterList(remoteRouterList){
+export function setRunningStatus(running_status){//当前端口运行状态
   return {
-      type: SET_REMOTE_ROUTER_LIST,
-      remoteRouterList
+    type:SET_RUNNING_STATUS,
+    running_status
+  }
+}
+
+//当前所选的vPort的对等路由器列表数据。
+export function setPeersRouteList(peersRouterList){
+  return {
+      type: SET_REMOTE_PEERS_ROUTER_LIST,
+      peersRouterList
+  }
+}
+//当前所选tunnel端口的启动点ip, 即proxy host.
+export function setCurBootNodeIP(curBootNodeIP){
+  return {
+      type: SET_CUR_BOOT_NODE_IP,
+      curBootNodeIP
   }
 }
 //当前所选端口的可选启动节点项列表数据。
@@ -55,23 +73,25 @@ export function setPaymentInfo(paymentInfo){
     paymentInfo
   }
 }
-
-
-
-export function getMyVirtualIP(vPortName){ //获取某个vPort的路由器列表数据。
-  return dispatch => {
-    setTimeout(()=>{
-      dispatch(setMyVirtualIP(allMyVirtualIP[vPortName]));
-    },1000);
+//setting模块的manager server， 包括host和port， Manager Server1和Manager Server2暂时都默认是这同一个。
+export function setManagerServer(managerServer){
+  return {
+    type:SET_MANAGER_SERVER,
+    managerServer
   }
 }
-export function getRemoteRouterList(vPortName){ //获取某个vPort的路由器列表数据。
-  return dispatch => {
-    setTimeout(()=>{
-      dispatch(setRemoteRouterList(allRemoteRouterList[vPortName]));
-    },1000);
+//Diagnosis模块的route list
+export function setDiagnosisRouteList(diagnosisRouteList){
+  return {
+    type:SET_DIAGNOSIS_ROUTE_LIST,
+    diagnosisRouteList
   }
 }
+
+
+
+
+
 export function getVPortBootNodesList(){ //获取某个vPort的远程路由器的可选的启动节点列表。
   return dispatch => {
     WebClient.getPorxyBootsNode((allBootNodesList)=>{
@@ -80,33 +100,22 @@ export function getVPortBootNodesList(){ //获取某个vPort的远程路由器�
   }
 }
 
-export function getVProxyList(vPortName){  //获取某个vPort的vProxy代理列表
+export function getVLanStatusInfo(portNum){ //获取所有vPort的状态信息
   return dispatch => {
-    setTimeout(()=>{
-      dispatch(setVProxyList(allVProxyList[vPortName]));
-    },1000);
+    dispatch(getVPortBootNodesList());
+    WebClient.getVLanStatusInfo(portNum,(res)=>{
+      console.log('getVLanStatusInfo---:',res);
+      dispatch(setPeersRouteList( VpnUtils.parseRouteList(res.tunnel_status.peers)) );
+      dispatch(setVProxyList( VpnUtils.parseVProxyDropdownList(res.tunnel_status.peers)) ); //获取某个vPort的vProxy下拉选项列表
+      dispatch(setVPathList( VpnUtils.parseVPathList(res.tunnel_status.vpaths)) );
+      dispatch(setCurBootNodeIP(res.tunnel_status.proxy_host));
+      dispatch(setMyVirtualIP(res.tunnel_status.tunnel_vip || '')); //Current tunnel(端口) virtual IP,
+      dispatch(setManagerServer(res.manager));
+      dispatch(setDiagnosisRouteList(res.route_list));
+      dispatch(setRunningStatus(res.tunnel_status.running_status));
+      // dispatch(setPaymentInfo(res));
+    });
   }
-}
-
-export function getVPathList(vPortName){  //获取某个vPort的vPath列表
-  return dispatch => {
-    setTimeout(()=>{
-      dispatch(setVPathList(allVPathList[vPortName]));
-    },1000);
-  }
-}
-
-//获取某个vPort的初始化数据
-export function getVPortInitalDatasById(portNum) {
-    return dispatch => {
-      let vPortName = 'vPort'+portNum;
-      dispatch(getMyVirtualIP(vPortName));
-      dispatch(getVPortBootNodesList());
-      dispatch(getRemoteRouterList(vPortName));
-      dispatch(getVPathList(vPortName));
-      dispatch(getVProxyList(vPortName));
-
-    }
 }
 
 export function getPaymentInfo(){

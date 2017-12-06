@@ -9,6 +9,14 @@ export const allMyVirtualIP = {
   'vPort5':'',
 }
 
+/*{
+  "err_code":0,
+  "heartbeat_code":200,
+  "endtime":"123123123123",
+  "flow":"123123213123",
+  "type":"date",
+  "mac":"40-8D-5C-27-5B-62"
+}*/
 
 //所有端口上的远程路由器列表
 export const allRemoteRouterList = {

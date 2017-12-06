@@ -9,7 +9,6 @@ Ext.require('Ext.Toast');
 export default class VportContent extends Component {
     state={
       menuItemVal:'',
-      selectedBootsNode:'220.168.30.12',
       selectedVProxyIp:'', //选中的vProxy IP.
       routerList:[],//远程路由器列表
       vPathList:[],//vPath列表
@@ -17,10 +16,10 @@ export default class VportContent extends Component {
     componentDidMount(){
     }
     componentWillReceiveProps(nextProps){
-      if(nextProps.remoteRouterList){
+      if(nextProps.peersRouterList){
         this.setState({
           routerList:new Ext.data.Store({
-            data: nextProps.remoteRouterList,
+            data: nextProps.peersRouterList,
             sorters: 'name'
           }),
           vPathList:new Ext.data.Store({
@@ -33,17 +32,22 @@ export default class VportContent extends Component {
     onAddTypeChange = (item)=>{
       this.setState({menuItemVal:item.value});
     }
-    onBootsNodeSelectChanged = (field, newValue)=>{  //引导节点有改变。
-      this.setState({ selectedBootsNode:newValue });
+    onBootsNodeSelectChanged = (field, newValue)=>{  //引导节点有改变。proxy host
+      this.props.vpnActions.setCurBootNodeIP(newValue);
       Ext.toast(`You selected the item with value ${newValue}`);
     }
     onVProxySelectChanged = (field, newValue) => { //vProxy 路由ip有改变。
       this.setState({ selectedVProxyIp:newValue });
       Ext.toast(`You selected the item with value ${newValue}`);
     }
+
+    onTurnOnOffVPort = ()=>{ //打开和关闭当前端口
+      this.props.vpnActions.setRunningStatus(this.props.running_status=="disable"?"connected":"disable");
+    }
+
     render(){
-      let {routerList,vPathList,menuItemVal,selectedBootsNode} = this.state;
-      let {contentId,myVirtualIP,vPortBootNodesList} = this.props;
+      let {routerList,vPathList,menuItemVal} = this.state;
+      let {contentId,myVirtualIP,running_status,vPortBootNodesList} = this.props;
       let idNum = contentId.split('_')[0]; //端口号索引
       let bootsNodeOptions = [];
       vPortBootNodesList.map((item)=>{ //获取某个端口的启动节点列表
@@ -84,10 +88,12 @@ export default class VportContent extends Component {
                        width="200"
                        name={'bootsNode'}
                        displayField={'value'}
-                       value={selectedBootsNode}
+                       value={this.props.curBootNodeIP}
                        onChange={this.onBootsNodeSelectChanged}
                        options={bootsNodeOptions} />
-                    <Button text={Intl.get("close")} ui={'decline alt'}></Button>
+                    <Button text={Intl.get(running_status=='disable'?"Turn on":"Turn off")}
+                      ui={'decline alt'}
+                      handler={this.onTurnOnOffVPort}></Button>
                     <Button text={""} ui={'confirm round alt'} iconCls={'x-fa fa-refresh'} alt={Intl.get("refresh")}></Button>
                   </Container>
                   <Container>
@@ -95,11 +101,11 @@ export default class VportContent extends Component {
                         <Column text={Intl.get('state')}
                           width="100"
                           dataIndex="status"/>
-                        <Column text={Intl.get('Remote Virtual IP')} width="120" dataIndex="virtualIp"/>
+                        <Column text={Intl.get('Remote Virtual IP')} width="120" dataIndex="peer_vip"/>
                         <Column text={Intl.get('Remote Subnet')} width="100" dataIndex="subnet"/>
                         <Column text={Intl.get('Link State')} width="100" dataIndex="link"/>
-                        <Column text={Intl.get('delay')} width="100" dataIndex="latency"/>
-                        <Column text={Intl.get('description')} width="100" dataIndex="latency"/>
+                        <Column text={Intl.get('delay')} width="100" dataIndex="peer_latency"/>
+                        <Column text={Intl.get('description')} width="100" dataIndex="peer_latency"/>
                     </Grid>
                   </Container>
                   <Container margin="10 0 10 0"
@@ -149,8 +155,8 @@ export default class VportContent extends Component {
                   </FormPanel>
                   <Container>
                     <Grid store={vPathList} grouped width={'98%'} height={'320px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
-                        <Column text={Intl.get('domain')} width="150" dataIndex="domain"/>
-                        <Column text={Intl.get('proxy')} width="85" dataIndex="proxy"/>
+                        <Column text={Intl.get('domain')} width="150" dataIndex="uri"/>
+                        <Column text={Intl.get('proxy')} width="150" dataIndex="vproxy"/>
                         <Column text={Intl.get('description')} width="100" dataIndex="desc"/>
                     </Grid>
                   </Container>

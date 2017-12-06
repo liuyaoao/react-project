@@ -1,4 +1,5 @@
 import React,{Component} from 'react';
+import moment from 'moment';
 import Intl from '../../intl/Intl';
 import { TabPanel, Container,FormPanel,FieldSet,TextField,Button,
   SelectField,ComboBoxField,List,TextAreaField } from '@extjs/ext-react';
@@ -29,10 +30,18 @@ export default class SettingContent extends Component{
   onListSelect = (records,opts)=>{
     console.log("records--opts--:",records,opts);
   }
+  clickManagerServerTest = (serverNum) => { //点击 manager server 测试
+
+  }
+  clickManagerServerSave = (serverNum) => {  //点击 manager server 保存
+
+  }
   itemTpl = (data)=>(<div>
               <a onClick={this.handleShow.bind(this, data.index)}>{data.name}</a>
             </div>)
+
   render(){
+    let {paymentInfo} = this.props;
     let data= [{name:'127.0.0.1',abbrev:'999'}];
     return (
       <div className="" style={{height:'100%'}}>
@@ -52,34 +61,17 @@ export default class SettingContent extends Component{
             }}
         >
             <Container title={Intl.get('setting')} scrollable={true}>
-              <FormPanel>
-                <FieldSet title={Intl.get('Manage Server')+" 1"}
-                  layout={{type:'hbox',pack:'start',align: 'bottom'}}
-                  defaults={{labelAlign: "placeholder"}}
-                  margin="5 10 0 10"
-                  >
-                    <TextField placeholder="Enter..." labelAlign={'placeholder'} width="200" label={Intl.get('Address')+"："} required flex={1}/>
-                    <TextField placeholder="Enter..." width="200" label={Intl.get('Port')+"："} required flex={1}/>
-                    <Container flex={1}>
-                      <Button text={Intl.get('test')} ui={'confirm  raised'} style={{marginLeft:'10px',marginRight:'10px'}}></Button>
-                      <Button text={Intl.get('save')} ui={'action raised'}></Button>
-                    </Container>
-                </FieldSet>
-              </FormPanel>
-              <FormPanel>
-                <FieldSet title={Intl.get('Manage Server')+" 2"}
-                  layout={{type:'hbox',pack:'start',align: 'bottom'}}
-                  defaults={{labelAlign: "placeholder"}}
-                  margin="5 10 0 10"
-                  >
-                    <TextField placeholder="Enter..." width="200" label={Intl.get('Address')+"："} required flex={1}/>
-                    <TextField placeholder="Enter..." width="200" label={Intl.get('Port')+"："} required flex={1}/>
-                    <Container flex={1}>
-                      <Button text={Intl.get('test')} ui={'confirm raised'} style={{marginLeft:'10px',marginRight:'10px'}}></Button>
-                      <Button text={Intl.get('save')} ui={'action raised'}></Button>
-                    </Container>
-                </FieldSet>
-              </FormPanel>
+              <ManagerServerComp serverNum={1}
+                managerServer={this.props.managerServer}
+                clickManagerServerTest={this.clickManagerServerTest}
+                clickManagerServerSave={this.clickManagerServerSave}
+              />
+              <ManagerServerComp serverNum={2}
+                managerServer={this.props.managerServer}
+                clickManagerServerTest={this.clickManagerServerTest}
+                clickManagerServerSave={this.clickManagerServerSave}
+              />
+
               <FormPanel>
                 <FieldSet title={Intl.get("Management Goal")}
                   layout={{type:'hbox',pack:'start',align: 'bottom'}}
@@ -158,7 +150,10 @@ export default class SettingContent extends Component{
             </Container>
 
             <Container title={Intl.get('payment')} scrollable={true}>
-                <div className="action" style={{margin:'10px'}}>{Intl.get("Expiration date")}：2020-11-09</div>
+                {paymentInfo.type=='date' ?
+                  <div style={{margin:'10px',fontSize:'23px',fontWeight:'600'}}>{Intl.get("Expiration date")}：{moment(+paymentInfo.endtime).format("MM-DD-YYYY")}</div>:
+                  <div style={{margin:'10px',fontSize:'23px',fontWeight:'600'}}>{Intl.get("Remaining traffic")}：{parseInt(+paymentInfo.flow/1024)} kb</div>
+                }
                 <div style={{margin:'10px'}}>{Intl.get("Please click to pay")}：<span> PayPal</span></div>
             </Container>
         </TabPanel>
@@ -166,4 +161,36 @@ export default class SettingContent extends Component{
     )
   }
 
+}
+
+function ManagerServerComp(props){
+  return (
+    <div>
+      <FormPanel>
+        <FieldSet title={Intl.get('Manage Server')+" "+props.serverNum}
+          layout={{type:'hbox',pack:'stretch',align: 'bottom'}}
+          defaults={{labelAlign: "placeholder"}}
+          margin="5 10 0 10"
+          >
+            <TextField value={props.managerServer.cloud_host}
+              label={Intl.get('Address')+"："}
+              width="250"
+              required />
+            <TextField value={props.managerServer.cloud_port}
+              label={Intl.get('Port')+"："}
+              width="250"
+              required />
+            <Container>
+              <Button text={Intl.get('test')}
+                onClick={()=>props.clickManagerServerTest(props.serverNum)}
+                ui={'confirm  raised'}
+                style={{marginLeft:'10px',marginRight:'10px'}}></Button>
+              <Button text={Intl.get('save')}
+                onClick={()=>props.clickManagerServerSave(props.serverNum)}
+                ui={'action raised'}></Button>
+            </Container>
+        </FieldSet>
+      </FormPanel>
+    </div>
+  )
 }
