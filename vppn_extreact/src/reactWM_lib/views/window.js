@@ -25,6 +25,9 @@ class Window extends Component{
     document.addEventListener('mousemove', this.handleMouseMove);
     document.addEventListener('mouseup', this.handleMouseUp);
   }
+  componentWillReceiveProps(nextProps){
+    // console.log('views window will receive props.......');
+  }
 
   componentDidUpdate() {
     var _this = this;
@@ -113,8 +116,9 @@ class Window extends Component{
     e.stopPropagation();
   }
 
-  handleMove = (e)=>{
+  onWindowHeaderMouseDown = (e)=>{
     e.preventDefault();
+    // console.log("window header mouse down......");
     this.window.opacity = 0.4;
     this.focus();
     var mouse = this.convertPoints(e);
@@ -124,6 +128,8 @@ class Window extends Component{
 
   handleMouseMove = (e)=>{
     if (this.window.mode === WIN_MODE.INACTIVE) { return true; }
+    console.log("mouse move!!!!!!");
+    //窗口移动时设置成半透明
     this.window.mode == WIN_MODE.MOVE ? $("#window-"+this.window.id+' .content')[0].style.opacity = '0.01' : null;
     var mouse = this.convertPoints(e);
     this.window.update(mouse.x, mouse.y);
@@ -133,7 +139,7 @@ class Window extends Component{
   handleMouseUp = ()=>{
     this.window.opacity = 1;
     this.window.endChange();
-
+    console.log("mouse up!!!!!!");
     $("#window-"+this.window.id)[0].style.opacity = '1';
     $("#window-"+this.window.id+' .content')[0].style.opacity = '1';
     this.props.setWindowSizeChange({windowId: this.window.id, flag: false});
@@ -219,8 +225,8 @@ class Window extends Component{
 
     return (
       /* jshint ignore: start */
-      <div id={"window-"+this.windowModel.id} className={classes} style={styles} onMouseDown={this.handleMove}>
-        <header className='window-caption'>
+      <div id={"window-"+this.windowModel.id} className={classes} style={styles} >
+        <header className='window-caption' onMouseDown={this.onWindowHeaderMouseDown}>
           <span className="window-caption-icon">{this.window.icon.substr(0,7)=="images/" ? <img src={this.window.icon}/> : <span className={this.window.icon}></span>}</span>
           <span className='window-caption-title' title={this.window.title} style={{maxWidth:this.window.width-11-20-27*3}}>{Intl.get(this.window.title)}</span>
           <span className='min' onMouseDown={this.handlePropagation} onClick={this.minimize}>

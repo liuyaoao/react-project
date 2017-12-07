@@ -467,7 +467,7 @@ class Icon extends Component{
     return false;
   }
 
-  handleMove=(e)=>{
+  onIconMouseDown=(e)=>{
     e.preventDefault();
     this.focus();
     var mouse = this.convertPoints(e);
@@ -477,6 +477,7 @@ class Icon extends Component{
 
   handleMouseMove = (e)=>{
     if (this.icon.mode === WIN_MODE.INACTIVE) { return true; }
+    console.log("icon mouse move!!!!!!");
     $(ReactDOM.findDOMNode(this))[0].style.zIndex = "1";
     var mouse = this.convertPoints(e);
     this.icon.update(mouse.x, mouse.y);
@@ -563,7 +564,7 @@ class Icon extends Component{
     };
     return (
       /* jshint ignore: start */
-      <li className={"icon_container"} id={"icon-"+this.icon.id} style={styles} onMouseDown={this.handleMove}>
+      <li className={"icon_container"} id={"icon-"+this.icon.id} style={styles} onMouseDown={this.onIconMouseDown}>
         <Container>
           <img src={this.icon.iconUrl}/>
           <div className="icon-text">{ Intl.get(this.icon.title,this.icon.title,{}) }</div>

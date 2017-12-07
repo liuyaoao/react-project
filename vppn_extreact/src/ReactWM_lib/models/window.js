@@ -159,7 +159,7 @@ _.extend(Window.prototype, {
 
   endChange: function () {
     if (this.mode === WIN_MODE.INACTIVE) { return; }
-    this.mode = WIN_MODE.INACTIVE;
+    this.mode = WIN_MODE.INACTIVE; // 未激活，无效状态
 
     if (this.mode === WIN_MODE.MOVE) {
       delete this._offsetX;

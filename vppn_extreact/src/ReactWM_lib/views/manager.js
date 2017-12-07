@@ -34,6 +34,9 @@ class Manager extends Component{
     this.setState({  offset: el.offset() });
   }
 
+  componentWillReceiveProps(nextProps){
+    console.log('views manager will receive props.......');
+  }
  shouldComponentUpdate(nextProps, nextState) {
    if(nextProps.desktopType != this.props.desktopType && nextProps.desktopType == "phone") {
      var _this = this;

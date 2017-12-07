@@ -14,7 +14,7 @@ import desktopIconDatas from './datas/desktopIconData';
 // var manager = window.m = new ReactWM.Manager.WrappedComponent.Manager(windowData, iconData);
 
 var manager = window.m = new ManagerModel(null, null);
-manager.allWindows().forEach(function (window) {
+manager.allWindows().forEach(function (window) { //展示初始化已经打开的窗口
   window.setComponent(<WindowContentTpl id={window.id} manager={manager} contentComp={window.contentComp}/>);
 });
 

@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import Intl from '../../intl/Intl';
 
 import { TabPanel, Container, FormPanel,TextField,
-  FieldSet, SelectField,Button,Menu,MenuItem,Grid,Column,RendererCell  } from '@extjs/ext-react';
+  FieldSet, SelectField,Button,Menu,MenuItem,Grid,Column  } from '@extjs/ext-react';
 Ext.require('Ext.field.InputMask');
 Ext.require('Ext.Toast');
 
@@ -10,16 +10,19 @@ export default class VportContent extends Component {
     state={
       menuItemVal:'',
       selectedVProxyIp:'', //选中的vProxy IP.
-      routerList:[],//远程路由器列表
+      peersRouterList:[],//远程路由器列表
       vPathList:[],//vPath列表
     }
     componentDidMount(){
     }
     componentWillReceiveProps(nextProps){
+      // console.log(nextProps.peersRouterList);
+      console.log('views vportContent will receive props.......');
       if(nextProps.peersRouterList){
         this.setState({
-          routerList:new Ext.data.Store({
+          peersRouterList:new Ext.data.Store({
             data: nextProps.peersRouterList,
+            fields: ['status', 'subnet', 'peer_latency', 'peer_vip', 'link'],
             sorters: 'name'
           }),
           vPathList:new Ext.data.Store({
@@ -44,9 +47,12 @@ export default class VportContent extends Component {
     onTurnOnOffVPort = ()=>{ //打开和关闭当前端口
       this.props.vpnActions.setRunningStatus(this.props.running_status=="disable"?"connected":"disable");
     }
+    onRouteListItemSelect = (record)=>{
+      // console.log(record);
+    }
 
     render(){
-      let {routerList,vPathList,menuItemVal} = this.state;
+      let {peersRouterList,vPathList,menuItemVal} = this.state;
       let {contentId,myVirtualIP,running_status,vPortBootNodesList} = this.props;
       let idNum = contentId.split('_')[0]; //端口号索引
       let bootsNodeOptions = [];
@@ -97,9 +103,16 @@ export default class VportContent extends Component {
                     <Button text={""} ui={'confirm round alt'} iconCls={'x-fa fa-refresh'} alt={Intl.get("refresh")}></Button>
                   </Container>
                   <Container>
-                    <Grid store={routerList} grouped width={'99%'} height={'320px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
+                    <Grid store={this.props.peersRouterList} grouped onSelect={this.onRouteListItemSelect}
+                      width={'99%'} height={'320px'}
+                      style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
                         <Column text={Intl.get('state')}
                           width="100"
+                          renderer={
+                            (value, record) => (
+                                 <div style={{color:'red'}}>{record.get('status')}</div>
+                             )
+                          }
                           dataIndex="status"/>
                         <Column text={Intl.get('Remote Virtual IP')} width="120" dataIndex="peer_vip"/>
                         <Column text={Intl.get('Remote Subnet')} width="100" dataIndex="subnet"/>

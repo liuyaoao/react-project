@@ -18,31 +18,28 @@ import VlanModuleIconView from './VlanModuleIconView';
 class VlanWindow extends Component{
   state = {
     windowHeight:570,
+    headerHeight:38,
     contentId: 'ModuleIconView',
   }
   componentDidMount(){
     this.props.vpnActions.getVLanStatusInfo('0'); //获取所有端口信息
     this.setRightHeight(this.props.id);
-    document.addEventListener('mousemove', this.handleMouseMove);
+    // $(window).resize(this.handleMouseMove);
+  }
+  componentWillReceiveProps(nextProps){
+    console.log('views vlanWindow will receive props.......');
   }
   componentWillUnmount () {
-    document.removeEventListener('mousemove', this.handleMouseMove);
-    // document.removeEventListener('mouseup', this.handleMouseUp);
+    // $(window).off('resize',this.handleMouseMove);
   }
   onShowModuleIconView = ()=>{  //展示功能模块的图标视图
     this.setState({contentId:'ModuleIconView'});
   }
   setRightHeight = (id)=>{
-    // console.log(id);
     var windowId = '#window-' + id;
-    var height = $(windowId).height();
-    var headerHeight = 38;  //49
-    $(windowId + ' .cell.side').css("height", height - headerHeight);
-    $(windowId + ' .wi-right').css("height", height - headerHeight);
-    this.setState({ windowHeight:height});
-  }
-  handleMouseMove = ()=>{
-    this.setRightHeight(this.props.id);
+    var windowHeight = $(windowId).height();
+    // console.log('setRightHeight----:',id,windowHeight);
+    this.setState({ windowHeight:windowHeight});
   }
   onMenuItemClick = (contentId)=>{
     this.setState({contentId});
@@ -70,19 +67,18 @@ class VlanWindow extends Component{
         }
         {contentId!="ModuleIconView" ?
           <div className="row cells4">
-            <div className="cell side">
+            <div className="cell side" style={{height:(this.state.windowHeight-38)+'px'}}>
               <VlanSidebar
                 contentId={contentId}
                 onShowModuleIconView={this.onShowModuleIconView}
                 onMenuItemClick={this.onMenuItemClick}
               />
             </div>
-            <div className="cell colspan3 wi-right">
+            <div className="cell colspan3 wi-right" style={{height:(this.state.windowHeight-38)+'px'}}>
               <div className="wi active" id="wi_right_content" style={{height:'100%',width:'100%',overflow: 'hidden'}}>
                 {/*所有的Vport tab的右边内容块*/}
                 {(contentId.indexOf('vport')!=-1)?
                   <VportContent
-                    windowHeight={this.state.windowHeight}
                     myVirtualIP={this.props.myVirtualIP}
                     running_status={this.props.running_status}
                     peersRouterList={this.props.peersRouterList}

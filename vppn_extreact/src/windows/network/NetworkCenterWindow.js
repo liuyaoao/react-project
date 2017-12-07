@@ -25,6 +25,7 @@ import Intl from '../../intl/Intl';
 class NetworkCenterWindow extends Component{
   state = {
     windowHeight:570,
+    headerHeight:38,
     contentId: 'ModuleIconView', //首先展示所有的模块图标视图
     modulesData : {
       root: {
@@ -44,26 +45,12 @@ class NetworkCenterWindow extends Component{
   }
   componentDidMount(){
     this.setRightHeight(this.props.id);
-    document.addEventListener('mousemove', this.handleMouseMove);
   }
   componentWillUnmount () {
-    document.removeEventListener('mousemove', this.handleMouseMove);
-    // document.removeEventListener('mouseup', this.handleMouseUp);
   }
   setRightHeight = (id)=>{
-    // console.log(id);
     var windowId = '#window-' + id;
-    var height = $(windowId).height();
-    var headerHeight = 38;  //49
-    $(windowId + ' .cell.side').css("height", height - headerHeight);
-    $(windowId + ' .wi-right').css("height", height - headerHeight);
-    this.setState({ windowHeight:height});
-  }
-  handleMouseMove = ()=>{
-    var cl = $("#window-" + this.props.id);
-    this.setRightHeight(this.props.id);
-    // if (cl.hasClass('active')) {
-    // }
+    this.setState({ windowHeight:$(windowId).height()});
   }
   onSelectedModule = (contentId)=>{
     this.setState({contentId:contentId});
@@ -88,7 +75,7 @@ class NetworkCenterWindow extends Component{
       }
       {contentId!="ModuleIconView" ?
         <div className="row cells4">
-          <div className="cell side">
+          <div className="cell side" style={{height:(this.state.windowHeight-38)+'px'}}>
             <NetworkSidebar
               contentId={contentId}
               modulesData={modulesData}
@@ -96,7 +83,7 @@ class NetworkCenterWindow extends Component{
               onMenuItemClick={this.onMenuItemClick}
             />
           </div>
-          <div className="cell colspan3 wi-right" style={{overflowY:'auto'}}>
+          <div className="cell colspan3 wi-right" style={{overflowY:'auto',height:(this.state.windowHeight-38)+'px'}}>
             <div className="wi active" id={"wi_right_content"}
               style={{height:'100%',width:'100%',overflowX: 'hidden'}}>
               {/*状态 tab的右边内容块*/}
@@ -176,12 +163,9 @@ class NetworkCenterWindow extends Component{
         </div>:null
       }
 
-
-
       </div>
     );
   }
-
 }
 
 export default NetworkCenterWindow;

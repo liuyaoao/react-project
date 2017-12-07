@@ -114,6 +114,16 @@ body.x-desktop{
     overflow: hidden;
   }
 }
+#ext-viewport{
+  position: absolute;
+  top: 50px;
+  bottom: 0;
+  width: 100%;
+  overflow: hidden;
+  & >.x-body-el.x-viewport-body-el.x-container-body-el{
+    background: none;
+  }
+}
 
 .window-manager {
   position: relative;

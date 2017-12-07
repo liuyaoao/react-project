@@ -53,4 +53,5 @@ Ext.require('Ext.plugin.Responsive');
         )
     }
 }
-export default renderWhenReady(App);
+// export default renderWhenReady(App);
+export default App;
