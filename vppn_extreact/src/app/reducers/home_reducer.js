@@ -2,8 +2,9 @@ import {combineReducers} from 'redux';
 import * as ACTIONS from '../actions/home_action';
 import Store from '../script/store';
 
-var initUserLogin = Store.get('userLogin') || false;
-var windowSizeChange = function(state = {windowId:'', flag:false}, action){
+let initUserLogin = Store.get('userLogin') || false;
+
+const windowSizeChange = function(state = {windowId:'', flag:false}, action){
   switch (action.type) {
     case ACTIONS.SET_WINDOW_SIZE_CHANGE:
       return action.windowSizeChange;

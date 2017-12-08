@@ -1,21 +1,27 @@
-.over-table {
-  .table {
-    thead th, tbody td {
-      text-align: center;
-    }
-    tbody tr {
-      border-bottom: 1px solid #ddd;
+// .over-table {
+//   .table {
+//     thead th, tbody td {
+//       text-align: center;
+//     }
+//     tbody tr {
+//       border-bottom: 1px solid #ddd;
+//
+//       &:last-child {
+//         border-bottom: none
+//       }
+//     }
+//     .input-control.text {
+//       width: 8.5rem;
+//     }
+//   }
+// }
 
-      &:last-child {
-        border-bottom: none
-      }
-    }
-    .input-control.text {
-      width: 8.5rem;
-    }
+.tab_settingContent{
+  .packs_textarea{
+    width:100%;
+    border:1px solid #a0cdd6;
   }
 }
-
 .sidebar3 {
   li a, li.active a, li:hover a {
     background-repeat: no-repeat;

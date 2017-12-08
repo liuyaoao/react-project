@@ -15,6 +15,7 @@ import SettingContent from './settingContent';
 import VlanModuleIconView from './VlanModuleIconView';
 // import CommonDialog from '../app/components/common/dialog';
 
+let vlanWindowInterval = '';
 class VlanWindow extends Component{
   state = {
     windowHeight:570,
@@ -27,7 +28,17 @@ class VlanWindow extends Component{
     // $(window).resize(this.handleMouseMove);
   }
   componentWillReceiveProps(nextProps){
-    console.log('views vlanWindow will receive props.......');
+    // console.log('views vlanWindow will receive props.......');
+    // let sizeChange = nextProps.windowSizeChange;
+    // if(sizeChange.flag && sizeChange.windowId==this.props.id && !vlanWindowInterval){
+    //   vlanWindowInterval = setInterval(()=>{
+    //     this.setRightHeight(this.props.id);
+    //   },500);
+    // }
+    // if(!sizeChange.flag){
+    //   clearInterval(vlanWindowInterval);
+    //   vlanWindowInterval = null;
+    // }
   }
   componentWillUnmount () {
     // $(window).off('resize',this.handleMouseMove);
@@ -125,6 +136,7 @@ class VlanWindow extends Component{
 const mapStateToProps = (state) => {
   let { myVirtualIP,running_status,peersRouterList,curBootNodeIP,vPortBootNodesList,
       vPathList,vProxyList,paymentInfo,managerServer,diagnosisRouteList } = state.vpnReducer;
+  // let {windowSizeChange} = state.homeReducer;
   return {
     myVirtualIP,
     running_status,
@@ -136,6 +148,7 @@ const mapStateToProps = (state) => {
     paymentInfo,
     managerServer,
     diagnosisRouteList,
+    // windowSizeChange,
   }
 }
 const mapDispatchToProps = (dispatch) => {

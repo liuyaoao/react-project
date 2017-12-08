@@ -1,26 +1,34 @@
 import React,{Component} from 'react';
 import moment from 'moment';
 import Intl from '../../intl/Intl';
+import {vPathPacksData} from '../../datas/localConfig';
+
 import { TabPanel, Container,FormPanel,FieldSet,TextField,Button,
   SelectField,ComboBoxField,List,TextAreaField } from '@extjs/ext-react';
 
+Ext.require('Ext.data.Store');
 Ext.require('Ext.Toast');
 Ext.require('store.chained');
 
 export default class SettingContent extends Component{
-
-  dataStore = {
-      data: [
-        {index:1, name:' China2World'},
-        {index:2, name:' World2China'}
-      ],
-      sorters: 'name'
+  state = {
+    curVPathPack:[], // 当前的vPath pack数据。数组格式的
   }
+  dataStore = new Ext.data.Store({
+    data: [
+      {index:1, name:'China2World'},
+      {index:2, name:'World2China'}
+    ],
+    sorters: 'name'
+  });
   componentWillMount(){
 
   }
   componentDidMount(){
     this.props.vpnActions.getPaymentInfo();
+  }
+  componentWillReceiveProps(nextProps){
+    console.log("setting content will receive props....");
   }
   componentWillUnmount(){
     // $('.tab_settingContent').remove();
@@ -29,6 +37,16 @@ export default class SettingContent extends Component{
   }
   onListSelect = (records,opts)=>{
     console.log("records--opts--:",records,opts);
+    this.setState({
+      curVPathPack:vPathPacksData[opts.data.name]
+    });
+  }
+  onListItemTap = (list, index, target, record)=>{
+    console.log("onListItemTap--:",record,index);
+  }
+  onTextareaChange = (evt)=>{
+    console.log("onTextareaChange--:",evt);
+    
   }
   clickManagerServerTest = (serverNum) => { //点击 manager server 测试
 
@@ -138,11 +156,16 @@ export default class SettingContent extends Component{
                       itemTpl={this.itemTpl}
                       store={this.dataStore}
                       onSelect={this.onListSelect}
+                      onItemTap={this.onListItemTap}
                       zIndex={999}
-                      height={''+(this.props.windowHeight-169)}
+                      height={''+(this.props.windowHeight-176)}
                       width={'160'}/>
                   <Container flex={1} style={{marginLeft:'20px'}}>
-                    <textarea style={{width:'100%',height:''+(this.props.windowHeight-200)+'px',border:'1px solid #a0cdd6'}} />
+                    <textarea spellCheck="false" autoCapitalize="off" autoComplete="off" autoCorrect="off"
+                      className='packs_textarea'
+                      onChange={this.onTextareaChange}
+                      style={{height:''+(this.props.windowHeight-220)+'px'}}
+                      value={this.state.curVPathPack.join('\n')} />
                     <Button text={Intl.get('save')} ui={'action raised'} style={{'float':'right',marginTop:'10px'}}></Button>
                   </Container>
                 </FieldSet>

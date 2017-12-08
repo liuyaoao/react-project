@@ -52,7 +52,7 @@ class Window extends Component{
     document.removeEventListener('mouseup', this.handleMouseUp);
   }
 
-  quickUpdate() {
+  quickManualUpdate() { //手动更新窗口的有关样式。
     var self = this;
     requestAnimationFrame(function () {
       var el = ReactDOM.findDOMNode(self);
@@ -62,30 +62,13 @@ class Window extends Component{
       el.style.left   = self.windowModel.x + 'px';
       el.style.opacity= self.windowModel.opacity;
       self.props.setWindowSize({width: el.style.width, height:el.style.height});
-      switch (self.windowModel.id) {
-        case "photo":
-        case "video":
-        case "music":
-        case "file":
-        case "phone_photo":
-        case "phone_video":
-        case "phone_music":
-        case "phone_file":
-        case "settings-2":
-          let isResize = (self.window.mode == WIN_MODE.RESIZE || self.window.mode == WIN_MODE.RESIZE_EW || self.window.mode == WIN_MODE.RESIZE_NS);
-          if(!self.window.isMinimize && isResize) {
-            self.props.setWindowSizeChange({windowId: self.window.id, flag: true});
-          }
-          break;
-        default:
-          break;
-      }
-    });
-  }
 
-  preventDefault(e) {
-    e.preventDefault();
-    return false;
+      let isResize = (self.window.mode == WIN_MODE.RESIZE || self.window.mode == WIN_MODE.RESIZE_EW || self.window.mode == WIN_MODE.RESIZE_NS);
+      if(!self.window.isMinimize && isResize) {
+        self.props.setWindowSizeChange({windowId: self.window.id, flag: true});
+      }
+
+    });
   }
 
   handlePropagation = (e)=>{
@@ -133,7 +116,7 @@ class Window extends Component{
     this.window.mode == WIN_MODE.MOVE ? $("#window-"+this.window.id+' .content')[0].style.opacity = '0.01' : null;
     var mouse = this.convertPoints(e);
     this.window.update(mouse.x, mouse.y);
-    this.quickUpdate();
+    this.quickManualUpdate();
   }
 
   handleMouseUp = ()=>{
@@ -184,7 +167,7 @@ class Window extends Component{
       $('.sw-resize').show();
       $('.se-resize').show();
     }
-    this.quickUpdate();
+    this.quickManualUpdate();
     this.props.setWindowSizeChange({windowId: this.window.id, flag: true});
     this.window.endChange();
     setTimeout(function(){
@@ -196,7 +179,7 @@ class Window extends Component{
     ReactDOM.findDOMNode(this).style.transition = 'all 0.3s ease';
     this.window.requestFocus();
     this.window.minimize($('#taskbar-'+this.window.id).offset().left + 16 + $('#taskbar-'+this.window.id).width()/2, 0);
-    this.quickUpdate();
+    this.quickManualUpdate();
     // this.window.hide();
     // this.window.endChange();
   }

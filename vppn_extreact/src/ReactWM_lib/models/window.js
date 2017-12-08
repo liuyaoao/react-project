@@ -54,25 +54,24 @@ _.extend(Window.prototype, {
    * - x (number)
    * - y (number)
    */
-  setPosition: function (x, y) {
-    this.x = x;
-    this.y = y;
-    this.emit('change:position');
-    this.emit('change');
-  },
+  // setPosition: function (x, y) {
+  //   this.x = x;
+  //   this.y = y;
+  //   this.emit('change:position');
+  //   this.emit('change');
+  // },
 
   /**
    * resize the window
    * - width (number)
    * - height (number)
    */
-  setSize: function (width, height) {
-    this.width = width;
-    this.height = height;
-    this.emit('change:size');
-    this.emit('change');
-  },
-
+  // setSize: function (width, height) {
+  //   this.width = width;
+  //   this.height = height;
+  //   this.emit('change:size');
+  //   this.emit('change');
+  // },
 
   /**
    * set z-index of window

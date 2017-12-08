@@ -5,6 +5,7 @@ import { TabPanel, Container, FormPanel,TextField,
   FieldSet, SelectField,Button,Menu,MenuItem,Grid,Column  } from '@extjs/ext-react';
 Ext.require('Ext.field.InputMask');
 Ext.require('Ext.Toast');
+Ext.require('Ext.data.Store');
 
 export default class VportContent extends Component {
     state={
@@ -14,11 +15,23 @@ export default class VportContent extends Component {
       vPathList:[],//vPath列表
     }
     componentDidMount(){
+      this.setState({
+        peersRouterList:new Ext.data.Store({
+          data: this.props.peersRouterList,
+          fields: ['status', 'subnet', 'peer_latency', 'peer_vip', 'link'],
+          sorters: 'name'
+        }),
+        vPathList:new Ext.data.Store({
+          data:this.props.vPathList,
+          sorters:'domain'
+        })
+      });
     }
     componentWillReceiveProps(nextProps){
       // console.log(nextProps.peersRouterList);
       console.log('views vportContent will receive props.......');
-      if(nextProps.peersRouterList){
+      if(nextProps.peersRouterList && nextProps.peersRouterList!=this.props.peersRouterList){
+        console.log('views vportContent peersRouterList props~~~~~~~');
         this.setState({
           peersRouterList:new Ext.data.Store({
             data: nextProps.peersRouterList,
@@ -44,11 +57,11 @@ export default class VportContent extends Component {
       Ext.toast(`You selected the item with value ${newValue}`);
     }
 
-    onTurnOnOffVPort = ()=>{ //打开和关闭当前端口
+    onTurnOnOffVPort = (e)=>{ //打开和关闭当前端口
       this.props.vpnActions.setRunningStatus(this.props.running_status=="disable"?"connected":"disable");
     }
     onRouteListItemSelect = (record)=>{
-      // console.log(record);
+      console.log('点击了vport content 的路由列表某一项~~~~~');
     }
 
     render(){
@@ -103,14 +116,14 @@ export default class VportContent extends Component {
                     <Button text={""} ui={'confirm round alt'} iconCls={'x-fa fa-refresh'} alt={Intl.get("refresh")}></Button>
                   </Container>
                   <Container>
-                    <Grid store={this.props.peersRouterList} grouped onSelect={this.onRouteListItemSelect}
+                    <Grid store={peersRouterList} grouped onSelect={this.onRouteListItemSelect}
                       width={'99%'} height={'320px'}
                       style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
                         <Column text={Intl.get('state')}
-                          width="100"
+                          width="60"
                           renderer={
                             (value, record) => (
-                                 <div style={{color:'red'}}>{record.get('status')}</div>
+                                 <div style={{fontWeight:'600',color:value?'green':'red'}}>{value?'on':'off'}</div>
                              )
                           }
                           dataIndex="status"/>

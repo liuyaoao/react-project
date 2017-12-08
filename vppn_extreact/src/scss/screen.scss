@@ -116,7 +116,7 @@ body.x-desktop{
 }
 #ext-viewport{
   position: absolute;
-  top: 50px;
+  top: 0;
   bottom: 0;
   width: 100%;
   overflow: hidden;
@@ -124,7 +124,7 @@ body.x-desktop{
     background: none;
   }
 }
-
+textarea:focus {outline: none;}
 .window-manager {
   position: relative;
 }
