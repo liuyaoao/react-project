@@ -218,10 +218,10 @@ class GuestNetworkTab extends Component{
   }
   render(){
     return (
-      <div className="cnt" style={{margin:'20px'}}>
+      <div className="cnt" style={{margin:'10px',width:'96%'}}>
         <div className="title">5GHz</div>
         <Panel
-          margin='10 0 10 0'
+          margin='10 10 10 10'
           layout="vbox"
         >
             <Container flex={1}>
@@ -318,10 +318,10 @@ class MACFilterTab extends Component{
   }
   render(){
     return (
-      <div className="cnt" style={{margin:'10px'}}>
+      <div className="cnt" style={{margin:'10px',width:'96%'}}>
         <Container
             layout={{ type: 'hbox', pack: 'left'}}
-            margin="0 0 10 0"
+            margin="10 0 10 0"
             defaults={{ margin: "0 10 10 0" }}
           >
           <Button ui="confirm raised" text="新增"/>

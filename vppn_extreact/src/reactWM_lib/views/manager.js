@@ -5,6 +5,8 @@ import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 // var CSSTransitionGroup = require('react/addons').addons.CSSTransitionGroup;
 
+// import { TabPanel, Container,Grid,Column  } from '@extjs/ext-react';
+
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as HomeActions from '../../app/actions/home_action';
@@ -25,7 +27,7 @@ class Manager extends Component{
     offset: {
       top: 0,
       left: 0
-    }
+    },
   }
   componentDidMount () {
     this.manager = this.props.manager;
@@ -357,8 +359,11 @@ class Manager extends Component{
           </ul>
         </div>
         <div className='window-manager'>
+
           {/*所有已打开窗口*/}
-          <div className='windows'>{windowsView}</div>
+          <div className='windows'>
+            {windowsView}
+          </div>
         </div>
         {/*右键菜单*/}
         <ContextMenu

@@ -9,6 +9,7 @@ import { Container,Sheet,TitleBar,Button,SelectField,ContainerField,Menu,MenuIte
 
 class AdvancedSettingComp extends Component{
   state = {
+    noticeType:"",
   }
   componentDidMount(){
     this.setState({
@@ -30,7 +31,7 @@ class AdvancedSettingComp extends Component{
       <div style={{padding:'10px'}}>
         <div>{Intl.get('message_desc')}</div>
         <Container layout={{type:'vbox',pack:'start',align:'left'}} width="100%">
-          <Container layout={{type:'hbox',pack:'let',align:'bottom'}} margin="10 10 10 10">
+          <Container layout={{type:'hbox',pack:'left',align:'bottom'}} margin="10 10 10 10">
               <Button text={Intl.get('Edit Message')} ui={'confirm raised'} style={{marginRight:'10px'}}/>
               <Button text={Intl.get('Save')} ui={'decline raised'} style={{marginLeft:'10px'}}/>
               <Button text={Intl.get('Edit Variables')} ui={'decline raised'} style={{marginLeft:'10px'}}/>

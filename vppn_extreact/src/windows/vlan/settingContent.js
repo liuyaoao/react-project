@@ -12,6 +12,8 @@ Ext.require('store.chained');
 
 export default class SettingContent extends Component{
   state = {
+    vPathPacksData:{},
+    vPathPackKey:'',
     curVPathPack:[], // 当前的vPath pack数据。数组格式的
   }
   dataStore = new Ext.data.Store({
@@ -22,31 +24,43 @@ export default class SettingContent extends Component{
     sorters: 'name'
   });
   componentWillMount(){
-
+    let vPathPacksStr = localStorage.getItem('vPathPacksStorageKey');
+    this.setState({
+      vPathPacksData:vPathPacksStr?JSON.parse(vPathPacksStr):vPathPacksData
+    });
   }
   componentDidMount(){
     this.props.vpnActions.getPaymentInfo();
   }
   componentWillReceiveProps(nextProps){
-    console.log("setting content will receive props....");
+    // console.log("setting content will receive props....");
   }
   componentWillUnmount(){
     // $('.tab_settingContent').remove();
+    localStorage.setItem('vPathPacksStorageKey',JSON.stringify(this.state.vPathPacksData));
   }
   handleShow(key, e){
   }
   onListSelect = (records,opts)=>{
     console.log("records--opts--:",records,opts);
     this.setState({
-      curVPathPack:vPathPacksData[opts.data.name]
+      vPathPackKey:opts.data.name,
+      curVPathPack:this.state.vPathPacksData[opts.data.name]
     });
   }
-  onListItemTap = (list, index, target, record)=>{
-    console.log("onListItemTap--:",record,index);
-  }
   onTextareaChange = (evt)=>{
-    console.log("onTextareaChange--:",evt);
-    
+    console.log("onTextareaChange--:",evt,evt.currentTarget.value);
+    let val = evt.currentTarget.value;
+    this.setState({
+      curVPathPack:val.split('\n')
+    });
+  }
+  onClickSavePacks = (evt)=>{
+    let {curVPathPack,vPathPacksData} = this.state;
+    vPathPacksData[this.state.vPathPackKey] = curVPathPack;
+    this.setState({
+      vPathPacksData:vPathPacksData
+    });
   }
   clickManagerServerTest = (serverNum) => { //点击 manager server 测试
 
@@ -61,6 +75,7 @@ export default class SettingContent extends Component{
   render(){
     let {paymentInfo} = this.props;
     let data= [{name:'127.0.0.1',abbrev:'999'}];
+    console.log('render00989');
     return (
       <div className="" style={{height:'100%'}}>
         <TabPanel cls="tab_settingContent"
@@ -156,17 +171,19 @@ export default class SettingContent extends Component{
                       itemTpl={this.itemTpl}
                       store={this.dataStore}
                       onSelect={this.onListSelect}
-                      onItemTap={this.onListItemTap}
                       zIndex={999}
                       height={''+(this.props.windowHeight-176)}
                       width={'160'}/>
                   <Container flex={1} style={{marginLeft:'20px'}}>
-                    <textarea spellCheck="false" autoCapitalize="off" autoComplete="off" autoCorrect="off"
+                    <textarea type="text" spellCheck="false" autoCapitalize="off" autoComplete="off" autoCorrect="off"
                       className='packs_textarea'
                       onChange={this.onTextareaChange}
                       style={{height:''+(this.props.windowHeight-220)+'px'}}
                       value={this.state.curVPathPack.join('\n')} />
-                    <Button text={Intl.get('save')} ui={'action raised'} style={{'float':'right',marginTop:'10px'}}></Button>
+                    <Button text={Intl.get('save')}
+                      ui={'action raised'}
+                      onTap={this.onClickSavePacks}
+                      style={{'float':'right',marginTop:'10px'}}></Button>
                   </Container>
                 </FieldSet>
               </FormPanel>

@@ -33,9 +33,9 @@ export default class VportContent extends Component {
       if(nextProps.peersRouterList && nextProps.peersRouterList!=this.props.peersRouterList){
         console.log('views vportContent peersRouterList props~~~~~~~');
         this.setState({
-          peersRouterList:new Ext.data.Store({
+          peersRouterList:Ext.create('Ext.data.Store', {
             data: nextProps.peersRouterList,
-            fields: ['status', 'subnet', 'peer_latency', 'peer_vip', 'link'],
+            fields: ['id','status', 'subnet', 'peer_latency', 'peer_vip', 'link'],
             sorters: 'name'
           }),
           vPathList:new Ext.data.Store({
@@ -74,7 +74,7 @@ export default class VportContent extends Component {
           bootsNodeOptions.push({ text:item.IP, value:item.IP });
         }
       });
-
+      // console.log('vport content render----------');
       let vProxyIpOptions = this.props.vProxyList;
       return (
         <div className="" style={{height:'100%'}}>
@@ -181,9 +181,9 @@ export default class VportContent extends Component {
                   </FormPanel>
                   <Container>
                     <Grid store={vPathList} grouped width={'98%'} height={'320px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
-                        <Column text={Intl.get('domain')} width="150" dataIndex="uri"/>
-                        <Column text={Intl.get('proxy')} width="150" dataIndex="vproxy"/>
-                        <Column text={Intl.get('description')} width="100" dataIndex="desc"/>
+                        <Column text={Intl.get('domain')} flex={1} dataIndex="uri"/>
+                        <Column text={Intl.get('proxy')} flex={1} dataIndex="vproxy"/>
+                        <Column text={Intl.get('description')} flex={1} dataIndex="desc"/>
                     </Grid>
                   </Container>
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Transition, Container, TitleBar, Button, Sheet, Panel } from '@extjs/ext-react';
+import { Transition, Container, TitleBar, Button, Sheet, Panel,Grid,Column } from '@extjs/ext-react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom'
 import { medium, large } from './responsiveFormulas';
 import Home from './Home/Home';
@@ -12,7 +12,14 @@ import NavMenu from './NavMenu';
 class Layout extends Component {
 
     state = {
-        showAppMenu: false
+        showAppMenu: false,
+        vPathList:new Ext.data.Store({
+          data:[
+            {uri:'234.532.432.23',vproxy:'baidu.com',desc:'33'},
+            {uri:'234.532.73.23',vproxy:'souhu.com',desc:'98'}
+          ],
+          sorters:'domain'
+        })
     }
 
     toggleAppMenu = () => {
@@ -73,6 +80,11 @@ class Layout extends Component {
                         <Route path="/about" component={About}/>
                     </Switch>
                 </Transition>
+                <Grid store={this.state.vPathList} grouped width={'98%'} height={'320px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
+                    <Column text={'domain'} width="150" dataIndex="uri"/>
+                    <Column text={'proxy'} width="150" dataIndex="vproxy"/>
+                    <Column text={'description'} width="100" dataIndex="desc"/>
+                </Grid>
             </Container>
         );
     }

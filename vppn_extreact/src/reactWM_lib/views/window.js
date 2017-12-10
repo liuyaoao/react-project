@@ -4,7 +4,7 @@ import $ from 'jquery';
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 import classSet from 'react-classset';
-
+// import { TabPanel, Container,Grid,Column  } from '@extjs/ext-react';
 import {WIN_MODE} from '../models/Constants';
 import WindowModel from '../models/window';
 import Intl from '../../intl/Intl';
@@ -13,7 +13,8 @@ var bodyWidth = document.documentElement.clientWidth / 2, bodyHeight = (document
 
 //窗口的框架容器
 class Window extends Component{
-
+  state={
+  }
   componentWillMount() {
     this.hasMounted = true;
     this.window = this.props.windowModel;
@@ -74,7 +75,7 @@ class Window extends Component{
   handlePropagation = (e)=>{
     if (!(e.ctrlKey || e.metaKey || e.altKey || e.button !== 0)){
       this.focus();
-      e.stopPropagation();
+      // e.stopPropagation();
     }
   }
 
@@ -120,12 +121,15 @@ class Window extends Component{
   }
 
   handleMouseUp = ()=>{
-    this.window.opacity = 1;
-    this.window.endChange();
-    console.log("mouse up!!!!!!");
-    $("#window-"+this.window.id)[0].style.opacity = '1';
-    $("#window-"+this.window.id+' .content')[0].style.opacity = '1';
-    this.props.setWindowSizeChange({windowId: this.window.id, flag: false});
+    if(this.window.mode != WIN_MODE.INACTIVE){
+
+      this.window.opacity = 1;
+      this.window.endChange();
+      console.log("mouse up on window=====");
+      $("#window-"+this.window.id)[0].style.opacity = '1';
+      $("#window-"+this.window.id+' .content')[0].style.opacity = '1';
+      this.props.setWindowSizeChange({windowId: this.window.id, flag: false});
+    }
   }
 
   focus () {

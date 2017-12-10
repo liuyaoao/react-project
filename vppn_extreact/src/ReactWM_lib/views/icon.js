@@ -486,6 +486,7 @@ class Icon extends Component{
 
   handleMouseUp = (e)=>{
     if(this.icon.mode != WIN_MODE.INACTIVE) {
+      console.log("mouse up on icon=====");
       $(ReactDOM.findDOMNode(this))[0].style.zIndex = "";
       $("#icon_position_line").hide();
       if($("#icon_check_lineUptoGrid")[0].style.display == "block" || $("#icon_check_lineUptoGrid")[0].style.display == "inline") {

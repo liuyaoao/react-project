@@ -17,8 +17,9 @@ export function parseRouteList(routeList){  //vpn 的remote router 的列表
 
 export function parseVPathList(vpaths){ //整理，重新构造vPath列表。
   let list = [];
-  vpaths.map((item)=>{
+  vpaths.map((item,index)=>{
     let tempObj = Object.assign({},item);
+    tempObj.id = index+1;
     tempObj.desc = "";
     list.push(tempObj);
   });

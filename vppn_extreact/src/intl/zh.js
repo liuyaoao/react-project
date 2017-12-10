@@ -203,7 +203,7 @@ export default ({
    "Restore Configuration":"还原配置",
    "Restore Factory Settings":"恢复出厂设置值",
 
-   //通知设置-电子邮件
+   //通知设置
    "email_desc":"当状态改变或系统发生错误时，启动电子邮件通知服务通过电子邮件接收通知消息。",
    "Enable email notification":"启动电子右键通知",
    "Recipient":"收件人",
@@ -230,8 +230,8 @@ export default ({
    "Enable browser notifications":"启用浏览器通知",
    "Edit Message":"编辑信息",
    "Edit Variables":"编辑变量",
-   "":"",
-   "":"",
+   "Events":"事件",
+   "Mobile Device":"移动设备",
    "":"",
    "":"",
 

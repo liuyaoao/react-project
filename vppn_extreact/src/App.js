@@ -8,7 +8,7 @@ import {Router,browserHistory,hashHistory } from 'react-router/es6';
 
 import { renderWhenReady,Container } from '@extjs/reactor';
 
-// import RootPc from './RootPc'; //pc端微软桌面风格页面。
+import RootPc from './RootPc'; //pc端微软桌面风格页面。
 
 import "./scss/screen.scss";
 
@@ -53,5 +53,6 @@ Ext.require('Ext.plugin.Responsive');
         )
     }
 }
+
 // export default renderWhenReady(App);
 export default App;

@@ -100,7 +100,8 @@ body {
 }
 
 body.x-desktop{
-  position: fixed;
+  // position: fixed;
+  position: relative;
   top: 0; bottom: 0;
   background-image: url("../images/bj.jpg");
   background-repeat: round;
@@ -381,6 +382,7 @@ $fade: opacity 1s ease-in;
     }
     .text_view{
       color: #505A64;
+      white-space:nowrap;
       font-family: verdana,arial,tahoma,helvetica,sans-serif;
     }
     &:hover{
