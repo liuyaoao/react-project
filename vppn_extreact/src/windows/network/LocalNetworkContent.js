@@ -1,8 +1,8 @@
 import React,{Component} from 'react';
 import Intl from '../../intl/Intl';
 
-import { TabPanel, Container, FormPanel,TextField,
-  FieldSet, SelectField,Button,Menu,MenuItem,Grid,
+import { TabPanel, Container, FormPanel,TextField,RadioField,
+  FieldSet, SelectField,Button,Menu,MenuItem,Grid,CheckColumn,
   Column,ToggleField,ContainerField,CheckBoxField   } from '@extjs/ext-react';
 
 Ext.require('Ext.field.InputMask');
@@ -39,7 +39,7 @@ export default class LocalNetworkContent extends Component {
       let {maskNumber,DHCPServerOn} = this.state;
 
       return (
-        <div className='localNetwork_content' style={{height:'100%'}}>
+        <div className='localNetwork_content' style={{height:'100%',position:'relative'}}>
           <TabPanel cls='tabpanel_pc localNetwork_tabPanel'
             height={'100%'}
             defaults={{
@@ -56,7 +56,7 @@ export default class LocalNetworkContent extends Component {
                 }
             }}
           >
-              <Container title="常规" cls="state_Internet" scrollable={true}>
+              <Container title={Intl.get('Routine')} cls="state_Internet" scrollable={true}>
                 <div className="cnt" style={{margin:'10px',width:'95%'}}>
                   <div className="title">{Intl.get('Local')+' IP'}</div>
                   <Container layout="vbox">
@@ -190,35 +190,290 @@ export default class LocalNetworkContent extends Component {
 
               </Container>
               <Container title="IPv6" cls="state_equipList" scrollable={true}>
-                  <div className="">
-                    IPv6
-                  </div>
+                  <IPv6Comp/>
               </Container>
-              <Container title="静态路由" cls="state_CPU" scrollable={true}>
-                  <div className="">
-                    静态路由
-                  </div>
+              <Container title={Intl.get('Static Route')} cls="state_CPU" scrollable={true}>
+                  <StaticRouteComp/>
               </Container>
-              <Container title="DHCP客户端" cls="state_memory" scrollable={true}>
-                  <div className="">
-                    DHCP客户端
-                  </div>
+              <Container title={"DHCP "+Intl.get('Client')} cls="state_memory" scrollable={true}>
+                  <DHCP_ClientComp/>
               </Container>
 
-              <Container title="DHCP保留" cls="state_memory" scrollable={true}>
-                  <div className="">
-                    DHCP客户端
-                  </div>
+              <Container title={"DHCP "+Intl.get('Retain')} cls="state_memory" scrollable={true}>
+                  <DHCP_RetainComp/>
               </Container>
 
-              <Container title="IPTV和VoIP" cls="state_memory" scrollable={true}>
-                  <div className="">
-                    IPTV和VoIP
-                  </div>
+              <Container title={Intl.get('IPTV And VoIP')} cls="state_memory" scrollable={true}>
+                  <IPTV_And_VoIP_Comp/>
               </Container>
 
             </TabPanel>
+            <Container layout={{type:'hbox',pack:'end',align:'bottom'}} height="40px" width="100%" style={{position:'absolute',bottom:'10px',right:'20px'}}>
+                <Button text={Intl.get('Apply')} ui={'confirm alt'} style={{marginRight:'10px'}}/>
+                <Button text={Intl.get('Reset')} ui={'decline alt'} style={{marginLeft:'10px'}}/>
+            </Container>
         </div>
     )
+  }
+}
+
+//IPv6
+class IPv6Comp extends Component{
+  state = {
+    DHCPServerOn:"1",
+  }
+  onDHCPServerChange = (newValue)=>{
+    this.setState({ DHCPServerOn:newValue });
+  }
+  componentDidMount(){
+  }
+  render () {
+    let {DHCPServerOn} = this.state;
+    const radioProps = {
+        name: 'radios'
+    };
+    return (
+        <div style={{padding:'10px'}}>
+          <Container layout="vbox" >
+              <Container flex={1}>
+                <div style={{'float':'left'}}>
+                  <CheckBoxField boxLabel={Intl.get('Enable ')+'IPv6'} cls="black_label"/>
+                </div>
+              </Container>
+              <ContainerField label={Intl.get('Prefix')+"："}
+                cls="black_label auto_width disable_text"
+                width="100%"
+                layout={'hbox'}
+                labelAlign="left" labelTextAlign="left">
+                <Button ui="menu" text={Intl.get('123.456.213')}
+                  style={{width:'100%','float':'left'}}
+                  textAlign="right" menuAlign="tr-br">
+                   <Menu defaults={{ handler: this.onDHCPServerChange, group: 'buttonstyle' }}>
+                       <MenuItem text={Intl.get('123.456.213')} value="1" iconCls={DHCPServerOn === '1' && 'x-font-icon md-icon-check'}/>
+                       <MenuItem text={Intl.get('123.456.213')} value="0" iconCls={DHCPServerOn === '0' && 'x-font-icon md-icon-check'}/>
+                   </Menu>
+                </Button>
+              </ContainerField>
+              <TextField label={Intl.get('Main')+" DNS："}
+                labelTextAlign="text" labelAlign="left"
+                value="192.168.1.1"
+                cls="black_label auto_width disable_text"
+                textAlign="right"/>
+              <TextField label={Intl.get('Sub')+" DNS："}
+                labelTextAlign="text" labelAlign="left"
+                value="192.168.1.1"
+                cls="black_label auto_width disable_text"
+                textAlign="right"/>
+              <FormPanel layout={{type:'vbox',pack:'center',align:'left'}} padding="0">
+                <RadioField {...radioProps} cls="black_label" boxLabel={Intl.get('Stateless mode')} value="checked1" checked/>
+                <RadioField {...radioProps} cls="black_label" boxLabel={Intl.get('Stateless DHCPv6 mode')} value="checked2"/>
+                <RadioField {...radioProps} cls="black_label" boxLabel={Intl.get('State mode')} value="checked3"/>
+              </FormPanel>
+              <TextField label={Intl.get('Start IP Address')+"："}
+                labelTextAlign="text" labelAlign="left"
+                value="225.225.225.0"
+                cls="black_label auto_width disable_text"
+                textAlign="right"/>
+              <TextField label={Intl.get('End IP Address')+"："}
+                labelTextAlign="text" labelAlign="left"
+                value=""
+                cls="black_label auto_width disable_text"
+                textAlign="right"/>
+          </Container>
+        </div>
+    );
+  }
+}
+
+//静态路由
+class StaticRouteComp extends Component{
+  state = {
+    DHCPServerOn:"1",
+  }
+  dataStore = new Ext.data.Store({
+      data: [
+        {index:1, name:' Wireless',price:'342.54', priceChange:'mif-wifi-connect icon'},
+        {index:2, name:' Internet',price:'342.54', priceChange:'mif-earth icon'}
+      ],
+      sorters: 'name'
+  })
+  onDHCPServerChange = (newValue)=>{
+    this.setState({ DHCPServerOn:newValue });
+  }
+  componentDidMount(){
+  }
+  render () {
+    let {DHCPServerOn} = this.state;
+    return (
+        <div style={{padding:'10px'}}>
+          <Container layout={{type:'hbox',pack:'left',aglin:'bottom'}}>
+            <Button text={Intl.get('Add')} ui="confirm raised" style={{marginRight:'10px'}}/>
+            <Button text={Intl.get('Delete')} ui="decline raised" style={{marginRight:'10px'}}/>
+            <Button text={Intl.get('Save')} ui="decline raised" style={{marginRight:'10px'}}/>
+            <Button text={'IP '+Intl.get('Routing table')} ui="decline raised" />
+          </Container>
+          <Container>
+            <Button ui="menu" text="IPv4"
+              style={{width:'100%'}}>
+               <Menu defaults={{ handler: this.onDHCPServerChange, group: 'buttonstyle' }}>
+                   <MenuItem text={Intl.get('IPv4')} value="1" iconCls={DHCPServerOn === '1' && 'x-font-icon md-icon-check'}/>
+                   <MenuItem text={Intl.get('IPv6')} value="0" iconCls={DHCPServerOn === '0' && 'x-font-icon md-icon-check'}/>
+               </Menu>
+            </Button>
+          </Container>
+          <Container width="100%" margin="10 0 10 0">
+            <Grid shadow grouped
+              store={this.dataStore}
+              style={{minHeight:'600px'}}
+              scrollable={true}>
+                <CheckColumn text={Intl.get('Apply')} width="100" dataIndex="name" groupable={false} sortable={false}/>
+                <Column text={Intl.get('Network target address')} width="120" dataIndex="price"/>
+                <Column text={Intl.get('Subnet mask')} width="100" dataIndex="priceChange"/>
+                <Column text={Intl.get('Gateway')} width="100" dataIndex="priceChange"/>
+                <Column text={Intl.get('Interface')} width="100" dataIndex="priceChange"/>
+                <Column text={Intl.get('State')} width="100" dataIndex="priceChange"/>
+            </Grid>
+          </Container>
+        </div>
+    );
+  }
+}
+
+//DHCP客户端
+class DHCP_ClientComp extends Component{
+  state = {
+    DHCPServerOn:"1",
+  }
+  onDHCPServerChange = (newValue)=>{
+    this.setState({ DHCPServerOn:newValue });
+  }
+  dataStore = new Ext.data.Store({
+      data: [
+        {index:1, name:' Wireless',price:'342.54', priceChange:'mif-wifi-connect icon'},
+        {index:2, name:' Internet',price:'342.54', priceChange:'mif-earth icon'}
+      ],
+      sorters: 'name'
+  })
+  componentDidMount(){
+  }
+  render () {
+    let {DHCPServerOn} = this.state;
+    return (
+        <div style={{padding:'10px'}}>
+          <Container layout={{type:'hbox',pack:'left',aglin:'bottom'}}>
+            <Button text={Intl.get('Refresh')} ui="confirm raised" style={{marginRight:'10px'}}/>
+            <Button text={Intl.get('Add to address reservation')} ui="decline raised" />
+          </Container>
+          <Container>
+            <Button ui="menu" text="IPv4"
+              style={{width:'100%'}}>
+               <Menu defaults={{ handler: this.onDHCPServerChange, group: 'buttonstyle' }}>
+                   <MenuItem text={Intl.get('IPv4')} value="1" iconCls={DHCPServerOn === '1' && 'x-font-icon md-icon-check'}/>
+                   <MenuItem text={Intl.get('IPv6')} value="0" iconCls={DHCPServerOn === '0' && 'x-font-icon md-icon-check'}/>
+               </Menu>
+            </Button>
+          </Container>
+          <Container width="100%" margin="10 0 10 0">
+            <Grid shadow grouped
+              store={this.dataStore}
+              style={{minHeight:'600px'}}
+              scrollable={true}>
+                <Column text={Intl.get('MAC/DUID')} width="120" dataIndex="price"/>
+                <Column text={Intl.get('IP')} width="100" dataIndex="priceChange"/>
+                <Column text={Intl.get('Host')} width="100" dataIndex="priceChange"/>
+                <Column text={Intl.get('Expiration date')} width="100" dataIndex="priceChange"/>
+            </Grid>
+          </Container>
+        </div>
+    );
+  }
+}
+
+//DHCP保留
+class DHCP_RetainComp extends Component{
+  state = {
+    DHCPServerOn:"1",
+  }
+  dataStore = new Ext.data.Store({
+      data: [
+        {index:1, name:' Wireless',price:'342.54', priceChange:'mif-wifi-connect icon'},
+        {index:2, name:' Internet',price:'342.54', priceChange:'mif-earth icon'}
+      ],
+      sorters: 'name'
+  })
+  componentDidMount(){
+  }
+  render () {
+    let {DHCPServerOn} = this.state;
+    return (
+        <div style={{padding:'10px'}}>
+          <Container layout={{type:'hbox',pack:'left',aglin:'bottom'}}>
+            <Button text={Intl.get('Add')} ui="confirm raised" style={{marginRight:'10px'}}/>
+            <Button text={Intl.get('Delete')} ui="decline raised" style={{marginRight:'10px'}}/>
+            <Button text={Intl.get('Save')} ui="decline raised" />
+          </Container>
+          <Container>
+            <Button ui="menu" text="IPv4"
+              style={{width:'100%'}}>
+               <Menu defaults={{ handler: this.onDHCPServerChange, group: 'buttonstyle' }}>
+                   <MenuItem text={Intl.get('IPv4')} value="1" iconCls={DHCPServerOn === '1' && 'x-font-icon md-icon-check'}/>
+                   <MenuItem text={Intl.get('IPv6')} value="0" iconCls={DHCPServerOn === '0' && 'x-font-icon md-icon-check'}/>
+               </Menu>
+            </Button>
+          </Container>
+          <Container width="100%" margin="10 0 10 0">
+            <Grid shadow grouped
+              store={this.dataStore}
+              style={{minHeight:'600px'}}
+              scrollable={true}>
+                <Column text={Intl.get('MAC/DUID')} width="120" dataIndex="price"/>
+                <Column text={Intl.get('IP')} width="100" dataIndex="priceChange"/>
+                <Column text={Intl.get('Host')} width="100" dataIndex="priceChange"/>
+            </Grid>
+          </Container>
+        </div>
+    );
+  }
+}
+
+//IPTV 和 VoIP
+class IPTV_And_VoIP_Comp extends Component{
+  state = {
+    maskNumber:"1",
+  }
+  componentDidMount(){
+  }
+  onMaskNumberChange = (item)=>{
+
+  }
+  render () {
+    let {maskNumber} = this.state;
+    return (
+        <div style={{padding:'10px'}}>
+          <Container layout="vbox">
+            <Container flex={1}>
+              <div style={{'float':'left'}}>
+                <CheckBoxField boxLabel={'Enable '+Intl.get('IPTV/VoIP')} cls="black_label"/>
+              </div>
+            </Container>
+            <ContainerField label={Intl.get('Mode')+':'} cls="black_label auto_width disable_text" width="100%" layout={'hbox'} labelAlign="left" labelTextAlign="left">
+              <Button ui="menu raised" text={'IPTV/VoIP '+Intl.get('Configuration')} style={{width:'100%','float':'left'}} textAlign="right" menuAlign="tr-br">
+                 <Menu defaults={{ handler: this.onMaskNumberChange, group: 'buttonstyle' }}>
+                     <MenuItem text={'IPTV/VoIP '+Intl.get('Configuration')} value="1" iconCls={maskNumber === '1' && 'x-font-icon md-icon-check'}/>
+                     <MenuItem text="12334556" value="2" iconCls={maskNumber === '2' && 'x-font-icon md-icon-check'}/>
+                 </Menu>
+              </Button>
+            </ContainerField>
+            <ContainerField label={'ISP '+Intl.get('Configuration')+':'} cls="black_label auto_width disable_text" width="100%" layout={'hbox'} labelAlign="left" labelTextAlign="left">
+              <Button ui="menu raised" text={"M1-Fiber"} style={{width:'100%','float':'left'}} textAlign="right" menuAlign="tr-br">
+                 <Menu defaults={{ handler: this.onMaskNumberChange, group: 'buttonstyle' }}>
+                     <MenuItem text="M1-Fiber" value="1" iconCls={maskNumber === '1' && 'x-font-icon md-icon-check'}/>
+                     <MenuItem text="M2-Fiber" value="2" iconCls={maskNumber === '2' && 'x-font-icon md-icon-check'}/>
+                 </Menu>
+              </Button>
+            </ContainerField>
+          </Container>
+        </div>
+    );
   }
 }

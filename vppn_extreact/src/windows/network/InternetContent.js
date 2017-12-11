@@ -2,7 +2,8 @@ import React,{Component} from 'react';
 import Intl from '../../intl/Intl';
 
 import { TabPanel, Container, FormPanel,TextField,Panel,
-  FieldSet, SelectField,Button,Menu,MenuItem,Grid,Column,CheckBoxField,RadioField   } from '@extjs/ext-react';
+  FieldSet, SelectField,Button,Menu,MenuItem,Grid,Column,CheckColumn,
+  CheckBoxField,RadioField,ContainerField   } from '@extjs/ext-react';
 Ext.require('Ext.field.InputMask');
 Ext.require('Ext.Toast');
 
@@ -35,7 +36,6 @@ export default class InternetContent extends Component {
         <div className='Internet_content' style={{height:'100%'}}>
           <TabPanel cls='Internet_tabPanel'
               height={'100%'}
-              minWidth={'750px'}
               defaults={{
                   cls: "card",
                   // layout: "center",
@@ -50,16 +50,15 @@ export default class InternetContent extends Component {
                   }
               }}
           >
-              <Container title="链接" cls="connect_tab" scrollable={true}>
-                <div >
+              <Container title={Intl.get('Link')} cls="connect_tab" scrollable={true}>
+                <div>
                   <FormPanel>
-                    <FieldSet title={"您可在此设置Internet连接。您的连接类型由网络环境决定。请咨询ISP以获得所需的帮助。"}
+                    <FieldSet title={Intl.get('You can set up the Internet connection here. Your connection type is determined by the network environment. Please consult ISP to get the help you need.')}
                       layout={{type:'vbox',pack:'left',align: 'left'}}
                       defaults={{labelAlign: "placeholder"}}
                       width={'100%'}
-                      margin="10 10 10 10"
-                      >
-                        <SelectField label="连接类型：" width={'90%'}
+                      margin="10 10 10 10">
+                        <SelectField label={Intl.get('Connection Type')+':'} width={'90%'}
                             labelTextAlign="left" labelAlign="left" value={1}
                             onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
                             options={[
@@ -67,7 +66,7 @@ export default class InternetContent extends Component {
                                 { text: 'Option 1', value: 2 }
                             ]}
                         />
-                        <SelectField label="设置默认网关：" width={'90%'}
+                        <SelectField label={Intl.get('Set as default gateway')+':'} width={'90%'}
                             labelTextAlign="left" labelAlign="left" value={1}
                             onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
                             options={[
@@ -75,8 +74,8 @@ export default class InternetContent extends Component {
                                 { text: '已停用', value: 2 }
                             ]}
                         />
-                        <TextField width={'90%'} label="DNS Server:" labelTextAlign="left" labelAlign="left" value="" />
-                        <SelectField label="启用Jumbo Frame：" width={'90%'}
+                        <TextField width={'90%'} label={"DNS "+Intl.get('Server')+"："} labelTextAlign="left" labelAlign="left" value="" />
+                        <SelectField label={Intl.get('Enable')+' Jumbo Frame:'} width={'90%'}
                             labelTextAlign="left" labelAlign="left" value={1}
                             onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
                             options={[
@@ -89,45 +88,22 @@ export default class InternetContent extends Component {
                   <Container
                     layout={{ type: 'hbox', pack: 'left'}}
                     margin="0 0 10 0"
-                    defaults={{ margin: "0 10 10 0" }}
-                  >
-                      <Button ui="confirm raised" text="ISP设置"/>
-                      <Button ui="raised" text="ISP设置(IPTV和VoIP)"/>
-                      <Button ui="raised" text="VPN设置"/>
-                      <Button ui="raised" text="IPv6设置"/>
+                    defaults={{ margin: "0 10 10 0" }}>
+                      <Button ui="confirm raised" text={'ISP '+Intl.get('Setting')}/>
+                      <Button ui="raised" text={'ISP '+Intl.get('Setting')+'('+Intl.get('IPTV And VoIP')+')'}/>
+                      <Button ui="raised" text={'VPN '+Intl.get('Setting')}/>
+                      <Button ui="raised" text={'IPv6 '+Intl.get('Setting')}/>
                   </Container>
                 </div>
               </Container>
 
               {/* QuickConnect & DDNS 内容区 */}
-              <Container title="QuickConnect & DDNS" cls="ddns_tab" scrollable={true}>
-                  <div className="action">
-                    <FormPanel>
-                      <FieldSet title={"来自vPort的域名的流量将通过所选的vProxy路由。"}
-                        layout={{type:'hbox',pack:'start',align: 'bottom'}}
-                        defaults={{labelAlign: "placeholder"}}
-                        margin="10 10 10 10"
-                        >
-                          <TextField placeholder="Enter..." width="200" label="请输入关键字或域名或URL" required flex={1}/>
-                          <Container flex={1}>
-                            <Button ui="menu raised" text="Add" style={{marginRight:'10px',marginBottom:'2px'}}>
-                               <Menu defaults={{ handler: this.onAddTypeChange, group: 'buttonstyle' }}>
-                                   <MenuItem text="Add" value="" iconCls={menuItemVal === '' && 'x-font-icon md-icon-check'}/>
-                                   <MenuItem text="Import cloud vPath to 10.100.16.24" value="action" iconCls={menuItemVal === 'action' && 'x-font-icon md-icon-check'}/>
-                                   <MenuItem text="import from China2World pack" value="decline" iconCls={menuItemVal === 'decline' && 'x-font-icon md-icon-check'}/>
-                                   <MenuItem text="import from World2China pack" value="confirm" iconCls={menuItemVal === 'confirm' && 'x-font-icon md-icon-check'}/>
-                               </Menu>
-                            </Button>
-                            <Button text={""} ui={'confirm round alt'} iconCls={'x-fa fa-refresh'}></Button>
-                          </Container>
-                      </FieldSet>
-                    </FormPanel>
-
-                  </div>
+              <Container title={Intl.get('QuickConnect & DDNS')} cls="ddns_tab" scrollable={true}>
+                  <DDNS_Comp/>
               </Container>
 
               {/* 端口转发 tab 内容区 */}
-              <Container title="端口转发" cls="portTransfer_tab" scrollable={true}>
+              <Container title={Intl.get('Port Forwarding')} cls="portTransfer_tab" scrollable={true}>
                   <div style={{background:'',border:'1px solid #9dd4d6',padding:'10px',margin:'10px',background:'#e4f3f5'}}>
                     <div style={{padding:'1px'}}>随处连接到您的 Synology Router</div>
                     <div style={{marginLeft:'10px',textAlign:'left'}}>
@@ -146,56 +122,71 @@ export default class InternetContent extends Component {
                       <Container flex={1}>
                         <div style={{'float':'left'}}><CheckBoxField boxLabel="启用QuickConnect"/></div>
                       </Container>
-
                     </Panel>
                   </div>
 
               </Container>
 
               {/* 端口触发 tab 内容区 */}
-              <Container title="端口触发" cls="portTrigger_tab" scrollable={true}>
-                  <Container
-                      layout={{ type: 'hbox', pack: 'left'}}
-                      margin="10 0 10 10"
-                      defaults={{ margin: "10 0 10 10" }}
-                    >
-                      <Button ui="confirm raised" text="新增"/>
-                      <Button ui="raised" text="编辑"/>
-                      <Button ui="raised" text="删除"/>
-                      <Button ui="raised" text="保存"/>
-                      <Button ui="raised" text="设置"/>
+              <Container title={Intl.get('Port Trigger')} cls="portTrigger_tab" scrollable={true}>
+                <div style={{padding:'10px'}}>
+                  <Container layout={{type:'hbox',pack:'left',aglin:'bottom'}}>
+                    <Button text={Intl.get('Add')} ui="confirm raised" />
+                    <Button text={Intl.get('Edit')} ui="confirm raised" />
+                    <Button text={Intl.get('Delete')} ui="decline raised" />
+                    <Button text={Intl.get('Save')} ui="decline raised" />
                   </Container>
-              </Container>
-
-              {/* DMZ tab 内容区 */}
-              <Container title="DMZ" cls="DMZ_tab" scrollable={true}>
-                  <div></div>
-              </Container>
-
-              {/* IPv6隧道 tab 内容区 */}
-              <Container title="IPv6隧道" cls="IPv6_tab" scrollable={true}>
-                <div style={{margin:'10px'}}>
-                  <div>启动Tunnel来在IPv4网络环境里使用IPv6通讯协议。</div>
-                  <div style={{'float':'left'}}>
-                    <CheckBoxField boxLabel="启用Tunnel" cls="wps_tab_checkbox"/>
-                  </div>
-                  <FormPanel margin="0 0 0 10" layout={{type: 'vbox',pack:'left', align: 'left'}} width="90%">
-                    <CheckBoxField boxLabel="启用Tunnel" cls="wps_tab_checkbox"/>
-                    <TextField label="服务器位置：" labelTextAlign="left" labelAlign="left" value=""/>
-                    <RadioField name="connectType" boxLabel="匿名联机" value="checked" checked style={{marginRight:'10px'}}/>
-                    <RadioField name="connectType" boxLabel="已现有的账号联机" value="unchecked"/>
-                    <TextField label="用户名：" labelTextAlign="left" labelAlign="left" value=""/>
-                    <TextField label="密码：" labelTextAlign="left" labelAlign="left" value=""/>
-                  </FormPanel>
-                  <Container margin="20 0 10 0" layout={{type:'vbox',align:'left'}}>
-                    <div style={{margin:'10px'}}><span>连接状态：</span> <span>已断线</span></div>
-                    <div style={{margin:'10px'}}><span>外部地址：</span> <span>---</span></div>
+                  <Container width="100%" margin="10 0 10 0">
+                    <Grid shadow grouped
+                      store={this.dataStore}
+                      style={{minHeight:'600px'}}
+                      selectable={{}}
+                      scrollable={true}>
+                        <CheckColumn text={Intl.get('Enabled')} width="100" dataIndex="name" groupable={false} sortable={false}/>
+                        <Column text={Intl.get('Full Name')} width="120" dataIndex="price"/>
+                        <Column text={Intl.get('Trigger Port')} width="100" dataIndex="priceChange"/>
+                        <Column text={Intl.get('Inbound Port')} width="100" dataIndex="priceChange"/>
+                        <Column text={Intl.get('Source IP')} width="100" dataIndex="priceChange"/>
+                        <Column text={Intl.get('MAC')} width="100" dataIndex="priceChange"/>
+                        <Column text={Intl.get('Communication Protocol')} width="100" dataIndex="priceChange"/>
+                    </Grid>
                   </Container>
                 </div>
               </Container>
 
+              {/* DMZ tab 内容区 */}
+              <Container title={Intl.get('DMZ')} cls="DMZ_tab" scrollable={true}>
+                <div style={{padding:'10px'}}>
+                  <div>{Intl.get('DMZ allows you to display a server on the Internet so that all inbound packets will redirect to the server.')}</div>
+                  <div style={{margin:'10px 0'}}>{Intl.get('This is very useful when the server is running applications that use an uncertain inbound port.')}</div>
+                  <Container layout={{type:'vbox'}}>
+                      <ContainerField label={Intl.get('Enable')+' DMZ:'} cls="black_label auto_width disable_text" width="100%" layout={'hbox'} labelAlign="left" labelTextAlign="left">
+                        <Button ui="menu raised" text={Intl.get(this.state.enableDMZ)} style={{width:'100%','float':'left'}} textAlign="right" menuAlign="tr-br">
+                           <Menu defaults={{ handler: this.onEnableDMZChange, group: 'buttonstyle' }}>
+                               <MenuItem text={Intl.get('Enabled')} value="Enabled" iconCls={this.state.enableDMZ === 'Enabled' && 'x-font-icon md-icon-check'}/>
+                               <MenuItem text={Intl.get('Disabled')} value="Disabled" iconCls={this.state.enableDMZ === 'Disabled' && 'x-font-icon md-icon-check'}/>
+                           </Menu>
+                        </Button>
+                      </ContainerField>
+                      <ContainerField label={Intl.get('DMZ Host IP Address')+':'} cls="black_label auto_width disable_text" width="100%" layout={'hbox'} labelAlign="left" labelTextAlign="left">
+                        <Button ui="menu raised" text={this.state.DMZHostIP} style={{width:'100%','float':'left'}} textAlign="right" menuAlign="tr-br">
+                           <Menu defaults={{ handler: this.onDMZHostIPChange, group: 'buttonstyle' }}>
+                               <MenuItem text='192.168.9.12' value="Enabled" iconCls={this.state.DMZHostIP === 'Enabled' && 'x-font-icon md-icon-check'}/>
+                               <MenuItem text='192.168.9.14' value="Disabled" iconCls={this.state.DMZHostIP === 'Disabled' && 'x-font-icon md-icon-check'}/>
+                           </Menu>
+                        </Button>
+                      </ContainerField>
+                  </Container>
+                </div>
+              </Container>
+
+              {/* IPv6隧道 tab 内容区 */}
+              <Container title={"IPv6 "+Intl.get('Tunnel')} cls="IPv6_tab" scrollable={true}>
+                  <IPv6TunnelComp />
+              </Container>
+
               {/* 3G和4G tab 内容区 */}
-              <Container title="3G和4G" cls="threeFourG_tab" scrollable={true}>
+              <Container title={Intl.get('3G And 4G')} cls="threeFourG_tab" scrollable={true}>
                   <Container
                       layout={{ type: 'hbox', pack: 'left'}}
                       margin="10 0 10 10"
@@ -210,4 +201,127 @@ export default class InternetContent extends Component {
         </div>
     )
   }
+}
+
+
+//
+class DDNS_Comp extends Component{
+  state = {
+  }
+  componentDidMount(){
+  }
+  render () {
+    return (
+      <div className='' style={{height:(this.state.bodyHeight-45)+"px"}}>
+        <div style={{padding:'10px'}}>
+          <Container shadow padding="10 10 10 10">
+            <FieldSet title={Intl.get('Connect to your router everywhere')} >
+                <TextField disabled label={"DNS "+Intl.get('Server')+"："}
+                  labelTextAlign="text" labelAlign="left" width="100%"
+                  value="192.168.1.1"
+                  cls="disable_text"
+                  textAlign="right"/>
+                <TextField disabled label={"DNS "+Intl.get('Server')+"："}
+                  labelTextAlign="text" labelAlign="left" width="100%"
+                  value="192.168.1.1"
+                  cls="disable_text"
+                  textAlign="right"/>
+                <TextField disabled label={"DNS "+Intl.get('Server')+"："}
+                  labelTextAlign="text" labelAlign="left" width="100%"
+                  value="192.168.1.1"
+                  cls="disable_text"
+                  textAlign="right"/>
+            </FieldSet>
+          </Container>
+
+          <div className="cnt" style={{marginTop:'10px'}}>
+            <div className="title">{Intl.get('QuickConnect')}</div>
+            <Container layout={{type:'vbox',pack:'start',align:'left'}} width="100%">
+              <div>{Intl.get('Internet_DDNS_desc')}</div>
+              <CheckBoxField boxLabel={Intl.get('Enable')+' QuickConnect'} cls="black_label"/>
+              <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
+                <TextField label={Intl.get('QuickConnect ID')+"："}
+                  labelTextAlign="text" labelAlign="left" width="70%"
+                  value="192.168.1.1"
+                  cls="black_label auto_width disable_text"
+                  textAlign="right"/>
+                <Button ui="confirm raised" text={Intl.get('Advanced Setting')} style={{marginRight:'10px'}}/>
+              </Container>
+
+            </Container>
+          </div>
+
+          <div className="cnt" style={{marginTop:'10px'}}>
+            <div className="title">{Intl.get('DDNS')}</div>
+            <div style={{margin:'10px 0'}}>{Intl.get('Enable DDNS to enable users to connect to servers with registered host names.')}</div>
+            <Container layout={{type:'hbox',pack:'start',align:'left'}} width="100%">
+              <Button ui="confirm alt raised" text={Intl.get('Add New')} style={{marginRight:'10px'}}/>
+              <Button ui="confirm raised" text={Intl.get('Immediate updates')} style={{marginRight:'10px'}}/>
+            </Container>
+          </div>
+
+          <Container layout={{type:'hbox',pack:'center',aglin:'bottom'}} margin="10 10 10 10">
+            <Button text={Intl.get('Apply')} ui="confirm alt" style={{marginRight:'10px'}}/>
+            <Button text={Intl.get('Reset')} ui="decline alt" style={{marginLeft:'10px'}}/>
+          </Container>
+
+        </div>
+      </div>
+    );
+  }
+}
+
+//IPv6隧道
+class IPv6TunnelComp extends Component{
+  state = {
+  }
+  componentDidMount(){
+  }
+  render () {
+    const radioProps = {
+        name: 'radios'
+    };
+    return (
+      <div style={{padding:'10px'}}>
+          <div>{Intl.get('Starting Tunnel can use IPv6 communication protocol in IPv4 network environment.')}</div>
+          <FormPanel layout={{type:'vbox',pack:'center',align:'left'}} padding="0">
+            <CheckBoxField boxLabel={Intl.get('Enable')+' Tunnel'} cls="black_label"/>
+            <RadioField {...radioProps} boxLabel={Intl.get('Set as default gateway')} value="checked1" checked/>
+            <TextField label={Intl.get('Server Address')+"："}
+              labelTextAlign="text" labelAlign="left" width="100%"
+              value="192.168.1.1"
+              cls="black_label auto_width disable_text"
+              textAlign="right"/>
+            <RadioField {...radioProps} boxLabel={Intl.get('Anonymous online')} value="checked2"/>
+            <RadioField {...radioProps} boxLabel={Intl.get('Online with current accounts')} value="checked3"/>
+            <TextField label={Intl.get('User Name')+"："}
+              labelTextAlign="text" labelAlign="left" width="100%"
+              value="192.168.1.1"
+              cls="black_label auto_width disable_text"
+              textAlign="right"/>
+            <TextField label={Intl.get('Password')+"："}
+              labelTextAlign="text" labelAlign="left" width="100%"
+              value="192.168.1.1"
+              cls="black_label auto_width disable_text"
+              textAlign="right"/>
+          </FormPanel>
+
+          <div style={{marginTop:'20px'}}>
+            <Container layout={{type:'vbox',pack:'start',align:'left'}} width="100%">
+            <TextField disabled label={Intl.get('Connection state')+"："}
+              labelTextAlign="text" labelAlign="left" width="100%"
+              value="已断线"
+              cls="disable_text"
+              textAlign="right"/>
+            <TextField disabled label={Intl.get('External address')+"："}
+              labelTextAlign="text" labelAlign="left" width="100%"
+              value="--"
+              cls="disable_text"
+              textAlign="right"/>
+            </Container>
+          </div>
+      </div>
+    );
+  }
+
 }
