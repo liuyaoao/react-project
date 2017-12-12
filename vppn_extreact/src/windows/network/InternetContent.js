@@ -104,80 +104,17 @@ export default class InternetContent extends Component {
 
               {/* 端口转发 tab 内容区 */}
               <Container title={Intl.get('Port Forwarding')} cls="portTransfer_tab" scrollable={true}>
-                  <div style={{background:'',border:'1px solid #9dd4d6',padding:'10px',margin:'10px',background:'#e4f3f5'}}>
-                    <div style={{padding:'1px'}}>随处连接到您的 Synology Router</div>
-                    <div style={{marginLeft:'10px',textAlign:'left'}}>
-                      <div><span style={{width:'100px',display:'inline-block',paddingTop:'10px'}}>网页浏览器：</span><span>已停用</span></div>
-                      <div><span style={{width:'100px',display:'inline-block',paddingTop:'10px'}}>DDNS：</span><span>已停用</span></div>
-                      <div><span style={{width:'100px',display:'inline-block',paddingTop:'10px'}}>移动应用程序：</span><span>已停用</span></div>
-                    </div>
-                  </div>
-                  <div className="cnt" style={{margin:'20px'}}>
-                    <div className="title">5GHz</div>
-                    <Panel
-                      margin='10 0 10 0'
-                      layout="vbox"
-                    >
-                      <div>QuickConnect能够让您在任何地方轻松连接到Synology Router，只需启动下方的QuickConnect并注册一组Synology账户即可完成。</div>
-                      <Container flex={1}>
-                        <div style={{'float':'left'}}><CheckBoxField boxLabel="启用QuickConnect"/></div>
-                      </Container>
-                    </Panel>
-                  </div>
-
+                  <PortForwardingComp/>
               </Container>
 
               {/* 端口触发 tab 内容区 */}
               <Container title={Intl.get('Port Trigger')} cls="portTrigger_tab" scrollable={true}>
-                <div style={{padding:'10px'}}>
-                  <Container layout={{type:'hbox',pack:'left',aglin:'bottom'}}>
-                    <Button text={Intl.get('Add')} ui="confirm raised" />
-                    <Button text={Intl.get('Edit')} ui="confirm raised" />
-                    <Button text={Intl.get('Delete')} ui="decline raised" />
-                    <Button text={Intl.get('Save')} ui="decline raised" />
-                  </Container>
-                  <Container width="100%" margin="10 0 10 0">
-                    <Grid shadow grouped
-                      store={this.dataStore}
-                      style={{minHeight:'600px'}}
-                      selectable={{}}
-                      scrollable={true}>
-                        <CheckColumn text={Intl.get('Enabled')} width="100" dataIndex="name" groupable={false} sortable={false}/>
-                        <Column text={Intl.get('Full Name')} width="120" dataIndex="price"/>
-                        <Column text={Intl.get('Trigger Port')} width="100" dataIndex="priceChange"/>
-                        <Column text={Intl.get('Inbound Port')} width="100" dataIndex="priceChange"/>
-                        <Column text={Intl.get('Source IP')} width="100" dataIndex="priceChange"/>
-                        <Column text={Intl.get('MAC')} width="100" dataIndex="priceChange"/>
-                        <Column text={Intl.get('Communication Protocol')} width="100" dataIndex="priceChange"/>
-                    </Grid>
-                  </Container>
-                </div>
+                <PortTriggerComp/>
               </Container>
 
               {/* DMZ tab 内容区 */}
               <Container title={Intl.get('DMZ')} cls="DMZ_tab" scrollable={true}>
-                <div style={{padding:'10px'}}>
-                  <div>{Intl.get('DMZ allows you to display a server on the Internet so that all inbound packets will redirect to the server.')}</div>
-                  <div style={{margin:'10px 0'}}>{Intl.get('This is very useful when the server is running applications that use an uncertain inbound port.')}</div>
-                  <Container layout={{type:'vbox'}}>
-                      <ContainerField label={Intl.get('Enable')+' DMZ:'} cls="black_label auto_width disable_text" width="100%" layout={'hbox'} labelAlign="left" labelTextAlign="left">
-                        <Button ui="menu raised" text={Intl.get(this.state.enableDMZ)} style={{width:'100%','float':'left'}} textAlign="right" menuAlign="tr-br">
-                           <Menu defaults={{ handler: this.onEnableDMZChange, group: 'buttonstyle' }}>
-                               <MenuItem text={Intl.get('Enabled')} value="Enabled" iconCls={this.state.enableDMZ === 'Enabled' && 'x-font-icon md-icon-check'}/>
-                               <MenuItem text={Intl.get('Disabled')} value="Disabled" iconCls={this.state.enableDMZ === 'Disabled' && 'x-font-icon md-icon-check'}/>
-                           </Menu>
-                        </Button>
-                      </ContainerField>
-                      <ContainerField label={Intl.get('DMZ Host IP Address')+':'} cls="black_label auto_width disable_text" width="100%" layout={'hbox'} labelAlign="left" labelTextAlign="left">
-                        <Button ui="menu raised" text={this.state.DMZHostIP} style={{width:'100%','float':'left'}} textAlign="right" menuAlign="tr-br">
-                           <Menu defaults={{ handler: this.onDMZHostIPChange, group: 'buttonstyle' }}>
-                               <MenuItem text='192.168.9.12' value="Enabled" iconCls={this.state.DMZHostIP === 'Enabled' && 'x-font-icon md-icon-check'}/>
-                               <MenuItem text='192.168.9.14' value="Disabled" iconCls={this.state.DMZHostIP === 'Disabled' && 'x-font-icon md-icon-check'}/>
-                           </Menu>
-                        </Button>
-                      </ContainerField>
-                  </Container>
-                </div>
+                  <DMZ_Comp/>
               </Container>
 
               {/* IPv6隧道 tab 内容区 */}
@@ -204,7 +141,7 @@ export default class InternetContent extends Component {
 }
 
 
-//
+//快速链接和DDNS
 class DDNS_Comp extends Component{
   state = {
   }
@@ -271,6 +208,126 @@ class DDNS_Comp extends Component{
   }
 }
 
+//端口转发
+class PortForwardingComp extends Component{
+  state = {
+  }
+  dataStore = new Ext.data.Store({
+      data: [
+        {index:1, name:' Wireless',price:'342.54', priceChange:'mif-wifi-connect icon'},
+        {index:2, name:' Internet',price:'342.54', priceChange:'mif-earth icon'}
+      ],
+      sorters: 'name'
+  })
+  componentDidMount(){
+  }
+  render () {
+    return (
+      <div style={{padding:'10px'}}>
+        <Container layout={{type:'hbox',pack:'left',aglin:'bottom'}}>
+          <Button text={Intl.get('Add')} ui="confirm raised" style={{marginRight:'6px'}}/>
+          <Button text={Intl.get('Edit')} ui="confirm raised" style={{marginRight:'6px'}}/>
+          <Button text={Intl.get('Delete')} ui="decline raised" style={{marginRight:'6px'}}/>
+          <Button text={Intl.get('Save')} ui="decline raised" style={{marginRight:'6px'}}/>
+          <Button text={Intl.get('Setting')} ui="decline raised" />
+        </Container>
+        <Container width="100%" margin="10 0 10 0">
+          <Grid shadow grouped
+            store={this.dataStore}
+            style={{minHeight:'400px'}}
+            scrollable={true}>
+              <CheckColumn text={Intl.get('Enabled')} width="80" dataIndex="name" groupable={false} sortable={false}/>
+              <Column text={Intl.get('Rule')} width="100" dataIndex="price"/>
+              <Column text={Intl.get('Target Device')} width="100" dataIndex="priceChange"/>
+              <Column text={Intl.get('Private IP Address')} width="100" dataIndex="priceChange"/>
+              <Column text={Intl.get('Common Port')} width="80" dataIndex="priceChange"/>
+              <Column text={Intl.get('Private Port')} width="80" dataIndex="priceChange"/>
+              <Column text={Intl.get('Communication Protocol')} width="100" dataIndex="priceChange"/>
+          </Grid>
+        </Container>
+      </div>
+    );
+  }
+}
+
+//端口触发
+class PortTriggerComp extends Component{
+  state = {
+  }
+  dataStore = new Ext.data.Store({
+      data: [
+        {index:1, name:' Wireless',price:'342.54', priceChange:'mif-wifi-connect icon'},
+        {index:2, name:' Internet',price:'342.54', priceChange:'mif-earth icon'}
+      ],
+      sorters: 'name'
+  })
+  componentDidMount(){
+  }
+  render () {
+    return (
+      <div style={{padding:'10px'}}>
+        <Container layout={{type:'hbox',pack:'left',aglin:'bottom'}}>
+          <Button text={Intl.get('Add')} ui="confirm raised" />
+          <Button text={Intl.get('Edit')} ui="confirm raised" />
+          <Button text={Intl.get('Delete')} ui="decline raised" />
+          <Button text={Intl.get('Save')} ui="decline raised" />
+        </Container>
+        <Container width="100%" margin="10 0 10 0">
+          <Grid shadow grouped
+            store={this.dataStore}
+            style={{minHeight:'400px'}}
+            selectable={{}}
+            scrollable={true}>
+              <CheckColumn text={Intl.get('Enabled')} width="80" dataIndex="name" groupable={false} sortable={false}/>
+              <Column text={Intl.get('Full Name')} width="120" dataIndex="price"/>
+              <Column text={Intl.get('Trigger Port')} width="80" dataIndex="priceChange"/>
+              <Column text={Intl.get('Inbound Port')} width="80" dataIndex="priceChange"/>
+              <Column text={Intl.get('Source IP')} width="100" dataIndex="priceChange"/>
+              <Column text={Intl.get('MAC')} width="100" dataIndex="priceChange"/>
+              <Column text={Intl.get('Communication Protocol')} width="100" dataIndex="priceChange"/>
+          </Grid>
+        </Container>
+      </div>
+    );
+  }
+}
+
+//DMZ tab内容去
+class DMZ_Comp extends Component{
+  state={
+    enableDMZ:'Enabled',
+    DMZHostIP:'Enabled',
+  }
+  componentDidMount(){
+  }
+  render () {
+    return (
+      <div style={{padding:'10px'}}>
+        <div>{Intl.get('DMZ allows you to display a server on the Internet so that all inbound packets will redirect to the server.')}</div>
+        <div style={{margin:'10px 0'}}>{Intl.get('This is very useful when the server is running applications that use an uncertain inbound port.')}</div>
+        <Container layout={{type:'vbox'}}>
+            <ContainerField label={Intl.get('Enable')+' DMZ:'} labelWidth={'160'} labelAlign="left" labelTextAlign="left">
+              <Button ui="menu raised" text={Intl.get(this.state.enableDMZ)} style={{width:'98%','margin':'5px'}} textAlign="right" menuAlign="tr-br">
+                 <Menu defaults={{ handler: this.onEnableDMZChange, group: 'buttonstyle' }}>
+                     <MenuItem text={Intl.get('Enabled')} value="Enabled" iconCls={this.state.enableDMZ === 'Enabled' && 'x-font-icon md-icon-check'}/>
+                     <MenuItem text={Intl.get('Disabled')} value="Disabled" iconCls={this.state.enableDMZ === 'Disabled' && 'x-font-icon md-icon-check'}/>
+                 </Menu>
+              </Button>
+            </ContainerField>
+            <ContainerField label={Intl.get('DMZ Host IP Address')+':'} labelWidth={'160'} labelAlign="left" labelTextAlign="left">
+              <Button ui="menu raised" text={this.state.DMZHostIP} style={{width:'98%','margin':'5px'}} textAlign="right" menuAlign="tr-br">
+                 <Menu defaults={{ handler: this.onDMZHostIPChange, group: 'buttonstyle' }}>
+                     <MenuItem text='192.168.9.12' value="Enabled" iconCls={this.state.DMZHostIP === 'Enabled' && 'x-font-icon md-icon-check'}/>
+                     <MenuItem text='192.168.9.14' value="Disabled" iconCls={this.state.DMZHostIP === 'Disabled' && 'x-font-icon md-icon-check'}/>
+                 </Menu>
+              </Button>
+            </ContainerField>
+        </Container>
+      </div>
+    );
+  }
+}
+
 //IPv6隧道
 class IPv6TunnelComp extends Component{
   state = {
@@ -308,16 +365,16 @@ class IPv6TunnelComp extends Component{
 
           <div style={{marginTop:'20px'}}>
             <Container layout={{type:'vbox',pack:'start',align:'left'}} width="100%">
-            <TextField disabled label={Intl.get('Connection state')+"："}
-              labelTextAlign="text" labelAlign="left" width="100%"
-              value="已断线"
-              cls="disable_text"
-              textAlign="right"/>
-            <TextField disabled label={Intl.get('External address')+"："}
-              labelTextAlign="text" labelAlign="left" width="100%"
-              value="--"
-              cls="disable_text"
-              textAlign="right"/>
+              <TextField disabled label={Intl.get('Connection state')+"："}
+                labelTextAlign="text" labelAlign="left" width="100%"
+                value="已断线"
+                cls="disable_text"
+                textAlign="right"/>
+              <TextField disabled label={Intl.get('External address')+"："}
+                labelTextAlign="text" labelAlign="left" width="100%"
+                value="--"
+                cls="disable_text"
+                textAlign="right"/>
             </Container>
           </div>
       </div>

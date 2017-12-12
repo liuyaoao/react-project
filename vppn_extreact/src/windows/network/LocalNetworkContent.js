@@ -306,20 +306,22 @@ class StaticRouteComp extends Component{
     let {DHCPServerOn} = this.state;
     return (
         <div style={{padding:'10px'}}>
-          <Container layout={{type:'hbox',pack:'left',aglin:'bottom'}}>
-            <Button text={Intl.get('Add')} ui="confirm raised" style={{marginRight:'10px'}}/>
-            <Button text={Intl.get('Delete')} ui="decline raised" style={{marginRight:'10px'}}/>
-            <Button text={Intl.get('Save')} ui="decline raised" style={{marginRight:'10px'}}/>
-            <Button text={'IP '+Intl.get('Routing table')} ui="decline raised" />
-          </Container>
-          <Container>
-            <Button ui="menu" text="IPv4"
-              style={{width:'100%'}}>
-               <Menu defaults={{ handler: this.onDHCPServerChange, group: 'buttonstyle' }}>
-                   <MenuItem text={Intl.get('IPv4')} value="1" iconCls={DHCPServerOn === '1' && 'x-font-icon md-icon-check'}/>
-                   <MenuItem text={Intl.get('IPv6')} value="0" iconCls={DHCPServerOn === '0' && 'x-font-icon md-icon-check'}/>
-               </Menu>
-            </Button>
+          <Container layout={{type:'hbox',pack:'space-between',align:'bottom'}}>
+            <Container style={{'float':'left'}}>
+              <Button text={Intl.get('Add')} ui="confirm raised" style={{marginRight:'10px'}}/>
+              <Button text={Intl.get('Delete')} ui="decline raised" style={{marginRight:'10px'}}/>
+              <Button text={Intl.get('Save')} ui="decline raised" style={{marginRight:'10px'}}/>
+              <Button text={'IP '+Intl.get('Routing table')} ui="decline raised" />
+            </Container>
+            <Container style={{'float':'right'}}>
+              <Button ui="menu" text="IPv4"
+                style={{width:'100%'}}>
+                 <Menu defaults={{ handler: this.onDHCPServerChange, group: 'buttonstyle' }}>
+                     <MenuItem text={Intl.get('IPv4')} value="1" iconCls={DHCPServerOn === '1' && 'x-font-icon md-icon-check'}/>
+                     <MenuItem text={Intl.get('IPv6')} value="0" iconCls={DHCPServerOn === '0' && 'x-font-icon md-icon-check'}/>
+                 </Menu>
+              </Button>
+            </Container>
           </Container>
           <Container width="100%" margin="10 0 10 0">
             <Grid shadow grouped
@@ -360,18 +362,20 @@ class DHCP_ClientComp extends Component{
     let {DHCPServerOn} = this.state;
     return (
         <div style={{padding:'10px'}}>
-          <Container layout={{type:'hbox',pack:'left',aglin:'bottom'}}>
-            <Button text={Intl.get('Refresh')} ui="confirm raised" style={{marginRight:'10px'}}/>
-            <Button text={Intl.get('Add to address reservation')} ui="decline raised" />
-          </Container>
-          <Container>
-            <Button ui="menu" text="IPv4"
-              style={{width:'100%'}}>
-               <Menu defaults={{ handler: this.onDHCPServerChange, group: 'buttonstyle' }}>
-                   <MenuItem text={Intl.get('IPv4')} value="1" iconCls={DHCPServerOn === '1' && 'x-font-icon md-icon-check'}/>
-                   <MenuItem text={Intl.get('IPv6')} value="0" iconCls={DHCPServerOn === '0' && 'x-font-icon md-icon-check'}/>
-               </Menu>
-            </Button>
+          <Container layout={{type:'hbox',pack:'space-between',align:'bottom'}}>
+            <Container style={{'float':'left'}}>
+              <Button text={Intl.get('Refresh')} ui="confirm raised" style={{marginRight:'10px'}}/>
+              <Button text={Intl.get('Add to address reservation')} ui="decline raised" />
+            </Container>
+            <Container style={{'float':'right'}}>
+              <Button ui="menu" text="IPv4"
+                style={{width:'100%'}}>
+                 <Menu defaults={{ handler: this.onDHCPServerChange, group: 'buttonstyle' }}>
+                     <MenuItem text={Intl.get('IPv4')} value="1" iconCls={DHCPServerOn === '1' && 'x-font-icon md-icon-check'}/>
+                     <MenuItem text={Intl.get('IPv6')} value="0" iconCls={DHCPServerOn === '0' && 'x-font-icon md-icon-check'}/>
+                 </Menu>
+              </Button>
+            </Container>
           </Container>
           <Container width="100%" margin="10 0 10 0">
             <Grid shadow grouped
@@ -407,19 +411,21 @@ class DHCP_RetainComp extends Component{
     let {DHCPServerOn} = this.state;
     return (
         <div style={{padding:'10px'}}>
-          <Container layout={{type:'hbox',pack:'left',aglin:'bottom'}}>
-            <Button text={Intl.get('Add')} ui="confirm raised" style={{marginRight:'10px'}}/>
-            <Button text={Intl.get('Delete')} ui="decline raised" style={{marginRight:'10px'}}/>
-            <Button text={Intl.get('Save')} ui="decline raised" />
-          </Container>
-          <Container>
-            <Button ui="menu" text="IPv4"
-              style={{width:'100%'}}>
-               <Menu defaults={{ handler: this.onDHCPServerChange, group: 'buttonstyle' }}>
-                   <MenuItem text={Intl.get('IPv4')} value="1" iconCls={DHCPServerOn === '1' && 'x-font-icon md-icon-check'}/>
-                   <MenuItem text={Intl.get('IPv6')} value="0" iconCls={DHCPServerOn === '0' && 'x-font-icon md-icon-check'}/>
-               </Menu>
-            </Button>
+          <Container layout={{type:'hbox',pack:'space-between',align:'bottom'}}>
+            <Container style={{'float':'left'}}>
+              <Button text={Intl.get('Add')} ui="confirm raised" style={{marginRight:'10px'}}/>
+              <Button text={Intl.get('Delete')} ui="decline raised" style={{marginRight:'10px'}}/>
+              <Button text={Intl.get('Save')} ui="decline raised" />
+            </Container>
+            <Container style={{'float':'right'}}>
+              <Button ui="menu" text="IPv4"
+                style={{width:'100%'}}>
+                 <Menu defaults={{ handler: this.onDHCPServerChange, group: 'buttonstyle' }}>
+                     <MenuItem text={Intl.get('IPv4')} value="1" iconCls={DHCPServerOn === '1' && 'x-font-icon md-icon-check'}/>
+                     <MenuItem text={Intl.get('IPv6')} value="0" iconCls={DHCPServerOn === '0' && 'x-font-icon md-icon-check'}/>
+                 </Menu>
+              </Button>
+            </Container>
           </Container>
           <Container width="100%" margin="10 0 10 0">
             <Grid shadow grouped

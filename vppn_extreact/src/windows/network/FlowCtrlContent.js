@@ -48,9 +48,9 @@ export default class FlowCtrlContent extends Component {
               <Container title={Intl.get('Routine Setting')} cls="" scrollable={true}>
                 <div style={{padding:'10px'}}>
                   <Container layout={{type:'hbox',pack:'start',align:'bottom',marginBottom:'10px'}}>
-                    <Button text={Intl.get('Add New')} ui="confirm raised" style={{marginRight:'10px'}}/>
-                    <Button text={Intl.get('Edit')} ui="confirm raised" style={{marginRight:'10px'}}/>
-                    <Button text={Intl.get('Delete')} ui="decline raised"/>
+                    <Button text={Intl.get('Add New')} ui="confirm alt raised" style={{marginRight:'10px'}}/>
+                    <Button text={Intl.get('Edit')} ui="action alt raised" style={{marginRight:'10px'}}/>
+                    <Button text={Intl.get('Delete')} ui="decline alt raised"/>
                   </Container>
                   <Container height={'300px'} margin="10 0 10 0">
                     <Grid store={this.dataStore} shadow grouped style={{minHeight:'500px'}} scrollable={true}>

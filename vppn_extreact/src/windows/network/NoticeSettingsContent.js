@@ -147,21 +147,12 @@ class MessageComp extends Component{
     SMS_Provider:'',
   }
   componentDidMount(){
-    this.setState({
-      bodyHeight:document.documentElement.clientHeight,
-      bodyWidth:document.documentElement.clientWidth
-    });
-  }
-  componentWillUnmount() {
   }
   onSMS_ProviderChanged = (item)=>{
 
   }
-
   render () {
-    let {bodyHeight,SMS_Provider} = this.state;
-    let {} = this.state;
-    let {contentId} = this.props;
+    let {SMS_Provider} = this.state;
     return (
       <div style={{padding:'10px'}}>
         <div>{Intl.get('message_desc')}</div>
