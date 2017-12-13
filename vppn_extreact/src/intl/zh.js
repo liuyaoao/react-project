@@ -78,7 +78,7 @@ export default ({
    "Insulate":"隔离",
    "Access strategy":"访问策略",
    "Refuse":"拒绝",
-   "":"",
+   "Local network access":"本地网络访问",
    "":"",
    "wps_tab_desc":"您可以使用WPS(Wi-Fi Protected Setup)以在Router与无线客户端之间共享无线密钥，并通过以下方法之一安全地建立无线网络。",
    "Connection State":"连接状态",
@@ -148,7 +148,7 @@ export default ({
 
    "":"",
    //本地网络
-   "Local":"本地",
+   "Local":"本地",      "Off line":"已离线",
    "Enable web proxy server to automatically discover":"Enable web proxy server to automatically discover",
    "Website":"网址",
    "Enable PPPoE relay":"启用PPPoE中继",
@@ -271,7 +271,7 @@ export default ({
    "Edit Variables":"编辑变量",
    "Events":"事件",
    "Mobile Device":"移动设备",
-   "":"",
+   "All notifications":"所有通知",
    "":"",
 
    //安全性

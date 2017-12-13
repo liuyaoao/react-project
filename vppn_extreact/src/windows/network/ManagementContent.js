@@ -45,20 +45,20 @@ export default class ManagementContent extends Component {
                 }
             }}
           >
-              <Container title="工作模式" cls="state_Internet" scrollable={true}>
+              <Container title={Intl.get('Work Mode')} cls="state_Internet" scrollable={true}>
                 <WorkModeComp/>
               </Container>
-              <Container title="更新和还原" cls="state_equipList" scrollable={true}>
+              <Container title={Intl.get('Update And Reset')} cls="state_equipList" scrollable={true}>
                   <UpdateAndResetComp/>
               </Container>
-              <Container title="SRM设置" cls="state_CPU" scrollable={true}>
+              <Container title={"SRM "+Intl.get('Setting')} cls="state_CPU" scrollable={true}>
                   <SRMSettingComp/>
               </Container>
-              <Container title="服务" cls="state_memory" scrollable={true}>
+              <Container title={Intl.get('Service')} cls="state_memory" scrollable={true}>
                   <ServiceTab />
               </Container>
 
-              <Container title="区域选项" cls="state_memory" scrollable={true}>
+              <Container title={Intl.get('Region Options')} cls="state_memory" scrollable={true}>
                   <RegionOptionsComp/>
               </Container>
 
@@ -68,7 +68,7 @@ export default class ManagementContent extends Component {
                   </div>
               </Container>
 
-              <Container title="使用状况" cls="state_memory" scrollable={true}>
+              <Container title={Intl.get('Using State')} cls="state_memory" scrollable={true}>
                   <div className="">
                     使用状况
                   </div>
@@ -146,13 +146,13 @@ class UpdateAndResetComp extends Component{
             <div className="title">{Intl.get('System Update')}</div>
             <Container layout={{type:'vbox',pack:'start',align:'left'}} width="100%">
               <TextField label={Intl.get('Product model')+"："}
-                labelTextAlign="text" labelAlign="left" labelWidth="160"
+                labelTextAlign="text" labelAlign="left" labelWidth="160" width="98%"
                 value="RT1900ac"/>
               <TextField label={"SRM "+Intl.get('Version')+"："}
-                labelTextAlign="text" labelAlign="left" labelWidth="160"
+                labelTextAlign="text" labelAlign="left" labelWidth="160" width="98%"
                 value="SRM 1.0.2-60022 Update 1"/>
               <TextAreaField  label={Intl.get('State')+"："}
-                labelTextAlign="text" labelAlign="left" labelWidth="160" height="60px"
+                labelTextAlign="text" labelAlign="left" labelWidth="160" height="60px" width="98%"
                 value={Intl.get('Version can be downloaded',null,{version:'SRM 1.1.5-6542'})}
                 maxRows={2}/>
               <Container layout={{type:'hbox',pack:'start',aglin:'left'}} margin="10 0 10 0">
@@ -197,7 +197,7 @@ class SRMSettingComp extends Component{
         <div style={{padding:'10px'}}>
           <Container layout={{type:'vbox',pack:'start',align:'left'}} width="100%">
             <TextField label={Intl.get('System Name')+"："}
-              labelTextAlign="text" labelAlign="left" labelWidth="160"
+              labelTextAlign="text" labelAlign="left" labelWidth="160" width="98%"
               value="192.168.1.1"/>
             <FieldSet title={Intl.get('Default Port Number')} width="100%" margin="10 0 0 0">
               <Container style={{width:'90%',marginLeft:'20px'}}>
@@ -234,15 +234,15 @@ class ServiceTab extends Component{
   render(){
     return (
       <div className="cnt" style={{padding:'10px'}}>
-        <div className="title">终端机</div>
+        <div className="title">{Intl.get('Terminal')}</div>
         <Panel
           margin='10 0 10 0'
           layout="vbox"
         >
             <Container flex={1}>
-              <div style={{'float':'left'}}><CheckBoxField boxLabel="启用SSH功能"/></div>
+              <div style={{'float':'left'}}><CheckBoxField boxLabel={Intl.get('Enable SSH Functionality')}/></div>
             </Container>
-            <TextField label="端口：" labelTextAlign="left" labelAlign="left" value="22" labelWidth="160"/>
+            <TextField label={Intl.get('Port')+"："} labelTextAlign="left" labelAlign="left" value="22" labelWidth="160"/>
         </Panel>
 
         <div className="title">SNMP</div>
@@ -251,17 +251,17 @@ class ServiceTab extends Component{
           layout="vbox"
         >
             <Container flex={1}>
-              <div style={{'float':'left'}}><CheckBoxField boxLabel="启用SNMP功能（请参阅Synology MIB Guide以获得更多信息。）"/></div>
+              <div style={{'float':'left'}}><CheckBoxField boxLabel={Intl.get('Enable SNMP Service')}/></div>
             </Container>
             <TextField label={Intl.get('Device Name')+"："} labelTextAlign="left" labelAlign="left" value="" labelWidth="160"/>
             <TextField label={Intl.get('Device Location')+"："} labelTextAlign="left" labelAlign="left" value="" labelWidth="160"/>
             <TextField label={Intl.get('Contact Way')+"："} labelTextAlign="left" labelAlign="left" value="" labelWidth="160"/>
             <Container flex={1}>
-              <div style={{'float':'left'}}><CheckBoxField boxLabel="SNMPv1、SNMPv2c服务"/></div>
+              <div style={{'float':'left'}}><CheckBoxField boxLabel={"SNMPv1、SNMPv2c "+Intl.get('Service')}/></div>
             </Container>
             <TextField label={Intl.get('Community')+"："} labelTextAlign="left" labelAlign="left" value="" labelWidth="160"/>
             <Container flex={1}>
-              <div style={{'float':'left'}}><CheckBoxField boxLabel="SNMPv3服务"/></div>
+              <div style={{'float':'left'}}><CheckBoxField boxLabel={"SNMPv3 "+Intl.get('Service')}/></div>
             </Container>
             <TextField label={Intl.get('User Account')+"："} labelTextAlign="left" labelAlign="left" value="" labelWidth="160"/>
             <TextField label={Intl.get('Password')+"："} labelTextAlign="left" labelAlign="left" value="" labelWidth="160"/>

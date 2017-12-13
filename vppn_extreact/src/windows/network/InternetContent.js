@@ -120,8 +120,8 @@ class LinkComp extends Component{
                   labelTextAlign="left" labelAlign="left" value={1}
                   onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
                   options={[
-                      { text: '已启用', value: 1 },
-                      { text: '已停用', value: 2 }
+                      { text: Intl.get('Enabled'), value: 1 },
+                      { text: Intl.get('Deactivated'), value: 2 }
                   ]}
               />
               <TextField width={'90%'} label={"DNS "+Intl.get('Server')+"："} labelTextAlign="left" labelAlign="left" value="" />
@@ -129,8 +129,8 @@ class LinkComp extends Component{
                   labelTextAlign="left" labelAlign="left" value={1}
                   onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
                   options={[
-                      { text: '已停用', value: 1 },
-                      { text: '已启用', value: 2 }
+                      { text: Intl.get('Enabled'), value: 1 },
+                      { text: Intl.get('Deactivated'), value: 2 }
                   ]}
               />
           </FieldSet>
@@ -366,7 +366,7 @@ class IPv6TunnelComp extends Component{
             <Container layout={{type:'vbox',pack:'start',align:'left'}} width="100%">
               <TextField disabled label={Intl.get('Connection state')+"："}
                 labelTextAlign="text" labelAlign="left" width="100%"
-                value="已断线"
+                value={Intl.get('Off line')}
                 cls="disable_text"
                 textAlign="right"/>
               <TextField disabled label={Intl.get('External address')+"："}

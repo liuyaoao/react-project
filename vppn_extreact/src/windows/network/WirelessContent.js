@@ -323,7 +323,7 @@ class GuestNetworkTab extends Component{
             </div>
         </Panel>
 
-        <div className="title">本地网络访问</div>
+        <div className="title">{Intl.get('Local network access')}</div>
         <Panel
           margin='10 0 10 0'
           layout="vbox"

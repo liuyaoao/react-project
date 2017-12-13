@@ -42,13 +42,13 @@ export default class NoticeSettingsContent extends Component {
                 }
             }}
           >
-              <Container title="电子邮件" cls="email_tab" scrollable={true}>
+              <Container title={Intl.get('Email')} cls="email_tab" scrollable={true}>
                 <EmailComp/>
               </Container>
-              <Container title="短信" cls="message_tab" scrollable={true}>
+              <Container title={Intl.get('Message')} cls="message_tab" scrollable={true}>
                   <MessageComp/>
               </Container>
-              <Container title="推送服务" cls="pushService_tab" scrollable={true}>
+              <Container title={Intl.get('Push Service')} cls="pushService_tab" scrollable={true}>
                 <div style={{padding:'10px'}}>
                   <div>{Intl.get('pushSevice_desc')}</div>
                   <Container layout={{type:'vbox',pack:'start',align:'left'}} width="100%">
@@ -74,10 +74,10 @@ export default class NoticeSettingsContent extends Component {
                         <Button text={Intl.get('Edit Variables')} ui={'decline raised'} style={{marginRight:'10px',marginBottom:'10px'}}/>
                     </Container>
                     <Container style={{'float':'right'}}>
-                      <Button shadow ui="menu raised" text="所有通知" style={{'float':'right',marginRight:'5px',marginBottom:'10px'}}>
+                      <Button shadow ui="menu raised" text={Intl.get('All notifications')} style={{'float':'right',marginRight:'5px',marginBottom:'10px'}}>
                          <Menu defaults={{ handler: this.onNoticeTypeChanged, group: 'buttonstyle' }}>
-                             <MenuItem text="所有通知" value="所有通知" iconCls={noticeType === '所有通知' && 'x-font-icon md-icon-check'}/>
-                             <MenuItem text="电子邮件" value="电子邮件" iconCls={noticeType === '电子邮件' && 'x-font-icon md-icon-check'}/>
+                             <MenuItem text={Intl.get('All notifications')} value="allNotice" iconCls={noticeType === 'allNotice' && 'x-font-icon md-icon-check'}/>
+                             <MenuItem text={Intl.get('Email')} value="emailNotice" iconCls={noticeType === 'emailNotice' && 'x-font-icon md-icon-check'}/>
                          </Menu>
                       </Button>
                     </Container>
