@@ -31,7 +31,7 @@ export default ({
    "Port":"端口",
    "test":"测试",
    "Level":"等级",
-   "Enable":"启动",         "Enabled":"已启动",     "Closed":"已关闭",
+   "Enable":"启动",         "Enabled":"已启动",     "Closed":"已关闭",   "Deactivated":"已停用",
    "Expiration date":"到期时间",        "Remaining traffic":"剩余流量",
    "Please click to pay":"支付请点击",
    "close":"关闭",        "Close":"关闭",  "Turn off":"关 闭",     "Turn on":"打 开",
@@ -49,6 +49,8 @@ export default ({
    "domain":"域名",
    "proxy":"代理",
    "vPathPacks_title":"vPathPacks:请选择一个要编辑的vPathPack",
+
+   //网络中心--状态
    "Already Online":"已联机",
    "Gateway":"网关",
    "Server":"服务器",
@@ -67,6 +69,17 @@ export default ({
    "Wireless Mode":"无线模式",
    "Advanced Options":"高级选项",
 
+   //wps和访客网络
+   "Press the WPS button on Router.":"按 Router 上的WPS按钮。",
+   "Press the WPS button on the wireless device.":"按下无线设备上的WPS按钮。",
+   "These devices have been connected.":"这些设备已连接。",
+   "Device PIN code":"设备PIN码",
+   "Effective":"有效",  "week":"周",     "Permanent validity":"永久有效",
+   "Insulate":"隔离",
+   "Access strategy":"访问策略",
+   "Refuse":"拒绝",
+   "":"",
+   "":"",
    "wps_tab_desc":"您可以使用WPS(Wi-Fi Protected Setup)以在Router与无线客户端之间共享无线密钥，并通过以下方法之一安全地建立无线网络。",
    "Connection State":"连接状态",
    "Ready":"已就绪",
@@ -126,6 +139,9 @@ export default ({
    "Anonymous online":"匿名联机",
    "Online with current accounts":"以现有账号联机",
    "User Name":"用户名",
+   "Web browser":"网页浏览器",
+   "Mobile applications":"移动应用程序",
+   "":"",
    "":"",
    "":"",
 

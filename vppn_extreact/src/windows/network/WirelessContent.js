@@ -2,8 +2,8 @@
 import React,{Component} from 'react';
 import Intl from '../../intl/Intl';
 
-import { TabPanel,Panel, Container, FormPanel,TextField,
-  FieldSet, SelectField,Button,Menu,MenuItem,Grid,Column,CheckBoxField,RadioField } from '@extjs/ext-react';
+import { TabPanel,Panel, Container, FormPanel,TextField,FieldSet,
+  SelectField,Button,Menu,MenuItem,Grid,Column,CheckColumn,CheckBoxField,RadioField } from '@extjs/ext-react';
 Ext.require('Ext.field.InputMask');
 Ext.require('Ext.Toast');
 Ext.require('Ext.panel.Collapser');
@@ -18,14 +18,7 @@ let bootsNodeOptions = [
 //无线 tab内容块。
 export default class WirelessContent extends Component {
     state={
-      nameType:'show',
-      menuItemVal:'',
-
-      selectedBootsNode:'220.168.30.12',
-      selectedVProxyIp:'', //选中的vProxy IP.
-    }
-    onAddTypeChange = (item)=>{
-      this.setState({menuItemVal:item.value});
+      tabIndex:0,
     }
     dataStore = new Ext.data.Store({
         data: [
@@ -34,24 +27,28 @@ export default class WirelessContent extends Component {
         ],
         sorters: 'name'
     })
-    onBootsNodeSelectChanged = (field, newValue)=>{  //引导节点有改变。
-      this.setState({ selectedBootsNode:newValue });
-      Ext.toast(`You selected the item with value ${newValue}`);
-    }
-    onVProxySelectChanged = (field, newValue) => { //vProxy 路由ip有改变。
-      this.setState({ selectedVProxyIp:newValue });
-      Ext.toast(`You selected the item with value ${newValue}`);
-    }
-    onNameMenuChange = (item)=>{
-        this.setState({nameType:item.value});
-    }
-    render(){
-      let {nameType,menuItemVal,selectedBootsNode} = this.state;
+    // onBootsNodeSelectChanged = (field, newValue)=>{  //引导节点有改变。
+    //   this.setState({ selectedBootsNode:newValue });
+    // }
+    // onVProxySelectChanged = (field, newValue) => { //vProxy 路由ip有改变。
+    //   this.setState({ selectedVProxyIp:newValue });
+    // }
 
+    onActiveItemChange = (sender, value, oldValue,opts)=>{
+      let activeItem = this.refs.mainTab.getActiveItem();
+      console.log("onActiveItemChange-----",activeItem.title);
+      let tabTitleArr = ["Wi-Fi", 'WPS', Intl.get('Guest Network'), "MAC "+Intl.get('Filter')];
+      this.setState({
+        tabIndex:tabTitleArr.indexOf(activeItem.title)
+      });
+    }
+
+    render(){
       return (
         <div className='wireless_content' style={{height:'100%'}}>
           <TabPanel cls='tabpanel_pc wireless_tabPanel'
               height={'100%'}
+              ref={'mainTab'}
               defaults={{
                   cls: "card",
                   tab: {
@@ -64,140 +61,15 @@ export default class WirelessContent extends Component {
                       pack: 'left'
                   }
               }}
+              onActiveItemChange={this.onActiveItemChange}
           >
             <Container title="Wi-Fi" cls="wifi_tab" scrollable={true}>
-              <div className="cnt" style={{margin:'10px',width:'96%'}}>
-                <div className="title">5GHz</div>
-                <Panel
-                  margin='10 0 10 0'
-                  layout="vbox"
-                >
-                    <Container flex={1}>
-                      <div style={{'float':'left'}}><CheckBoxField boxLabel={Intl.get('Enable wireless broadcast')}/></div>
-                    </Container>
-                    <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
-                      <TextField label={Intl.get('Name')+" (SSID)："} labelTextAlign="left" labelAlign="left" value="5G" width="80%"/>
-                      <Button ui="menu raised" text={Intl.get('Show')} style={{marginRight:'10px'}}>
-                         <Menu defaults={{ handler: this.onNameMenuChange, group: 'buttonstyle' }}>
-                             <MenuItem text={Intl.get('Show')} value="show" iconCls={nameType === 'show' && 'x-font-icon md-icon-check'}/>
-                             <MenuItem text={Intl.get('Hide')} value="hide" iconCls={nameType === 'hide' && 'x-font-icon md-icon-check'}/>
-                         </Menu>
-                      </Button>
-                    </Container>
-                    <SelectField label={Intl.get('Security Level')+':'}
-                        labelTextAlign="left" labelAlign="left" value={1}
-                        onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
-                        options={[
-                            { text: '高 - WAP2-个人', value: 1 },
-                            { text: 'Option 1', value: 2 }
-                        ]} />
-                    <TextField label={Intl.get('Password')+'：'} labelTextAlign="left" labelAlign="left" value="siteview"/>
-                    <SelectField label={Intl.get('Wireless Mode')+'：'}
-                        labelTextAlign="left" labelAlign="left" value={1}
-                        onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
-                        options={[
-                            { text: 'an+ac', value: 1 },
-                            { text: 'Option 1', value: 2 }
-                        ]} />
-                    <div style={{color:'#07439e'}}>{Intl.get('Advanced Options')}<span className="x-fa fa-chevron-down"></span></div>
-                </Panel>
-
-                <div className="title">2.4GHz</div>
-                <Panel
-                  margin='10 0 10 0'
-                  layout="vbox"
-                >
-                    <Container flex={1}>
-                      <div style={{'float':'left'}}><CheckBoxField boxLabel={Intl.get('Enable wireless broadcast')}/></div>
-                    </Container>
-                    <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
-                      <TextField label={Intl.get('Name')+" (SSID)："} labelTextAlign="left" labelAlign="left" value="" width="80%"/>
-                      <Button ui="menu raised" text={Intl.get('Show')} style={{marginRight:'10px'}}>
-                         <Menu defaults={{ handler: this.onNameMenuChange, group: 'buttonstyle' }}>
-                             <MenuItem text={Intl.get('Show')} value="show" iconCls={nameType === 'show' && 'x-font-icon md-icon-check'}/>
-                             <MenuItem text={Intl.get('Hide')} value="hide" iconCls={nameType === 'hide' && 'x-font-icon md-icon-check'}/>
-                         </Menu>
-                      </Button>
-                    </Container>
-                    <SelectField label={Intl.get('Security Level')+"："}
-                        labelTextAlign="left" labelAlign="left" value={1}
-                        onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
-                        options={[
-                            { text: '高 - WAP2-个人', value: 1 },
-                            { text: 'Option 1', value: 2 }
-                        ]}
-                    />
-                    <TextField label={Intl.get('Password')+"："} labelTextAlign="left" labelAlign="left" value="siteview"/>
-                    <SelectField label={Intl.get('Wireless Mode')+"："}
-                        labelTextAlign="left" labelAlign="left" value={1}
-                        onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
-                        options={[
-                            { text: 'b+g+n', value: 1 },
-                            { text: 'Option 1', value: 2 }
-                        ]}
-                    />
-                    <div style={{color:'#07439e'}}>{Intl.get('Advanced Options')}<span className="x-fa fa-chevron-down"></span></div>
-                </Panel>
-              </div>
+              <WiFi_Comp/>
             </Container>
-
             {/* WPS tab块内容*/}
             <Container title="WPS" cls="wps_tab" scrollable={true}>
-                <div className="">
-                  <div style={{margin:'10px'}}>
-                    <div>{Intl.get('wps_tab_desc')}</div>
-                    <div style={{'float':'left'}}>
-                      <CheckBoxField boxLabel={Intl.get('Enable')+" WPS"} cls="wps_tab_checkbox"/>
-                    </div>
-                    <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
-                      <div>{Intl.get('Connection State')}：<span>{Intl.get('Ready')}</span></div>
-                      <div style={{marginLeft:'20px'}}>{Intl.get('Connection Type')}：<span>2.4GHz</span></div>
-                    </Container>
-                  </div>
-                  <Container layout={{type:'vbox',pack:'center',align:'left'}}>
-                    <Panel
-                      title={Intl.get('By Push Button')}
-                      width={'100%'}
-                      bodyPadding={20}
-                      collapsible={{
-                          direction: 'top',
-                          dynamic: true
-                      }}
-                      bodyPadding={10}
-                    >
-                    <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
-                      <Container flex={1}>
-                        <p>按 Router 上的WPS按钮。</p>
-                        <div style={{padding:'20px'}}><img src='images/network/pushBtn_1.png'/></div>
-                      </Container>
-                      <Container flex={1}>
-                        <p>按下无线设备上的WPS按钮。</p>
-                        <div style={{padding:'20px'}}><img src='images/network/pushBtn_2.png'/></div>
-                      </Container>
-                      <Container flex={1}>
-                        <p>这些设备已连接。</p>
-                        <div style={{padding:'20px'}}><img src='images/network/pushBtn_3.png'/></div>
-                      </Container>
-                    </Container>
-                    </Panel>
-                    <Panel
-                      title="设备PIN码"
-                      width={'100%'}
-                      bodyPadding={20}
-                      collapsible={{
-                          direction: 'top',
-                          dynamic: true
-                      }}
-                      bodyPadding={10}
-                    >
-                      <Container>
-                        设备PIN码 内容区
-                      </Container>
-                    </Panel>
-                  </Container>
-                </div>
+                <WPS_Comp/>
             </Container>
-
             {/*访客网络 tab 内容区*/}
             <Container title={Intl.get('Guest Network')} cls="guest_tab" scrollable={true}>
                 <GuestNetworkTab />
@@ -207,8 +79,164 @@ export default class WirelessContent extends Component {
                 <MACFilterTab />
             </Container>
           </TabPanel>
+          {this.state.tabIndex!=3?
+            <div><Container layout={{type:'hbox',pack:'end',align:'bottom'}} height="40px" width="100%" style={{position:'absolute',bottom:'10px',right:'30px'}}>
+                <Button text={Intl.get('Apply')} ui={'confirm alt'} style={{marginRight:'10px'}}/>
+                <Button text={Intl.get('Reset')} ui={'decline alt'} style={{marginLeft:'10px'}}/>
+            </Container></div>:null
+          }
         </div>
     )
+  }
+}
+
+//Wi-Fi tab的内容区
+class WiFi_Comp extends Component{
+  state={
+    nameType:'show',
+  }
+  onNameMenuChange = (item)=>{
+      this.setState({nameType:item.value});
+  }
+  render (){
+    let {nameType} = this.state;
+    return (
+      <div className="cnt" style={{margin:'10px',width:'96%',marginBottom:'50px'}}>
+        <div className="title">5GHz</div>
+        <Panel
+          margin='10 0 10 0'
+          layout="vbox"
+        >
+            <Container flex={1}>
+              <div style={{'float':'left'}}><CheckBoxField boxLabel={Intl.get('Enable wireless broadcast')}/></div>
+            </Container>
+            <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
+              <TextField label={Intl.get('Name')+" (SSID)："} labelTextAlign="left" labelAlign="left" value="5G" labelWidth="160" width="80%"/>
+              <Button ui="menu raised" text={Intl.get('Show')} style={{marginRight:'10px'}}>
+                 <Menu defaults={{ handler: this.onNameMenuChange, group: 'buttonstyle' }}>
+                     <MenuItem text={Intl.get('Show')} value="show" iconCls={nameType === 'show' && 'x-font-icon md-icon-check'}/>
+                     <MenuItem text={Intl.get('Hide')} value="hide" iconCls={nameType === 'hide' && 'x-font-icon md-icon-check'}/>
+                 </Menu>
+              </Button>
+            </Container>
+            <SelectField label={Intl.get('Security Level')+':'}
+                labelTextAlign="left" labelAlign="left" labelWidth="160" value={1}
+                onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
+                options={[
+                    { text: '高 - WAP2-个人', value: 1 },
+                    { text: 'Option 1', value: 2 }
+                ]} />
+            <TextField label={Intl.get('Password')+'：'} labelTextAlign="left" labelAlign="left" labelWidth="160" value="siteview"/>
+            <SelectField label={Intl.get('Wireless Mode')+'：'}
+                labelTextAlign="left" labelAlign="left" labelWidth="160" value={1}
+                onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
+                options={[
+                    { text: 'an+ac', value: 1 },
+                    { text: 'Option 1', value: 2 }
+                ]} />
+            <div style={{color:'#07439e'}}>{Intl.get('Advanced Options')}<span className="x-fa fa-chevron-down"></span></div>
+        </Panel>
+
+        <div className="title">2.4GHz</div>
+        <Panel
+          margin='10 0 10 0'
+          layout="vbox"
+        >
+            <Container flex={1}>
+              <div style={{'float':'left'}}><CheckBoxField boxLabel={Intl.get('Enable wireless broadcast')}/></div>
+            </Container>
+            <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
+              <TextField label={Intl.get('Name')+" (SSID)："} labelTextAlign="left" labelAlign="left" labelWidth="160" value="" width="80%"/>
+              <Button ui="menu raised" text={Intl.get('Show')} style={{marginRight:'10px'}}>
+                 <Menu defaults={{ handler: this.onNameMenuChange, group: 'buttonstyle' }}>
+                     <MenuItem text={Intl.get('Show')} value="show" iconCls={nameType === 'show' && 'x-font-icon md-icon-check'}/>
+                     <MenuItem text={Intl.get('Hide')} value="hide" iconCls={nameType === 'hide' && 'x-font-icon md-icon-check'}/>
+                 </Menu>
+              </Button>
+            </Container>
+            <SelectField label={Intl.get('Security Level')+"："}
+                labelTextAlign="left" labelAlign="left" labelWidth="160" value={1}
+                onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
+                options={[
+                    { text: '高 - WAP2-个人', value: 1 },
+                    { text: 'Option 1', value: 2 }
+                ]}
+            />
+            <TextField label={Intl.get('Password')+"："} labelTextAlign="left" labelAlign="left" labelWidth="160" value="siteview"/>
+            <SelectField label={Intl.get('Wireless Mode')+"："}
+                labelTextAlign="left" labelAlign="left" labelWidth="160" value={1}
+                onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
+                options={[
+                    { text: 'b+g+n', value: 1 },
+                    { text: 'Option 1', value: 2 }
+                ]}
+            />
+            <div style={{color:'#07439e'}}>{Intl.get('Advanced Options')}<span className="x-fa fa-chevron-down"></span></div>
+        </Panel>
+      </div>
+    );
+  }
+}
+
+//WPS tab 的内容去
+class WPS_Comp extends Component{
+  state={}
+  render () {
+    return (
+      <div className="" style={{marginBottom:'50px'}}>
+        <div style={{margin:'10px'}}>
+          <div>{Intl.get('wps_tab_desc')}</div>
+          <div style={{'float':'left'}}>
+            <CheckBoxField boxLabel={Intl.get('Enable')+" WPS"} cls="wps_tab_checkbox"/>
+          </div>
+          <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
+            <div>{Intl.get('Connection State')}：<span>{Intl.get('Ready')}</span></div>
+            <div style={{marginLeft:'20px'}}>{Intl.get('Connection Type')}：<span>2.4GHz</span></div>
+          </Container>
+        </div>
+        <Container layout={{type:'vbox',pack:'center',align:'left'}}>
+          <Panel
+            title={Intl.get('By Push Button')}
+            width={'100%'}
+            bodyPadding={20}
+            collapsible={{
+                direction: 'top',
+                dynamic: true
+            }}
+            bodyPadding={10}
+          >
+          <Container layout={{ type: 'hbox', pack:'left',align:'left'}}>
+            <Container flex={1}>
+              <p>{Intl.get('Press the WPS button on Router.')}</p>
+              <div style={{padding:'20px'}}><img src='images/network/pushBtn_1.png'/></div>
+            </Container>
+            <Container flex={1}>
+              <p>{Intl.get('Press the WPS button on the wireless device.')}</p>
+              <div style={{padding:'20px'}}><img src='images/network/pushBtn_2.png'/></div>
+            </Container>
+            <Container flex={1}>
+              <p>{Intl.get('These devices have been connected.')}</p>
+              <div style={{padding:'20px'}}><img src='images/network/pushBtn_3.png'/></div>
+            </Container>
+          </Container>
+          </Panel>
+          <Panel
+            title={Intl.get('Device PIN code')}
+            width={'100%'}
+            bodyPadding={20}
+            collapsible={{
+                direction: 'top',
+                dynamic: true
+            }}
+            bodyPadding={10}
+          >
+            <Container>
+              设备PIN码 内容区
+            </Container>
+          </Panel>
+        </Container>
+      </div>
+    );
   }
 }
 
@@ -218,17 +246,17 @@ class GuestNetworkTab extends Component{
   }
   render(){
     return (
-      <div className="cnt" style={{margin:'10px',width:'96%'}}>
+      <div className="cnt" style={{margin:'10px',width:'96%',marginBottom:'50px'}}>
         <div className="title">5GHz</div>
         <Panel
           margin='10 10 10 10'
           layout="vbox"
         >
             <Container flex={1}>
-              <div style={{'float':'left'}}><CheckBoxField boxLabel="启用访客网络"/></div>
+              <div style={{'float':'left'}}><CheckBoxField boxLabel={Intl.get('Enable')+' '+Intl.get('Guest Network')}/></div>
             </Container>
-            <TextField label="名称(SSID)：" labelTextAlign="left" labelAlign="left" value="RouterGuest" />
-            <SelectField label="安全级别："
+            <TextField label={Intl.get('Name')+"(SSID)："} labelTextAlign="left" labelAlign="left" value="RouterGuest" />
+            <SelectField label={Intl.get('Security Level')+"："}
                 labelTextAlign="left" labelAlign="left" value={1}
                 onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
                 options={[
@@ -236,22 +264,22 @@ class GuestNetworkTab extends Component{
                     { text: 'Option 1', value: 2 }
                 ]}
             />
-            <TextField label="密码：" labelTextAlign="left" labelAlign="left" value="siteview"/>
-            <SelectField label="有效："
+            <TextField label={Intl.get('Password')+"："} labelTextAlign="left" labelAlign="left" value="siteview"/>
+            <SelectField label={Intl.get('Effective')+"："}
                 labelTextAlign="left" labelAlign="left" value={1}
                 onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
                 options={[
-                    { text: '1 周', value: 1 },
-                    { text: '2 周', value: 2 },
-                    { text: '永久有效', value: 3 },
+                    { text: '1'+Intl.get('Week'), value: 1 },
+                    { text: '2'+Intl.get('Week'), value: 2 },
+                    { text: Intl.get('Permanent validity'), value: 3 },
                 ]}
             />
             <div style={{'clear':'both'}}>
-              <div style={{width:'100px','float':'left',textAlign:'left','lineHeight':'46px'}}>AP隔离：</div>
+              <div style={{width:'100px','float':'left',textAlign:'left','lineHeight':'46px'}}>{"AP "+Intl.get('Insulate')+"："}</div>
               <span style={{'float':'left'}}>
                 <FormPanel layout={{type: 'hbox', align: 'left'}}>
-                  <RadioField name="ap_5GHz" boxLabel="已启用" value="checked" checked style={{marginRight:'10px'}}/>
-                  <RadioField name="ap_5GHz" boxLabel="已停用" value="unchecked"/>
+                  <RadioField name="ap_5GHz" boxLabel={Intl.get('Enabled')} value="checked" checked style={{marginRight:'10px'}}/>
+                  <RadioField name="ap_5GHz" boxLabel={Intl.get('Deactivated')} value="unchecked"/>
                 </FormPanel>
               </span>
             </div>
@@ -263,10 +291,10 @@ class GuestNetworkTab extends Component{
           layout="vbox"
         >
             <Container flex={1}>
-              <div style={{'float':'left'}}><CheckBoxField boxLabel="启用无线广播"/></div>
+              <div style={{'float':'left'}}><CheckBoxField boxLabel={Intl.get('Enable wireless broadcast')}/></div>
             </Container>
-            <TextField label="名称(SSID)：" labelTextAlign="left" labelAlign="left" value="RouterGuest_2.4GHz" />
-            <SelectField label="安全级别："
+            <TextField label={Intl.get('Name')+"(SSID)："} labelTextAlign="left" labelAlign="left" value="RouterGuest_2.4GHz" />
+            <SelectField label={Intl.get('Security Level')+"："}
                 labelTextAlign="left" labelAlign="left" value={1}
                 onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
                 options={[
@@ -274,22 +302,22 @@ class GuestNetworkTab extends Component{
                     { text: 'Option 1', value: 2 }
                 ]}
             />
-            <TextField label="密码：" labelTextAlign="left" labelAlign="left" value="siteview"/>
-            <SelectField label="有效："
+            <TextField label={Intl.get('Password')+"："} labelTextAlign="left" labelAlign="left" value="siteview"/>
+            <SelectField label={Intl.get('Effective')+"："}
                 labelTextAlign="left" labelAlign="left" value={1}
                 onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
                 options={[
-                    { text: '1 周', value: 1 },
-                    { text: '2 周', value: 2 },
-                    { text: '永久有效', value: 3 },
+                  { text: '1'+Intl.get('Week'), value: 1 },
+                  { text: '2'+Intl.get('Week'), value: 2 },
+                  { text: Intl.get('Permanent validity'), value: 3 },
                 ]}
             />
             <div style={{'clear':'both'}}>
-              <div style={{width:'100px','float':'left',textAlign:'left','lineHeight':'46px'}}>AP隔离：</div>
+              <div style={{width:'100px','float':'left',textAlign:'left','lineHeight':'46px'}}>{"AP "+Intl.get('Insulate')+"："}</div>
               <span style={{'float':'left'}}>
                 <FormPanel layout={{type: 'hbox', align: 'left'}}>
-                  <RadioField name="ap_5GHz" boxLabel="已启用" value="checked" checked style={{marginRight:'10px'}}/>
-                  <RadioField name="ap_5GHz" boxLabel="已停用" value="unchecked"/>
+                  <RadioField name="ap_24GHz" boxLabel={Intl.get('Enabled')} value="checked" checked style={{marginRight:'10px'}}/>
+                  <RadioField name="ap_24GHz" boxLabel={Intl.get('Deactivated')} value="unchecked"/>
                 </FormPanel>
               </span>
             </div>
@@ -318,23 +346,28 @@ class MACFilterTab extends Component{
   }
   render(){
     return (
-      <div className="cnt" style={{margin:'10px',width:'96%'}}>
+      <div className="cnt" style={{margin:'10px',width:'96%',position:'relative'}}>
         <Container
             layout={{ type: 'hbox', pack: 'left'}}
             margin="10 0 10 0"
-            defaults={{ margin: "0 10 10 0" }}
-          >
-          <Button ui="confirm raised" text="新增"/>
-          <Button ui="raised" text="编辑"/>
-          <Button ui="raised" text="删除"/>
-          <Button ui="raised" text="保存"/>
+            defaults={{ margin: "0 10 10 0" }}>
+          <Button ui="confirm alt raised" text={Intl.get('Add')}/>
+          <Button ui="raised" text={Intl.get('Edit')}/>
+          <Button ui="raised" text={Intl.get('Delete')}/>
+          <Button ui="raised" text={Intl.get('Save')}/>
         </Container>
         <Grid store={this.state.dataStore} grouped width={'99%'} height={'320px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
-            <Column text="应用" width="100" dataIndex="name"/>
-            <Column text="描述" width="120" dataIndex="description"/>
-            <Column text="MAC 地址" width="100" dataIndex="MACAdredss"/>
+            <CheckColumn text={Intl.get('Apply')} width="80" dataIndex="name" groupable={false} sortable={false}/>
+            <Column text={Intl.get('Description')} width="120" dataIndex="description"/>
+            <Column text={"MAC"+Intl.get('Address')} width="100" dataIndex="MACAdredss"/>
         </Grid>
-
+        <Container layout={{type:'hbox',pack:'start',align:'bottom'}} height="40px" width="100%" style={{position:'absolute',bottom:'-50px',left:'10px'}}>
+            <div style={{height:'45px',lineHeight:'45px'}}>{Intl.get('Access strategy')+': '}</div>
+            <FormPanel layout={{type: 'hbox', align: 'left'}}>
+              <RadioField name="accessStrategy" boxLabel={Intl.get('Refuse')} value="checked" checked style={{marginRight:'10px'}}/>
+              <RadioField name="accessStrategy" boxLabel={Intl.get('Allow')} value="unchecked"/>
+            </FormPanel>
+        </Container>
       </div>
     );
   }

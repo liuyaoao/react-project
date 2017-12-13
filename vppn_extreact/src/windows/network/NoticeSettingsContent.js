@@ -66,7 +66,7 @@ export default class NoticeSettingsContent extends Component {
 
                 </div>
               </Container>
-              <Container title="高级设置" cls="superSetting_tab" scrollable={true}>
+              <Container title={Intl.get('Advanced Setting')} cls="superSetting_tab" scrollable={true}>
                   <Container layout={{type:'hbox',pack:'space-between',align:'bottom'}} margin='10'>
                     <Container style={{'float':'left'}}>
                         <Button text={Intl.get('Edit Message')} ui={'confirm raised'} style={{marginRight:'10px',marginBottom:'10px'}}/>
@@ -91,7 +91,7 @@ export default class NoticeSettingsContent extends Component {
               </Container>
 
             </TabPanel>
-            <Container layout={{type:'hbox',pack:'end',align:'bottom'}} height="40px" width="100%" style={{position:'absolute',bottom:'10px',right:'20px'}}>
+            <Container layout={{type:'hbox',pack:'end',align:'bottom'}} height="40px" width="100%" style={{position:'absolute',bottom:'10px',right:'30px'}}>
                 <Button text={Intl.get('Apply')} ui={'confirm alt'} style={{marginRight:'10px'}}/>
                 <Button text={Intl.get('Reset')} ui={'decline alt'} style={{marginLeft:'10px'}}/>
             </Container>

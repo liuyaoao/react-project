@@ -7,38 +7,34 @@ import { TabPanel, Container, FormPanel,TextField,Panel,
 Ext.require('Ext.field.InputMask');
 Ext.require('Ext.Toast');
 
-let bootsNodeOptions = [
-    { text: '220.168.30.12', value: '220.168.30.12' },
-    { text: '220.168.30.1', value: '220.168.30.1' },
-    { text: '220.168.30.6', value: '220.168.30.6' }
-];
-
+//互联网
 export default class InternetContent extends Component {
     state={
-      menuItemVal:'',
-      selectedBootsNode:'220.168.30.12',
-      selectedVProxyIp:'', //选中的vProxy IP.
+      tabIndex:0, //当前展示的tab
     }
-    onAddTypeChange = (item)=>{
-      this.setState({menuItemVal:item.value});
-    }
-    onBootsNodeSelectChanged = (field, newValue)=>{  //引导节点有改变。
-      this.setState({ selectedBootsNode:newValue });
-      Ext.toast(`You selected the item with value ${newValue}`);
-    }
-    onVProxySelectChanged = (field, newValue) => { //vProxy 路由ip有改变。
-      this.setState({ selectedVProxyIp:newValue });
-      Ext.toast(`You selected the item with value ${newValue}`);
+    // onBootsNodeSelectChanged = (field, newValue)=>{  //引导节点有改变。
+    //   this.setState({ selectedBootsNode:newValue });
+    //   Ext.toast(`You selected the item with value ${newValue}`);
+    // }
+    // onVProxySelectChanged = (field, newValue) => { //vProxy 路由ip有改变。
+    //   this.setState({ selectedVProxyIp:newValue });
+    //   Ext.toast(`You selected the item with value ${newValue}`);
+    // }
+    onActiveItemChange = (sender, value, oldValue,opts)=>{
+      let activeItem = this.refs.mainTab.getActiveItem();
+      let tabTitleArr = [Intl.get('Link'), Intl.get('QuickConnect & DDNS'), Intl.get('Port Forwarding'), Intl.get('Port Trigger'),
+        Intl.get('DMZ'),"IPv6 "+Intl.get('Tunnel'),Intl.get('3G And 4G')];
+      this.setState({
+        tabIndex:tabTitleArr.indexOf(activeItem.title)
+      });
     }
     render(){
-      let {menuItemVal,selectedBootsNode} = this.state;
       return (
         <div className='Internet_content' style={{height:'100%'}}>
           <TabPanel cls='Internet_tabPanel'
-              height={'100%'}
+              height={'100%'} ref={'mainTab'}
               defaults={{
                   cls: "card",
-                  // layout: "center",
                   tab: {
                       flex: 0,
                       minWidth: 100
@@ -49,79 +45,31 @@ export default class InternetContent extends Component {
                       pack: 'left'
                   }
               }}
-          >
+              onActiveItemChange={this.onActiveItemChange}
+            >
               <Container title={Intl.get('Link')} cls="connect_tab" scrollable={true}>
-                <div>
-                  <FormPanel>
-                    <FieldSet title={Intl.get('You can set up the Internet connection here. Your connection type is determined by the network environment. Please consult ISP to get the help you need.')}
-                      layout={{type:'vbox',pack:'left',align: 'left'}}
-                      defaults={{labelAlign: "placeholder"}}
-                      width={'100%'}
-                      margin="10 10 10 10">
-                        <SelectField label={Intl.get('Connection Type')+':'} width={'90%'}
-                            labelTextAlign="left" labelAlign="left" value={1}
-                            onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
-                            options={[
-                                { text: '高 - WAP2-个人', value: 1 },
-                                { text: 'Option 1', value: 2 }
-                            ]}
-                        />
-                        <SelectField label={Intl.get('Set as default gateway')+':'} width={'90%'}
-                            labelTextAlign="left" labelAlign="left" value={1}
-                            onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
-                            options={[
-                                { text: '已启用', value: 1 },
-                                { text: '已停用', value: 2 }
-                            ]}
-                        />
-                        <TextField width={'90%'} label={"DNS "+Intl.get('Server')+"："} labelTextAlign="left" labelAlign="left" value="" />
-                        <SelectField label={Intl.get('Enable')+' Jumbo Frame:'} width={'90%'}
-                            labelTextAlign="left" labelAlign="left" value={1}
-                            onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
-                            options={[
-                                { text: '已停用', value: 1 },
-                                { text: '已启用', value: 2 }
-                            ]}
-                        />
-                    </FieldSet>
-                  </FormPanel>
-                  <Container
-                    layout={{ type: 'hbox', pack: 'left'}}
-                    margin="0 0 10 0"
-                    defaults={{ margin: "0 10 10 0" }}>
-                      <Button ui="confirm raised" text={'ISP '+Intl.get('Setting')}/>
-                      <Button ui="raised" text={'ISP '+Intl.get('Setting')+'('+Intl.get('IPTV And VoIP')+')'}/>
-                      <Button ui="raised" text={'VPN '+Intl.get('Setting')}/>
-                      <Button ui="raised" text={'IPv6 '+Intl.get('Setting')}/>
-                  </Container>
-                </div>
+                  <LinkComp/>
               </Container>
-
               {/* QuickConnect & DDNS 内容区 */}
               <Container title={Intl.get('QuickConnect & DDNS')} cls="ddns_tab" scrollable={true}>
                   <DDNS_Comp/>
               </Container>
-
               {/* 端口转发 tab 内容区 */}
               <Container title={Intl.get('Port Forwarding')} cls="portTransfer_tab" scrollable={true}>
                   <PortForwardingComp/>
               </Container>
-
               {/* 端口触发 tab 内容区 */}
               <Container title={Intl.get('Port Trigger')} cls="portTrigger_tab" scrollable={true}>
                 <PortTriggerComp/>
               </Container>
-
               {/* DMZ tab 内容区 */}
               <Container title={Intl.get('DMZ')} cls="DMZ_tab" scrollable={true}>
                   <DMZ_Comp/>
               </Container>
-
               {/* IPv6隧道 tab 内容区 */}
               <Container title={"IPv6 "+Intl.get('Tunnel')} cls="IPv6_tab" scrollable={true}>
                   <IPv6TunnelComp />
               </Container>
-
               {/* 3G和4G tab 内容区 */}
               <Container title={Intl.get('3G And 4G')} cls="threeFourG_tab" scrollable={true}>
                   <Container
@@ -135,12 +83,71 @@ export default class InternetContent extends Component {
               </Container>
 
           </TabPanel>
+          {(this.state.tabIndex==0||this.state.tabIndex==1)?
+            <div><Container layout={{type:'hbox',pack:'end',align:'bottom'}} height="40px" width="100%" style={{position:'absolute',bottom:'10px',right:'30px'}}>
+                <Button text={Intl.get('Apply')} ui={'confirm alt'} style={{marginRight:'10px'}}/>
+                <Button text={Intl.get('Reset')} ui={'decline alt'} style={{marginLeft:'10px'}}/>
+            </Container></div>:null
+          }
         </div>
     )
   }
 }
 
+//链接 tab页的内容区
+class LinkComp extends Component{
+  state={
 
+  }
+  render () {
+    return (
+      <div style={{marginBottom:'50px'}}>
+        <FormPanel>
+          <FieldSet title={Intl.get('You can set up the Internet connection here. Your connection type is determined by the network environment. Please consult ISP to get the help you need.')}
+            layout={{type:'vbox',pack:'left',align: 'left'}}
+            defaults={{labelAlign: "placeholder"}}
+            width={'100%'}
+            margin="10 10 10 10">
+              <SelectField label={Intl.get('Connection Type')+':'} width={'90%'}
+                  labelTextAlign="left" labelAlign="left" value={1}
+                  onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
+                  options={[
+                      { text: '高 - WAP2-个人', value: 1 },
+                      { text: 'Option 1', value: 2 }
+                  ]}
+              />
+              <SelectField label={Intl.get('Set as default gateway')+':'} width={'90%'}
+                  labelTextAlign="left" labelAlign="left" value={1}
+                  onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
+                  options={[
+                      { text: '已启用', value: 1 },
+                      { text: '已停用', value: 2 }
+                  ]}
+              />
+              <TextField width={'90%'} label={"DNS "+Intl.get('Server')+"："} labelTextAlign="left" labelAlign="left" value="" />
+              <SelectField label={Intl.get('Enable')+' Jumbo Frame:'} width={'90%'}
+                  labelTextAlign="left" labelAlign="left" value={1}
+                  onChange={(field, newValue) => Ext.toast(`You selected the item with value ${newValue}`)}
+                  options={[
+                      { text: '已停用', value: 1 },
+                      { text: '已启用', value: 2 }
+                  ]}
+              />
+          </FieldSet>
+        </FormPanel>
+        <Container
+          layout={{ type: 'hbox', pack: 'left'}}
+          margin="0 0 10 0"
+          defaults={{ margin: "0 10 10 0" }}>
+            <Button ui="confirm raised" text={'ISP '+Intl.get('Setting')}/>
+            <Button ui="raised" text={'ISP '+Intl.get('Setting')+'('+Intl.get('IPTV And VoIP')+')'}/>
+            <Button ui="raised" text={'VPN '+Intl.get('Setting')}/>
+            <Button ui="raised" text={'IPv6 '+Intl.get('Setting')}/>
+        </Container>
+      </div>
+    );
+  }
+}
 //快速链接和DDNS
 class DDNS_Comp extends Component{
   state = {
@@ -151,23 +158,20 @@ class DDNS_Comp extends Component{
     return (
       <div className='' style={{height:(this.state.bodyHeight-45)+"px"}}>
         <div style={{padding:'10px'}}>
-          <Container shadow padding="10 10 10 10">
+          <Container shadow padding="10 10 10 10" style={{background:'#dae8ec'}}>
             <FieldSet title={Intl.get('Connect to your router everywhere')} >
-                <TextField disabled label={"DNS "+Intl.get('Server')+"："}
-                  labelTextAlign="text" labelAlign="left" width="100%"
-                  value="192.168.1.1"
-                  cls="disable_text"
-                  textAlign="right"/>
-                <TextField disabled label={"DNS "+Intl.get('Server')+"："}
-                  labelTextAlign="text" labelAlign="left" width="100%"
-                  value="192.168.1.1"
-                  cls="disable_text"
-                  textAlign="right"/>
-                <TextField disabled label={"DNS "+Intl.get('Server')+"："}
-                  labelTextAlign="text" labelAlign="left" width="100%"
-                  value="192.168.1.1"
-                  cls="disable_text"
-                  textAlign="right"/>
+                <TextField disabled label={Intl.get('Web browser')+"："}
+                  labelTextAlign="text" labelAlign="left" labelWidth="180"
+                  value={Intl.get('Deactivated')}
+                  cls="black_label"/>
+                <TextField disabled label={"DDNS："}
+                  labelTextAlign="text" labelAlign="left" labelWidth="180"
+                  value={Intl.get('Deactivated')}
+                  cls="black_label"/>
+                <TextField disabled label={Intl.get('Mobile applications')+"："}
+                  labelTextAlign="text" labelAlign="left" labelWidth="180"
+                  value={Intl.get('Deactivated')}
+                  cls="black_label"/>
             </FieldSet>
           </Container>
 
@@ -196,11 +200,6 @@ class DDNS_Comp extends Component{
               <Button ui="confirm raised" text={Intl.get('Immediate updates')} style={{marginRight:'10px'}}/>
             </Container>
           </div>
-
-          <Container layout={{type:'hbox',pack:'center',aglin:'bottom'}} margin="10 10 10 10">
-            <Button text={Intl.get('Apply')} ui="confirm alt" style={{marginRight:'10px'}}/>
-            <Button text={Intl.get('Reset')} ui="decline alt" style={{marginLeft:'10px'}}/>
-          </Container>
 
         </div>
       </div>

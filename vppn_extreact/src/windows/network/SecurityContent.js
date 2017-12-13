@@ -57,6 +57,10 @@ export default class SecurityContent extends Component {
                   <CertificateComp/>
               </Container>
             </TabPanel>
+            <Container layout={{type:'hbox',pack:'end',align:'bottom'}} height="40px" width="100%" style={{position:'absolute',bottom:'10px',right:'30px'}}>
+                <Button text={Intl.get('Apply')} ui={'confirm alt'} style={{marginRight:'10px'}}/>
+                <Button text={Intl.get('Reset')} ui={'decline alt'} style={{marginLeft:'10px'}}/>
+            </Container>
         </div>
     )
   }
@@ -74,9 +78,8 @@ class SecurityComp extends Component{
         <div>{Intl.get('security_desc')}</div>
         <Container layout={{type:'vbox',pack:'start',align:'left'}} width="100%">
           <TextField label={Intl.get('Wait timeout(min)')+"："}
-            labelTextAlign="text" labelAlign="left" width="100%"
+            labelTextAlign="text" labelAlign="left" labelWidth="160"
             value=''
-            cls="disable_text"
             textAlign="right"/>
           <CheckBoxField boxLabel={Intl.get('Ignore IP checks to enhance browser compatibility')} cls="black_label"/>
           <div>{Intl.get('Enabling this option provides better compatibility for browsers using proxy servers, but reduces the security level.')}</div>
@@ -191,7 +194,7 @@ class AutoBlockComp extends Component{
                 cls="black_label auto_width disable_text"
                 textAlign="right"/>
               <div style={{margin:'10px 0'}}>{Intl.get('Create and manage the permission list to add your trusted IP address, or create a blocked list to prevent login of a specific IP address.')}</div>
-              <Button text={Intl.get('Allow/Block List')} ui={'confirm raised'} style={{marginRight:'10px'}}/>
+              <Container><Button text={Intl.get('Allow/Block List')} ui={'confirm raised'} style={{marginRight:'10px'}}/></Container>
           </Container>
         </div>
     );
