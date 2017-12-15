@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import Intl from '../../intl/Intl';
+import WebClient from '../../app/script/web_client';
 
 import { TabPanel, Container, FormPanel,TextField,
   FieldSet, SelectField,Button,Menu,MenuItem,Grid,Column  } from '@extjs/ext-react';
@@ -9,9 +10,9 @@ Ext.require('Ext.data.Store');
 
 export default class VportContent extends Component {
     state={
-      menuItemVal:'',
+      vPathAddType:'add', // 值可为：'add', 'vPorxyIp', 'China2World', 'World2China'
       selectedVProxyIp:'', //选中的vProxy IP.
-      peersRouterList:[],//远程路由器列表
+      peersRouterList:[],//远程路由器列表.
       vPathList:[],//vPath列表
     }
     componentDidMount(){
@@ -45,8 +46,43 @@ export default class VportContent extends Component {
         });
       }
     }
-    onAddTypeChange = (item)=>{
-      this.setState({menuItemVal:item.value});
+    onAddTypeChange = (item)=>{ //点击了某个添加类型。
+      console.log('点击了onAddTypeChange');
+      this.setState({vPathAddType:item.value});
+      if(item.value == "add"){ //普通添加。
+        if(!this.refs.domainField.getValue()){
+          Ext.toast(Intl.get('Please fill in the domain name first...')); return;
+        }
+        let params = {
+          vPortNum:this.props.vPortNum,
+          list:[
+            {
+              vproxy:this.state.selectedVProxyIp,
+              server:this.props.curBootNodeIP,
+              uri:this.refs.domainField.getValue(),
+            }
+          ]
+        };
+        WebClient.addVPath(params,(res)=>{
+          Ext.toast(`添加一个vPath成功！！！`);
+            let vPathListData = this.state.vPathList.getData().getSource();
+            console.log("vPathListData:",vPathListData);
+            params.list.map((item,index)=>{
+              vPathListData.push(Object.assign({
+                id:'add'+index,
+                desc:'',
+              },item));
+            });
+            this.setState({
+              vPathList: new Ext.data.Store({
+                data:vPathListData,
+                sorters:'domain'
+              })
+            });
+        });
+      }
+
+
     }
     onBootsNodeSelectChanged = (field, newValue)=>{  //引导节点有改变。proxy host
       this.props.vpnActions.setCurBootNodeIP(newValue);
@@ -65,7 +101,7 @@ export default class VportContent extends Component {
     }
 
     render(){
-      let {peersRouterList,vPathList,menuItemVal} = this.state;
+      let {peersRouterList,vPathList,vPathAddType} = this.state;
       let {contentId,myVirtualIP,running_status,vPortBootNodesList} = this.props;
       let idNum = contentId.split('_')[0]; //端口号索引
       let bootsNodeOptions = [];
@@ -75,7 +111,6 @@ export default class VportContent extends Component {
         }
       });
       // console.log('vport content render----------');
-      let vProxyIpOptions = this.props.vProxyList;
       return (
         <div className="" style={{height:'100%'}}>
         <TabPanel cls='vportContent'
@@ -157,22 +192,25 @@ export default class VportContent extends Component {
                       defaults={{labelAlign: "placeholder"}}
                       margin="10 10 10 10"
                       >
-                        <TextField placeholder="Enter..." width="200" label={Intl.get('Please input keywords or domain or URL')+'：'} required flex={1}/>
-                        <SelectField
-                            label="vProxy"
-                            flex={1}
-                            width="200"
-                            value={this.state.selectedVProxyIp}
-                            onChange={this.onVProxySelectChanged}
-                            options={vProxyIpOptions}
-                        />
-                        <Container flex={1}>
+                        <TextField placeholder="Enter..."
+                          ref="domainField"
+                          label={Intl.get('Please input keywords or domain or URL')+'：'}
+                          required flex={1}/>
+
+                        <Container layout={{type:'hbox',pack:'end',align:'bottom'}} flex={1}>
+                          <SelectField
+                              label="vProxy"
+                              width="200"
+                              value={this.state.selectedVProxyIp}
+                              onChange={this.onVProxySelectChanged}
+                              options={this.props.vProxyList}
+                          />
                           <Button ui="menu raised" text={Intl.get("Add")} style={{marginRight:'10px',marginBottom:'2px'}}>
                              <Menu defaults={{ handler: this.onAddTypeChange, group: 'buttonstyle' }}>
-                                 <MenuItem text="Add" value="" iconCls={menuItemVal === '' && 'x-font-icon md-icon-check'}/>
-                                 <MenuItem text="Import cloud vPath to 10.100.16.24" value="action" iconCls={menuItemVal === 'action' && 'x-font-icon md-icon-check'}/>
-                                 <MenuItem text="import from China2World pack" value="decline" iconCls={menuItemVal === 'decline' && 'x-font-icon md-icon-check'}/>
-                                 <MenuItem text="import from World2China pack" value="confirm" iconCls={menuItemVal === 'confirm' && 'x-font-icon md-icon-check'}/>
+                                 <MenuItem text={Intl.get('Add')} value="add" iconCls={vPathAddType === 'add' && 'x-font-icon md-icon-check'}/>
+                                 <MenuItem text={Intl.get('Import cloud vPath to')+this.state.selectedVProxyIp} value="vProxyIp" iconCls={vPathAddType === 'vProxyIp' && 'x-font-icon md-icon-check'}/>
+                                 <MenuItem text={Intl.get('Import from China2World pack')} value="China2World" iconCls={vPathAddType === 'China2World' && 'x-font-icon md-icon-check'}/>
+                                 <MenuItem text={Intl.get('Import from World2China pack')} value="World2China" iconCls={vPathAddType === 'World2China' && 'x-font-icon md-icon-check'}/>
                              </Menu>
                           </Button>
                           <Button ui={'confirm round alt'} iconCls={'x-fa fa-refresh'}></Button>

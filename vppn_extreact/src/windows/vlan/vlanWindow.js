@@ -98,6 +98,7 @@ class VlanWindow extends Component{
                     vPathList={this.props.vPathList}
                     vProxyList={this.props.vProxyList}
                     vpnActions={this.props.vpnActions}
+                    vPortNum={contentId.split('_')[0]-1}
                     contentId={this.state.contentId} />:null
                 }
 

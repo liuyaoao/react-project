@@ -20,6 +20,16 @@ export default ({
    "management":"管理",
    "Remote Router":"远程路由器",
    "vPath":"路径",
+   "Import cloud vPath to":"导入云端vPath到",
+   "Import from China2World pack":"从China2World包导入",
+   "Import from World2China pack":"从World2China包导入",
+   "Please fill in the domain name first...":"请先填写域名",
+   "":"",
+   "":"",
+   "":"",
+   "":"",
+   "":"",
+   "":"",
 
    "vPath packs":"路径包",
    "payment":"支付",
@@ -69,7 +79,7 @@ export default ({
    "Wireless Mode":"无线模式",
    "Advanced Options":"高级选项",
 
-   //wps和访客网络
+   //网络中心-无线
    "Press the WPS button on Router.":"按 Router 上的WPS按钮。",
    "Press the WPS button on the wireless device.":"按下无线设备上的WPS按钮。",
    "These devices have been connected.":"这些设备已连接。",
@@ -80,6 +90,7 @@ export default ({
    "Refuse":"拒绝",
    "Local network access":"本地网络访问",
    "":"",
+   //wps和访客网络
    "wps_tab_desc":"您可以使用WPS(Wi-Fi Protected Setup)以在Router与无线客户端之间共享无线密钥，并通过以下方法之一安全地建立无线网络。",
    "Connection State":"连接状态",
    "Ready":"已就绪",
@@ -105,6 +116,9 @@ export default ({
    "Message":"短信",
    "Push Service":"推送服务",   "Service":"服务",
    "Advanced Setting":"高级设置",
+   "Allow local network access to visitor network":"允许本地网络访问访客网络",
+   "":"",
+   "":"",
 
    //互联网
    "Link":"链接",
@@ -318,10 +332,8 @@ export default ({
    "Routine Setting":"常规设置",
    "Custom Speed":"自定义速度",
    "High Priority":"高优先级",
-
-   "":"",
-   "":"",
-   "":"",
+   "Real time flow":"实时流量",
+   "Upload":"上传",
    "":"",
    "":"",
    "":"",

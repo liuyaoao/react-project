@@ -8,22 +8,8 @@ Ext.require('Ext.Toast');
 
 export default class NoticeSettingsContent extends Component {
     state={
-      noticeType:"",
-      vPathList:new Ext.data.Store({
-        data:[
-          {uri:'432',vproxy:'gregre',desc:'gfretgre'},
-          {uri:'765',vproxy:'fdegre',desc:'bresgr'}
-        ],
-        sorters:'domain'
-      }),//vPath列表
-    }
-
-    onNoticeTypeChanged = (item)=>{
-      this.setState({ noticeType:item.value });
     }
     render(){
-      let {noticeType} = this.state;
-
       return (
         <div className='noticeSettings_content' style={{height:'100%',position:'relative'}}>
           <TabPanel cls='noticeSettings_tabPanel'
@@ -67,27 +53,7 @@ export default class NoticeSettingsContent extends Component {
                 </div>
               </Container>
               <Container title={Intl.get('Advanced Setting')} cls="superSetting_tab" scrollable={true}>
-                  <Container layout={{type:'hbox',pack:'space-between',align:'bottom'}} margin='10'>
-                    <Container style={{'float':'left'}}>
-                        <Button text={Intl.get('Edit Message')} ui={'confirm raised'} style={{marginRight:'10px',marginBottom:'10px'}}/>
-                        <Button text={Intl.get('Save')} ui={'decline raised'} style={{marginRight:'10px',marginBottom:'10px'}}/>
-                        <Button text={Intl.get('Edit Variables')} ui={'decline raised'} style={{marginRight:'10px',marginBottom:'10px'}}/>
-                    </Container>
-                    <Container style={{'float':'right'}}>
-                      <Button shadow ui="menu raised" text={Intl.get('All notifications')} style={{'float':'right',marginRight:'5px',marginBottom:'10px'}}>
-                         <Menu defaults={{ handler: this.onNoticeTypeChanged, group: 'buttonstyle' }}>
-                             <MenuItem text={Intl.get('All notifications')} value="allNotice" iconCls={noticeType === 'allNotice' && 'x-font-icon md-icon-check'}/>
-                             <MenuItem text={Intl.get('Email')} value="emailNotice" iconCls={noticeType === 'emailNotice' && 'x-font-icon md-icon-check'}/>
-                         </Menu>
-                      </Button>
-                    </Container>
-                  </Container>
-                  <Grid store={this.state.vPathList} grouped width={'98%'} height={'320px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
-                      <Column text={Intl.get('Events')} flex={2} dataIndex="uri"/>
-                      <CheckColumn text={Intl.get('Email')} flex={1} dataIndex="vproxy" groupable={false} sortable={false}/>
-                      <CheckColumn text={Intl.get('Message')} flex={1} dataIndex="desc" groupable={false} sortable={false}/>
-                      <CheckColumn text={Intl.get('Mobile Device')} flex={1} dataIndex="desc" groupable={false} sortable={false}/>
-                  </Grid>
+                  <AdvancedSettingComp/>
               </Container>
 
             </TabPanel>
@@ -110,9 +76,6 @@ class EmailComp extends Component{
       bodyWidth:document.documentElement.clientWidth
     });
   }
-  componentWillUnmount() {
-  }
-
   render () {
     let {bodyHeight} = this.state;
     let {} = this.state;
@@ -204,4 +167,49 @@ class MessageComp extends Component{
     );
   }
 
+}
+
+//高级设置 tab页的内容区
+class AdvancedSettingComp extends Component {
+  state={
+    noticeType:"",
+    vPathList:new Ext.data.Store({
+      data:[
+        {uri:'432',vproxy:'gregre',desc:'gfretgre'},
+        {uri:'765',vproxy:'fdegre',desc:'bresgr'}
+      ],
+      sorters:'domain'
+    }),//vPath列表
+  }
+  onNoticeTypeChanged = (item)=>{
+    this.setState({ noticeType:item.value });
+  }
+  render () {
+    let {noticeType} = this.state;
+    return (
+      <div style={{padding:'10px'}}>
+        <Container layout={{type:'hbox',pack:'space-between',align:'bottom'}}>
+          <Container style={{'float':'left'}}>
+              <Button text={Intl.get('Edit Message')} ui={'confirm raised'} style={{marginRight:'10px',marginBottom:'10px'}}/>
+              <Button text={Intl.get('Save')} ui={'decline raised'} style={{marginRight:'10px',marginBottom:'10px'}}/>
+              <Button text={Intl.get('Edit Variables')} ui={'decline raised'} style={{marginRight:'10px',marginBottom:'10px'}}/>
+          </Container>
+          <Container style={{'float':'right'}}>
+            <Button shadow ui="menu raised" text={Intl.get('All notifications')} style={{'float':'right',marginRight:'5px',marginBottom:'10px'}}>
+               <Menu defaults={{ handler: this.onNoticeTypeChanged, group: 'buttonstyle' }}>
+                   <MenuItem text={Intl.get('All notifications')} value="allNotice" iconCls={noticeType === 'allNotice' && 'x-font-icon md-icon-check'}/>
+                   <MenuItem text={Intl.get('Email')} value="emailNotice" iconCls={noticeType === 'emailNotice' && 'x-font-icon md-icon-check'}/>
+               </Menu>
+            </Button>
+          </Container>
+        </Container>
+        <Grid store={this.state.vPathList} grouped width={'99%'} height={'320px'} style={{margin:'0 auto',border:'1px solid #73d8ef'}}>
+            <Column text={Intl.get('Events')} flex={2} dataIndex="uri"/>
+            <CheckColumn text={Intl.get('Email')} flex={1} dataIndex="vproxy" groupable={false} sortable={false}/>
+            <CheckColumn text={Intl.get('Message')} flex={1} dataIndex="desc" groupable={false} sortable={false}/>
+            <CheckColumn text={Intl.get('Mobile Device')} flex={1} dataIndex="desc" groupable={false} sortable={false}/>
+        </Grid>
+      </div>
+    );
+  }
 }

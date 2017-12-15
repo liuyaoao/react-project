@@ -92,7 +92,7 @@ class RoutineComp extends Component{
   render () {
     let {maskNumber,DHCPServerOn} = this.state;
     return (
-      <div className="cnt" style={{margin:'10px',width:'95%'}}>
+      <div className="cnt" style={{margin:'10px',width:'95%',marginBottom:'50px'}}>
         <div className="title">{Intl.get('Local')+' IP'}</div>
         <Container layout="vbox">
           <TextField label={"IP "+Intl.get('Address')+"："}
@@ -310,7 +310,7 @@ class StaticRouteComp extends Component{
   render () {
     let {DHCPServerOn} = this.state;
     return (
-        <div style={{padding:'10px'}}>
+        <div style={{padding:'10px',marginBottom:'40px'}}>
           <Container layout={{type:'hbox',pack:'space-between',align:'bottom'}}>
             <Container style={{'float':'left'}}>
               <Button text={Intl.get('Add')} ui="confirm raised" style={{marginRight:'10px'}}/>
@@ -331,7 +331,7 @@ class StaticRouteComp extends Component{
           <Container width="100%" margin="10 0 10 0">
             <Grid shadow grouped
               store={this.dataStore}
-              style={{minHeight:'600px'}}
+              style={{minHeight:'400px'}}
               scrollable={true}>
                 <CheckColumn text={Intl.get('Apply')} width="100" dataIndex="name" groupable={false} sortable={false}/>
                 <Column text={Intl.get('Network target address')} width="120" dataIndex="price"/>
@@ -366,7 +366,7 @@ class DHCP_ClientComp extends Component{
   render () {
     let {DHCPServerOn} = this.state;
     return (
-        <div style={{padding:'10px'}}>
+        <div style={{padding:'10px',marginBottom:'40px'}}>
           <Container layout={{type:'hbox',pack:'space-between',align:'bottom'}}>
             <Container style={{'float':'left'}}>
               <Button text={Intl.get('Refresh')} ui="confirm raised" style={{marginRight:'10px'}}/>
@@ -385,7 +385,7 @@ class DHCP_ClientComp extends Component{
           <Container width="100%" margin="10 0 10 0">
             <Grid shadow grouped
               store={this.dataStore}
-              style={{minHeight:'600px'}}
+              style={{minHeight:'400px'}}
               scrollable={true}>
                 <Column text={Intl.get('MAC/DUID')} width="120" dataIndex="price"/>
                 <Column text={Intl.get('IP')} width="100" dataIndex="priceChange"/>
@@ -415,7 +415,7 @@ class DHCP_RetainComp extends Component{
   render () {
     let {DHCPServerOn} = this.state;
     return (
-        <div style={{padding:'10px'}}>
+        <div style={{padding:'10px',marginBottom:'40px'}}>
           <Container layout={{type:'hbox',pack:'space-between',align:'bottom'}}>
             <Container style={{'float':'left'}}>
               <Button text={Intl.get('Add')} ui="confirm raised" style={{marginRight:'10px'}}/>
@@ -435,7 +435,7 @@ class DHCP_RetainComp extends Component{
           <Container width="100%" margin="10 0 10 0">
             <Grid shadow grouped
               store={this.dataStore}
-              style={{minHeight:'600px'}}
+              style={{minHeight:'400px'}}
               scrollable={true}>
                 <Column text={Intl.get('MAC/DUID')} width="120" dataIndex="price"/>
                 <Column text={Intl.get('IP')} width="100" dataIndex="priceChange"/>

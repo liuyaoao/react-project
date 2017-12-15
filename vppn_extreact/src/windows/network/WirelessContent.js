@@ -328,7 +328,9 @@ class GuestNetworkTab extends Component{
           margin='10 0 10 0'
           layout="vbox"
         >
-        本地网络访问 内容区。。
+        <Container flex={1}>
+          <div style={{'float':'left'}}><CheckBoxField boxLabel={Intl.get('Allow local network access to visitor network')}/></div>
+        </Container>
         </Panel>
 
       </div>

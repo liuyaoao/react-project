@@ -101,11 +101,11 @@ class web_client{
   }
 
   //添加一个vPath
-  addVPath(params,succCallBack) {  //打开一个vLan vport端口, params又三个参数:vPortNum,list;
+  addVPath(params,succCallBack) {  //打开一个vLan vport端口, params有三个参数:vPortNum,list;
     let data = {
       "action":4,
       "channel":params.vPortNum,
-      "list":params.list,
+      "list":params.list, //list是一个object数组。object:{vproxy:'xxx',server:'xxx',uri:'xxx'} ；分别是proxy IP, bootstrap IP, domain name.
     };
     $.ajax({
         url : this.url+this.getApiName('/addVPathList'),

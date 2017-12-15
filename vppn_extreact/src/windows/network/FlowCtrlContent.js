@@ -10,23 +10,16 @@ Ext.require('Ext.Toast');
 export default class FlowCtrlContent extends Component {
     state={
       wifi5GSwitch:true,
-      menuItemVal:'',
-      selectedBootsNode:'220.168.30.12',
     }
-    onAddTypeChange = (item)=>{
-      this.setState({menuItemVal:item.value});
-    }
-    onBootsNodeSelectChanged = (field, newValue)=>{
-      this.setState({ selectedBootsNode:newValue });
-      Ext.toast(`You selected the item with value ${newValue}`);
-    }
-    onClickWifi5GSwitch = (e)=>{
-      console.log("点击了wifi 5GHz开关：",e);
-      this.setState( {wifi5GSwitch:!this.state.wifi5GSwitch} );
-    }
+    // onBootsNodeSelectChanged = (field, newValue)=>{
+    //   this.setState({ selectedBootsNode:newValue });
+    //   Ext.toast(`You selected the item with value ${newValue}`);
+    // }
+    // onClickWifi5GSwitch = (e)=>{
+    //   console.log("点击了wifi 5GHz开关：",e);
+    //   this.setState( {wifi5GSwitch:!this.state.wifi5GSwitch} );
+    // }
     render(){
-      let {menuItemVal,selectedBootsNode} = this.state;
-
       return (
         <div className='flowCtrl_content' style={{height:'100%'}}>
           <TabPanel cls='flowCtrl_tabPanel'
@@ -70,10 +63,56 @@ export default class FlowCtrlContent extends Component {
               </Container>
 
               <Container title={Intl.get('Monitor')} scrollable={true}>
-                  <div>Badges <em>(like the 4, below)</em> can be added by setting the <code>badgeText</code> prop.</div>
+                  <MonitorComp/>
               </Container>
             </TabPanel>
         </div>
     )
+  }
+}
+
+
+
+//Monitor（监控） tab页的内容区
+class MonitorComp extends Component{
+  state={
+    monitorType:'1', //监控类型
+  }
+  onMonitorTypeChanged = (item)=>{
+    this.setState({
+      monitorType:item.value
+    });
+  }
+  render () {
+    let {monitorType} = this.state;
+    return (
+      <div style={{padding:'10px'}}>
+        <Container layout={{type:'hbox',pack:'space-between',align:'bottom'}}>
+          <Container style={{'float':'left'}}>
+              <Button text={Intl.get('Setting')} ui={'confirm alt raised'} style={{marginRight:'10px',marginBottom:'10px'}}/>
+          </Container>
+          <Container style={{'float':'right'}}>
+            <Button shadow ui="menu raised" text={Intl.get('Real time flow')} style={{'float':'right',marginRight:'5px',marginBottom:'10px'}}>
+               <Menu defaults={{ handler: this.onMonitorTypeChanged, group: 'buttonstyle' }}>
+                   <MenuItem text={Intl.get('Real time flow')} value="1" iconCls={monitorType === '1' && 'x-font-icon md-icon-check'}/>
+                   <MenuItem text={Intl.get('Interval time flow')} value="2" iconCls={monitorType === '2' && 'x-font-icon md-icon-check'}/>
+               </Menu>
+            </Button>
+          </Container>
+        </Container>
+        <Container style={{background:'#dae8ec',marginBottom:'10px'}}>
+          <div style={{padding:'10px',borderBottom:'1px solid gray'}}>
+            <span className="mif-arrow-up" style={{color:'blue'}}></span>
+            <span>{Intl.get('Upload')}</span>
+          </div>
+        </Container>
+        <div style={{background:'#dae8ec'}}>
+          <div style={{padding:'10px',borderBottom:'1px solid gray'}}>
+            <span className="mif-arrow-down" style={{color:'blue'}}></span>
+            <span>{Intl.get('Download')}</span>
+          </div>
+        </div>
+      </div>
+    );
   }
 }

@@ -2,7 +2,6 @@ import $ from 'jquery';
 import _ from 'lodash';
 import React, { Component } from 'react';
 import Intl from './intl/Intl';
-// import Settings from './settings';
 
 import ManagerModel from './reactWM_lib/models/manager';
 import WindowContentTpl from './reactWM_lib/views/WindowContentTpl';
