@@ -17,6 +17,70 @@
 .App-intro {
   font-size: large;
 }
+.container{
+  height:100%;
+}
+.clear-fix{
+  *overflow: hidden;
+  *zoom: 1;
+  height:100%;
+}
+.clear-fix:after{
+  display: table;
+  content: "";
+  width: 0;
+  clear: both;
+  visibility: hidden;
+}
+.content{
+  height:100%;
+  display:inline-block;
+  box-sizing: border-box;
+  position:relative;
+  border:1px solid gray;
+}
+.content button{
+  position:absolute;
+  display: inline-block;
+  right:0;
+  top:0;
+}
+.leftZone{
+  width:60%;
+  transition: all 1s;
+  /* float:left; */
+}
+.leftZone.foldRightOne{
+  width:77%;
+  transition: all 1s;
+}
+.leftZone.foldRightTwo{
+  width:77%;
+  transition: all 1s;
+}
+.leftZone.foldRightOne.foldRightTwo{
+  width:94%;
+  transition: all 1s;
+}
+
+
+.rightOne{
+  width:20%;
+  transition: all 1s;
+}
+.rightOne.foldRightOne{
+  width:3%;
+  transition: all 1s;
+}
+
+.rightTwo{
+  width:20%;
+  transition: all 1s;
+}
+.rightTwo.foldRightTwo{
+  width:3%;
+  transition: all 1s;
+}
 
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
